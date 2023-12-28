@@ -7,24 +7,26 @@
 
 
 void test(TestEnvironment* environment) {
-	assertEqual(environment, 1, 2, "assert");
+	int actual = 1;
+	int expected = 2;
+	cuTest_assert(environment, &cuTest_equalInt, NULL, &actual, &expected, __FILE__, __LINE__, "assert");
 }
 
-void test2(TestEnvironment* environment) {
-	assertEqual(environment, 1, 1, "assert2");
-}
+//void test2(TestEnvironment* environment) {
+//	assertEqual(environment, &equalInt, 1, 1, "assert2");
+//}
 
 int main() {
-	TestResult* result = runTest(test, "test");
+	TestResult* result = cuTest_run(test, "test");
 
-	TestResult* result2 = runTest(test2, "test2");
+	//TestResult* result2 = runTest(test2, "test2");
 	printf("\n\r");
 	printf("%s: %s\n\r", result->name, result->message);
 
-	printf("%s: %s\n\r", result2->name, result2->message);
+	//printf("%s: %s\n\r", result2->name, result2->message);
 
-	freeTestResult(result);
-	freeTestResult(result2);
+	cuTest_destroy(result);
+	//freeTestResult(result2);
 
 	return 0;
 }

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "cuTest.h"
 
-void freeTestResult(TestResult* result) {
+void cuTest_destroy(TestResult* result) {
 	if (result->name != NULL) {
 		free(result->name);
 	}
@@ -14,7 +14,7 @@ void freeTestResult(TestResult* result) {
 	free(result);
 }
 
-static void assertCore(TestEnvironment* environment, int conditionResult, const char* message) {
+static void cuTest_assertCore(TestEnvironment* environment, int conditionResult, const char* message) {
 	environment->result->message = _strdup(message);
 	if (environment->result->message == NULL) {
 		environment->result->result = CU_TEST_ERROR;
@@ -26,18 +26,28 @@ static void assertCore(TestEnvironment* environment, int conditionResult, const 
 	}
 };
 
-void assertEqual(TestEnvironment* environment, int i1, int i2, const char* message) {
+int cuTest_equalInt(const void* actualValue, const void* expectedValue) {
+	return *(const int *) actualValue == *(const int*) expectedValue;
+}
+
+void cuTest_assert(
+	TestEnvironment* environment, 
+	int (*assertFunc)(const void* actualValue, const void* expectedValue), 
+	char* (*formatMessage)(int asserted, const char* fileName, int line, const char* message),
+	const void* actualValue, const void* expectedValue, 
+	const char* fileName, int line, const char* message
+) {
 	char buffer[1024];
-	if (!(i1 == i2)) {
-		sprintf_s(buffer, 1024, "expected %d to be equal to %d: %s", i1, i2, message);
+	if (!(assertFunc(actualValue, expectedValue))) {
+		sprintf_s(buffer, 1024, "%s:%d %s", fileName, line, message);
 	}
 	else {
 		sprintf_s(buffer, 1024, "");
 	}
-	assertCore(environment, i1 == i2, buffer);
+	cuTest_assertCore(environment, assertFunc(actualValue, expectedValue), buffer);
 }
 
-TestResult* runTest(void (*testFunc)(TestEnvironment* environment), const char* name) {
+TestResult* cuTest_run(void (*testFunc)(TestEnvironment* environment), const char* name) {
 	TestEnvironment environment;
 
 	TestResult* result = (TestResult*)malloc(sizeof(TestResult));

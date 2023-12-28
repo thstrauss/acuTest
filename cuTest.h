@@ -19,9 +19,18 @@ typedef struct TestEnvironment_ {
 	TestResult* result;
 } TestEnvironment;
 
-void freeTestResult(TestResult* result);
-void assertEqual(TestEnvironment* environment, int i1, int i2, const char* message);
+void cuTest_destroy(TestResult* result);
+void cuTest_assert(
+	TestEnvironment* environment, 
+	int (*assertFunc)(const void* actualValue, const void* expectedValue),
+	char* (*formatMessage)(int asserted, const char* fileName, int line, const char* message),
+	const void* actualValue, const void* expectedValue,
+	const char* fileName,
+	int line, 
+	const char* message);
 
-TestResult* runTest(void (*testFunc)(TestEnvironment* environment), const char* name);
+int cuTest_equalInt(const void* actualValue, const void* expectedValue);
+
+TestResult* cuTest_run(void (*testFunc)(TestEnvironment* environment), const char* name);
 
 #endif
