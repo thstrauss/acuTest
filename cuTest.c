@@ -31,7 +31,23 @@ int cuTest_equalInt(const void* actualValue, const void* expectedValue) {
 }
 
 void cuTest_equalIntFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter) {
-	sprintf_s(buffer, bufferSize, "%s:%d -> actual value %d not equal to expeced value %d: %s", parameter->fileName, parameter->line, * (const int *) parameter->actual, * (const int *) parameter->expected, parameter->message);
+	sprintf_s(buffer, bufferSize, "%s:%d -> actual value %d not equal to expected value %d: %s", parameter->fileName, parameter->line, *(const int*)parameter->actual, *(const int*)parameter->expected, parameter->message);
+}
+
+int cuTest_notEqualInt(const void* actualValue, const void* expectedValue) {
+	return *(const int*)actualValue != *(const int*)expectedValue;
+}
+
+void cuTest_notEqualIntFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter) {
+	sprintf_s(buffer, bufferSize, "%s:%d -> actual value %d equal to expected value %d: %s", parameter->fileName, parameter->line, * (const int *) parameter->actual, * (const int *) parameter->expected, parameter->message);
+}
+
+int cuTest_equalPtr(const void* actualValue, const void* expectedValue) {
+	return actualValue == expectedValue;
+}
+
+void cuTest_equalPtrFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter) {
+	sprintf_s(buffer, bufferSize, "%s:%d -> actual value %p not equal to expeced value %p: %s", parameter->fileName, parameter->line, parameter->actual, parameter->expected, parameter->message);
 }
 
 void cuTest_assert(

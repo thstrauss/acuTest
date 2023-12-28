@@ -27,6 +27,27 @@ typedef struct TestParameter_ {
 	char* message;
 } TestParameter;
 
+#define cuTest_assertEqualInt(environment, actualValue, expectedValue, message) {\
+			int actual = (actualValue); \
+ 			int expected = (expectedValue); \
+			TestParameter parameter = { &actual, &expected, __FILE__, __LINE__, (message) }; \
+			cuTest_assert(environment, &cuTest_equalInt, &cuTest_equalIntFormatMessage, &parameter); \
+			};
+
+#define cuTest_assertNotEqualInt(environment, actualValue, expectedValue, message) {\
+			int actual = (actualValue); \
+ 			int expected = (expectedValue); \
+			TestParameter parameter = { &actual, &expected, __FILE__, __LINE__, (message) }; \
+			cuTest_assert(environment, &cuTest_notEqualInt, &cuTest_notEqualIntFormatMessage, &parameter); \
+			};
+
+#define cuTest_assertPtrEqual(environment, actualValue, expectedValue, message) {\
+			int actual = (actualValue); \
+ 			int expected = (expectedValue); \
+			TestParameter parameter = { &actual, &expected, __FILE__, __LINE__, (message) }; \
+			cuTest_assert(environment, &cuTest_equalPtr, &cuTest_equalPtrFormatMessage, &parameter); \
+			};
+
 void cuTest_destroy(TestResult* result);
 void cuTest_assert(
 	TestEnvironment* environment, 
@@ -36,6 +57,13 @@ void cuTest_assert(
 
 int cuTest_equalInt(const void* actualValue, const void* expectedValue);
 void cuTest_equalIntFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter);
+
+int cuTest_notEqualInt(const void* actualValue, const void* expectedValue);
+void cuTest_notEqualIntFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter);
+
+int cuTest_equalPtr(const void* actualValue, const void* expectedValue);
+void cuTest_equalPtrFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter);
+
 
 TestResult* cuTest_run(void (*testFunc)(TestEnvironment* environment), const char* name);
 
