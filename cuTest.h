@@ -19,17 +19,23 @@ typedef struct TestEnvironment_ {
 	TestResult* result;
 } TestEnvironment;
 
+typedef struct TestParameter_ {
+	void* actual;
+	void* expected;
+	const char* fileName;
+	int line;
+	char* message;
+} TestParameter;
+
 void cuTest_destroy(TestResult* result);
 void cuTest_assert(
 	TestEnvironment* environment, 
 	int (*assertFunc)(const void* actualValue, const void* expectedValue),
-	char* (*formatMessage)(int asserted, const char* fileName, int line, const char* message),
-	const void* actualValue, const void* expectedValue,
-	const char* fileName,
-	int line, 
-	const char* message);
+	void (*formatMessage)(char* buffer, int bufferSize, const TestParameter* parameter),
+	const TestParameter* parameter);
 
 int cuTest_equalInt(const void* actualValue, const void* expectedValue);
+void cuTest_equalIntFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter);
 
 TestResult* cuTest_run(void (*testFunc)(TestEnvironment* environment), const char* name);
 
