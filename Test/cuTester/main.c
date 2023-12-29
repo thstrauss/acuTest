@@ -1,18 +1,17 @@
 #include <stdio.h>
-#include "cuTest.h"
+#include "..\..\Source\cuTest.h"
 
 
 
 void test(TestEnvironment* environment) {
 	int actual = 1;
 	int expected = 2;
-	TestParameter parameter = {
-		.actual = &actual,
-		.expected = &expected,
-		.fileName = __FILE__,
-		.line = __LINE__+3,
-		.message = "assert"
-	};
+	TestParameter parameter;
+	parameter.actual = &actual;
+	parameter.expected = &expected;
+	parameter.fileName = __FILE__;
+	parameter.line = __LINE__ + 3;
+	parameter.message = "assert";
 	cuTest_assert(environment, &cuTest_equalInt, &cuTest_equalIntFormatMessage, &parameter);
 }
 

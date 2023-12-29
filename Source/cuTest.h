@@ -27,24 +27,28 @@ typedef struct TestParameter_ {
 	char* message;
 } TestParameter;
 
-#define cuTest_assertEqualInt(environment, actualValue, expectedValue, message) {\
-			int actual = (actualValue); \
- 			int expected = (expectedValue); \
-			TestParameter parameter = { &actual, &expected, __FILE__, __LINE__, (message) }; \
+#define cuTest_PrepareParameter(type, actualValue, expectedValue, messageValue) \
+			TestParameter parameter; \
+			type actual = (actualValue); \
+ 			type expected = (expectedValue); \
+			parameter.actual = &actual; \
+			parameter.expected = &expected; \
+			parameter.fileName = __FILE__; \
+			parameter.line = __LINE__; \
+			parameter.message = (messageValue); 
+
+#define cuTest_assertEqualInt(environment, actualValue, expectedValue, messageValue) { \
+			cuTest_PrepareParameter(int, actualValue, expectedValue, messageValue) \
 			cuTest_assert(environment, &cuTest_equalInt, &cuTest_equalIntFormatMessage, &parameter); \
 			};
 
-#define cuTest_assertNotEqualInt(environment, actualValue, expectedValue, message) {\
-			int actual = (actualValue); \
- 			int expected = (expectedValue); \
-			TestParameter parameter = { &actual, &expected, __FILE__, __LINE__, (message) }; \
+#define cuTest_assertNotEqualInt(environment, actualValue, expectedValue, messageValue) {\
+			cuTest_PrepareParameter(int, actualValue, expectedValue, messageValue) \
 			cuTest_assert(environment, &cuTest_notEqualInt, &cuTest_notEqualIntFormatMessage, &parameter); \
 			};
 
 #define cuTest_assertPtrEqual(environment, actualValue, expectedValue, message) {\
-			int actual = (actualValue); \
- 			int expected = (expectedValue); \
-			TestParameter parameter = { &actual, &expected, __FILE__, __LINE__, (message) }; \
+			cuTest_PrepareParameter(void*, actualValue, expectedValue, messageValue) \
 			cuTest_assert(environment, &cuTest_equalPtr, &cuTest_equalPtrFormatMessage, &parameter); \
 			};
 
