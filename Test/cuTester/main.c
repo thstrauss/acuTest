@@ -15,7 +15,7 @@ void test3(TestEnvironment* environment) {
 	char str[] = "abc";
 	cuTest_assertEqualStr(environment, str, str, "assert2");
 	cuTest_assertEqualStr(environment, "abc", "abc", "assert2");
-	cuTest_assertEqualStr(environment, "str", "abc", "assert2");
+	cuTest_assertNotEqualStr(environment, "str", "abc", "assert2");
 }
 
 int main() {

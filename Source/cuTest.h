@@ -57,12 +57,12 @@ typedef struct TestParameter_ {
 
 #define cuTest_assertNotEqualPtr(environment, actualValue, expectedValue, messageValue) {\
 			cuTest_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
-			cuTest_assert(environment, &cuTest_notEqualPtr, &cuTest_notEqualPtrFormatMessage, &parameter); \
+			cuTest_assert(environment, &cuTest_notEqualStr, &cuTest_notEqualPtrFormatMessage, &parameter); \
 			};
 
 #define cuTest_assertEqualStr(environment, actualValue, expectedValue, messageValue) {\
-			char* actual; \
-			char* expected; \
+			char* actual = NULL; \
+			char* expected = NULL; \
 			TRY \
 				TestParameter parameter; \
 				actual = _strdup(actualValue); \
@@ -73,6 +73,25 @@ typedef struct TestParameter_ {
 				parameter.line = __LINE__; \
 				parameter.message = (messageValue); \
 				cuTest_assert(environment, &cuTest_equalStr, &cuTest_equalStrFormatMessage, &parameter); \
+			FINALLY \
+				free(expected); \
+				free(actual); \
+			ETRY; \
+			};
+
+#define cuTest_assertNotEqualStr(environment, actualValue, expectedValue, messageValue) {\
+			char* actual = NULL; \
+			char* expected = NULL; \
+			TRY \
+				TestParameter parameter; \
+				actual = _strdup(actualValue); \
+ 				expected = _strdup(expectedValue); \
+				parameter.actual = actual; \
+				parameter.expected = expected; \
+				parameter.fileName = __FILE__; \
+				parameter.line = __LINE__; \
+				parameter.message = (messageValue); \
+				cuTest_assert(environment, &cuTest_notEqualStr, &cuTest_notEqualStrFormatMessage, &parameter); \
 			FINALLY \
 				free(expected); \
 				free(actual); \
@@ -100,6 +119,9 @@ void cuTest_notEqualPtrFormatMessage(char* buffer, int bufferSize, const TestPar
 
 int cuTest_equalStr(const TestParameter* parameter);
 void cuTest_equalStrFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter);
+
+int cuTest_notEqualStr(const TestParameter* parameter);
+void cuTest_notEqualStrFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter);
 
 TestResult* cuTest_run(void (*testFunc)(TestEnvironment* environment), const char* name);
 
