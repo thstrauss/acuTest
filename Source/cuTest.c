@@ -95,7 +95,7 @@ void cuTest_run(TestCase* testCase) {
 	TestResult* result = (TestResult*)malloc(sizeof(TestResult));
 	if (result == NULL) {
 		printf("E");
-		return NULL;
+		return;
 	}
 	result->result = CU_TEST_PASSED;
 	result->message = NULL;
