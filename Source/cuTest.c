@@ -5,9 +5,6 @@
 #include "cuTest.h"
 
 void cuTest_destroy(TestResult* result) {
-	if (result->name != NULL) {
-		free(result->name);
-	}
 	if (result->message != NULL) {
 		free(result->message);
 	}
@@ -26,59 +23,59 @@ static void cuTest_assertCore(TestEnvironment* environment, int conditionResult,
 	}
 };
 
-int cuTest_equalInt(const TestParameter* parameter) {
+int cuTest_equalInt(const AssertParameter* parameter) {
 	return *(const int *) parameter->actual == *(const int*) parameter->expected;
 }
 
-void cuTest_equalIntFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter) {
+void cuTest_equalIntFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) {
 	sprintf_s(buffer, bufferSize, "%s:%d -> actual value %d not equal to expected value %d: %s", parameter->fileName, parameter->line, *(const int*)parameter->actual, *(const int*)parameter->expected, parameter->message);
 }
 
-int cuTest_notEqualInt(const TestParameter* parameter) {
+int cuTest_notEqualInt(const AssertParameter* parameter) {
 	return *(const int*)parameter->actual != *(const int*)parameter->expected;
 }
 
-void cuTest_notEqualIntFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter) {
+void cuTest_notEqualIntFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) {
 	sprintf_s(buffer, bufferSize, "%s:%d -> actual value %d equal to expected value %d: %s", parameter->fileName, parameter->line, * (const int *) parameter->actual, * (const int *) parameter->expected, parameter->message);
 }
 
-int cuTest_equalPtr(const TestParameter* parameter) {
+int cuTest_equalPtr(const AssertParameter* parameter) {
 	return parameter->actual == parameter->expected;
 }
 
-void cuTest_equalPtrFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter) {
+void cuTest_equalPtrFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) {
 	sprintf_s(buffer, bufferSize, "%s:%d -> actual value %p not equal to expected value %p: %s", parameter->fileName, parameter->line, parameter->actual, parameter->expected, parameter->message);
 }
 
-int cuTest_notEqualPtr(const TestParameter* parameter) {
+int cuTest_notEqualPtr(const AssertParameter* parameter) {
 	return parameter->actual != parameter->expected;
 }
 
-void cuTest_notEqualPtrFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter) {
+void cuTest_notEqualPtrFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) {
 	sprintf_s(buffer, bufferSize, "%s:%d -> actual value %p equal to expected value %p: %s", parameter->fileName, parameter->line, parameter->actual, parameter->expected, parameter->message);
 }
 
-int cuTest_equalStr(const TestParameter* parameter) {
+int cuTest_equalStr(const AssertParameter* parameter) {
 	return strcmp((const char*) (parameter->actual), (const char*)(parameter->expected)) == 0;
 }
 
-void cuTest_equalStrFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter) {
+void cuTest_equalStrFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) {
 	sprintf_s(buffer, bufferSize, "%s:%d -> actual value \"%s\" not equal to expected value \"%s\": %s", parameter->fileName, parameter->line, (const char*) parameter->actual, (const char*) parameter->expected, parameter->message);
 }
 
-int cuTest_notEqualStr(const TestParameter* parameter) {
+int cuTest_notEqualStr(const AssertParameter* parameter) {
 	return strcmp((const char*)(parameter->actual), (const char*)(parameter->expected)) != 0;
 }
 
-void cuTest_notEqualStrFormatMessage(char* buffer, int bufferSize, const TestParameter* parameter) {
+void cuTest_notEqualStrFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) {
 	sprintf_s(buffer, bufferSize, "%s:%d -> actual value \"%s\" equal to expected value \"%s\": %s", parameter->fileName, parameter->line, (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
 }
 
 void cuTest_assert(
 	TestEnvironment* environment, 
-	int (*assertFunc)(const TestParameter* parameter),
-	void (*formatMessage)(char* buffer, int bufferSize, const TestParameter* parameter),
-	const TestParameter* parameter
+	int (*assertFunc)(const AssertParameter* parameter),
+	void (*formatMessage)(char* buffer, int bufferSize, const AssertParameter* parameter),
+	const AssertParameter* parameter
 ) {
 	char buffer[1024];
 	int assertResult = assertFunc(parameter);
@@ -92,7 +89,7 @@ void cuTest_assert(
 	cuTest_assertCore(environment, assertResult, buffer);
 }
 
-TestResult* cuTest_run(void (*testFunc)(TestEnvironment* environment), const char* name) {
+void cuTest_run(TestCase* testCase) {
 	TestEnvironment environment;
 
 	TestResult* result = (TestResult*)malloc(sizeof(TestResult));
@@ -102,14 +99,13 @@ TestResult* cuTest_run(void (*testFunc)(TestEnvironment* environment), const cha
 	}
 	result->result = CU_TEST_PASSED;
 	result->message = NULL;
-	result->name = _strdup(name);
 
 	environment.result = result;
 
 	do {
 		switch (setjmp(environment.assertBuf)) {
 		case 0: while (1) {
-			testFunc(&environment);
+			testCase->testFunc(&environment);
 			break;
 		}
 			  printf(".");
@@ -124,5 +120,5 @@ TestResult* cuTest_run(void (*testFunc)(TestEnvironment* environment), const cha
 		}
 		}
 	} while (0);
-	return result;
+	testCase->result = result;
 }

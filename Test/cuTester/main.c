@@ -19,20 +19,15 @@ void test3(TestEnvironment* environment) {
 }
 
 int main() {
-	TestResult* result = cuTest_run(test, "test");
+	TestCase case1;
+	case1.name = "test";
+	case1.testFunc = test;
+	cuTest_run(&case1);
 
-	TestResult* result2 = cuTest_run(test2, "test2");
-
-	TestResult* result3 = cuTest_run(test3, "test3");
 	printf("\n\r");
-	printf("%s: %s\n\r", result->name, result->message);
+	printf("%s: %s\n\r", case1.name, case1.result->message);
 
-	printf("%s: %s\n\r", result2->name, result2->message);
+	cuTest_destroy(case1.result);
 
-	printf("%s: %s\n\r", result3->name, result3->message);
-
-	cuTest_destroy(result);
-	cuTest_destroy(result2);
-	cuTest_destroy(result3);
 	return 0;
 }
