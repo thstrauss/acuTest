@@ -89,7 +89,7 @@ void cuTest_assert(
 	cuTest_assertCore(environment, assertResult, buffer);
 }
 
-void cuTest_run(TestCase* testCase) {
+static void cuTest_run(TestCase* testCase) {
 	TestEnvironment environment;
 
 	TestResult* result = (TestResult*)malloc(sizeof(TestResult));
@@ -121,4 +121,24 @@ void cuTest_run(TestCase* testCase) {
 		}
 	} while (0);
 	testCase->result = result;
+}
+
+void TestFixtureInit(TestFixture* fixture, const char* name) {
+	List* testCases = (List*) malloc(sizeof(List));
+	listInit(testCases, NULL);
+	fixture->testCases = testCases;
+	fixture->name = _strdup(name);
+}
+
+void TestFixtureAdd(TestFixture* fixture, const TestCase* testCase) {
+	listInsertTail(fixture->testCases, (void*) testCase);
+}
+
+void TestFixtureExecute(TestFixture* fixture) {
+	ListElement* testElement = listHead(fixture->testCases);
+
+	while (testElement != NULL) {
+		cuTest_run((TestCase*) testElement->data);
+		testElement = listNext(testElement);
+	}
 }

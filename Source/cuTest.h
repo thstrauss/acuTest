@@ -2,10 +2,11 @@
 #ifndef _CU_TEST_H_
 #define _CU_TEST_H_
 
-#include <setjmp.h>
-#include <string.h>
-#include <stdlib.h>
 #include "try_catch_throw.h"
+#include "list.h"
+#include <setjmp.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define CU_TEST_PASSED 0
 #define CU_TEST_FAILED 1
@@ -37,9 +38,9 @@ typedef struct TestCase_ {
 } TestCase;
 
 typedef struct TestFixture_ {
-	char* name;
-	TestCase* testCase;
-} TestFicture;
+	const char* name;
+	List* testCases;
+} TestFixture;
 
 #define cuTest_PrepareParameter(type, actualValue, expectedValue, messageValue, lineValue) \
 			AssertParameter parameter; \
@@ -134,6 +135,10 @@ void cuTest_equalStrFormatMessage(char* buffer, int bufferSize, const AssertPara
 int cuTest_notEqualStr(const AssertParameter* parameter);
 void cuTest_notEqualStrFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter);
 
-void cuTest_run(TestCase *testCase);
+void TestFixtureAdd(TestFixture* fixture, const TestCase* testCase);
+
+void TestFixtureInit(TestFixture* fixture, const char* name);
+
+void TestFixtureExecute(TestFixture* fixture);
 
 #endif

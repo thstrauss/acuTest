@@ -19,10 +19,16 @@ void test3(TestEnvironment* environment) {
 }
 
 int main() {
+	TestFixture fixture;
 	TestCase case1;
 	case1.name = "test";
-	case1.testFunc = test;
-	cuTest_run(&case1);
+	case1.testFunc = &test;
+
+	TestFixtureInit(&fixture, "testFixture");
+
+	TestFixtureAdd(&fixture, &case1);
+
+	TestFixtureExecute(&fixture);
 
 	printf("\n\r");
 	printf("%s: %s\n\r", case1.name, case1.result->message);
