@@ -7,17 +7,17 @@
 #include "cu_cmmn.h"
 #include "cu_list.h"
 
-static void cuTest_destroyTestResult(TestResult* result) {
+static void cuTest_destroyResult(CU_Result* result) {
 	if (result->message != NULL) {
 		free(result->message);
 	}
 	free(result);
 }
 
-static void cuTest_run(TestCase* testCase) {
+static void cuTest_run(CU_TestCase* testCase) {
 	CU_ExecuteEnv environment;
 
-	TestResult* result = (TestResult*)malloc(sizeof(TestResult));
+	CU_Result* result = (CU_Result*)malloc(sizeof(CU_Result));
 	if (result == NULL) {
 		printf("E");
 		return;
@@ -49,10 +49,10 @@ static void cuTest_run(TestCase* testCase) {
 }
 
 static void cuTest_destroyTestCase(void* data) {
-	TestCase* testCase = (TestCase*) data;
+	CU_TestCase* testCase = (CU_TestCase*) data;
 	free(testCase->name);
 	if (testCase->result != NULL) {
-		cuTest_destroyTestResult(testCase->result);
+		cuTest_destroyResult(testCase->result);
 	}
 }
 
@@ -64,7 +64,7 @@ void cuTest_init(CU_Fixture* fixture, const char* name) {
 }
 
 void cuTest_addTestCase(CU_Fixture* fixture, const char* name, void (*testFunc)(CU_ExecuteEnv* environment)) {
-	TestCase* testCase = (TestCase*)malloc(sizeof(TestCase));
+	CU_TestCase* testCase = (CU_TestCase*)malloc(sizeof(CU_TestCase));
 	if (testCase != NULL) {
 		testCase->name = _strdup(name);
 		testCase->testFunc = testFunc;
@@ -76,7 +76,7 @@ void cuTest_execute(CU_Fixture* fixture) {
 	CU_ListElement* testElement = cu_listHead(fixture->testCases);
 
 	while (testElement != NULL) {
-		cuTest_run((TestCase*) testElement->data);
+		cuTest_run((CU_TestCase*) testElement->data);
 		testElement = cu_listNext(testElement);
 	}
 }
@@ -88,7 +88,7 @@ int cuTest_report(CU_Fixture* fixture) {
 	
 	printf("\n\r");
 	while (testElement != NULL) {
-		TestCase* testCase = (TestCase*) testElement->data;
+		CU_TestCase* testCase = (CU_TestCase*) testElement->data;
 		if (testCase->result->status != CU_TEST_PASSED) {
 			printf("%s: %s\n\r", testCase->name, testCase->result->message);
 			accumulatedResult = testCase->result->status;

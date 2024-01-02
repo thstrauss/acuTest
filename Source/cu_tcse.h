@@ -5,10 +5,10 @@
 #include "cu_trslt.h"
 #include "cu_tenv.h"
 
-typedef struct TestCase_ {
+typedef struct CU_TestCase_ {
 	char* name;
 	void (*testFunc)(CU_ExecuteEnv* environment);
-	TestResult* result;
-} TestCase;
+	CU_Result* result;
+} CU_TestCase;
 
 #endif

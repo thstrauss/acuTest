@@ -5,7 +5,7 @@
 #include "cu_list.h"
 #include "cu_tenv.h"
 
-typedef struct Fixture_ {
+typedef struct CU_Fixture_ {
 	const char* name;
 	CU_List* testCases;
 } CU_Fixture;

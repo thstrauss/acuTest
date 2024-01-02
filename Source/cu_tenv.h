@@ -7,7 +7,7 @@
 
 typedef struct CU_ExecuteEnv_ {
 	jmp_buf assertBuf;
-	TestResult* result;
+	CU_Result* result;
 } CU_ExecuteEnv;
 
 #endif
