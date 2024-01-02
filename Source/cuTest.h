@@ -134,14 +134,14 @@ void cuTest_equalStrFormatMessage(char* buffer, int bufferSize, const AssertPara
 int cuTest_notEqualStr(const AssertParameter* parameter);
 void cuTest_notEqualStrFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter);
 
-void cuTest_FixtureAddTestCase(TestFixture* fixture, const char *name, void (*testFunc)(TestEnvironment* environment));
+void cuTest_addTestCase(TestFixture* fixture, const char *name, void (*testFunc)(TestEnvironment* environment));
 
-void cuTest_FixtureInit(TestFixture* fixture, const char* name);
+void cuTest_init(TestFixture* fixture, const char* name);
 
-void cuTest_FixtureExecute(TestFixture* fixture);
+void cuTest_execute(TestFixture* fixture);
 
-int cuTest_FixtureReport(TestFixture* fixture);
+int cuTest_report(TestFixture* fixture);
 
-void cuTest_FixtureDestroy(TestFixture* fixture);
+void cuTest_destroy(TestFixture* fixture);
 
 #endif

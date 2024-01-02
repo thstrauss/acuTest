@@ -22,17 +22,17 @@ int main() {
 	TestFixture fixture;
 	int returnValue;
 
-	cuTest_FixtureInit(&fixture, "testFixture");
+	cuTest_init(&fixture, "testFixture");
 
-	cuTest_FixtureAddTestCase(&fixture, "test1", test1);
-	cuTest_FixtureAddTestCase(&fixture, "test2", test2);
-	cuTest_FixtureAddTestCase(&fixture, "test3", test3);
+	cuTest_addTestCase(&fixture, "test1", test1);
+	cuTest_addTestCase(&fixture, "test2", test2);
+	cuTest_addTestCase(&fixture, "test3", test3);
 
-	cuTest_FixtureExecute(&fixture);
+	cuTest_execute(&fixture);
 
-	returnValue = cuTest_FixtureReport(&fixture) == CU_TEST_PASSED ? 0 : 2;
+	returnValue = cuTest_report(&fixture) == CU_TEST_PASSED ? 0 : 2;
 
-	cuTest_FixtureDestroy(&fixture);
+	cuTest_destroy(&fixture);
 
 	return returnValue;
 }

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "cuTest.h"
 
-static void cuTest_TestResultDestroy(TestResult* result) {
+static void cuTest_destroyTestResult(TestResult* result) {
 	if (result->message != NULL) {
 		free(result->message);
 	}
@@ -123,22 +123,22 @@ static void cuTest_run(TestCase* testCase) {
 	testCase->result = result;
 }
 
-static void cuTest_TestCaseDestroy(void* data) {
+static void cuTest_destroyTestCase(void* data) {
 	TestCase* testCase = (TestCase*) data;
 	free(testCase->name);
 	if (testCase->result != NULL) {
-		cuTest_TestResultDestroy(testCase->result);
+		cuTest_destroyTestResult(testCase->result);
 	}
 }
 
-void cuTest_FixtureInit(TestFixture* fixture, const char* name) {
+void cuTest_init(TestFixture* fixture, const char* name) {
 	List* testCases = (List*) malloc(sizeof(List));
-	listInit(testCases, cuTest_TestCaseDestroy);
+	listInit(testCases, cuTest_destroyTestCase);
 	fixture->testCases = testCases;
 	fixture->name = _strdup(name);
 }
 
-void cuTest_FixtureAddTestCase(TestFixture* fixture, const char* name, void (*testFunc)(TestEnvironment* environment)) {
+void cuTest_addTestCase(TestFixture* fixture, const char* name, void (*testFunc)(TestEnvironment* environment)) {
 	TestCase* testCase = (TestCase*)malloc(sizeof(TestCase));
 	if (testCase != NULL) {
 		testCase->name = _strdup(name);
@@ -147,7 +147,7 @@ void cuTest_FixtureAddTestCase(TestFixture* fixture, const char* name, void (*te
 	}
 }
 
-void cuTest_FixtureExecute(TestFixture* fixture) {
+void cuTest_execute(TestFixture* fixture) {
 	ListElement* testElement = listHead(fixture->testCases);
 
 	while (testElement != NULL) {
@@ -156,7 +156,7 @@ void cuTest_FixtureExecute(TestFixture* fixture) {
 	}
 }
 
-int cuTest_FixtureReport(TestFixture* fixture) {
+int cuTest_report(TestFixture* fixture) {
 	ListElement* testElement = listHead(fixture->testCases);
 
 	int accumulatedResult = CU_TEST_PASSED;
@@ -174,6 +174,6 @@ int cuTest_FixtureReport(TestFixture* fixture) {
 	return accumulatedResult;
 }
 
-void cuTest_FixtureDestroy(TestFixture* fixture) {
+void cuTest_destroy(TestFixture* fixture) {
 	listDestroy(fixture->testCases);
 }
