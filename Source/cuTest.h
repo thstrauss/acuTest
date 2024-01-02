@@ -39,7 +39,7 @@ typedef struct TestCase_ {
 
 typedef struct TestFixture_ {
 	const char* name;
-	List* testCases;
+	CU_List* testCases;
 } TestFixture;
 
 #define cuTest_PrepareParameter(type, actualValue, expectedValue, messageValue, lineValue) \

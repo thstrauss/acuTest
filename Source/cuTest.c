@@ -132,7 +132,7 @@ static void cuTest_destroyTestCase(void* data) {
 }
 
 void cuTest_init(TestFixture* fixture, const char* name) {
-	List* testCases = (List*) malloc(sizeof(List));
+	CU_List* testCases = (CU_List*) malloc(sizeof(CU_List));
 	cu_listInit(testCases, cuTest_destroyTestCase);
 	fixture->testCases = testCases;
 	fixture->name = _strdup(name);
@@ -148,7 +148,7 @@ void cuTest_addTestCase(TestFixture* fixture, const char* name, void (*testFunc)
 }
 
 void cuTest_execute(TestFixture* fixture) {
-	ListElement* testElement = cu_listHead(fixture->testCases);
+	CU_ListElement* testElement = cu_listHead(fixture->testCases);
 
 	while (testElement != NULL) {
 		cuTest_run((TestCase*) testElement->data);
@@ -157,7 +157,7 @@ void cuTest_execute(TestFixture* fixture) {
 }
 
 int cuTest_report(TestFixture* fixture) {
-	ListElement* testElement = cu_listHead(fixture->testCases);
+	CU_ListElement* testElement = cu_listHead(fixture->testCases);
 
 	int accumulatedResult = CU_TEST_PASSED;
 	
