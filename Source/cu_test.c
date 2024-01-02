@@ -15,7 +15,7 @@ static void cuTest_destroyTestResult(TestResult* result) {
 }
 
 static void cuTest_run(TestCase* testCase) {
-	ExecuteEnv environment;
+	CU_ExecuteEnv environment;
 
 	TestResult* result = (TestResult*)malloc(sizeof(TestResult));
 	if (result == NULL) {
@@ -56,14 +56,14 @@ static void cuTest_destroyTestCase(void* data) {
 	}
 }
 
-void cuTest_init(Fixture* fixture, const char* name) {
+void cuTest_init(CU_Fixture* fixture, const char* name) {
 	CU_List* testCases = (CU_List*) malloc(sizeof(CU_List));
 	cu_listInit(testCases, cuTest_destroyTestCase);
 	fixture->testCases = testCases;
 	fixture->name = _strdup(name);
 }
 
-void cuTest_addTestCase(Fixture* fixture, const char* name, void (*testFunc)(ExecuteEnv* environment)) {
+void cuTest_addTestCase(CU_Fixture* fixture, const char* name, void (*testFunc)(CU_ExecuteEnv* environment)) {
 	TestCase* testCase = (TestCase*)malloc(sizeof(TestCase));
 	if (testCase != NULL) {
 		testCase->name = _strdup(name);
@@ -72,7 +72,7 @@ void cuTest_addTestCase(Fixture* fixture, const char* name, void (*testFunc)(Exe
 	}
 }
 
-void cuTest_execute(Fixture* fixture) {
+void cuTest_execute(CU_Fixture* fixture) {
 	CU_ListElement* testElement = cu_listHead(fixture->testCases);
 
 	while (testElement != NULL) {
@@ -81,7 +81,7 @@ void cuTest_execute(Fixture* fixture) {
 	}
 }
 
-int cuTest_report(Fixture* fixture) {
+int cuTest_report(CU_Fixture* fixture) {
 	CU_ListElement* testElement = cu_listHead(fixture->testCases);
 
 	int accumulatedResult = CU_TEST_PASSED;
@@ -99,6 +99,6 @@ int cuTest_report(Fixture* fixture) {
 	return accumulatedResult;
 }
 
-void cuTest_destroy(Fixture* fixture) {
+void cuTest_destroy(CU_Fixture* fixture) {
 	cu_listDestroy(fixture->testCases);
 }

@@ -5,9 +5,9 @@
 #include "cu_trslt.h"
 #include <setjmp.h>
 
-typedef struct TestEnvironment_ {
+typedef struct CU_ExecuteEnv_ {
 	jmp_buf assertBuf;
 	TestResult* result;
-} ExecuteEnv;
+} CU_ExecuteEnv;
 
 #endif

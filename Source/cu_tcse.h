@@ -7,7 +7,7 @@
 
 typedef struct TestCase_ {
 	char* name;
-	void (*testFunc)(ExecuteEnv* environment);
+	void (*testFunc)(CU_ExecuteEnv* environment);
 	TestResult* result;
 } TestCase;
 
