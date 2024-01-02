@@ -2,7 +2,7 @@
 #ifndef _CU_TEST_ENV_H_
 #define _CU_TEST_ENV_H_
 
-#include "cu_trslt.h"
+#include "cu_rslt.h"
 #include <setjmp.h>
 
 typedef struct CU_ExecuteEnv_ {

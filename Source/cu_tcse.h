@@ -2,8 +2,8 @@
 #ifndef _CU_TEST_CASE_H
 #define _CU_TEST_CASE_H
 
-#include "cu_trslt.h"
-#include "cu_tenv.h"
+#include "cu_rslt.h"
+#include "cu_eenv.h"
 
 typedef struct CU_TestCase_ {
 	char* name;

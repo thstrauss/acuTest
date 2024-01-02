@@ -2,7 +2,7 @@
 #ifndef _CU_ASSERT_H_
 #define _CU_ASSERT_H_
 
-#include "cu_tenv.h"
+#include "cu_eenv.h"
 #include "tryctch.h"
 #include <string.h>
 #include <stdlib.h>

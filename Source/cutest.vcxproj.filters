@@ -38,10 +38,10 @@
     <ClInclude Include="cu_assrt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cu_tenv.h">
+    <ClInclude Include="cu_eenv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cu_trslt.h">
+    <ClInclude Include="cu_rslt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cu_cmmn.h">

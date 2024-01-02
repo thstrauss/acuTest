@@ -1,5 +1,5 @@
 #include "cu_assrt.h"
-#include "cu_tenv.h"
+#include "cu_eenv.h"
 #include "cu_cmmn.h"
 #include <string.h>
 #include <stdio.h>

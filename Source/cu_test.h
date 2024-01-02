@@ -3,7 +3,7 @@
 #define _CU_TEST_H_
 
 #include "cu_list.h"
-#include "cu_tenv.h"
+#include "cu_eenv.h"
 
 typedef struct CU_Fixture_ {
 	const char* name;
