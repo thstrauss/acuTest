@@ -3,26 +3,26 @@
 #include <stdlib.h>
 #include <string.h>
 
-void listInit(List* list, void (*destroy)(void* data)) {
+void cu_listInit(List* list, void (*destroy)(void* data)) {
 	list->size = 0;
 	list->destroy = destroy;
 	list->head = NULL;
 	list->tail = NULL;
 }
 
-ListElement* listHead(List* list) {
+ListElement* cu_listHead(List* list) {
 	return list->head;
 }
 
-ListElement* listNext(ListElement* element) {
+ListElement* cu_listNext(ListElement* element) {
 	return element->next;
 }
 
-static int listSize(List* list) {
+static int cu_listSize(List* list) {
 	return list->size;
 }
 
-int listInsertTail(List* list, void* data) {
+int cu_listAppend(List* list, void* data) {
 	ListElement* newElement;
 	ListElement* tailElement = list->tail;
 
@@ -32,7 +32,7 @@ int listInsertTail(List* list, void* data) {
 	newElement->next = NULL; 
 	newElement->data = data;
 
-	if (listSize(list) == 0) {
+	if (cu_listSize(list) == 0) {
 		list->head = newElement;
 	}
 	
@@ -46,16 +46,16 @@ int listInsertTail(List* list, void* data) {
 	return 0;
 }
 
-static int listRemoveHead(List* list, void** data) {
+static int cu_listRemoveHead(List* list, void** data) {
 	ListElement* oldElement;
-	if (listSize(list) <= 0) {
+	if (cu_listSize(list) <= 0) {
 		return -1;
 	}
 	
 	*data = list->head->data;
 	oldElement = list->head;
 	list->head = list->head->next;
-	if (listSize(list) == 1) {
+	if (cu_listSize(list) == 1) {
 		list->tail = NULL;
 	}
 
@@ -66,11 +66,11 @@ static int listRemoveHead(List* list, void** data) {
 	return 0;
 }
 
-void listDestroy(List* list) {
+void cu_listDestroy(List* list) {
 	void* data;
 
-	while (listSize(list) > 0) {
-		if (listRemoveHead(list, (void**)&data) == 0 && list->destroy != NULL) {
+	while (cu_listSize(list) > 0) {
+		if (cu_listRemoveHead(list, (void**)&data) == 0 && list->destroy != NULL) {
 			list->destroy(data);
 		}
 	}

@@ -18,14 +18,14 @@ typedef struct List_ {
 	ListElement* tail;
 } List;
 
-void listInit(List* list, void (*destroy)(void* data));
+void cu_listInit(List* list, void (*destroy)(void* data));
 
-ListElement* listHead(List* list);
+ListElement* cu_listHead(List* list);
 
-ListElement* listNext(ListElement* element);
+ListElement* cu_listNext(ListElement* element);
 
-void listDestroy(List* list);
+void cu_listDestroy(List* list);
 
-int listInsertTail(List* list, void* data);
+int cu_listAppend(List* list, void* data);
 
 #endif 

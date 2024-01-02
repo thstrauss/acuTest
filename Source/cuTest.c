@@ -133,7 +133,7 @@ static void cuTest_destroyTestCase(void* data) {
 
 void cuTest_init(TestFixture* fixture, const char* name) {
 	List* testCases = (List*) malloc(sizeof(List));
-	listInit(testCases, cuTest_destroyTestCase);
+	cu_listInit(testCases, cuTest_destroyTestCase);
 	fixture->testCases = testCases;
 	fixture->name = _strdup(name);
 }
@@ -143,21 +143,21 @@ void cuTest_addTestCase(TestFixture* fixture, const char* name, void (*testFunc)
 	if (testCase != NULL) {
 		testCase->name = _strdup(name);
 		testCase->testFunc = testFunc;
-		listInsertTail(fixture->testCases, (void*)testCase);
+		cu_listAppend(fixture->testCases, (void*)testCase);
 	}
 }
 
 void cuTest_execute(TestFixture* fixture) {
-	ListElement* testElement = listHead(fixture->testCases);
+	ListElement* testElement = cu_listHead(fixture->testCases);
 
 	while (testElement != NULL) {
 		cuTest_run((TestCase*) testElement->data);
-		testElement = listNext(testElement);
+		testElement = cu_listNext(testElement);
 	}
 }
 
 int cuTest_report(TestFixture* fixture) {
-	ListElement* testElement = listHead(fixture->testCases);
+	ListElement* testElement = cu_listHead(fixture->testCases);
 
 	int accumulatedResult = CU_TEST_PASSED;
 	
@@ -168,12 +168,12 @@ int cuTest_report(TestFixture* fixture) {
 			printf("%s: %s\n\r", testCase->name, testCase->result->message);
 			accumulatedResult = testCase->result->result;
 		}
-		testElement = listNext(testElement);
+		testElement = cu_listNext(testElement);
 	}
 
 	return accumulatedResult;
 }
 
 void cuTest_destroy(TestFixture* fixture) {
-	listDestroy(fixture->testCases);
+	cu_listDestroy(fixture->testCases);
 }
