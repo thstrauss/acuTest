@@ -8,6 +8,6 @@
 typedef struct TestEnvironment_ {
 	jmp_buf assertBuf;
 	TestResult* result;
-} TestEnvironment;
+} ExecuteEnv;
 
 #endif

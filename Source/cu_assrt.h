@@ -104,7 +104,7 @@ int cuTest_notEqualStr(const AssertParameter* parameter);
 void cuTest_notEqualStrFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter);
 
 void cuTest_assert(
-	TestEnvironment* environment,
+	ExecuteEnv* environment,
 	int (*assertFunc)(const AssertParameter* parameter),
 	void (*formatMessage)(char* buffer, int bufferSize, const AssertParameter* parameter),
 	const AssertParameter* parameter);

@@ -3,7 +3,7 @@
 #define _CU_TEST_RESULT_H_
 
 typedef struct TestResult_ {
-	int result;
+	int status;
 	char* message;
 } TestResult;
 

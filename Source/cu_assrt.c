@@ -52,20 +52,20 @@ void cuTest_notEqualStrFormatMessage(char* buffer, int bufferSize, const AssertP
 	sprintf_s(buffer, bufferSize, "%s:%d -> actual value \"%s\" equal to expected value \"%s\": %s", parameter->fileName, parameter->line, (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
 }
 
-static void cuTest_assertCore(TestEnvironment* environment, int conditionResult, const char* message) {
+static void cuTest_assertCore(ExecuteEnv* environment, int conditionResult, const char* message) {
 	environment->result->message = _strdup(message);
 	if (environment->result->message == NULL) {
-		environment->result->result = CU_TEST_ERROR;
+		environment->result->status = CU_TEST_ERROR;
 		longjmp(environment->assertBuf, CU_TEST_ERROR);
 	}
 	if (!conditionResult) {
-		environment->result->result = CU_TEST_FAILED;
+		environment->result->status = CU_TEST_FAILED;
 		longjmp(environment->assertBuf, CU_TEST_FAILED);
 	}
 };
 
 void cuTest_assert(
-	TestEnvironment* environment,
+	ExecuteEnv* environment,
 	int (*assertFunc)(const AssertParameter* parameter),
 	void (*formatMessage)(char* buffer, int bufferSize, const AssertParameter* parameter),
 	const AssertParameter* parameter

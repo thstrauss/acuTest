@@ -5,20 +5,20 @@
 #include "cu_list.h"
 #include "cu_tenv.h"
 
-typedef struct TestFixture_ {
+typedef struct Fixture_ {
 	const char* name;
 	CU_List* testCases;
-} TestFixture;
+} Fixture;
 
 
-void cuTest_addTestCase(TestFixture* fixture, const char *name, void (*testFunc)(TestEnvironment* environment));
+void cuTest_addTestCase(Fixture* fixture, const char *name, void (*testFunc)(ExecuteEnv* environment));
 
-void cuTest_init(TestFixture* fixture, const char* name);
+void cuTest_init(Fixture* fixture, const char* name);
 
-void cuTest_execute(TestFixture* fixture);
+void cuTest_execute(Fixture* fixture);
 
-int cuTest_report(TestFixture* fixture);
+int cuTest_report(Fixture* fixture);
 
-void cuTest_destroy(TestFixture* fixture);
+void cuTest_destroy(Fixture* fixture);
 
 #endif

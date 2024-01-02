@@ -15,14 +15,14 @@ static void cuTest_destroyTestResult(TestResult* result) {
 }
 
 static void cuTest_run(TestCase* testCase) {
-	TestEnvironment environment;
+	ExecuteEnv environment;
 
 	TestResult* result = (TestResult*)malloc(sizeof(TestResult));
 	if (result == NULL) {
 		printf("E");
 		return;
 	}
-	result->result = CU_TEST_PASSED;
+	result->status = CU_TEST_PASSED;
 	result->message = NULL;
 
 	environment.result = result;
@@ -56,14 +56,14 @@ static void cuTest_destroyTestCase(void* data) {
 	}
 }
 
-void cuTest_init(TestFixture* fixture, const char* name) {
+void cuTest_init(Fixture* fixture, const char* name) {
 	CU_List* testCases = (CU_List*) malloc(sizeof(CU_List));
 	cu_listInit(testCases, cuTest_destroyTestCase);
 	fixture->testCases = testCases;
 	fixture->name = _strdup(name);
 }
 
-void cuTest_addTestCase(TestFixture* fixture, const char* name, void (*testFunc)(TestEnvironment* environment)) {
+void cuTest_addTestCase(Fixture* fixture, const char* name, void (*testFunc)(ExecuteEnv* environment)) {
 	TestCase* testCase = (TestCase*)malloc(sizeof(TestCase));
 	if (testCase != NULL) {
 		testCase->name = _strdup(name);
@@ -72,7 +72,7 @@ void cuTest_addTestCase(TestFixture* fixture, const char* name, void (*testFunc)
 	}
 }
 
-void cuTest_execute(TestFixture* fixture) {
+void cuTest_execute(Fixture* fixture) {
 	CU_ListElement* testElement = cu_listHead(fixture->testCases);
 
 	while (testElement != NULL) {
@@ -81,7 +81,7 @@ void cuTest_execute(TestFixture* fixture) {
 	}
 }
 
-int cuTest_report(TestFixture* fixture) {
+int cuTest_report(Fixture* fixture) {
 	CU_ListElement* testElement = cu_listHead(fixture->testCases);
 
 	int accumulatedResult = CU_TEST_PASSED;
@@ -89,9 +89,9 @@ int cuTest_report(TestFixture* fixture) {
 	printf("\n\r");
 	while (testElement != NULL) {
 		TestCase* testCase = (TestCase*) testElement->data;
-		if (testCase->result->result != CU_TEST_PASSED) {
+		if (testCase->result->status != CU_TEST_PASSED) {
 			printf("%s: %s\n\r", testCase->name, testCase->result->message);
-			accumulatedResult = testCase->result->result;
+			accumulatedResult = testCase->result->status;
 		}
 		testElement = cu_listNext(testElement);
 	}
@@ -99,6 +99,6 @@ int cuTest_report(TestFixture* fixture) {
 	return accumulatedResult;
 }
 
-void cuTest_destroy(TestFixture* fixture) {
+void cuTest_destroy(Fixture* fixture) {
 	cu_listDestroy(fixture->testCases);
 }
