@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
-#include "cuTest.h"
+#include "cu_test.h"
 
 static void cuTest_destroyTestResult(TestResult* result) {
 	if (result->message != NULL) {

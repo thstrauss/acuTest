@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "..\..\Source\cuTest.h"
+#include "..\..\Source\cu_test.h"
 
 void test1(TestEnvironment* environment) {
 	cuTest_PrepareParameter(int, 1, 2, "assert", __LINE__ + 1);
