@@ -2,8 +2,8 @@
 #ifndef _CU_TEST_H_
 #define _CU_TEST_H_
 
-#include "try_catch_throw.h"
-#include "list.h"
+#include "tryctch.h"
+#include "cu_list.h"
 #include <setjmp.h>
 #include <stdlib.h>
 #include <string.h>

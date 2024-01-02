@@ -18,18 +18,18 @@
     <ClCompile Include="cuTest.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="list.c">
+    <ClCompile Include="cu_list.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="try_catch_throw.h">
+    <ClInclude Include="tryctch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cuTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="list.h">
+    <ClInclude Include="cu_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

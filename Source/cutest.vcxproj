@@ -129,12 +129,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cuTest.c" />
-    <ClCompile Include="list.c" />
+    <ClCompile Include="cu_list.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cuTest.h" />
-    <ClInclude Include="list.h" />
-    <ClInclude Include="try_catch_throw.h" />
+    <ClInclude Include="cu_list.h" />
+    <ClInclude Include="tryctch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
