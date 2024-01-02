@@ -128,12 +128,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cu_assrt.c" />
     <ClCompile Include="cu_test.c" />
     <ClCompile Include="cu_list.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cu_assrt.h" />
+    <ClInclude Include="cu_cmmn.h" />
+    <ClInclude Include="cu_tcse.h" />
+    <ClInclude Include="cu_tenv.h" />
     <ClInclude Include="cu_test.h" />
     <ClInclude Include="cu_list.h" />
+    <ClInclude Include="cu_trslt.h" />
     <ClInclude Include="tryctch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
