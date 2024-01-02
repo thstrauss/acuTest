@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "cuTest.h"
 
-void cuTest_destroy(TestResult* result) {
+static void cuTest_TestResultDestroy(TestResult* result) {
 	if (result->message != NULL) {
 		free(result->message);
 	}
@@ -123,22 +123,57 @@ static void cuTest_run(TestCase* testCase) {
 	testCase->result = result;
 }
 
-void TestFixtureInit(TestFixture* fixture, const char* name) {
+static void cuTest_TestCaseDestroy(void* data) {
+	TestCase* testCase = (TestCase*) data;
+	free(testCase->name);
+	if (testCase->result != NULL) {
+		cuTest_TestResultDestroy(testCase->result);
+	}
+}
+
+void cuTest_FixtureInit(TestFixture* fixture, const char* name) {
 	List* testCases = (List*) malloc(sizeof(List));
-	listInit(testCases, NULL);
+	listInit(testCases, cuTest_TestCaseDestroy);
 	fixture->testCases = testCases;
 	fixture->name = _strdup(name);
 }
 
-void TestFixtureAdd(TestFixture* fixture, const TestCase* testCase) {
-	listInsertTail(fixture->testCases, (void*) testCase);
+void cuTest_FixtureAddTestCase(TestFixture* fixture, const char* name, void (*testFunc)(TestEnvironment* environment)) {
+	TestCase* testCase = (TestCase*)malloc(sizeof(TestCase));
+	if (testCase != NULL) {
+		testCase->name = _strdup(name);
+		testCase->testFunc = testFunc;
+		listInsertTail(fixture->testCases, (void*)testCase);
+	}
 }
 
-void TestFixtureExecute(TestFixture* fixture) {
+void cuTest_FixtureExecute(TestFixture* fixture) {
 	ListElement* testElement = listHead(fixture->testCases);
 
 	while (testElement != NULL) {
 		cuTest_run((TestCase*) testElement->data);
 		testElement = listNext(testElement);
 	}
+}
+
+int cuTest_FixtureReport(TestFixture* fixture) {
+	ListElement* testElement = listHead(fixture->testCases);
+
+	int accumulatedResult = CU_TEST_PASSED;
+	
+	printf("\n\r");
+	while (testElement != NULL) {
+		TestCase* testCase = (TestCase*) testElement->data;
+		if (testCase->result->result != CU_TEST_PASSED) {
+			printf("%s: %s\n\r", testCase->name, testCase->result->message);
+			accumulatedResult = testCase->result->result;
+		}
+		testElement = listNext(testElement);
+	}
+
+	return accumulatedResult;
+}
+
+void cuTest_FixtureDestroy(TestFixture* fixture) {
+	listDestroy(fixture->testCases);
 }

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "..\..\Source\cuTest.h"
 
-void test(TestEnvironment* environment) {
+void test1(TestEnvironment* environment) {
 	cuTest_PrepareParameter(int, 1, 2, "assert", __LINE__ + 1);
 	cuTest_assert(environment, &cuTest_equalInt, &cuTest_equalIntFormatMessage, &parameter);
 }
@@ -20,20 +20,19 @@ void test3(TestEnvironment* environment) {
 
 int main() {
 	TestFixture fixture;
-	TestCase case1;
-	case1.name = "test";
-	case1.testFunc = &test;
+	int returnValue;
 
-	TestFixtureInit(&fixture, "testFixture");
+	cuTest_FixtureInit(&fixture, "testFixture");
 
-	TestFixtureAdd(&fixture, &case1);
+	cuTest_FixtureAddTestCase(&fixture, "test1", test1);
+	cuTest_FixtureAddTestCase(&fixture, "test2", test2);
+	cuTest_FixtureAddTestCase(&fixture, "test3", test3);
 
-	TestFixtureExecute(&fixture);
+	cuTest_FixtureExecute(&fixture);
 
-	printf("\n\r");
-	printf("%s: %s\n\r", case1.name, case1.result->message);
+	returnValue = cuTest_FixtureReport(&fixture) == CU_TEST_PASSED ? 0 : 2;
 
-	cuTest_destroy(case1.result);
+	cuTest_FixtureDestroy(&fixture);
 
-	return 0;
+	return returnValue;
 }

@@ -32,10 +32,11 @@ int listInsertTail(List* list, void* data) {
 	newElement->next = NULL; 
 	newElement->data = data;
 
-	if (list->head == NULL) {
+	if (listSize(list) == 0) {
 		list->head = newElement;
 	}
-	else {
+	
+	if (tailElement != NULL) {
 		tailElement->next = newElement;
 	}
 	list->tail = newElement;

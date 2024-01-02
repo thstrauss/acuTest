@@ -110,7 +110,6 @@ typedef struct TestFixture_ {
 			ETRY; \
 			};
 
-void cuTest_destroy(TestResult* result);
 void cuTest_assert(
 	TestEnvironment* environment, 
 	int (*assertFunc)(const AssertParameter* parameter),
@@ -135,10 +134,14 @@ void cuTest_equalStrFormatMessage(char* buffer, int bufferSize, const AssertPara
 int cuTest_notEqualStr(const AssertParameter* parameter);
 void cuTest_notEqualStrFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter);
 
-void TestFixtureAdd(TestFixture* fixture, const TestCase* testCase);
+void cuTest_FixtureAddTestCase(TestFixture* fixture, const char *name, void (*testFunc)(TestEnvironment* environment));
 
-void TestFixtureInit(TestFixture* fixture, const char* name);
+void cuTest_FixtureInit(TestFixture* fixture, const char* name);
 
-void TestFixtureExecute(TestFixture* fixture);
+void cuTest_FixtureExecute(TestFixture* fixture);
+
+int cuTest_FixtureReport(TestFixture* fixture);
+
+void cuTest_FixtureDestroy(TestFixture* fixture);
 
 #endif
