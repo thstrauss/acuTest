@@ -128,11 +128,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cuTest.c" />
+    <ClCompile Include="cu_test.c" />
     <ClCompile Include="cu_list.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cuTest.h" />
+    <ClInclude Include="cu_test.h" />
     <ClInclude Include="cu_list.h" />
     <ClInclude Include="tryctch.h" />
   </ItemGroup>

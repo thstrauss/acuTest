@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cuTest.c">
+    <ClCompile Include="cu_test.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cu_list.c">
@@ -26,7 +26,7 @@
     <ClInclude Include="tryctch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cuTest.h">
+    <ClInclude Include="cu_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cu_list.h">
