@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
+
 #include "cu_test.h"
 #include "cu_tcse.h"
 #include "cu_cmmn.h"
 #include "cu_list.h"
+#include "cu_eenv.h"
 
 static void cuTest_destroyResult(CU_Result* result) {
 	if (result->message != NULL) {
