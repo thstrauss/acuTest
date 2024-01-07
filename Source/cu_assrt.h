@@ -2,10 +2,11 @@
 #ifndef _CU_ASSERT_H_
 #define _CU_ASSERT_H_
 
-#include "cu_eenv.h"
 #include "tryctch.h"
 #include <string.h>
 #include <stdlib.h>
+
+typedef struct CU_ExecuteEnv_ CU_ExecuteEnv;
 
 typedef struct AssertParameter_ {
 	void* actual;
