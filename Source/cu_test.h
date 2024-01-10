@@ -12,16 +12,16 @@ typedef struct CU_Fixture_ {
     CU_List* testCases;
 } CU_Fixture;
 
-void cuTest_addTestCase(CU_Fixture* fixture, const char *name, void (*testFunc)(CU_ExecuteEnv* environment, const void* context));
+void cu_fixtureAddTestCase(CU_Fixture* fixture, const char *name, void (*testFunc)(CU_ExecuteEnv* environment, const void* context));
 
-void cuTest_addContext(CU_Fixture* fixture, const void* context);
+void cu_fixtureSetContext(CU_Fixture* fixture, const void* context);
 
-void cuTest_init(CU_Fixture* fixture, const char* name);
+void cu_fixtureInit(CU_Fixture* fixture, const char* name);
 
-void cuTest_execute(CU_Fixture* fixture);
+void cu_fixtureExecute(CU_Fixture* fixture);
 
-int cuTest_report(CU_Fixture* fixture);
+int cu_fixturReport(CU_Fixture* fixture);
 
-void cuTest_destroy(CU_Fixture* fixture);
+void cu_fixtureDestroy(CU_Fixture* fixture);
 
 #endif

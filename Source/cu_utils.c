@@ -6,7 +6,7 @@
 
 #include "cu_utils.h"
 
-static char* name = NULL;
+static char* progName = NULL;
 
 typedef enum CU_Level_ 
 {
@@ -15,27 +15,26 @@ typedef enum CU_Level_
 } CU_Level;
 
 char* cu_progName() {
-    return name;
+    return progName;
 }
 
 char* cu_estrdup(const char* s) {
     char* temp = _strdup(s);
     if (temp == NULL) {
         cu_eprintf("cu_estrdup(\"%.20s\") failed:", s);
-        return NULL;
     }
     return temp;
 }
 
 void cu_setProgName(const char* progName) {
-    if (name != NULL) {
-        free(name);
+    if (progName != NULL) {
+        free(progName);
     }
     if (progName != NULL) {
-        name = cu_estrdup(progName);
+        progName = cu_estrdup(progName);
     }
     else {
-        name = NULL;
+        progName = NULL;
     }
 }
 
@@ -74,14 +73,11 @@ void cu_weprintf(const char* format, ...) {
     va_end(args);
 }
 
-
-
 void* cu_emalloc(size_t size) {
     void* p;
     p = malloc(size);
     if (p == NULL) {
         cu_eprintf("malloc of %u bytes failed:", size);
-        return NULL;
     }
     return p;
 }
