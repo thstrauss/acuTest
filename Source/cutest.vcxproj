@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -131,6 +131,7 @@
     <ClCompile Include="cu_assrt.c" />
     <ClCompile Include="cu_test.c" />
     <ClCompile Include="cu_list.c" />
+    <ClCompile Include="cu_utils.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cu_assrt.h" />
@@ -140,6 +141,7 @@
     <ClInclude Include="cu_test.h" />
     <ClInclude Include="cu_list.h" />
     <ClInclude Include="cu_rslt.h" />
+    <ClInclude Include="cu_utils.h" />
     <ClInclude Include="tryctch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

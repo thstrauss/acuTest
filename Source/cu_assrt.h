@@ -5,6 +5,7 @@
 #include "tryctch.h"
 #include <string.h>
 #include <stdlib.h>
+#include "cu_utils.h"
 
 typedef struct CU_ExecuteEnv_ CU_ExecuteEnv;
 
@@ -51,8 +52,8 @@ typedef struct AssertParameter_ {
 			char* expected = NULL; \
 			TRY \
 				AssertParameter parameter; \
-				actual = _strdup(actualValue); \
- 				expected = _strdup(expectedValue); \
+				actual = cu_estrdup(actualValue); \
+ 				expected = cu_estrdup(expectedValue); \
 				parameter.actual = actual; \
 				parameter.expected = expected; \
 				parameter.fileName = __FILE__; \
@@ -70,8 +71,8 @@ typedef struct AssertParameter_ {
 			char* expected = NULL; \
 			TRY \
 				AssertParameter parameter; \
-				actual = _strdup(actualValue); \
- 				expected = _strdup(expectedValue); \
+				actual = cu_estrdup(actualValue); \
+ 				expected = cu_estrdup(expectedValue); \
 				parameter.actual = actual; \
 				parameter.expected = expected; \
 				parameter.fileName = __FILE__; \

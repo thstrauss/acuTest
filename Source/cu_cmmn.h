@@ -4,8 +4,7 @@
 
 enum {
 	CU_TEST_PASSED = 0,
-	CU_TEST_FAILED = 1,
-	CU_TEST_ERROR  = 2
+	CU_TEST_FAILED = 1
 };
 
 #endif

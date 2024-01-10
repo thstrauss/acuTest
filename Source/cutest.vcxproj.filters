@@ -24,6 +24,9 @@
     <ClCompile Include="cu_assrt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cu_utils.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tryctch.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cu_tcse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cu_utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

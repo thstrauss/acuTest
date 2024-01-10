@@ -1,4 +1,5 @@
 #include "cu_list.h"
+#include "cu_utils.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -26,7 +27,7 @@ int cu_listAppend(CU_List* list, void* data) {
 	CU_ListElement* newElement;
 	CU_ListElement* tailElement = list->tail;
 
-	if ((newElement = (CU_ListElement*)malloc(sizeof(CU_ListElement))) == NULL) {
+	if ((newElement = (CU_ListElement*) cu_emalloc(sizeof(CU_ListElement))) == NULL) {
 		return -1;
 	}
 	newElement->next = NULL; 

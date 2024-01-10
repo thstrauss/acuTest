@@ -53,11 +53,7 @@ void cuTest_notEqualStrFormatMessage(char* buffer, int bufferSize, const AssertP
 }
 
 static void cuTest_assertCore(CU_ExecuteEnv* environment, int conditionResult, const char* message) {
-	environment->result->message = _strdup(message);
-	if (environment->result->message == NULL) {
-		environment->result->status = CU_TEST_ERROR;
-		longjmp(environment->assertBuf, CU_TEST_ERROR);
-	}
+	environment->result->message = cu_estrdup(message);
 	if (!conditionResult) {
 		environment->result->status = CU_TEST_FAILED;
 		longjmp(environment->assertBuf, CU_TEST_FAILED);
@@ -70,14 +66,20 @@ void cuTest_assert(
 	void (*formatMessage)(char* buffer, int bufferSize, const AssertParameter* parameter),
 	const AssertParameter* parameter
 ) {
-	char buffer[1024];
+	const int bufferSize = 1024;
+	char* buffer = cu_emalloc(bufferSize);
 	int assertResult = assertFunc(parameter);
 
-	sprintf_s(buffer, sizeof(buffer), "");
+	TRY
+
+	sprintf_s(buffer, bufferSize, "");
 	if (!assertResult) {
 		if (formatMessage != NULL) {
-			formatMessage(buffer, sizeof(buffer), parameter);
+			formatMessage(buffer, bufferSize, parameter);
 		}
 	}
 	cuTest_assertCore(environment, assertResult, buffer);
+	FINALLY
+		free(buffer);
+	ETRY;
 }

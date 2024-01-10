@@ -8,6 +8,7 @@
 #include "cu_cmmn.h"
 #include "cu_list.h"
 #include "cu_eenv.h"
+#include "cu_utils.h"
 
 static void cuTest_destroyResult(CU_Result* result) {
 	if (result->message != NULL) {
@@ -41,10 +42,6 @@ static void cuTest_run(CU_TestCase* testCase) {
 			printf("F");
 			break;
 		}
-		case CU_TEST_ERROR: {
-			printf("E");
-			break;
-		}
 		}
 	} while (0);
 	testCase->result = result;
@@ -59,16 +56,16 @@ static void cuTest_destroyTestCase(void* data) {
 }
 
 void cuTest_init(CU_Fixture* fixture, const char* name) {
-	CU_List* testCases = (CU_List*) malloc(sizeof(CU_List));
+	CU_List* testCases = (CU_List*) cu_emalloc(sizeof(CU_List));
 	cu_listInit(testCases, cuTest_destroyTestCase);
 	fixture->testCases = testCases;
-	fixture->name = _strdup(name);
+	fixture->name = cu_estrdup(name);
 }
 
 void cuTest_addTestCase(CU_Fixture* fixture, const char* name, void (*testFunc)(CU_ExecuteEnv* environment)) {
 	CU_TestCase* testCase = (CU_TestCase*)malloc(sizeof(CU_TestCase));
 	if (testCase != NULL) {
-		testCase->name = _strdup(name);
+		testCase->name = cu_estrdup(name);
 		testCase->testFunc = testFunc;
 		cu_listAppend(fixture->testCases, (void*)testCase);
 	}
