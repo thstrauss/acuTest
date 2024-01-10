@@ -20,7 +20,7 @@ static void cuTest_destroyResult(CU_Result* result) {
 static void cuTest_run(CU_TestCase* testCase) {
     CU_ExecuteEnv environment;
 
-    CU_Result* result = (CU_Result*)malloc(sizeof(CU_Result));
+    CU_Result* result = (CU_Result*)cu_emalloc(sizeof(CU_Result));
     if (result == NULL) {
         printf("E");
         return;
@@ -32,16 +32,18 @@ static void cuTest_run(CU_TestCase* testCase) {
 
     do {
         switch (setjmp(environment.assertBuf)) {
-        case 0: while (1) {
-            testCase->testFunc(&environment);
-            break;
-        }
-              printf(".");
-              break;
-        case CU_TEST_FAILED: {
-            printf("F");
-            break;
-        }
+            case 0: {
+                while (1) {
+                    testCase->testFunc(&environment);
+                    break;
+                }
+                printf(".");
+                break;
+            }
+            case CU_TEST_FAILED: {
+                printf("F");
+                break;
+            }
         }
     } while (0);
     testCase->result = result;
