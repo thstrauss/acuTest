@@ -7,8 +7,8 @@ typedef struct CU_ExecuteEnv_ CU_ExecuteEnv;
 typedef struct CU_List_ CU_List;
 
 typedef struct CU_Fixture_ {
-	const char* name;
-	CU_List* testCases;
+    const char* name;
+    CU_List* testCases;
 } CU_Fixture;
 
 void cuTest_addTestCase(CU_Fixture* fixture, const char *name, void (*testFunc)(CU_ExecuteEnv* environment));

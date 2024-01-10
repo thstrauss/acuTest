@@ -7,8 +7,8 @@
 #include "cu_rslt.h"
 
 typedef struct CU_ExecuteEnv_ {
-	jmp_buf assertBuf;
-	CU_Result* result;
+    jmp_buf assertBuf;
+    CU_Result* result;
 } CU_ExecuteEnv;
 
 #endif

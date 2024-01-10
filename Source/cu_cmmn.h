@@ -3,8 +3,8 @@
 #define _CU_COMMON_H_
 
 enum {
-	CU_TEST_PASSED = 0,
-	CU_TEST_FAILED = 1
+    CU_TEST_PASSED = 0,
+    CU_TEST_FAILED = 1
 };
 
 #endif

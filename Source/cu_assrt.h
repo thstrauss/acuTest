@@ -11,80 +11,80 @@
 typedef struct CU_ExecuteEnv_ CU_ExecuteEnv;
 
 typedef struct AssertParameter_ {
-	void* actual;
-	void* expected;
-	const char* fileName;
-	int line;
-	char* message;
+    void* actual;
+    void* expected;
+    const char* fileName;
+    int line;
+    char* message;
 } AssertParameter;
 
 #define cuTest_PrepareParameter(type, actualValue, expectedValue, messageValue, lineValue) \
-			AssertParameter parameter; \
-			type actual = (actualValue); \
- 			type expected = (expectedValue); \
-			parameter.actual = &actual; \
-			parameter.expected = &expected; \
-			parameter.fileName = __FILE__; \
-			parameter.line = (lineValue); \
-			parameter.message = (messageValue); 
+            AssertParameter parameter; \
+            type actual = (actualValue); \
+             type expected = (expectedValue); \
+            parameter.actual = &actual; \
+            parameter.expected = &expected; \
+            parameter.fileName = __FILE__; \
+            parameter.line = (lineValue); \
+            parameter.message = (messageValue); 
 
 #define cuTest_assertEqualInt(environment, actualValue, expectedValue, messageValue) { \
-			cuTest_PrepareParameter(int, actualValue, expectedValue, messageValue, __LINE__) \
-			cuTest_assert(environment, &cuTest_equalInt, &cuTest_equalIntFormatMessage, &parameter); \
-			};
+            cuTest_PrepareParameter(int, actualValue, expectedValue, messageValue, __LINE__) \
+            cuTest_assert(environment, &cuTest_equalInt, &cuTest_equalIntFormatMessage, &parameter); \
+            };
 
 #define cuTest_assertNotEqualInt(environment, actualValue, expectedValue, messageValue) {\
-			cuTest_PrepareParameter(int, actualValue, expectedValue, messageValue, __LINE__) \
-			cuTest_assert(environment, &cuTest_notEqualInt, &cuTest_notEqualIntFormatMessage, &parameter); \
-			};
+            cuTest_PrepareParameter(int, actualValue, expectedValue, messageValue, __LINE__) \
+            cuTest_assert(environment, &cuTest_notEqualInt, &cuTest_notEqualIntFormatMessage, &parameter); \
+            };
 
 #define cuTest_assertEqualPtr(environment, actualValue, expectedValue, messageValue) {\
-			cuTest_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
-			cuTest_assert(environment, &cuTest_equalPtr, &cuTest_equalPtrFormatMessage, &parameter); \
-			};
+            cuTest_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
+            cuTest_assert(environment, &cuTest_equalPtr, &cuTest_equalPtrFormatMessage, &parameter); \
+            };
 
 #define cuTest_assertNotEqualPtr(environment, actualValue, expectedValue, messageValue) {\
-			cuTest_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
-			cuTest_assert(environment, &cuTest_notEqualStr, &cuTest_notEqualPtrFormatMessage, &parameter); \
-			};
+            cuTest_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
+            cuTest_assert(environment, &cuTest_notEqualStr, &cuTest_notEqualPtrFormatMessage, &parameter); \
+            };
 
 #define cuTest_assertEqualStr(environment, actualValue, expectedValue, messageValue) {\
-			char* actual = NULL; \
-			char* expected = NULL; \
-			TRY \
-				AssertParameter parameter; \
-				actual = cu_estrdup(actualValue); \
- 				expected = cu_estrdup(expectedValue); \
-				parameter.actual = actual; \
-				parameter.expected = expected; \
-				parameter.fileName = __FILE__; \
-				parameter.line = __LINE__; \
-				parameter.message = (messageValue); \
-				cuTest_assert(environment, &cuTest_equalStr, &cuTest_equalStrFormatMessage, &parameter); \
-			FINALLY \
-				free(expected); \
-				free(actual); \
-			ETRY; \
-			};
+            char* actual = NULL; \
+            char* expected = NULL; \
+            TRY \
+                AssertParameter parameter; \
+                actual = cu_estrdup(actualValue); \
+                 expected = cu_estrdup(expectedValue); \
+                parameter.actual = actual; \
+                parameter.expected = expected; \
+                parameter.fileName = __FILE__; \
+                parameter.line = __LINE__; \
+                parameter.message = (messageValue); \
+                cuTest_assert(environment, &cuTest_equalStr, &cuTest_equalStrFormatMessage, &parameter); \
+            FINALLY \
+                free(expected); \
+                free(actual); \
+            ETRY; \
+            };
 
 #define cuTest_assertNotEqualStr(environment, actualValue, expectedValue, messageValue) {\
-			char* actual = NULL; \
-			char* expected = NULL; \
-			TRY \
-				AssertParameter parameter; \
-				actual = cu_estrdup(actualValue); \
- 				expected = cu_estrdup(expectedValue); \
-				parameter.actual = actual; \
-				parameter.expected = expected; \
-				parameter.fileName = __FILE__; \
-				parameter.line = __LINE__; \
-				parameter.message = (messageValue); \
-				cuTest_assert(environment, &cuTest_notEqualStr, &cuTest_notEqualStrFormatMessage, &parameter); \
-			FINALLY \
-				free(expected); \
-				free(actual); \
-			ETRY; \
-			};
+            char* actual = NULL; \
+            char* expected = NULL; \
+            TRY \
+                AssertParameter parameter; \
+                actual = cu_estrdup(actualValue); \
+                 expected = cu_estrdup(expectedValue); \
+                parameter.actual = actual; \
+                parameter.expected = expected; \
+                parameter.fileName = __FILE__; \
+                parameter.line = __LINE__; \
+                parameter.message = (messageValue); \
+                cuTest_assert(environment, &cuTest_notEqualStr, &cuTest_notEqualStrFormatMessage, &parameter); \
+            FINALLY \
+                free(expected); \
+                free(actual); \
+            ETRY; \
+            };
 
 
 
@@ -107,9 +107,9 @@ int cuTest_notEqualStr(const AssertParameter* parameter);
 void cuTest_notEqualStrFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter);
 
 void cuTest_assert(
-	CU_ExecuteEnv* environment,
-	int (*assertFunc)(const AssertParameter* parameter),
-	void (*formatMessage)(char* buffer, int bufferSize, const AssertParameter* parameter),
-	const AssertParameter* parameter);
+    CU_ExecuteEnv* environment,
+    int (*assertFunc)(const AssertParameter* parameter),
+    void (*formatMessage)(char* buffer, int bufferSize, const AssertParameter* parameter),
+    const AssertParameter* parameter);
 
 #endif
