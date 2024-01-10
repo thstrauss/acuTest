@@ -21,7 +21,7 @@ typedef struct AssertParameter_ {
 #define cuTest_PrepareParameter(type, actualValue, expectedValue, messageValue, lineValue) \
             AssertParameter parameter; \
             type actual = (actualValue); \
-             type expected = (expectedValue); \
+            type expected = (expectedValue); \
             parameter.actual = &actual; \
             parameter.expected = &expected; \
             parameter.fileName = __FILE__; \
@@ -85,8 +85,6 @@ typedef struct AssertParameter_ {
                 free(actual); \
             ETRY; \
             };
-
-
 
 int cuTest_equalInt(const AssertParameter* parameter);
 void cuTest_equalIntFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter);

@@ -17,7 +17,7 @@ static void cuTest_destroyResult(CU_Result* result) {
     free(result);
 }
 
-static void cuTest_run(CU_TestCase* testCase) {
+static void cuTest_run(CU_TestCase* testCase, const void* context) {
     CU_ExecuteEnv environment;
 
     CU_Result* result = (CU_Result*)cu_emalloc(sizeof(CU_Result));
@@ -34,7 +34,7 @@ static void cuTest_run(CU_TestCase* testCase) {
         switch (setjmp(environment.assertBuf)) {
             case 0: {
                 while (1) {
-                    testCase->testFunc(&environment);
+                    testCase->testFunc(&environment, context);
                     break;
                 }
                 printf(".");
@@ -64,7 +64,7 @@ void cuTest_init(CU_Fixture* fixture, const char* name) {
     fixture->name = cu_estrdup(name);
 }
 
-void cuTest_addTestCase(CU_Fixture* fixture, const char* name, void (*testFunc)(CU_ExecuteEnv* environment)) {
+void cuTest_addTestCase(CU_Fixture* fixture, const char* name, void (*testFunc)(CU_ExecuteEnv* environment, const void* context)) {
     CU_TestCase* testCase = (CU_TestCase*)malloc(sizeof(CU_TestCase));
     if (testCase != NULL) {
         testCase->name = cu_estrdup(name);
@@ -73,11 +73,16 @@ void cuTest_addTestCase(CU_Fixture* fixture, const char* name, void (*testFunc)(
     }
 }
 
+void cuTest_addContext(CU_Fixture* fixture, const void* context)
+{
+    fixture->context = context;
+}
+
 void cuTest_execute(CU_Fixture* fixture) {
     CU_ListElement* testElement = cu_listHead(fixture->testCases);
 
     while (testElement != NULL) {
-        cuTest_run((CU_TestCase*) testElement->data);
+        cuTest_run((CU_TestCase*) testElement->data, fixture->context);
         testElement = cu_listNext(testElement);
     }
 }

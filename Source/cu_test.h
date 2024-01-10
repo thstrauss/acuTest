@@ -8,10 +8,13 @@ typedef struct CU_List_ CU_List;
 
 typedef struct CU_Fixture_ {
     const char* name;
+    const void* context;
     CU_List* testCases;
 } CU_Fixture;
 
-void cuTest_addTestCase(CU_Fixture* fixture, const char *name, void (*testFunc)(CU_ExecuteEnv* environment));
+void cuTest_addTestCase(CU_Fixture* fixture, const char *name, void (*testFunc)(CU_ExecuteEnv* environment, const void* context));
+
+void cuTest_addContext(CU_Fixture* fixture, const void* context);
 
 void cuTest_init(CU_Fixture* fixture, const char* name);
 
