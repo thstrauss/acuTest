@@ -1,8 +1,9 @@
+#include <string.h>
+#include <stdio.h>
+
 #include "cu_assrt.h"
 #include "cu_eenv.h"
 #include "cu_cmmn.h"
-#include <string.h>
-#include <stdio.h>
 
 int cuTest_equalInt(const AssertParameter* parameter) {
 	return *(const int*)parameter->actual == *(const int*)parameter->expected;

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _CU_TEST_CASE_H
-#define _CU_TEST_CASE_H
+#ifndef _CU_TEST_CASE_H_
+#define _CU_TEST_CASE_H_
 
 #include "cu_rslt.h"
 #include "cu_eenv.h"

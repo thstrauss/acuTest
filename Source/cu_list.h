@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _CU_LIST_H
-#define _CU_LIST_H
+#ifndef _CU_LIST_H_
+#define _CU_LIST_H_
 
 #include <stdlib.h>
 

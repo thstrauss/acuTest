@@ -1,6 +1,5 @@
 #include "cu_list.h"
 #include "cu_utils.h"
-
 #include <stdlib.h>
 #include <string.h>
 
