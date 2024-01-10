@@ -67,7 +67,7 @@ static int cu_listRemoveHead(CU_List* list, void** data) {
 }
 
 void cu_listDestroy(CU_List* list) {
-	void* data;
+	void* data = NULL;
 
 	while (cu_listSize(list) > 0) {
 		if (cu_listRemoveHead(list, (void**)&data) == 0 && list->destroy != NULL) {

@@ -72,14 +72,13 @@ void cuTest_assert(
 	int assertResult = assertFunc(parameter);
 
 	TRY
-
-	sprintf_s(buffer, bufferSize, "");
-	if (!assertResult) {
-		if (formatMessage != NULL) {
-			formatMessage(buffer, bufferSize, parameter);
+		sprintf_s(buffer, bufferSize, "");
+		if (!assertResult) {
+			if (formatMessage != NULL) {
+				formatMessage(buffer, bufferSize, parameter);
+			}
 		}
-	}
-	cuTest_assertCore(environment, assertResult, buffer);
+		cuTest_assertCore(environment, assertResult, buffer);
 	FINALLY
 		free(buffer);
 	ETRY;
