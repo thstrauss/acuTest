@@ -1,25 +1,11 @@
 #include <string.h>
 #include <stdio.h>
 
+#define __emit 1
 #include "cu_assrt.h"
+#undef __emit
 #include "cu_eenv.h"
 #include "cu_cmmn.h"
-
-int cu_equalInt(const AssertParameter* parameter) {
-    return *(const int*)parameter->actual == *(const int*)parameter->expected;
-}
-
-void cu_equalIntFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) {
-    sprintf_s(buffer, bufferSize, "%s:%d -> actual value %d not equal to expected value %d: %s", parameter->fileName, parameter->line, *(const int*)parameter->actual, *(const int*)parameter->expected, parameter->message);
-}
-
-int cu_notEqualInt(const AssertParameter* parameter) {
-    return *(const int*)parameter->actual != *(const int*)parameter->expected;
-}
-
-void cu_notEqualIntFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) {
-    sprintf_s(buffer, bufferSize, "%s:%d -> actual value %d equal to expected value %d: %s", parameter->fileName, parameter->line, *(const int*)parameter->actual, *(const int*)parameter->expected, parameter->message);
-}
 
 int cu_equalPtr(const AssertParameter* parameter) {
     return parameter->actual == parameter->expected;
@@ -49,7 +35,7 @@ int cu_notEqualStr(const AssertParameter* parameter) {
     return strcmp((const char*)(parameter->actual), (const char*)(parameter->expected)) != 0;
 }
 
-void cuTest_notEqualStrFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) {
+void cu_notEqualStrFormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) {
     sprintf_s(buffer, bufferSize, "%s:%d -> actual value \"%s\" equal to expected value \"%s\": %s", parameter->fileName, parameter->line, (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
 }
 

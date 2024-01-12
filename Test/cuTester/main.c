@@ -4,21 +4,21 @@
 #include "..\..\Source\cu_cmmn.h"
 
 void test1(CU_ExecuteEnv* environment, const void* context) {
-    cu_PrepareParameter(int, 1, 2, "assert", __LINE__ + 1);
+    CU_PrepareParameter(int, 1, 2, "assert", __LINE__ + 1);
     cu_assert(environment, &cu_equalInt, &cu_equalIntFormatMessage, &parameter);
 }
 
 void test2(CU_ExecuteEnv* environment, const void* context) {
-    cu_assertEqualInt(environment, 1, 1, "assert2");
-    cu_assertNotEqualInt(environment, 1, 2, "xxx");
+    CU_assertEqualInt(environment, 1, 1, "assert2");
+    CU_assertNotEqualInt(environment, 1, 2, "xxx");
 }
 
 void test3(CU_ExecuteEnv* environment, const void* context) {
     char str[] = "abc";
-    cu_assertEqualStr(environment, str, str, "assert2");
-    cu_assertEqualStr(environment, "abc", "abc", "assert2");
-    cu_assertEqualStr(environment, (char*) context, "context", "assert context");
-    cu_assertNotEqualStr(environment, "str", "abc", "assert2");
+    CU_assertEqualStr(environment, str, str, "assert2");
+    CU_assertEqualStr(environment, "abc", "abc", "assert2");
+    CU_assertEqualStr(environment, (char*) context, "context", "assert context");
+    CU_assertNotEqualStr(environment, "str", "abc", "assert2");
 }
 
 int main() {
