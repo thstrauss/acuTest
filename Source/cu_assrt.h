@@ -35,36 +35,37 @@ void cu_assert(
             parameter.message = (messageValue); 
 
 #ifdef __emit
-#define CREATE_ASSERT_FUNC(name, type, op, format) \
-int cu_##name(const AssertParameter* parameter) { \
-    return *(const type*)parameter->actual op *(const type*)parameter->expected; \
+#define CREATE_ASSERT_FUNC(type, op, opcode, format) \
+int cu_##type##op(const AssertParameter* parameter) { \
+    return *(const type*)parameter->actual opcode *(const type*)parameter->expected; \
 } \
-void cu_##name##FormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) { \
+void cu_##type##op##FormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter) { \
 char formatBuffer[128]; \
 sprintf_s(formatBuffer, sizeof(formatBuffer), "%%s:%%d -> actual value %s not %%s to expected value %s: %%s", #format, #format); \
-sprintf_s(buffer, bufferSize, formatBuffer, parameter->fileName, parameter->line, *(const type*)parameter->actual, #op, *(const type*)parameter->expected, parameter->message); \
+sprintf_s(buffer, bufferSize, formatBuffer, parameter->fileName, parameter->line, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
+} \
+void cu_assert_##type##op(CU_ExecuteEnv* environment, const AssertParameter* parameter) { \
+    cu_assert(environment, &cu_##type##op, &cu_##type##op##FormatMessage, parameter); \
 }
 #else
-#define CREATE_ASSERT_FUNC(name, type, op, format) \
-int cu_##name(const AssertParameter* parameter); \
-void cu_##name##FormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter); 
+#define CREATE_ASSERT_FUNC(type, op, opCode, format) \
+int cu_##type##op(const AssertParameter* parameter); \
+void cu_##type##op##FormatMessage(char* buffer, int bufferSize, const AssertParameter* parameter); \
+void cu_assert_##type##op(CU_ExecuteEnv* environment, const AssertParameter* parameter);
 #endif
 
-CREATE_ASSERT_FUNC(equalInt, int, ==, %d )
-CREATE_ASSERT_FUNC(lessInt, int, <, %d)
-CREATE_ASSERT_FUNC(greaterInt, int, >, %d )
-CREATE_ASSERT_FUNC(notEqualInt, int, != , %d)
-CREATE_ASSERT_FUNC(equalfloat, float, ==, %f )
-CREATE_ASSERT_FUNC(equaldouble, double, ==, %lf )
+CREATE_ASSERT_FUNC(int, Equal, ==, %d )
+CREATE_ASSERT_FUNC(int, Less, <, %d)
+CREATE_ASSERT_FUNC(int, Greater, >, %d )
+CREATE_ASSERT_FUNC(int, NotEqual, != , %d)
+CREATE_ASSERT_FUNC(float, Equal, ==, %f )
+CREATE_ASSERT_FUNC(float, NotEqual, != , % f)
+CREATE_ASSERT_FUNC(double, Equal, ==, %lf )
+CREATE_ASSERT_FUNC(double, NotEqual, == , % lf)
 
-#define CU_assertEqualInt(environment, actualValue, expectedValue, messageValue) { \
-            CU_PrepareParameter(int, actualValue, expectedValue, messageValue, __LINE__) \
-            cu_assert(environment, &cu_equalInt, &cu_equalIntFormatMessage, &parameter); \
-            };
-
-#define CU_assertNotEqualInt(environment, actualValue, expectedValue, messageValue) {\
-            CU_PrepareParameter(int, actualValue, expectedValue, messageValue, __LINE__) \
-            cu_assert(environment, &cu_notEqualInt, &cu_notEqualIntFormatMessage, &parameter); \
+#define CU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
+            CU_PrepareParameter(type, actualValue, expectedValue, messageValue, __LINE__) \
+            cu_assert_##type##op(environment, &parameter); \
             };
 
 #define CU_assertEqualPtr(environment, actualValue, expectedValue, messageValue) {\

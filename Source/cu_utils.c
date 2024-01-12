@@ -6,7 +6,7 @@
 
 #include "cu_utils.h"
 
-static char* progName = NULL;
+static char* programName = NULL;
 
 typedef enum CU_Level_ 
 {
@@ -15,7 +15,7 @@ typedef enum CU_Level_
 } CU_Level;
 
 char* cu_progName() {
-    return progName;
+    return programName;
 }
 
 char* cu_estrdup(const char* s) {
@@ -27,14 +27,14 @@ char* cu_estrdup(const char* s) {
 }
 
 void cu_setProgName(const char* progName) {
-    if (progName != NULL) {
-        free(progName);
+    if (programName != NULL) {
+        free(programName);
     }
     if (progName != NULL) {
-        progName = cu_estrdup(progName);
+        programName = cu_estrdup(progName);
     }
     else {
-        progName = NULL;
+        programName = NULL;
     }
 }
 
