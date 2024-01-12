@@ -5,12 +5,14 @@
 
 void test1(CU_ExecuteEnv* environment, const void* context) {
     CU_PrepareParameter(int, 1, 2, "assert", __LINE__ + 1);
-    cu_assert(environment, &cu_equalInt, &cu_equalIntFormatMessage, &parameter);
+    cu_assert(environment, &cu_intEqual, &cu_intEqualFormatMessage, &parameter);
+    cu_assert_intEqual(environment, &parameter);
 }
 
 void test2(CU_ExecuteEnv* environment, const void* context) {
-    CU_assertEqualInt(environment, 1, 1, "assert2");
-    CU_assertNotEqualInt(environment, 1, 2, "xxx");
+    CU_assert(environment, int, Equal, 1, 1, "assert2");
+    CU_assert(environment, int, NotEqual, 1, 2, "xxx");
+    CU_assert(environment, float, NotEqual, 1.0, 2.0, "yyy");
 }
 
 void test3(CU_ExecuteEnv* environment, const void* context) {
