@@ -54,14 +54,40 @@ void cu_##type##op##FormatMessage(char* buffer, int bufferSize, const AssertPara
 void cu_assert_##type##op(CU_ExecuteEnv* environment, const AssertParameter* parameter);
 #endif
 
-CREATE_ASSERT_FUNC(int, Equal, ==, %d )
-CREATE_ASSERT_FUNC(int, Less, <, %d)
-CREATE_ASSERT_FUNC(int, Greater, >, %d )
+CREATE_ASSERT_FUNC(char, Equal, ==, %c)
+CREATE_ASSERT_FUNC(char, NotEqual, != , %c)
+CREATE_ASSERT_FUNC(char, Less, <, %c)
+CREATE_ASSERT_FUNC(char, Greater, >, %c)
+CREATE_ASSERT_FUNC(char, LessEqual, <=, %c)
+CREATE_ASSERT_FUNC(char, GreaterEqual, >= , %c)
+
+CREATE_ASSERT_FUNC(int, Equal, ==, %d)
 CREATE_ASSERT_FUNC(int, NotEqual, != , %d)
-CREATE_ASSERT_FUNC(float, Equal, ==, %f )
+CREATE_ASSERT_FUNC(int, Less, <, %d)
+CREATE_ASSERT_FUNC(int, Greater, >, %d)
+CREATE_ASSERT_FUNC(int, LessEqual, <=, %d)
+CREATE_ASSERT_FUNC(int, GreaterEqual, >= , %d)
+
+CREATE_ASSERT_FUNC(long, Equal, ==, %d)
+CREATE_ASSERT_FUNC(long, NotEqual, != , %d)
+CREATE_ASSERT_FUNC(long, Less, <, %d)
+CREATE_ASSERT_FUNC(long, Greater, >, %d)
+CREATE_ASSERT_FUNC(long, LessEqual, <=, %d)
+CREATE_ASSERT_FUNC(long, GreaterEqual, >= , %d)
+
+CREATE_ASSERT_FUNC(float, Equal, ==, %f)
 CREATE_ASSERT_FUNC(float, NotEqual, != , % f)
-CREATE_ASSERT_FUNC(double, Equal, ==, %lf )
+CREATE_ASSERT_FUNC(float, Less, <, %f)
+CREATE_ASSERT_FUNC(float, Greater, >, %f)
+CREATE_ASSERT_FUNC(float, LessEqual, <=, %f)
+CREATE_ASSERT_FUNC(float, GreaterEqual, >= , %f)
+
+CREATE_ASSERT_FUNC(double, Equal, ==, %lf)
 CREATE_ASSERT_FUNC(double, NotEqual, == , % lf)
+CREATE_ASSERT_FUNC(double, Less, <, %lf)
+CREATE_ASSERT_FUNC(double, Greater, >, %lf)
+CREATE_ASSERT_FUNC(double, LessEqual, <=, %lf)
+CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 
 #define CU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
             CU_PrepareParameter(type, actualValue, expectedValue, messageValue, __LINE__) \
