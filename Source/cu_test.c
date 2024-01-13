@@ -18,7 +18,7 @@ static void cuTest_destroyResult(CU_Result* result) {
 }
 
 static void cuTest_run(CU_TestCase* testCase, const void* context) {
-    CU_ExecuteEnv environment;
+    ACU_ExecuteEnv environment;
 
     CU_Result* result = (CU_Result*)cu_emalloc(sizeof(CU_Result));
     if (result == NULL) {
@@ -64,7 +64,7 @@ void cu_fixtureInit(CU_Fixture* fixture, const char* name) {
     fixture->name = cu_estrdup(name);
 }
 
-void cu_fixtureAddTestCase(CU_Fixture* fixture, const char* name, void (*testFunc)(CU_ExecuteEnv* environment, const void* context)) {
+void cu_fixtureAddTestCase(CU_Fixture* fixture, const char* name, void (*testFunc)(ACU_ExecuteEnv* environment, const void* context)) {
     CU_TestCase* testCase = (CU_TestCase*)malloc(sizeof(CU_TestCase));
     if (testCase != NULL) {
         testCase->name = cu_estrdup(name);

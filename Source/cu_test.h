@@ -2,7 +2,7 @@
 #ifndef _CU_TEST_H_
 #define _CU_TEST_H_
 
-typedef struct CU_ExecuteEnv_ CU_ExecuteEnv;
+typedef struct ACU_ExecuteEnv_ ACU_ExecuteEnv;
 
 typedef struct CU_List_ CU_List;
 
@@ -12,7 +12,7 @@ typedef struct CU_Fixture_ {
     CU_List* testCases;
 } CU_Fixture;
 
-void cu_fixtureAddTestCase(CU_Fixture* fixture, const char *name, void (*testFunc)(CU_ExecuteEnv* environment, const void* context));
+void cu_fixtureAddTestCase(CU_Fixture* fixture, const char *name, void (*testFunc)(ACU_ExecuteEnv* environment, const void* context));
 
 void cu_fixtureSetContext(CU_Fixture* fixture, const void* context);
 
