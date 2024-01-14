@@ -1,6 +1,8 @@
 #pragma once
-#ifndef _ACU_TEST_H_
-#define _ACU_TEST_H_
+#ifndef _ACU_FIXTURE_H_
+#define _ACU_FIXTURE_H_
+
+#include "acu_cmmn.h"
 
 typedef struct ACU_ExecuteEnv_ ACU_ExecuteEnv;
 

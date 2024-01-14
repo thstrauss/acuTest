@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="acu_test.c">
+    <ClCompile Include="acu_fxtr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="acu_list.c">
@@ -32,7 +32,7 @@
     <ClInclude Include="tryctch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="acu_test.h">
+    <ClInclude Include="acu_fxtr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_list.h">

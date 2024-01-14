@@ -129,7 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="acu_assrt.c" />
-    <ClCompile Include="acu_test.c" />
+    <ClCompile Include="acu_fxtr.c" />
     <ClCompile Include="acu_list.c" />
     <ClCompile Include="acu_util.c" />
   </ItemGroup>
@@ -138,7 +138,7 @@
     <ClInclude Include="acu_cmmn.h" />
     <ClInclude Include="acu_tcse.h" />
     <ClInclude Include="acu_eenv.h" />
-    <ClInclude Include="acu_test.h" />
+    <ClInclude Include="acu_fxtr.h" />
     <ClInclude Include="acu_list.h" />
     <ClInclude Include="acu_rslt.h" />
     <ClInclude Include="acu_util.h" />
