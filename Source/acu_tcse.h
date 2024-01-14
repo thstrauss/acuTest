@@ -1,9 +1,9 @@
 #pragma once
-#ifndef _CU_TEST_CASE_H_
-#define _CU_TEST_CASE_H_
+#ifndef _ACU_TEST_CASE_H_
+#define _ACU_TEST_CASE_H_
 
-#include "cu_rslt.h"
-#include "cu_eenv.h"
+#include "acu_rslt.h"
+#include "acu_eenv.h"
 
 typedef struct ACU_TestCase_ {
     char* name;

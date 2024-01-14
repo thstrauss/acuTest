@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _CU_UTILS_H_
-#define _CU_UTILS_H_
+#ifndef _ACU_UTILS_H_
+#define _ACU_UTILS_H_
 
 void acu_eprintf(const char* format, ...);
 void acu_weprintf(const char* format, ...);

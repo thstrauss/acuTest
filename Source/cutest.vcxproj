@@ -128,20 +128,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cu_assrt.c" />
-    <ClCompile Include="cu_test.c" />
-    <ClCompile Include="cu_list.c" />
-    <ClCompile Include="cu_utils.c" />
+    <ClCompile Include="acu_assrt.c" />
+    <ClCompile Include="acu_test.c" />
+    <ClCompile Include="acu_list.c" />
+    <ClCompile Include="acu_util.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cu_assrt.h" />
-    <ClInclude Include="cu_cmmn.h" />
-    <ClInclude Include="cu_tcse.h" />
-    <ClInclude Include="cu_eenv.h" />
-    <ClInclude Include="cu_test.h" />
-    <ClInclude Include="cu_list.h" />
-    <ClInclude Include="cu_rslt.h" />
-    <ClInclude Include="cu_utils.h" />
+    <ClInclude Include="acu_assrt.h" />
+    <ClInclude Include="acu_cmmn.h" />
+    <ClInclude Include="acu_tcse.h" />
+    <ClInclude Include="acu_eenv.h" />
+    <ClInclude Include="acu_test.h" />
+    <ClInclude Include="acu_list.h" />
+    <ClInclude Include="acu_rslt.h" />
+    <ClInclude Include="acu_util.h" />
     <ClInclude Include="tryctch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

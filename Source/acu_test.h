@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _CU_TEST_H_
-#define _CU_TEST_H_
+#ifndef _ACU_TEST_H_
+#define _ACU_TEST_H_
 
 typedef struct ACU_ExecuteEnv_ ACU_ExecuteEnv;
 

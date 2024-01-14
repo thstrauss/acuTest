@@ -2,10 +2,10 @@
 #include <stdio.h>
 
 #define __ACU_EMIT_ASSERT_FUNCS__
-#include "cu_assrt.h"
+#include "acu_assrt.h"
 #undef __ACU_EMIT_ASSERT_FUNCS__
-#include "cu_eenv.h"
-#include "cu_cmmn.h"
+#include "acu_eenv.h"
+#include "acu_cmmn.h"
 
 int acu_equalPtr(const ACU_AssertParameter* parameter) {
     return parameter->actual == parameter->expected;
