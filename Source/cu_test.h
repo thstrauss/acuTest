@@ -4,12 +4,12 @@
 
 typedef struct ACU_ExecuteEnv_ ACU_ExecuteEnv;
 
-typedef struct CU_List_ CU_List;
+typedef struct ACU_List_ ACU_List;
 
 typedef struct CU_Fixture_ {
     const char* name;
     const void* context;
-    CU_List* testCases;
+    ACU_List* testCases;
 } ACU_Fixture;
 
 void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char *name, void (*testFunc)(ACU_ExecuteEnv* environment, const void* context));

@@ -58,7 +58,7 @@ static void cuTest_destroyTestCase(void* data) {
 }
 
 void acu_fixtureInit(ACU_Fixture* fixture, const char* name) {
-    CU_List* testCases = (CU_List*) cu_emalloc(sizeof(CU_List));
+    ACU_List* testCases = (ACU_List*) cu_emalloc(sizeof(ACU_List));
     acu_listInit(testCases, cuTest_destroyTestCase);
     fixture->testCases = testCases;
     fixture->name = cu_estrdup(name);
