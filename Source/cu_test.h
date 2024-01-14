@@ -10,18 +10,18 @@ typedef struct CU_Fixture_ {
     const char* name;
     const void* context;
     CU_List* testCases;
-} CU_Fixture;
+} ACU_Fixture;
 
-void cu_fixtureAddTestCase(CU_Fixture* fixture, const char *name, void (*testFunc)(ACU_ExecuteEnv* environment, const void* context));
+void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char *name, void (*testFunc)(ACU_ExecuteEnv* environment, const void* context));
 
-void cu_fixtureSetContext(CU_Fixture* fixture, const void* context);
+void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context);
 
-void cu_fixtureInit(CU_Fixture* fixture, const char* name);
+void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
 
-void cu_fixtureExecute(CU_Fixture* fixture);
+void acu_fixtureExecute(ACU_Fixture* fixture);
 
-int cu_fixturReport(CU_Fixture* fixture);
+int acu_fixturReport(ACU_Fixture* fixture);
 
-void cu_fixtureDestroy(CU_Fixture* fixture);
+void acu_fixtureDestroy(ACU_Fixture* fixture);
 
 #endif

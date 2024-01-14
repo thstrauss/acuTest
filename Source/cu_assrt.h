@@ -18,13 +18,13 @@ typedef struct ACU_AssertParameter_ {
     char* message;
 } ACU_AssertParameter;
 
-void cu_assert(
+void acu_assert(
     ACU_ExecuteEnv* environment,
     int (*assertFunc)(const ACU_AssertParameter* parameter),
     void (*formatMessage)(char* buffer, int bufferSize, const ACU_AssertParameter* parameter),
     const ACU_AssertParameter* parameter);
 
-#define CU_PrepareParameter(type, actualValue, expectedValue, messageValue, lineValue) \
+#define ACU_PrepareParameter(type, actualValue, expectedValue, messageValue, lineValue) \
             ACU_AssertParameter parameter; \
             type __actual = (actualValue); \
             type __expected = (expectedValue); \
@@ -36,22 +36,22 @@ void cu_assert(
 
 #ifdef __ACU_EMIT_ASSERT_FUNCS__
 #define CREATE_ASSERT_FUNC(type, op, opcode, format) \
-int cu_##type##op(const ACU_AssertParameter* parameter) { \
+int acu_##type##op(const ACU_AssertParameter* parameter) { \
     return *(const type*)parameter->actual opcode *(const type*)parameter->expected; \
 } \
-void cu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) { \
+void acu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) { \
 char formatBuffer[128]; \
 sprintf_s(formatBuffer, sizeof(formatBuffer), "%%s:%%d -> actual value %s not %%s to expected value %s: %%s", #format, #format); \
 sprintf_s(buffer, bufferSize, formatBuffer, parameter->fileName, parameter->line, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
 } \
-void cu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) { \
-    cu_assert(environment, &cu_##type##op, &cu_##type##op##FormatMessage, parameter); \
+void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) { \
+    acu_assert(environment, &acu_##type##op, &acu_##type##op##FormatMessage, parameter); \
 }
 #else
 #define CREATE_ASSERT_FUNC(type, op, opCode, format) \
-int cu_##type##op(const ACU_AssertParameter* parameter); \
-void cu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter); \
-void cu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter);
+int acu_##type##op(const ACU_AssertParameter* parameter); \
+void acu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter); \
+void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter);
 #endif
 
 CREATE_ASSERT_FUNC(char, Equal, ==, %c)
@@ -89,22 +89,22 @@ CREATE_ASSERT_FUNC(double, Greater, >, %lf)
 CREATE_ASSERT_FUNC(double, LessEqual, <=, %lf)
 CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 
-#define CU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
-            CU_PrepareParameter(type, actualValue, expectedValue, messageValue, __LINE__) \
-            cu_assert_##type##op(environment, &parameter); \
+#define ACU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
+            ACU_PrepareParameter(type, actualValue, expectedValue, messageValue, __LINE__) \
+            acu_assert_##type##op(environment, &parameter); \
             };
 
-#define CU_assertEqualPtr(environment, actualValue, expectedValue, messageValue) {\
-            CU_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
-            cu_assert(environment, &cu_equalPtr, &cu_equalPtrFormatMessage, &parameter); \
+#define ACU_assert_ptrEqual(environment, actualValue, expectedValue, messageValue) {\
+            ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
+            acu_assert(environment, &cu_equalPtr, &cu_equalPtrFormatMessage, &parameter); \
             };
 
-#define CU_assertNotEqualPtr(environment, actualValue, expectedValue, messageValue) {\
-            CU_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
-            cu_assert(environment, &cu_notEqualStr, &cu_notEqualPtrFormatMessage, &parameter); \
+#define ACU_assert_ptrNotEqual(environment, actualValue, expectedValue, messageValue) {\
+            ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
+            acu_assert(environment, &cu_notEqualStr, &cu_notEqualPtrFormatMessage, &parameter); \
             };
 
-#define __CU_assertStr(environment, actualValue, expectedValue, messageValue, assertFunc) {\
+#define __ACU_assert_str(environment, actualValue, expectedValue, messageValue, assertFunc) {\
             char* __actual = NULL; \
             char* __expected = NULL; \
             TRY \
@@ -116,19 +116,19 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
                 parameter.fileName = __FILE__; \
                 parameter.line = __LINE__; \
                 parameter.message = (messageValue); \
-                cu_assert(environment, &assertFunc, &assertFunc##FormatMessage, &parameter); \
+                acu_assert(environment, &assertFunc, &assertFunc##FormatMessage, &parameter); \
             FINALLY \
                 free(__expected); \
                 free(__actual); \
             ETRY; \
             };
 
-#define CU_assertEqualStr(environment, actualValue, expectedValue, messageValue) {\
-                __CU_assertStr(environment, actualValue, expectedValue, messageValue, cu_equalStr) \
+#define ACU_assert_strEqual(environment, actualValue, expectedValue, messageValue) {\
+                __ACU_assert_str(environment, actualValue, expectedValue, messageValue, cu_equalStr) \
             };
 
-#define CU_assertNotEqualStr(environment, actualValue, expectedValue, messageValue) {\
-                __CU_assertStr(environment, actualValue, expectedValue, messageValue, cu_notEqualStr) \
+#define ACU_assert_strNotEqual(environment, actualValue, expectedValue, messageValue) {\
+                __ACU_assert_str(environment, actualValue, expectedValue, messageValue, cu_notEqualStr) \
             };
 
 int cu_equalPtr(const ACU_AssertParameter* parameter);
