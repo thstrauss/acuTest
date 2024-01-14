@@ -36,7 +36,7 @@ int main() {
 
     acu_fixtureExecute(&fixture);
 
-    returnValue = acu_fixturReport(&fixture) == CU_TEST_PASSED ? 0 : 2;
+    returnValue = acu_fixturReport(&fixture) == ACU_TEST_PASSED ? 0 : 2;
 
     acu_fixtureDestroy(&fixture);
 

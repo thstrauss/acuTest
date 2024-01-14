@@ -10,7 +10,7 @@
 #include "cu_eenv.h"
 #include "cu_utils.h"
 
-static void cuTest_destroyResult(CU_Result* result) {
+static void cuTest_destroyResult(ACU_Result* result) {
     if (result->message != NULL) {
         free(result->message);
     }
@@ -20,12 +20,12 @@ static void cuTest_destroyResult(CU_Result* result) {
 static void cuTest_run(CU_TestCase* testCase, const void* context) {
     ACU_ExecuteEnv environment;
 
-    CU_Result* result = (CU_Result*)cu_emalloc(sizeof(CU_Result));
+    ACU_Result* result = (ACU_Result*)cu_emalloc(sizeof(ACU_Result));
     if (result == NULL) {
         printf("E");
         return;
     }
-    result->status = CU_TEST_PASSED;
+    result->status = ACU_TEST_PASSED;
     result->message = NULL;
 
     environment.result = result;
@@ -40,7 +40,7 @@ static void cuTest_run(CU_TestCase* testCase, const void* context) {
                 printf(".");
                 break;
             }
-            case CU_TEST_FAILED: {
+            case ACU_TEST_FAILED: {
                 printf("F");
                 break;
             }
@@ -59,7 +59,7 @@ static void cuTest_destroyTestCase(void* data) {
 
 void acu_fixtureInit(ACU_Fixture* fixture, const char* name) {
     CU_List* testCases = (CU_List*) cu_emalloc(sizeof(CU_List));
-    cu_listInit(testCases, cuTest_destroyTestCase);
+    acu_listInit(testCases, cuTest_destroyTestCase);
     fixture->testCases = testCases;
     fixture->name = cu_estrdup(name);
 }
@@ -69,7 +69,7 @@ void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char* name, void (*testF
     if (testCase != NULL) {
         testCase->name = cu_estrdup(name);
         testCase->testFunc = testFunc;
-        cu_listAppend(fixture->testCases, (void*)testCase);
+        acu_listAppend(fixture->testCases, (void*)testCase);
     }
 }
 
@@ -79,32 +79,32 @@ void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
 }
 
 void acu_fixtureExecute(ACU_Fixture* fixture) {
-    CU_ListElement* testElement = cu_listHead(fixture->testCases);
+    ACU_ListElement* testElement = acu_listHead(fixture->testCases);
 
     while (testElement != NULL) {
         cuTest_run((CU_TestCase*) testElement->data, fixture->context);
-        testElement = cu_listNext(testElement);
+        testElement = acu_listNext(testElement);
     }
 }
 
 int acu_fixturReport(ACU_Fixture* fixture) {
-    CU_ListElement* testElement = cu_listHead(fixture->testCases);
+    ACU_ListElement* testElement = acu_listHead(fixture->testCases);
 
-    int accumulatedResult = CU_TEST_PASSED;
+    int accumulatedResult = ACU_TEST_PASSED;
     
     printf("\n\r");
     while (testElement != NULL) {
         CU_TestCase* testCase = (CU_TestCase*) testElement->data;
-        if (testCase->result->status != CU_TEST_PASSED) {
+        if (testCase->result->status != ACU_TEST_PASSED) {
             printf("%s: %s\n\r", testCase->name, testCase->result->message);
             accumulatedResult = testCase->result->status;
         }
-        testElement = cu_listNext(testElement);
+        testElement = acu_listNext(testElement);
     }
 
     return accumulatedResult;
 }
 
 void acu_fixtureDestroy(ACU_Fixture* fixture) {
-    cu_listDestroy(fixture->testCases);
+    acu_listDestroy(fixture->testCases);
 }

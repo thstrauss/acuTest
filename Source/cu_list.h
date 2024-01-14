@@ -4,28 +4,28 @@
 
 #include <stdlib.h>
 
-typedef struct CU_ListElement_ {
+typedef struct ACU_ListElement_ {
     void* data;
-    struct CU_ListElement_* next;
-} CU_ListElement;
+    struct ACU_ListElement_* next;
+} ACU_ListElement;
 
 typedef struct CU_List_ {
     int size;
 
     void (*destroy)(void* data);
 
-    CU_ListElement* head;
-    CU_ListElement* tail;
+    ACU_ListElement* head;
+    ACU_ListElement* tail;
 } CU_List;
 
-void cu_listInit(CU_List* list, void (*destroy)(void* data));
+void acu_listInit(CU_List* list, void (*destroy)(void* data));
 
-CU_ListElement* cu_listHead(CU_List* list);
+ACU_ListElement* acu_listHead(CU_List* list);
 
-CU_ListElement* cu_listNext(CU_ListElement* element);
+ACU_ListElement* acu_listNext(ACU_ListElement* element);
 
-void cu_listDestroy(CU_List* list);
+void acu_listDestroy(CU_List* list);
 
-int cu_listAppend(CU_List* list, void* data);
+int acu_listAppend(CU_List* list, void* data);
 
 #endif 

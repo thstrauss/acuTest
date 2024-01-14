@@ -8,7 +8,7 @@
 typedef struct CU_TestCase_ {
     char* name;
     void (*testFunc)(ACU_ExecuteEnv* environment, const void* context);
-    CU_Result* result;
+    ACU_Result* result;
 } CU_TestCase;
 
 #endif

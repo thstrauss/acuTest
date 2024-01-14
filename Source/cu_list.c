@@ -3,18 +3,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-void cu_listInit(CU_List* list, void (*destroy)(void* data)) {
+void acu_listInit(CU_List* list, void (*destroy)(void* data)) {
     list->size = 0;
     list->destroy = destroy;
     list->head = NULL;
     list->tail = NULL;
 }
 
-CU_ListElement* cu_listHead(CU_List* list) {
+ACU_ListElement* acu_listHead(CU_List* list) {
     return list->head;
 }
 
-CU_ListElement* cu_listNext(CU_ListElement* element) {
+ACU_ListElement* acu_listNext(ACU_ListElement* element) {
     return element->next;
 }
 
@@ -22,11 +22,11 @@ static int cu_listSize(CU_List* list) {
     return list->size;
 }
 
-int cu_listAppend(CU_List* list, void* data) {
-    CU_ListElement* newElement;
-    CU_ListElement* tailElement = list->tail;
+int acu_listAppend(CU_List* list, void* data) {
+    ACU_ListElement* newElement;
+    ACU_ListElement* tailElement = list->tail;
 
-    if ((newElement = (CU_ListElement*) cu_emalloc(sizeof(CU_ListElement))) == NULL) {
+    if ((newElement = (ACU_ListElement*) cu_emalloc(sizeof(ACU_ListElement))) == NULL) {
         return -1;
     }
     newElement->next = NULL; 
@@ -47,7 +47,7 @@ int cu_listAppend(CU_List* list, void* data) {
 }
 
 static int cu_listRemoveHead(CU_List* list, void** data) {
-    CU_ListElement* oldElement;
+    ACU_ListElement* oldElement;
     if (cu_listSize(list) <= 0) {
         return -1;
     }
@@ -66,7 +66,7 @@ static int cu_listRemoveHead(CU_List* list, void** data) {
     return 0;
 }
 
-void cu_listDestroy(CU_List* list) {
+void acu_listDestroy(CU_List* list) {
     void* data = NULL;
 
     while (cu_listSize(list) > 0) {

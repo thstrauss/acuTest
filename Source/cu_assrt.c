@@ -53,8 +53,8 @@ void acu_assert(ACU_ExecuteEnv* environment, int(*assertFunc)(const ACU_AssertPa
         }
         environment->result->message = cu_estrdup(buffer);
         if (!assertResult) {
-            environment->result->status = CU_TEST_FAILED;
-            longjmp(environment->assertBuf, CU_TEST_FAILED);
+            environment->result->status = ACU_TEST_FAILED;
+            longjmp(environment->assertBuf, ACU_TEST_FAILED);
         }
     FINALLY
         free(buffer);
