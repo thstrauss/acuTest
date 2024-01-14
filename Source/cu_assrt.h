@@ -96,12 +96,12 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 
 #define ACU_assert_ptrEqual(environment, actualValue, expectedValue, messageValue) {\
             ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
-            acu_assert(environment, &cu_equalPtr, &cu_equalPtrFormatMessage, &parameter); \
+            acu_assert(environment, &acu_equalPtr, &acu_equalPtrFormatMessage, &parameter); \
             };
 
 #define ACU_assert_ptrNotEqual(environment, actualValue, expectedValue, messageValue) {\
             ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
-            acu_assert(environment, &cu_notEqualStr, &cu_notEqualPtrFormatMessage, &parameter); \
+            acu_assert(environment, &acu_notEqualStr, &acu_notEqualPtrFormatMessage, &parameter); \
             };
 
 #define __ACU_assert_str(environment, actualValue, expectedValue, messageValue, assertFunc) {\
@@ -124,23 +124,23 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
             };
 
 #define ACU_assert_strEqual(environment, actualValue, expectedValue, messageValue) {\
-                __ACU_assert_str(environment, actualValue, expectedValue, messageValue, cu_equalStr) \
+                __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_equalStr) \
             };
 
 #define ACU_assert_strNotEqual(environment, actualValue, expectedValue, messageValue) {\
-                __ACU_assert_str(environment, actualValue, expectedValue, messageValue, cu_notEqualStr) \
+                __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notEqualStr) \
             };
 
-int cu_equalPtr(const ACU_AssertParameter* parameter);
-void cu_equalPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+int acu_equalPtr(const ACU_AssertParameter* parameter);
+void acu_equalPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
 
-int cu_notEqualPtr(const ACU_AssertParameter* parameter);
-void cu_notEqualPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+int acu_notEqualPtr(const ACU_AssertParameter* parameter);
+void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
 
-int cu_equalStr(const ACU_AssertParameter* parameter);
-void cu_equalStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+int acu_equalStr(const ACU_AssertParameter* parameter);
+void acu_equalStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
 
-int cu_notEqualStr(const ACU_AssertParameter* parameter);
-void cu_notEqualStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+int acu_notEqualStr(const ACU_AssertParameter* parameter);
+void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
 
 #endif

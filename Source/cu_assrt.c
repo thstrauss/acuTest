@@ -7,35 +7,35 @@
 #include "cu_eenv.h"
 #include "cu_cmmn.h"
 
-int cu_equalPtr(const ACU_AssertParameter* parameter) {
+int acu_equalPtr(const ACU_AssertParameter* parameter) {
     return parameter->actual == parameter->expected;
 }
 
-void cu_equalPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
+void acu_equalPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
     sprintf_s(buffer, bufferSize, "%s:%d -> actual value %p not equal to expected value %p: %s", parameter->fileName, parameter->line, parameter->actual, parameter->expected, parameter->message);
 }
 
-int cu_notEqualPtr(const ACU_AssertParameter* parameter) {
+int acu_notEqualPtr(const ACU_AssertParameter* parameter) {
     return parameter->actual != parameter->expected;
 }
 
-void cu_notEqualPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
+void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
     sprintf_s(buffer, bufferSize, "%s:%d -> actual value %p equal to expected value %p: %s", parameter->fileName, parameter->line, parameter->actual, parameter->expected, parameter->message);
 }
 
-int cu_equalStr(const ACU_AssertParameter* parameter) {
+int acu_equalStr(const ACU_AssertParameter* parameter) {
     return strcmp((const char*)(parameter->actual), (const char*)(parameter->expected)) == 0;
 }
 
-void cu_equalStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
+void acu_equalStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
     sprintf_s(buffer, bufferSize, "%s:%d -> actual value \"%s\" not equal to expected value \"%s\": %s", parameter->fileName, parameter->line, (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
 }
 
-int cu_notEqualStr(const ACU_AssertParameter* parameter) {
+int acu_notEqualStr(const ACU_AssertParameter* parameter) {
     return strcmp((const char*)(parameter->actual), (const char*)(parameter->expected)) != 0;
 }
 
-void cu_notEqualStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
+void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
     sprintf_s(buffer, bufferSize, "%s:%d -> actual value \"%s\" equal to expected value \"%s\": %s", parameter->fileName, parameter->line, (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
 }
 
