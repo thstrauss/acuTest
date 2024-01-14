@@ -6,7 +6,7 @@ typedef struct ACU_ExecuteEnv_ ACU_ExecuteEnv;
 
 typedef struct ACU_List_ ACU_List;
 
-typedef struct CU_Fixture_ {
+typedef struct ACU_Fixture_ {
     const char* name;
     const void* context;
     ACU_List* testCases;

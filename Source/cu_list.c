@@ -26,7 +26,7 @@ int acu_listAppend(ACU_List* list, void* data) {
     ACU_ListElement* newElement;
     ACU_ListElement* tailElement = list->tail;
 
-    if ((newElement = (ACU_ListElement*) cu_emalloc(sizeof(ACU_ListElement))) == NULL) {
+    if ((newElement = (ACU_ListElement*) acu_emalloc(sizeof(ACU_ListElement))) == NULL) {
         return -1;
     }
     newElement->next = NULL; 

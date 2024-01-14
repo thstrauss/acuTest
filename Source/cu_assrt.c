@@ -41,7 +41,7 @@ void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, const ACU_Assert
 
 void acu_assert(ACU_ExecuteEnv* environment, int(*assertFunc)(const ACU_AssertParameter* parameter), void(*formatMessage)(char* buffer, int bufferSize, const ACU_AssertParameter* parameter), const ACU_AssertParameter* parameter) {
     const int bufferSize = 1024;
-    char* buffer = cu_emalloc(bufferSize);
+    char* buffer = acu_emalloc(bufferSize);
     int assertResult = assertFunc(parameter);
 
     TRY
@@ -51,7 +51,7 @@ void acu_assert(ACU_ExecuteEnv* environment, int(*assertFunc)(const ACU_AssertPa
                 formatMessage(buffer, bufferSize, parameter);
             }
         }
-        environment->result->message = cu_estrdup(buffer);
+        environment->result->message = acu_estrdup(buffer);
         if (!assertResult) {
             environment->result->status = ACU_TEST_FAILED;
             longjmp(environment->assertBuf, ACU_TEST_FAILED);

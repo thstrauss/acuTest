@@ -109,8 +109,8 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
             char* __expected = NULL; \
             TRY \
                 ACU_AssertParameter parameter; \
-                __actual = cu_estrdup(actualValue); \
-                __expected = cu_estrdup(expectedValue); \
+                __actual = acu_estrdup(actualValue); \
+                __expected = acu_estrdup(expectedValue); \
                 parameter.actual = __actual; \
                 parameter.expected = __expected; \
                 parameter.fileName = __FILE__; \
