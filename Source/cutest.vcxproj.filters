@@ -27,6 +27,9 @@
     <ClCompile Include="acu_util.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="acu_suit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tryctch.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="acu_suit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
