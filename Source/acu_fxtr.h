@@ -22,8 +22,8 @@ void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
 
 void acu_fixtureExecute(ACU_Fixture* fixture);
 
-int acu_fixturReport(ACU_Fixture* fixture);
+int acu_fixtureReport(ACU_Fixture* fixture);
 
-void acu_fixtureDestroy(ACU_Fixture* fixture);
+void acu_fixtureDestroy(void* fixture);
 
 #endif
