@@ -22,10 +22,6 @@ static void acuTest_run(ACU_TestCase* testCase, const void* context) {
     memset(&environment, 0, sizeof(ACU_ExecuteEnv));
 
     ACU_Result* result = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    if (result == NULL) {
-        printf("E");
-        return;
-    }
     result->status = ACU_TEST_PASSED;
     result->message = NULL;
 
