@@ -23,12 +23,8 @@ void test3(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert_strNotEqual(environment, "str", "str", "assert2");
 }
 
-int main() {
-    ACU_Suite suite;
-    int returnValue;
+void testFixture(ACU_Suite* suite) {
     ACU_Fixture* fixture = malloc(sizeof(ACU_Fixture));
-
-    acu_suiteInit(&suite, "Suite");
 
     acu_fixtureInit(fixture, "testFixture");
     acu_fixtureSetContext(fixture, "context");
@@ -37,7 +33,17 @@ int main() {
     acu_fixtureAddTestCase(fixture, "test2", test2);
     acu_fixtureAddTestCase(fixture, "test3", test3);
 
-    acu_suiteAddFixture(&suite, fixture);
+    acu_suiteAddFixture(suite, fixture);
+}
+
+int main() {
+    ACU_Suite suite;
+    int returnValue;
+
+    acu_suiteInit(&suite, "Suite");
+
+    testFixture(&suite);
+    testFixture(&suite);
 
     acu_suiteExecute(&suite);
 
