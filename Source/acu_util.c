@@ -14,7 +14,7 @@ typedef enum CU_Level_
     cu_warning = 2,
 } CU_Level;
 
-char* acu_progName() {
+char* acu_progName(void) {
     return programName;
 }
 

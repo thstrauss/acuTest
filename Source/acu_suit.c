@@ -1,5 +1,6 @@
 #include "stdlib.h"
 #include "string.h"
+#include "stdio.h"
 
 #include "acu_fxtr.h"
 #include "acu_suit.h"

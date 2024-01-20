@@ -92,7 +92,7 @@ int acu_fixtureReport(ACU_Fixture* fixture) {
     while (testElement != NULL) {
         ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
         if (testCase->result != NULL && testCase->result->status != ACU_TEST_PASSED) {
-            printf("\n\r\    %s: %s", testCase->name, testCase->result->message);
+            printf("\n\r    %s: %s", testCase->name, testCase->result->message);
             accumulatedResult = testCase->result->status;
         }
         testElement = acu_listNext(testElement);
