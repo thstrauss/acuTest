@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "acu_list.h"
-#include "acu_util.h"
+#include "include/acu_list.h"
+#include "include/acu_util.h"
 
 void acu_listInit(ACU_List* list, void (*destroy)(void* data)) {
     list->size = 0;

@@ -3,12 +3,12 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#include "acu_fxtr.h"
-#include "acu_tcse.h"
-#include "acu_cmmn.h"
-#include "acu_list.h"
-#include "acu_eenv.h"
-#include "acu_util.h"
+#include "include/acu_fxtr.h"
+#include "include/acu_tcse.h"
+#include "include/acu_cmmn.h"
+#include "include/acu_list.h"
+#include "include/acu_eenv.h"
+#include "include/acu_util.h"
 
 static void acuTest_destroyResult(ACU_Result* result) {
     if (result->message != NULL) {
