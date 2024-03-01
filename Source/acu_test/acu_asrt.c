@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #define __ACU_EMIT_ASSERT_FUNCS__
-#include "include/acu_assrt.h"
+#include "include/acu_asrt.h"
 #undef __ACU_EMIT_ASSERT_FUNCS__
 #include "include/acu_eenv.h"
 #include "include/acu_cmmn.h"

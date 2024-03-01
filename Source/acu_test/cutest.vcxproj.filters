@@ -21,7 +21,7 @@
     <ClCompile Include="acu_list.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="acu_assrt.c">
+    <ClCompile Include="acu_asrt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="acu_util.c">
@@ -41,9 +41,6 @@
     <ClInclude Include="acu_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="acu_assrt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="acu_eenv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -60,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_suit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\acu_asrt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

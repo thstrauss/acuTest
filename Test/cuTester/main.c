@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include <acu_fxtr.h>
-#include <acu_assrt.h>
+#include <acu_asrt.h>
 #include <acu_suit.h>
 
 void test1(ACU_ExecuteEnv* environment, const void* context) {
