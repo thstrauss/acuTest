@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "..\..\Source\acu_test\include\acu_fxtr.h"
-#include "..\..\Source\acu_test\include\acu_assrt.h"
-#include "..\..\Source\acu_test\include\acu_suit.h"
+#include <acu_fxtr.h>
+#include <acu_assrt.h>
+#include <acu_suit.h>
 
 void test1(ACU_ExecuteEnv* environment, const void* context) {
     ACU_PrepareParameter(int, 1, 2, "assert", __LINE__ + 1);
