@@ -4,7 +4,7 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#include "include/acu_util.h"
+#include <acu_util.h>
 
 static char* programName = NULL;
 
