@@ -72,7 +72,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Thomas\source\repos\cutest\Source\acu_test\include;$(IncludePath)</IncludePath>
+    <IncludePath>.\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,16 +139,16 @@
     <ClCompile Include="acu_util.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="acu_cmmn.h" />
-    <ClInclude Include="acu_suit.h" />
-    <ClInclude Include="acu_tcse.h" />
-    <ClInclude Include="acu_eenv.h" />
-    <ClInclude Include="acu_fxtr.h" />
-    <ClInclude Include="acu_list.h" />
-    <ClInclude Include="acu_rslt.h" />
-    <ClInclude Include="acu_util.h" />
+    <ClInclude Include="include\acu_cmmn.h" />
+    <ClInclude Include="include\acu_suit.h" />
+    <ClInclude Include="include\acu_tcse.h" />
+    <ClInclude Include="include\acu_eenv.h" />
+    <ClInclude Include="include\acu_fxtr.h" />
+    <ClInclude Include="include\acu_list.h" />
+    <ClInclude Include="include\acu_rslt.h" />
+    <ClInclude Include="include\acu_util.h" />
     <ClInclude Include="include\acu_asrt.h" />
-    <ClInclude Include="tryctch.h" />
+    <ClInclude Include="include\tryctch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

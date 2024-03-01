@@ -8,12 +8,14 @@ void test1(ACU_ExecuteEnv* environment, const void* context) {
     ACU_PrepareParameter(int, 1, 2, "assert", __LINE__ + 1);
     acu_assert(environment, &acu_intEqual, &acu_intEqualFormatMessage, &parameter);
     acu_assert_intEqual(environment, &parameter);
+    context;
 }
 
 void test2(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, 1, 1, "assert2");
     ACU_assert(environment, int, NotEqual, 1, 2, "xxx");
     ACU_assert(environment, float, NotEqual, 1.0, 2.0, "yyy");
+    context;
 }
 
 void test3(ACU_ExecuteEnv* environment, const void* context) {

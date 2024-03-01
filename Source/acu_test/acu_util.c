@@ -38,7 +38,7 @@ void acu_setProgName(const char* progName) {
     }
 }
 
-static void cu_printf(CU_Level level, const char* format, ...) {
+static void acu_printf(CU_Level level, const char* format, ...) {
     va_list args;
 
     fflush(stdout);
@@ -62,14 +62,14 @@ static void cu_printf(CU_Level level, const char* format, ...) {
 void acu_eprintf(const char* format, ...) {
     va_list args;
     va_start(args, format);
-    cu_printf(cu_error, format, args);
+    acu_printf(cu_error, format, args);
     va_end(args);
 }
 
 void acu_weprintf(const char* format, ...) {
     va_list args;
     va_start(args, format);
-    cu_printf(cu_warning, format, args);
+    acu_printf(cu_warning, format, args);
     va_end(args);
 }
 
