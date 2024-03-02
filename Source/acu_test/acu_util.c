@@ -86,15 +86,3 @@ void* acu_emalloc(size_t size) {
     return p;
 }
 
-void acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
-{
-    va_list args;
-    va_start(args, format);
-#ifdef __TOS__
-    sprintf(buffer, format, args);
-    sizeOfBuffer;
-#else
-    sprintf_s(buffer, sizeOfBuffer, format, args);
-#endif
-    va_end(args);
-}

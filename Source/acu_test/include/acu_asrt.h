@@ -40,7 +40,7 @@ int acu_##type##op(const ACU_AssertParameter* parameter) { \
 } \
 void acu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) { \
 char formatBuffer[128]; \
-acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "%%s:%%d -> actual value %s not %%s to expected value %s: %%s", #format, #format); \
+acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "%%s:%%d -> actual value %s not %%s to expected value %s: %%s", (format), (format)); \
 acu_sprintf_s(buffer, bufferSize, formatBuffer, parameter->fileName, parameter->line, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
 } \
 void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) { \
@@ -53,40 +53,40 @@ void acu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_Asser
 void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter);
 #endif
 
-CREATE_ASSERT_FUNC(char, Equal, ==, %c)
-CREATE_ASSERT_FUNC(char, NotEqual, != , %c)
-CREATE_ASSERT_FUNC(char, Less, <, %c)
-CREATE_ASSERT_FUNC(char, Greater, >, %c)
-CREATE_ASSERT_FUNC(char, LessEqual, <=, %c)
-CREATE_ASSERT_FUNC(char, GreaterEqual, >= , %c)
+CREATE_ASSERT_FUNC(char, Equal, ==, "%c")
+CREATE_ASSERT_FUNC(char, NotEqual, != , "%c")
+CREATE_ASSERT_FUNC(char, Less, <, "%c")
+CREATE_ASSERT_FUNC(char, Greater, >, "%c")
+CREATE_ASSERT_FUNC(char, LessEqual, <=, "%c")
+CREATE_ASSERT_FUNC(char, GreaterEqual, >= , "%c")
 
-CREATE_ASSERT_FUNC(int, Equal, ==, %d)
-CREATE_ASSERT_FUNC(int, NotEqual, != , %d)
-CREATE_ASSERT_FUNC(int, Less, <, %d)
-CREATE_ASSERT_FUNC(int, Greater, >, %d)
-CREATE_ASSERT_FUNC(int, LessEqual, <=, %d)
-CREATE_ASSERT_FUNC(int, GreaterEqual, >= , %d)
+CREATE_ASSERT_FUNC(int, Equal, ==, "%d")
+CREATE_ASSERT_FUNC(int, NotEqual, != , "%d")
+CREATE_ASSERT_FUNC(int, Less, <, "%d")
+CREATE_ASSERT_FUNC(int, Greater, >, "%d")
+CREATE_ASSERT_FUNC(int, LessEqual, <=, "%d")
+CREATE_ASSERT_FUNC(int, GreaterEqual, >= , "%d")
 
-CREATE_ASSERT_FUNC(long, Equal, ==, %d)
-CREATE_ASSERT_FUNC(long, NotEqual, != , %d)
-CREATE_ASSERT_FUNC(long, Less, <, %d)
-CREATE_ASSERT_FUNC(long, Greater, >, %d)
-CREATE_ASSERT_FUNC(long, LessEqual, <=, %d)
-CREATE_ASSERT_FUNC(long, GreaterEqual, >= , %d)
+CREATE_ASSERT_FUNC(long, Equal, ==, "%d")
+CREATE_ASSERT_FUNC(long, NotEqual, != , "%d")
+CREATE_ASSERT_FUNC(long, Less, <, "%d")
+CREATE_ASSERT_FUNC(long, Greater, >, "%d")
+CREATE_ASSERT_FUNC(long, LessEqual, <=, "%d")
+CREATE_ASSERT_FUNC(long, GreaterEqual, >= , "%d")
 
-CREATE_ASSERT_FUNC(float, Equal, ==, %f)
-CREATE_ASSERT_FUNC(float, NotEqual, != , % f)
-CREATE_ASSERT_FUNC(float, Less, <, %f)
-CREATE_ASSERT_FUNC(float, Greater, >, %f)
-CREATE_ASSERT_FUNC(float, LessEqual, <=, %f)
-CREATE_ASSERT_FUNC(float, GreaterEqual, >= , %f)
+CREATE_ASSERT_FUNC(float, Equal, ==, "%f")
+CREATE_ASSERT_FUNC(float, NotEqual, != , "%f")
+CREATE_ASSERT_FUNC(float, Less, <, "%f")
+CREATE_ASSERT_FUNC(float, Greater, >, "%f")
+CREATE_ASSERT_FUNC(float, LessEqual, <=, "%f")
+CREATE_ASSERT_FUNC(float, GreaterEqual, >= , "%f")
 
-CREATE_ASSERT_FUNC(double, Equal, ==, %lf)
-CREATE_ASSERT_FUNC(double, NotEqual, == , % lf)
-CREATE_ASSERT_FUNC(double, Less, <, %lf)
-CREATE_ASSERT_FUNC(double, Greater, >, %lf)
-CREATE_ASSERT_FUNC(double, LessEqual, <=, %lf)
-CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
+CREATE_ASSERT_FUNC(double, Equal, ==, "%lf")
+CREATE_ASSERT_FUNC(double, NotEqual, == , "%lf")
+CREATE_ASSERT_FUNC(double, Less, <, "%lf")
+CREATE_ASSERT_FUNC(double, Greater, >, "%lf")
+CREATE_ASSERT_FUNC(double, LessEqual, <=, "%lf")
+CREATE_ASSERT_FUNC(double, GreaterEqual, >= , "%lf")
 
 #define ACU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
             ACU_PrepareParameter(type, actualValue, expectedValue, messageValue, __LINE__) \

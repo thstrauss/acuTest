@@ -9,9 +9,10 @@ void* acu_emalloc(size_t n);
 char* acu_progName(void);
 void acu_setProgName(const char* progName);
 
-void acu_sprintf_s(char* buffer,
-    size_t sizeOfBuffer,
-    const char* format,
-    ...);
+#ifdef __TOS__
+#define acu_sprintf_s(buffer, sizeOfBuffer, format, ...) sprintf(buffer, format, __VA_ARGS__) 
+#else
+#define acu_sprintf_s(buffer, sizeOfBuffer, format, ...) sprintf_s(buffer, sizeOfBuffer, format, __VA_ARGS__) 
+#endif
 
 #endif
