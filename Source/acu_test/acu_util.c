@@ -8,11 +8,11 @@
 
 static char* programName = NULL;
 
-typedef enum CU_Level_ 
+typedef enum ACU_Level_ 
 {
-    cu_error = 1,
-    cu_warning = 2,
-} CU_Level;
+    acu_error = 1,
+    acu_warning = 2,
+} ACU_Level;
 
 char* acu_progName(void) {
     return programName;
@@ -21,7 +21,7 @@ char* acu_progName(void) {
 char* acu_estrdup(const char* s) {
     char* temp = _strdup(s);
     if (temp == NULL) {
-        acu_eprintf("cu_estrdup(\"%.20s\") failed:", s);
+        acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
     }
     return temp;
 }
@@ -38,7 +38,7 @@ void acu_setProgName(const char* progName) {
     }
 }
 
-static void cu_printf(CU_Level level, const char* format, ...) {
+static void cu_printf(ACU_Level level, const char* format, ...) {
     va_list args;
 
     fflush(stdout);
@@ -54,7 +54,7 @@ static void cu_printf(CU_Level level, const char* format, ...) {
         fprintf(stderr, " %s", buffer);
     }
     fprintf(stderr, "\r\n");
-    if (level == cu_error) {
+    if (level == acu_error) {
         exit(2);
     }
 }
@@ -62,14 +62,14 @@ static void cu_printf(CU_Level level, const char* format, ...) {
 void acu_eprintf(const char* format, ...) {
     va_list args;
     va_start(args, format);
-    cu_printf(cu_error, format, args);
+    cu_printf(acu_error, format, args);
     va_end(args);
 }
 
 void acu_weprintf(const char* format, ...) {
     va_list args;
     va_start(args, format);
-    cu_printf(cu_warning, format, args);
+    cu_printf(acu_warning, format, args);
     va_end(args);
 }
 
@@ -77,7 +77,7 @@ void* acu_emalloc(size_t size) {
     void* p;
     p = malloc(size);
     if (p == NULL) {
-        acu_eprintf("malloc of %u bytes failed:", size);
+        acu_eprintf("acu_emalloc of %u bytes failed:", size);
     }
     return p;
 }
