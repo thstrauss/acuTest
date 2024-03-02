@@ -32,34 +32,34 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tryctch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_fxtr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_eenv.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_rslt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_cmmn.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_tcse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_suit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\acu_asrt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\acu_cmmn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\acu_eenv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\acu_fxtr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\acu_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\acu_rslt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\acu_suit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\acu_tcse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\acu_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tryctch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
