@@ -3,7 +3,6 @@
 #define _ACU_ASSERT_H_
 
 #include <string.h>
-#include <stdlib.h>
 
 #include <acu_util.h>
 #include <tryctch.h>
@@ -41,8 +40,8 @@ int acu_##type##op(const ACU_AssertParameter* parameter) { \
 } \
 void acu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) { \
 char formatBuffer[128]; \
-sprintf_s(formatBuffer, sizeof(formatBuffer), "%%s:%%d -> actual value %s not %%s to expected value %s: %%s", #format, #format); \
-sprintf_s(buffer, bufferSize, formatBuffer, parameter->fileName, parameter->line, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
+acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "%%s:%%d -> actual value %s not %%s to expected value %s: %%s", #format, #format); \
+acu_sprintf_s(buffer, bufferSize, formatBuffer, parameter->fileName, parameter->line, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
 } \
 void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) { \
     acu_assert(environment, &acu_##type##op, &acu_##type##op##FormatMessage, parameter); \

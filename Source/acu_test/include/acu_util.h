@@ -9,4 +9,9 @@ void* acu_emalloc(size_t n);
 char* acu_progName(void);
 void acu_setProgName(const char* progName);
 
+void acu_sprintf_s(char* buffer,
+    size_t sizeOfBuffer,
+    const char* format,
+    ...);
+
 #endif

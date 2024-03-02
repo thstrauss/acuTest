@@ -1,8 +1,8 @@
 #include <stdarg.h>
-#include <string.h>
-#include <stdio.h>
-#include <errno.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
 
 #include <acu_util.h>
 
@@ -19,7 +19,11 @@ char* acu_progName(void) {
 }
 
 char* acu_estrdup(const char* s) {
+#ifdef __TOS__
+    char* temp = strdup(s);
+#else
     char* temp = _strdup(s);
+#endif
     if (temp == NULL) {
         acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
     }
@@ -80,4 +84,17 @@ void* acu_emalloc(size_t size) {
         acu_eprintf("acu_emalloc of %u bytes failed:", size);
     }
     return p;
+}
+
+void acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
+{
+    va_list args;
+    va_start(args, format);
+#ifdef __TOS__
+    sprintf(buffer, format, args);
+    sizeOfBuffer;
+#else
+    sprintf_s(buffer, sizeOfBuffer, format, args);
+#endif
+    va_end(args);
 }

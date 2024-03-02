@@ -1,11 +1,11 @@
 #include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <acu_fxtr.h>
+#include <acu_list.h>
 #include <acu_suit.h>
 #include <acu_util.h>
-#include <acu_list.h>
 
 void acu_suiteAddFixture(ACU_Suite* suite, const ACU_Fixture* fixture)
 {
