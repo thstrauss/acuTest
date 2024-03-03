@@ -2,12 +2,12 @@
 #ifndef _ACU_ASSERT_H_
 #define _ACU_ASSERT_H_
 
+#include <stdlib.h>
 #include <string.h>
 
+#include <acu_eenv.h> 
 #include <acu_util.h>
 #include <tryctch.h>
-
-typedef struct ACU_ExecuteEnv_ ACU_ExecuteEnv;
 
 typedef struct ACU_AssertParameter_ {
     void* actual;
@@ -35,21 +35,19 @@ void acu_assert(
 
 #ifdef __ACU_EMIT_ASSERT_FUNCS__
 #define CREATE_ASSERT_FUNC(type, op, opcode, format) \
-int acu_##type##op(const ACU_AssertParameter* parameter) { \
+static int acu_##type##op(const ACU_AssertParameter* parameter) { \
     return *(const type*)parameter->actual opcode *(const type*)parameter->expected; \
 } \
-void acu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) { \
-char formatBuffer[128]; \
+static void acu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) { \
+char formatBuffer[128]; memset(formatBuffer, 0, 128); \
 acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "%%s:%%d -> actual value %s not %%s to expected value %s: %%s", #format, #format); \
 acu_sprintf_s(buffer, bufferSize, formatBuffer, parameter->fileName, parameter->line, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
 } \
 void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) { \
-    acu_assert(environment, &acu_##type##op, &acu_##type##op##FormatMessage, parameter); \
+    acu_assert(environment, acu_##type##op, acu_##type##op##FormatMessage, parameter); \
 }
 #else
 #define CREATE_ASSERT_FUNC(type, op, opCode, format) \
-int acu_##type##op(const ACU_AssertParameter* parameter); \
-void acu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter); \
 void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter);
 #endif
 

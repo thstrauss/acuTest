@@ -3,10 +3,8 @@
 #define _ACU_FIXTURE_H_
 
 #include <acu_cmmn.h>
-
-typedef struct ACU_ExecuteEnv_ ACU_ExecuteEnv;
-
-typedef struct ACU_List_ ACU_List;
+#include <acu_eenv.h>
+#include <acu_list.h>
 
 typedef struct ACU_Fixture_ {
     const char* name;

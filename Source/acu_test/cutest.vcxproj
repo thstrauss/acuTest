@@ -150,6 +150,9 @@
     <ClInclude Include="include\acu_asrt.h" />
     <ClInclude Include="include\tryctch.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

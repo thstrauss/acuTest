@@ -3,10 +3,10 @@
 #include <acu_fxtr.h>
 #include <acu_asrt.h>
 #include <acu_suit.h>
+#include <acu_util.h>
 
 void test1(ACU_ExecuteEnv* environment, const void* context) {
     ACU_PrepareParameter(int, 1, 2, "assert", __LINE__ + 1);
-    acu_assert(environment, &acu_intEqual, &acu_intEqualFormatMessage, &parameter);
     acu_assert_intEqual(environment, &parameter);
     context;
 }
@@ -27,7 +27,7 @@ void test3(ACU_ExecuteEnv* environment, const void* context) {
 }
 
 void testFixture(ACU_Suite* suite) {
-    ACU_Fixture* fixture = malloc(sizeof(ACU_Fixture));
+    ACU_Fixture* fixture = acu_emalloc(sizeof(ACU_Fixture));
 
     acu_fixtureInit(fixture, "testFixture");
     acu_fixtureSetContext(fixture, "context");

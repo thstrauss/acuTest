@@ -2,9 +2,8 @@
 #ifndef _ACU_SUITE_H_
 #define _ACU_SUITE_H_
 
-typedef struct ACU_List_ ACU_List;
-
-typedef struct ACU_Fixture_ ACU_Fixture;
+#include <acu_fxtr.h>
+#include <acu_list.h>
 
 typedef struct ACU_Suite_ {
     char* name;
