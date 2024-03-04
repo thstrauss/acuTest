@@ -54,7 +54,7 @@ static void acu_printf(ACU_Level level, const char* format, ...) {
     va_end(args);
     if (format[0] != '\0' && format[strlen(format) - 1] == ':') {
 #ifdef __TOS__
-        fprintf(stderr. " %s", strerror(errno));
+        fprintf(stderr, " %s", strerror(errno));
 #else 
         char buffer[50];
         strerror_s(buffer, 50, errno);
