@@ -1,0 +1,12 @@
+cutester.tos
+
+=
+
+pcstart.o
+
+main
+
+..\..\Source\acu_test\acu_test.prj
+
+PCFLTLIB.LIB
+PCSTDLIB.lib
