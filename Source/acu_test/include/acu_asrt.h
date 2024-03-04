@@ -93,12 +93,12 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 
 #define ACU_assert_ptrEqual(environment, actualValue, expectedValue, messageValue) {\
             ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
-            acu_assert(environment, &acu_equalPtr, &acu_equalPtrFormatMessage, &parameter); \
+            acu_assert(environment, acu_equalPtr, acu_equalPtrFormatMessage, &parameter); \
             };
 
 #define ACU_assert_ptrNotEqual(environment, actualValue, expectedValue, messageValue) {\
             ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
-            acu_assert(environment, &acu_notEqualStr, &acu_notEqualPtrFormatMessage, &parameter); \
+            acu_assert(environment, acu_notEqualStr, acu_notEqualPtrFormatMessage, &parameter); \
             };
 
 #define __ACU_assert_str(environment, actualValue, expectedValue, messageValue, assertFunc) {\
@@ -113,7 +113,7 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
                 parameter.fileName = __FILE__; \
                 parameter.line = __LINE__; \
                 parameter.message = (messageValue); \
-                acu_assert(environment, &assertFunc, &assertFunc##FormatMessage, &parameter); \
+                acu_assert(environment, assertFunc, assertFunc##FormatMessage, &parameter); \
             FINALLY \
                 free(__expected); \
                 free(__actual); \

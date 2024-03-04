@@ -92,8 +92,8 @@ int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
     va_list args;
     va_start(args, format);
 #ifdef __TOS__
-    sprintf(b, format, args);
-    sizeOfBuffer;
+    vsprintf(b, format, args);
+    UNUSED(sizeOfBuffer);
 #else
     result = vsprintf_s(buffer, sizeOfBuffer, format, args);
 #endif

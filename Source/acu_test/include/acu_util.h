@@ -2,6 +2,8 @@
 #ifndef _ACU_UTILS_H_
 #define _ACU_UTILS_H_
 
+#define UNUSED(x) (void)(x);
+
 void acu_eprintf(const char* format, ...);
 void acu_weprintf(const char* format, ...);
 char* acu_estrdup(const char* s);
