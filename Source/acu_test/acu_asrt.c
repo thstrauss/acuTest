@@ -10,19 +10,19 @@
 #include <acu_util.h>
 
 int acu_equalPtr(const ACU_AssertParameter* parameter) {
-    return parameter->actual == parameter->expected;
+    return *(void**) parameter->actual == *(void**) parameter->expected;
 }
 
 void acu_equalPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
-    acu_sprintf_s(buffer, bufferSize, "%s:%d -> actual value %p not equal to expected value %p: %s", parameter->fileName, parameter->line, parameter->actual, parameter->expected, parameter->message);
+    acu_sprintf_s(buffer, bufferSize, "%s:%d -> actual value %p not equal to expected value %p: %s", parameter->fileName, parameter->line, *(void**)parameter->actual, *(void**)parameter->expected, parameter->message);
 }
 
 int acu_notEqualPtr(const ACU_AssertParameter* parameter) {
-    return parameter->actual != parameter->expected;
+    return *(void**)parameter->actual != *(void**)parameter->expected;
 }
 
 void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
-    acu_sprintf_s(buffer, bufferSize, "%s:%d -> actual value %p equal to expected value %p: %s", parameter->fileName, parameter->line, parameter->actual, parameter->expected, parameter->message);
+    acu_sprintf_s(buffer, bufferSize, "%s:%d -> actual value %p equal to expected value %p: %s", parameter->fileName, parameter->line, *(void**)parameter->actual, *(void**)parameter->expected, parameter->message);
 }
 
 int acu_equalStr(const ACU_AssertParameter* parameter) {

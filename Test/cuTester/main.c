@@ -6,6 +6,8 @@
 #include <acu_suit.h>
 #include <acu_util.h>
 
+#include "flt_test.h"
+
 void test1(ACU_ExecuteEnv* environment, const void* context) {
     ACU_PrepareParameter(int, 1, 2, "assert", __LINE__ + 1);
     acu_assert_intEqual(environment, &parameter);
@@ -48,6 +50,8 @@ int main() {
 
     testFixture(&suite);
     testFixture(&suite);
+
+    floatFixture(&suite);
 
     acu_suiteExecute(&suite);
 
