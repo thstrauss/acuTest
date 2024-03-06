@@ -25,7 +25,6 @@ static void acuTest_run(ACU_TestCase* testCase, const void* context) {
     result->status = ACU_TEST_PASSED;
     result->message = NULL;
 
-    memset(&environment, 0, sizeof(ACU_ExecuteEnv));
     environment.result = result;
 
     do {

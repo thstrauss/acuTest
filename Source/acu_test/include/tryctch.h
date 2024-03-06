@@ -30,10 +30,12 @@
   * http://www.di.unipi.it/~nids/docs/longjump_try_trow_catch.html
   */
 
-#define TRY do { jmp_buf exceptionBuf; switch( setjmp(exceptionBuf) ) { case 0: while(1) {
+#define TRY_CTX(CONTEXT) do { jmp_buf _##CONTEXT##_Buf; switch( setjmp(_##CONTEXT##_Buf) ) { case 0: while(1) {
+#define TRY TRY_CTX(exception)
 #define CATCH(x) break; case (x):
 #define FINALLY break; } default: {
 #define ETRY break; } } }while(0)
-#define THROW(x) longjmp(exceptionBuf, (x))
+#define THROW(x) THROW_CTX(DFLT, x)
+#define THROW_CTX(CONTEXT, x) longjmp(_##CONTEXT##_Buf, (x))
 
 #endif /*!_TRY_THROW_CATCH_H_*/

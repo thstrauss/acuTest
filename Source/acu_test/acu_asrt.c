@@ -46,7 +46,7 @@ void acu_assert(ACU_ExecuteEnv* environment, int(*assertFunc)(const ACU_AssertPa
     char* buffer = acu_emalloc(bufferSize);
     int assertResult = assertFunc(parameter);
 
-    TRY
+    TRY_CTX(acu_assert)
         acu_sprintf_s(buffer, bufferSize, "");
         if (!assertResult) {
             if (formatMessage != NULL) {

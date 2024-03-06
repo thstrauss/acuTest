@@ -104,7 +104,7 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 #define __ACU_assert_str(environment, actualValue, expectedValue, messageValue, assertFunc) {\
             char* __actual = NULL; \
             char* __expected = NULL; \
-            TRY \
+            TRY_CTX(_ACU_assert_str_) \
                 ACU_AssertParameter parameter; \
                 __actual = acu_estrdup(actualValue); \
                 __expected = acu_estrdup(expectedValue); \

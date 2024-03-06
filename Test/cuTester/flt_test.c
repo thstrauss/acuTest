@@ -13,7 +13,6 @@ static void floatTests(ACU_ExecuteEnv* environment, const void* context) {
 
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    void* null = NULL;
 
     memset(testEnvironment, 0, sizeof(ACU_ExecuteEnv));
     testEnvironment->result = resultBuf;
