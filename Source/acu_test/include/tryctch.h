@@ -35,7 +35,7 @@
 #define CATCH(x) break; case (x):
 #define FINALLY break; } default: {
 #define ETRY break; } } }while(0)
-#define THROW(x) THROW_CTX(DFLT, x)
+#define THROW(x) THROW_CTX(exception, x)
 #define THROW_CTX(CONTEXT, x) longjmp(_##CONTEXT##_Buf, (x))
 
 #endif /*!_TRY_THROW_CATCH_H_*/

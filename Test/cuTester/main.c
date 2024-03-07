@@ -7,6 +7,7 @@
 #include <acu_util.h>
 
 #include "flt_test.h"
+#include "tryc_tst.h"
 
 void test1(ACU_ExecuteEnv* environment, const void* context) {
     ACU_PrepareParameter(int, 1, 2, "assert", __LINE__ + 1);
@@ -52,6 +53,7 @@ int main() {
     testFixture(&suite);
 
     floatFixture(&suite);
+    tryCatchFixture(&suite);
 
     acu_suiteExecute(&suite);
 
