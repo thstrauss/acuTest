@@ -28,6 +28,7 @@ void acu_suiteExecute(ACU_Suite* suite)
         acu_fixtureExecute((ACU_Fixture *) fixtureElement->data);
         fixtureElement = acu_listNext(fixtureElement);
     }
+    printf("\n\r");
 }
 
 int acu_suiteReport(ACU_Suite* suite)
@@ -36,7 +37,7 @@ int acu_suiteReport(ACU_Suite* suite)
 
     int accumulatedResult = ACU_TEST_PASSED;
 
-    printf("\n\rSuite: %s", suite->name);
+    printf("Suite: %s\n\r", suite->name);
     while (fixtureElement != NULL) {
         ACU_Fixture* fixture = (ACU_Fixture*)fixtureElement->data;
         int fixtureResult = acu_fixtureReport(fixture);
