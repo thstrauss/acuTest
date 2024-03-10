@@ -14,7 +14,7 @@ int acu_equalPtr(const ACU_AssertParameter* parameter) {
 }
 
 void acu_equalPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
-    acu_sprintf_s(buffer, bufferSize, "%s:%d -> actual value %p not equal to expected value %p: %s", parameter->fileName, parameter->line, *(void**)parameter->actual, *(void**)parameter->expected, parameter->message);
+    acu_sprintf_s(buffer, bufferSize, "%actual value %p not equal to expected value %p: %s", *(void**)parameter->actual, *(void**)parameter->expected, parameter->message);
 }
 
 int acu_notEqualPtr(const ACU_AssertParameter* parameter) {
@@ -22,7 +22,7 @@ int acu_notEqualPtr(const ACU_AssertParameter* parameter) {
 }
 
 void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
-    acu_sprintf_s(buffer, bufferSize, "%s:%d -> actual value %p equal to expected value %p: %s", parameter->fileName, parameter->line, *(void**)parameter->actual, *(void**)parameter->expected, parameter->message);
+    acu_sprintf_s(buffer, bufferSize, "actual value %p equal to expected value %p: %s", *(void**)parameter->actual, *(void**)parameter->expected, parameter->message);
 }
 
 int acu_equalStr(const ACU_AssertParameter* parameter) {
@@ -30,7 +30,7 @@ int acu_equalStr(const ACU_AssertParameter* parameter) {
 }
 
 void acu_equalStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
-    acu_sprintf_s(buffer, bufferSize, "%s:%d -> actual value \"%s\" not equal to expected value \"%s\": %s", parameter->fileName, parameter->line, (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
+    acu_sprintf_s(buffer, bufferSize, "actual value \"%s\" not equal to expected value \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
 }
 
 int acu_notEqualStr(const ACU_AssertParameter* parameter) {
@@ -38,7 +38,7 @@ int acu_notEqualStr(const ACU_AssertParameter* parameter) {
 }
 
 void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) {
-    acu_sprintf_s(buffer, bufferSize, "%s:%d -> actual value \"%s\" equal to expected value \"%s\": %s", parameter->fileName, parameter->line, (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
+    acu_sprintf_s(buffer, bufferSize, "actual value \"%s\" equal to expected value \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
 }
 
 void acu_assert(ACU_ExecuteEnv* environment, int(*assertFunc)(const ACU_AssertParameter* parameter), void(*formatMessage)(char* buffer, int bufferSize, const ACU_AssertParameter* parameter), const ACU_AssertParameter* parameter) {

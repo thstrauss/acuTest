@@ -12,8 +12,6 @@
 typedef struct ACU_AssertParameter_ {
     void* actual;
     void* expected;
-    const char* fileName;
-    int line;
     char* message;
 } ACU_AssertParameter;
 
@@ -23,14 +21,12 @@ void acu_assert(
     void (*formatMessage)(char* buffer, int bufferSize, const ACU_AssertParameter* parameter),
     const ACU_AssertParameter* parameter);
 
-#define ACU_PrepareParameter(type, actualValue, expectedValue, messageValue, lineValue) \
+#define ACU_PrepareParameter(type, actualValue, expectedValue, messageValue) \
             ACU_AssertParameter parameter; \
             type __actual = (actualValue); \
             type __expected = (expectedValue); \
             parameter.actual = &__actual; \
             parameter.expected = &__expected; \
-            parameter.fileName = __FILE__; \
-            parameter.line = (lineValue); \
             parameter.message = (messageValue); 
 
 #ifdef __ACU_EMIT_ASSERT_FUNCS__
@@ -40,8 +36,8 @@ static int acu_##type##op(const ACU_AssertParameter* parameter) { \
 } \
 static void acu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) { \
 char formatBuffer[128]; memset(formatBuffer, 0, 128); \
-acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "%%s:%%d -> actual value %s not %%s to expected value %s: %%s", #format, #format); \
-acu_sprintf_s(buffer, bufferSize, formatBuffer, parameter->fileName, parameter->line, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
+acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "actual value %s not %%s to expected value %s: %%s", #format, #format); \
+acu_sprintf_s(buffer, bufferSize, formatBuffer, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
 } \
 void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) { \
     acu_assert(environment, acu_##type##op, acu_##type##op##FormatMessage, parameter); \
@@ -87,17 +83,26 @@ CREATE_ASSERT_FUNC(double, LessEqual, <=, %lf)
 CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 
 #define ACU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
-            ACU_PrepareParameter(type, actualValue, expectedValue, messageValue, __LINE__) \
+            ACU_PrepareParameter(type, actualValue, expectedValue, messageValue) \
+            if (environment->result->file != NULL) free(environment->result->file); \
+            environment->result->file = acu_estrdup(__FILE__); \
+            environment->result->line = __LINE__; \
             acu_assert_##type##op(environment, &parameter); \
             };
 
 #define ACU_assert_ptrEqual(environment, actualValue, expectedValue, messageValue) {\
-            ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
+            ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue) \
+            if (environment->result->file != NULL) free(environment->result->file); \
+            environment->result->file = acu_estrdup(__FILE__); \
+            environment->result->line = __LINE__; \
             acu_assert(environment, acu_equalPtr, acu_equalPtrFormatMessage, &parameter); \
             };
 
 #define ACU_assert_ptrNotEqual(environment, actualValue, expectedValue, messageValue) {\
-            ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue, __LINE__) \
+            ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue) \
+            if (environment->result->file != NULL) free(environment->result->file); \
+            environment->result->file = acu_estrdup(__FILE__); \
+            environment->result->line = __LINE__; \
             acu_assert(environment, acu_notEqualStr, acu_notEqualPtrFormatMessage, &parameter); \
             };
 
@@ -110,8 +115,9 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
                 __expected = acu_estrdup(expectedValue); \
                 parameter.actual = __actual; \
                 parameter.expected = __expected; \
-                parameter.fileName = __FILE__; \
-                parameter.line = __LINE__; \
+                if (environment->result->file != NULL) free(environment->result->file); \
+                environment->result->file = acu_estrdup(__FILE__); \
+                environment->result->line = __LINE__; \
                 parameter.message = (messageValue); \
                 acu_assert(environment, assertFunc, assertFunc##FormatMessage, &parameter); \
             FINALLY \

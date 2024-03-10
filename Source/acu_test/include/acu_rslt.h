@@ -5,6 +5,8 @@
 typedef struct ACU_Result_ {
     int status;
     char* message;
+    char* file;
+    int line;
 } ACU_Result;
 
 #endif

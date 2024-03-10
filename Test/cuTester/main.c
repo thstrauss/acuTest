@@ -10,7 +10,9 @@
 #include "tryc_tst.h"
 
 void test1(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_PrepareParameter(int, 1, 2, "assert", __LINE__ + 1);
+    ACU_PrepareParameter(int, 1, 2, "assert");
+    environment->result->file = acu_estrdup(__FILE__);
+    environment->result->line = __LINE__ + 1;
     acu_assert_intEqual(environment, &parameter);
     UNUSED(context);
 }

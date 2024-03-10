@@ -19,6 +19,7 @@ static void floatTests(ACU_ExecuteEnv* environment, const void* context) {
 
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
+    resultBuf->file = NULL;
 
     if (!setjmp(testEnvironment->assertBuf)) {
         ACU_assert(testEnvironment, float, Equal, 0.0, 0.0, "");

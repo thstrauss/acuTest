@@ -15,6 +15,9 @@ static void acuTest_destroyResult(ACU_Result* result) {
     if (result->message != NULL) {
         free(result->message);
     }
+    if (result->file != NULL) {
+        free(result->file);
+    }
     free(result);
 }
 
@@ -24,6 +27,8 @@ static void acuTest_run(FILE* stream, ACU_TestCase* testCase, const void* contex
 
     result->status = ACU_TEST_PASSED;
     result->message = NULL;
+    result->file = NULL;
+    result->line = -1;
 
     environment.result = result;
 
@@ -92,7 +97,7 @@ int acu_fixtureReport(FILE* stream, ACU_Fixture* fixture) {
     while (testElement != NULL) {
         ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
         if (testCase->result != NULL && testCase->result->status != ACU_TEST_PASSED) {
-            fprintf(stream, "    %s: %s\n\r", testCase->name, testCase->result->message);
+            fprintf(stream, "    %s: %s:%d: %s\n\r", testCase->name, testCase->result->file, testCase->result->line, testCase->result->message);
             accumulatedResult = testCase->result->status;
         }
         testElement = acu_listNext(testElement);
