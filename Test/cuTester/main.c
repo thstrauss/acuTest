@@ -55,9 +55,9 @@ int main() {
     floatFixture(&suite);
     tryCatchFixture(&suite);
 
-    acu_suiteExecute(&suite);
+    acu_suiteExecute(stdout, &suite);
 
-    returnValue = acu_suiteReport(&suite) == ACU_TEST_PASSED ? 0 : 2;
+    returnValue = acu_suiteReport(stdout, &suite) == ACU_TEST_PASSED ? 0 : 2;
 
     acu_suiteDestroy(&suite);
 

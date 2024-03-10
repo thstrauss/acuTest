@@ -2,6 +2,8 @@
 #ifndef _ACU_FIXTURE_H_
 #define _ACU_FIXTURE_H_
 
+#include <stdio.h>
+
 #include <acu_cmmn.h>
 #include <acu_eenv.h>
 #include <acu_list.h>
@@ -18,9 +20,9 @@ void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context);
 
 void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
 
-void acu_fixtureExecute(ACU_Fixture* fixture);
+void acu_fixtureExecute(FILE* stream, ACU_Fixture* fixture);
 
-int acu_fixtureReport(ACU_Fixture* fixture);
+int acu_fixtureReport(FILE* stream, ACU_Fixture* fixture);
 
 void acu_fixtureDestroy(void* fixture);
 

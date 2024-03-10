@@ -20,27 +20,27 @@ void acu_suiteInit(ACU_Suite* suite, const char* name)
     suite->name = acu_estrdup(name);
 }
 
-void acu_suiteExecute(ACU_Suite* suite)
+void acu_suiteExecute(FILE* stream, ACU_Suite* suite)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
 
     while (fixtureElement != NULL) {
-        acu_fixtureExecute((ACU_Fixture *) fixtureElement->data);
+        acu_fixtureExecute(stream, (ACU_Fixture *) fixtureElement->data);
         fixtureElement = acu_listNext(fixtureElement);
     }
-    printf("\n\r");
+    fprintf(stream, "\n\r");
 }
 
-int acu_suiteReport(ACU_Suite* suite)
+int acu_suiteReport(FILE* stream, ACU_Suite* suite)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
 
     int accumulatedResult = ACU_TEST_PASSED;
 
-    printf("Suite: %s\n\r", suite->name);
+    fprintf(stream, "Suite: %s\n\r", suite->name);
     while (fixtureElement != NULL) {
         ACU_Fixture* fixture = (ACU_Fixture*)fixtureElement->data;
-        int fixtureResult = acu_fixtureReport(fixture);
+        int fixtureResult = acu_fixtureReport(stream, fixture);
         if (fixtureResult != ACU_TEST_PASSED) {
             accumulatedResult = fixtureResult;
         }
