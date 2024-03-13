@@ -32,11 +32,11 @@ void acu_assert(
 #ifdef __ACU_EMIT_ASSERT_FUNCS__
 #define CREATE_ASSERT_FUNC(type, op, opcode, format) \
 static int acu_##type##op(const ACU_AssertParameter* parameter) { \
-    return *(const type*)parameter->actual opcode *(const type*)parameter->expected; \
+    return *(type*)parameter->actual opcode *(type*)parameter->expected; \
 } \
 static void acu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) { \
 char formatBuffer[128]; memset(formatBuffer, 0, 128); \
-acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "actual value %s not %%s to expected value %s: %%s", #format, #format); \
+acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "actual value %s not %%s to value %s: %%s", #format, #format); \
 acu_sprintf_s(buffer, bufferSize, formatBuffer, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
 } \
 void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) { \
@@ -76,7 +76,7 @@ CREATE_ASSERT_FUNC(float, LessEqual, <=, %f)
 CREATE_ASSERT_FUNC(float, GreaterEqual, >= , %f)
 
 CREATE_ASSERT_FUNC(double, Equal, ==, %lf)
-CREATE_ASSERT_FUNC(double, NotEqual, == , % lf)
+CREATE_ASSERT_FUNC(double, NotEqual, != , % lf)
 CREATE_ASSERT_FUNC(double, Less, <, %lf)
 CREATE_ASSERT_FUNC(double, Greater, >, %lf)
 CREATE_ASSERT_FUNC(double, LessEqual, <=, %lf)
