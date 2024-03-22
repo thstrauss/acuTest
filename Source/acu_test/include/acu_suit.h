@@ -10,11 +10,12 @@
 typedef struct ACU_Suite_ {
     char* name;
     ACU_List* testFixtures;
+    void (*progress)(const ACU_Result* result);
 } ACU_Suite;
 
 void acu_suiteAddFixture(ACU_Suite* suite, const ACU_Fixture* fixture);
 
-void acu_suiteInit(ACU_Suite* suite, const char* name);
+void acu_suiteInit(ACU_Suite* suite, const char* name, void (*progress)(const ACU_Result* result));
 
 void acu_suiteExecute(FILE* stream, ACU_Suite* suite);
 

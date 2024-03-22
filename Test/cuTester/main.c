@@ -32,6 +32,10 @@ void test3(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert_strNotEqual(environment, "str", "str", "assert2");
 }
 
+static void progress(const ACU_Result* result) {
+    printf("%s", result->status == ACU_TEST_PASSED ? "." : "F");
+}
+
 void testFixture(ACU_Suite* suite) {
     ACU_Fixture* fixture = acu_emalloc(sizeof(ACU_Fixture));
 
@@ -49,7 +53,7 @@ int main() {
     ACU_Suite suite;
     int returnValue;
 
-    acu_suiteInit(&suite, "Suite");
+    acu_suiteInit(&suite, "Suite", progress);
 
     testFixture(&suite);
     testFixture(&suite);

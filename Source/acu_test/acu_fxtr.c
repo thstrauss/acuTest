@@ -21,7 +21,7 @@ static void acuTest_destroyResult(ACU_Result* result) {
     free(result);
 }
 
-static void acuTest_run(FILE* stream, ACU_TestCase* testCase, const void* context) {
+static void acuTest_run(void (*progress)(ACU_Result* result), ACU_TestCase* testCase, const void* context) {
     ACU_ExecuteEnv environment;
     ACU_Result* result = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
 
@@ -39,17 +39,17 @@ static void acuTest_run(FILE* stream, ACU_TestCase* testCase, const void* contex
                     testCase->testFunc(&environment, context);
                     break;
                 }
-                fprintf(stream, ".");
                 break;
             }
             case ACU_TEST_FAILED: {
-                fprintf(stream, "F");
                 break;
             }
         }
     } while (0);
+    progress(result);
     testCase->result = result;
 }
+
 
 static void acuTest_destroyTestCase(void* data) {
     ACU_TestCase* testCase = (ACU_TestCase*) data;
@@ -79,11 +79,11 @@ void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
     fixture->context = context;
 }
 
-void acu_fixtureExecute(FILE* stream, ACU_Fixture* fixture) {
+void acu_fixtureExecute(ACU_Fixture* fixture) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
 
     while (testElement != NULL) {
-        acuTest_run(stream, (ACU_TestCase*) testElement->data, fixture->context);
+        acuTest_run(fixture->progress, (ACU_TestCase*) testElement->data, fixture->context);
         testElement = acu_listNext(testElement);
     }
 }
@@ -97,7 +97,7 @@ int acu_fixtureReport(FILE* stream, ACU_Fixture* fixture) {
     while (testElement != NULL) {
         ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
         if (testCase->result != NULL && testCase->result->status != ACU_TEST_PASSED) {
-            fprintf(stream, "    %s: %s:%d: %s\n\r", testCase->name, testCase->result->file, testCase->result->line, testCase->result->message);
+            fprintf(stream, "    %s: %s:%d:\n\r      %s\n\r", testCase->name, testCase->result->file, testCase->result->line, testCase->result->message);
             accumulatedResult = testCase->result->status;
         }
         testElement = acu_listNext(testElement);
