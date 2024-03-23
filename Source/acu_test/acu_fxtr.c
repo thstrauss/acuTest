@@ -21,7 +21,7 @@ static void acuTest_destroyResult(ACU_Result* result) {
     free(result);
 }
 
-static void acuTest_run(void (*progress)(ACU_Result* result), ACU_TestCase* testCase, const void* context) {
+static int acuTest_run(ACU_TestCase* testCase, const void* context, void (*progress)(const ACU_TestCase* testCase)) {
     ACU_ExecuteEnv environment;
     ACU_Result* result = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
 
@@ -46,10 +46,10 @@ static void acuTest_run(void (*progress)(ACU_Result* result), ACU_TestCase* test
             }
         }
     } while (0);
-    progress(result);
     testCase->result = result;
+    progress(testCase);
+    return result->status;
 }
-
 
 static void acuTest_destroyTestCase(void* data) {
     ACU_TestCase* testCase = (ACU_TestCase*) data;
@@ -79,31 +79,27 @@ void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
     fixture->context = context;
 }
 
-void acu_fixtureExecute(ACU_Fixture* fixture) {
+int acu_fixtureExecute(ACU_Fixture* fixture, void (*progress)(const ACU_TestCase* testCase)) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
-
+    int result = ACU_TEST_PASSED;
     while (testElement != NULL) {
-        acuTest_run(fixture->progress, (ACU_TestCase*) testElement->data, fixture->context);
+        result |= acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress);
         testElement = acu_listNext(testElement);
     }
+    return result;
 }
 
-int acu_fixtureReport(FILE* stream, ACU_Fixture* fixture) {
+void acu_fixtureReport(FILE* stream, ACU_Fixture* fixture) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
-
-    int accumulatedResult = ACU_TEST_PASSED;
-    
+   
     fprintf(stream, "  Fixture: %s\n\r", fixture->name);
     while (testElement != NULL) {
         ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
         if (testCase->result != NULL && testCase->result->status != ACU_TEST_PASSED) {
             fprintf(stream, "    %s: %s:%d:\n\r      %s\n\r", testCase->name, testCase->result->file, testCase->result->line, testCase->result->message);
-            accumulatedResult = testCase->result->status;
         }
         testElement = acu_listNext(testElement);
     }
-
-    return accumulatedResult;
 }
 
 void acu_fixtureDestroy(void* fixture) {

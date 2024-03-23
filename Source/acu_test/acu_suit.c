@@ -12,45 +12,36 @@ void acu_suiteAddFixture(ACU_Suite* suite, const ACU_Fixture* fixture)
     acu_listAppend(suite->testFixtures, (void*) fixture);
 }
 
-void acu_suiteInit(ACU_Suite* suite, const char* name, void (*progress)(const ACU_Result* result))
+void acu_suiteInit(ACU_Suite* suite, const char* name)
 {
     ACU_List* testFixtures = (ACU_List*)acu_emalloc(sizeof(ACU_List));
     acu_listInit(testFixtures, acu_fixtureDestroy);
     suite->testFixtures = testFixtures;
     suite->name = acu_estrdup(name);
-    suite->progress = progress;
 }
 
-void acu_suiteExecute(FILE* stream, ACU_Suite* suite)
+int acu_suiteExecute(ACU_Suite* suite, void (*progress)(const ACU_TestCase* testCase))
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
+    int result = ACU_TEST_PASSED;
 
     while (fixtureElement != NULL) {
-        ((ACU_Fixture*)fixtureElement->data)->progress = suite->progress;
-        acu_fixtureExecute((ACU_Fixture *) fixtureElement->data);
-        ((ACU_Fixture*)fixtureElement->data)->progress = NULL;
+        result |= acu_fixtureExecute((ACU_Fixture *) fixtureElement->data, progress);
         fixtureElement = acu_listNext(fixtureElement);
     }
-    fprintf(stream, "\n\r");
+    return result;
 }
 
-int acu_suiteReport(FILE* stream, ACU_Suite* suite)
+void acu_suiteReport(FILE* stream, ACU_Suite* suite)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
-
-    int accumulatedResult = ACU_TEST_PASSED;
 
     fprintf(stream, "Suite: %s\n\r", suite->name);
     while (fixtureElement != NULL) {
         ACU_Fixture* fixture = (ACU_Fixture*)fixtureElement->data;
-        int fixtureResult = acu_fixtureReport(stream, fixture);
-        if (fixtureResult != ACU_TEST_PASSED) {
-            accumulatedResult = fixtureResult;
-        }
+        acu_fixtureReport(stream, fixture);
         fixtureElement = acu_listNext(fixtureElement);
     }
-
-    return accumulatedResult;
 }
 
 void acu_suiteDestroy(ACU_Suite* suite)

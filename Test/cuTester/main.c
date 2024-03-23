@@ -32,8 +32,8 @@ void test3(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert_strNotEqual(environment, "str", "str", "assert2");
 }
 
-static void progress(const ACU_Result* result) {
-    printf("%s", result->status == ACU_TEST_PASSED ? "." : "F");
+static void progress(const ACU_TestCase* testCase) {
+    printf("%s", testCase->result->status == ACU_TEST_PASSED ? "." : "F");
 }
 
 void testFixture(ACU_Suite* suite) {
@@ -53,7 +53,7 @@ int main() {
     ACU_Suite suite;
     int returnValue;
 
-    acu_suiteInit(&suite, "Suite", progress);
+    acu_suiteInit(&suite, "Suite");
 
     testFixture(&suite);
     testFixture(&suite);
@@ -61,9 +61,12 @@ int main() {
     floatFixture(&suite);
     tryCatchFixture(&suite);
 
-    acu_suiteExecute(stdout, &suite);
+    returnValue = acu_suiteExecute(&suite, progress) == ACU_TEST_PASSED ? 0 : 2;
+    fprintf(stdout, "\n\r");
 
-    returnValue = acu_suiteReport(stdout, &suite) == ACU_TEST_PASSED ? 0 : 2;
+    if (returnValue != 0) {
+        acu_suiteReport(stdout, &suite);
+    }
 
     acu_suiteDestroy(&suite);
 
