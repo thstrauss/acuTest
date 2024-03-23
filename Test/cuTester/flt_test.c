@@ -55,6 +55,7 @@ TESTBED(Eq, double, GreaterEqual, 1.0, 1.0)
 
 static void doubleNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, double, NotEqual, 0.0, 1.0, "");
+    UNUSED(context);
 }
 
 void floatFixture(ACU_Suite* suite)
