@@ -46,26 +46,22 @@ static void tryCatchVisitedTests(ACU_ExecuteEnv* environment, const void* contex
 }
 
 static void tryCatchVisitedExpandedTests(ACU_ExecuteEnv* environment, const void* context) { 
-	struct {
-		int catched;
-		int visited;
-	} x;
-    x.catched = 0;
-    x.visited = 0;
+    int visited = 0;
+    int catched = 0;
     do {
         jmp_buf _exception_Buf; switch (setjmp(_exception_Buf)) {
         case 0: while (1) {
-            x.visited++;
+            visited++;
             longjmp(_exception_Buf, (1));
-            x.visited++;
+            visited++;
         break; case (1):
-            x.catched = 1;
+            catched = 1;
             break;
         }
         }
     } while (0);
-    ACU_assert(environment, int, Equal, x.visited, 1, "block visited");
-    ACU_assert(environment, int, Equal, x.catched, 1, "catch not visited");
+    ACU_assert(environment, int, Equal, visited, 1, "block visited");
+    ACU_assert(environment, int, Equal, catched, 1, "catch not visited");
     UNUSED(context);
 }
 
