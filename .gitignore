@@ -370,3 +370,5 @@ FodyWeavers.xsd
 /CMake/DefaultCXX.cmake
 /CMake/DefaultFortran.cmake
 /CMake/Utils.cmake
+
+*.O
