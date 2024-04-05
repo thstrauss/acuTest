@@ -45,13 +45,34 @@ static void tryCatchVisitedTests(ACU_ExecuteEnv* environment, const void* contex
     UNUSED(context);
 }
 
+static void tryCatchVisitedExpandedTests(ACU_ExecuteEnv* environment, const void* context) {
+    int visited = 0;
+    int catched = 0;
+    do {
+        jmp_buf _exception_Buf; switch (_setjmp(_exception_Buf)) {
+        case 0: while (1) {
+            visited++;
+            longjmp(_exception_Buf, (1));
+            visited++;
+        break; case (1):
+            catched = 1;
+            break;
+        }
+        }
+    } while (0);
+    ACU_assert(environment, int, Equal, visited, 1, "block visited");
+    ACU_assert(environment, int, Equal, catched, 1, "catch not visited");
+    UNUSED(context);
+}
+
+
 static void tryCatchFinallyVisitedTests(ACU_ExecuteEnv* environment, const void* context) {
     int visited = 0;
     int catched = 0;
     int finally = 0;
     TRY
         THROW(1);
-    visited = 1;
+        visited = 1;
     CATCH(1)
         catched = 1;
     FINALLY
@@ -72,5 +93,6 @@ void tryCatchFixture(ACU_Suite* suite)
     acu_fixtureAddTestCase(fixture, "try etry", tryETryTests);
     acu_fixtureAddTestCase(fixture, "try catch", tryCatchNotVisitedTests);
     acu_fixtureAddTestCase(fixture, "try throw catch", tryCatchVisitedTests);
+    acu_fixtureAddTestCase(fixture, "try throw catch_ expanded", tryCatchVisitedExpandedTests);
     acu_fixtureAddTestCase(fixture, "try throw catch finally", tryCatchFinallyVisitedTests);
 }
