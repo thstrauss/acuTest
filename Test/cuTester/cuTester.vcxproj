@@ -136,6 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="flt_test.c" />
+    <ClCompile Include="fxtr_tst.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="tryc_tst.c" />
   </ItemGroup>
@@ -146,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="flt_test.h" />
+    <ClInclude Include="fxtr_tst.h" />
     <ClInclude Include="tryc_tst.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

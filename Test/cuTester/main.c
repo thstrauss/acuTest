@@ -8,45 +8,10 @@
 
 #include "flt_test.h"
 #include "tryc_tst.h"
-
-void test1(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_PrepareParameter(int, 1, 2, "assert");
-    environment->result->file = acu_estrdup(__FILE__);
-    environment->result->line = __LINE__ + 1;
-    acu_assert_intEqual(environment, &parameter);
-    UNUSED(context);
-}
-
-void test2(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_assert(environment, int, Equal, 1, 1, "assert2");
-    ACU_assert(environment, int, NotEqual, 1, 2, "xxx");
-    ACU_assert(environment, float, NotEqual, 1.0, 2.0, "yyy");
-    UNUSED(context);
-}
-
-void test3(ACU_ExecuteEnv* environment, const void* context) {
-    char str[] = "abc";
-    ACU_assert_strEqual(environment, str, str, "assert2");
-    ACU_assert_strEqual(environment, "abc", "abc", "assert2");
-    ACU_assert_strEqual(environment, (char*) context, "context", "assert context");
-    ACU_assert_strNotEqual(environment, "str", "str", "assert2");
-}
+#include "fxtr_tst.h"
 
 static void progress(const ACU_TestCase* testCase) {
     printf("%s", testCase->result->status == ACU_TEST_PASSED ? "." : "F");
-}
-
-void testFixture(ACU_Suite* suite) {
-    ACU_Fixture* fixture = acu_emalloc(sizeof(ACU_Fixture));
-
-    acu_fixtureInit(fixture, "testFixture");
-    acu_fixtureSetContext(fixture, "context");
-
-    acu_fixtureAddTestCase(fixture, "test1", test1);
-    acu_fixtureAddTestCase(fixture, "test2", test2);
-    acu_fixtureAddTestCase(fixture, "test3", test3);
-
-    acu_suiteAddFixture(suite, fixture);
 }
 
 int main() {
@@ -55,18 +20,14 @@ int main() {
 
     acu_suiteInit(&suite, "Suite");
 
-    testFixture(&suite);
-    testFixture(&suite);
-
+    fixtureFixture(&suite);
     floatFixture(&suite);
     tryCatchFixture(&suite);
 
     returnValue = acu_suiteExecute(&suite, progress) == ACU_TEST_PASSED ? 0 : 2;
     fprintf(stdout, "\n\r");
 
-    if (returnValue != 0) {
-        acu_suiteReport(stdout, &suite);
-    }
+    acu_suiteReport(stdout, &suite);
 
     acu_suiteDestroy(&suite);
 
