@@ -2,8 +2,8 @@
 #ifndef __flt_test__
 #define __flt_test__
 
-#include <acu_suit.h>
+#include <acu_fxtr.h>
 
-void floatFixture(ACU_Suite* suite); 
+ACU_Fixture* floatFixture(void);
 
 #endif

@@ -1,6 +1,11 @@
+#include <stdlib.h>
+
 #include <acu_eenv.h>
 #include <acu_asrt.h>
 #include <acu_tcse.h> 
+#include <acu_suit.h>
+#include <acu_util.h>
+
 #include "fxtr_tst.h"
 
 static void test1(ACU_ExecuteEnv* environment, const void* context) {
@@ -26,7 +31,7 @@ static void test3(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert_strNotEqual(environment, "str", "str", "assert2");
 }
 
-static void failingFixture(ACU_Suite* suite) {
+static ACU_Fixture* failingFixture() {
     ACU_Fixture* fixture = (ACU_Fixture *) acu_emalloc(sizeof(ACU_Fixture));
 
     acu_fixtureInit(fixture, "testFixture");
@@ -35,26 +40,26 @@ static void failingFixture(ACU_Suite* suite) {
     acu_fixtureAddTestCase(fixture, "test1", test1);
     acu_fixtureAddTestCase(fixture, "test2", test2);
     acu_fixtureAddTestCase(fixture, "test3", test3);
-    acu_suiteAddFixture(suite, fixture);
+    return fixture;
 }
 
-static void passingFixture(ACU_Suite* suite) {
+static ACU_Fixture* passingFixture() {
     ACU_Fixture* fixture = (ACU_Fixture*)acu_emalloc(sizeof(ACU_Fixture));
 
     acu_fixtureInit(fixture, "testFixture");
     acu_fixtureSetContext(fixture, "context");
 
     acu_fixtureAddTestCase(fixture, "test2", test2);
-    acu_suiteAddFixture(suite, fixture);
+    return fixture;
 }
 
-static void emptyFixture(ACU_Suite* suite) {
+static ACU_Fixture* emptyFixture() {
     ACU_Fixture* fixture = (ACU_Fixture*)acu_emalloc(sizeof(ACU_Fixture));
 
     acu_fixtureInit(fixture, "testFixture");
     acu_fixtureSetContext(fixture, "context");
 
-    acu_suiteAddFixture(suite, fixture);
+    return fixture;
 }
 
 static void progress(const ACU_TestCase* testCase) {
@@ -67,11 +72,13 @@ static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     ACU_Suite* localSuite = (ACU_Suite*) acu_emalloc(sizeof(ACU_Suite));
 
     acu_suiteInit(localSuite, "testSuite");
-    failingFixture(localSuite);
+    acu_suiteAddFixture(localSuite, failingFixture());
     result = acu_suiteExecute(localSuite, progress);
     acu_suiteDestroy(localSuite);
+    free(localSuite);
 
     ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "assert2");
+    UNUSED(context);
 }
 
 static void passíngFixtureTest(ACU_ExecuteEnv* environment, const void* context)
@@ -80,11 +87,13 @@ static void passíngFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     ACU_Suite* localSuite = (ACU_Suite*)acu_emalloc(sizeof(ACU_Suite));
 
     acu_suiteInit(localSuite, "testSuite");
-    passingFixture(localSuite);
+    acu_suiteAddFixture(localSuite, passingFixture());
     result = acu_suiteExecute(localSuite, progress);
     acu_suiteDestroy(localSuite);
+    free(localSuite);
 
     ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "assert2");
+    UNUSED(context);
 }
 
 static void emptyFixtureTest(ACU_ExecuteEnv* environment, const void* context)
@@ -93,19 +102,21 @@ static void emptyFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     ACU_Suite* localSuite = (ACU_Suite*)acu_emalloc(sizeof(ACU_Suite));
 
     acu_suiteInit(localSuite, "testSuite");
-    emptyFixture(localSuite);
+    acu_suiteAddFixture(localSuite, emptyFixture());
     result = acu_suiteExecute(localSuite, progress);
     acu_suiteDestroy(localSuite);
+    free(localSuite);
 
     ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "assert2");
+    UNUSED(context);
 }
 
-void fixtureFixture(ACU_Suite* suite)
+ACU_Fixture* fixtureFixture(void)
 {
     ACU_Fixture* fixture = acu_emalloc(sizeof(ACU_Fixture));
-    acu_suiteAddFixture(suite, fixture);
     acu_fixtureInit(fixture, "fixture tests");
     acu_fixtureAddTestCase(fixture, "Failing Fixture", failingFixtureTest);
     acu_fixtureAddTestCase(fixture, "Passing Fixture", passíngFixtureTest);
     acu_fixtureAddTestCase(fixture, "Empty Fixture", emptyFixtureTest);
+    return fixture;
 }

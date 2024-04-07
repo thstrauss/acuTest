@@ -50,5 +50,5 @@ void acu_suiteDestroy(ACU_Suite* suite)
     if (suite->testFixtures != NULL) {
         acu_listDestroy(suite->testFixtures);
     }
-    memset(suite, 0, sizeof(ACU_Suite));
+    /*free(suite);*/
 }

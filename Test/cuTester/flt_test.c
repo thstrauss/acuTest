@@ -65,10 +65,10 @@ static void doubleNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
-void floatFixture(ACU_Suite* suite)
+ACU_Fixture* floatFixture(void)
 {
     ACU_Fixture* fixture = acu_emalloc(sizeof(ACU_Fixture));
-    acu_suiteAddFixture(suite, fixture);
+
     acu_fixtureInit(fixture, "float tests");
 
     acu_fixtureAddTestCase(fixture, "float Equal", testfloatEqual);
@@ -90,4 +90,6 @@ void floatFixture(ACU_Suite* suite)
     acu_fixtureAddTestCase(fixture, "double Greater", testdoubleGreater);
     acu_fixtureAddTestCase(fixture, "double GreaterEqualEq", testdoubleGreaterEqualEq);
     acu_fixtureAddTestCase(fixture, "double GreaterEqual", testdoubleGreaterEqual);
+
+    return fixture;
 }

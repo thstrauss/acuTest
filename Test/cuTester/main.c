@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include <acu_fxtr.h>
-#include <acu_asrt.h>
 #include <acu_suit.h>
 #include <acu_util.h>
 
@@ -15,21 +14,21 @@ static void progress(const ACU_TestCase* testCase) {
 }
 
 int main() {
-    ACU_Suite suite;
+    ACU_Suite* suite = (ACU_Suite*) acu_emalloc(sizeof(ACU_Suite*));
     int returnValue;
 
-    acu_suiteInit(&suite, "Suite");
+    acu_suiteInit(suite, "Suite");
 
-    fixtureFixture(&suite);
-    floatFixture(&suite);
-    tryCatchFixture(&suite);
+    acu_suiteAddFixture(suite, fixtureFixture());
+    acu_suiteAddFixture(suite, floatFixture());
+    acu_suiteAddFixture(suite, tryCatchFixture());
 
-    returnValue = acu_suiteExecute(&suite, progress) == ACU_TEST_PASSED ? 0 : 2;
+    returnValue = acu_suiteExecute(suite, progress) == ACU_TEST_PASSED ? 0 : 2;
     fprintf(stdout, "\n\r");
 
-    acu_suiteReport(stdout, &suite);
+    acu_suiteReport(stdout, suite);
 
-    acu_suiteDestroy(&suite);
+    acu_suiteDestroy(suite);
 
     return returnValue;
 }

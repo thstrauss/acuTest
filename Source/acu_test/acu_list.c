@@ -76,5 +76,4 @@ void acu_listDestroy(ACU_List* list) {
             list->destroy(data);
         }
     }
-    memset(list, 0, sizeof(list));
 }

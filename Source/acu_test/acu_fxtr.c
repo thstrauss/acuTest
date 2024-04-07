@@ -104,5 +104,4 @@ void acu_fixtureReport(FILE* stream, ACU_Fixture* fixture) {
 
 void acu_fixtureDestroy(void* fixture) {
     acu_listDestroy(((ACU_Fixture*) fixture)->testCases);
-    memset(fixture, 0, sizeof(ACU_Fixture));
 }

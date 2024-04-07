@@ -84,10 +84,10 @@ static void tryCatchFinallyVisitedTests(ACU_ExecuteEnv* environment, const void*
     UNUSED(context);
 }
 
-void tryCatchFixture(ACU_Suite* suite)
+ACU_Fixture* tryCatchFixture(void)
 {
     ACU_Fixture* fixture = acu_emalloc(sizeof(ACU_Fixture));
-    acu_suiteAddFixture(suite, fixture);
+    
     acu_fixtureInit(fixture, "try catch finally");
 
     acu_fixtureAddTestCase(fixture, "try etry", tryETryTests);
@@ -95,4 +95,6 @@ void tryCatchFixture(ACU_Suite* suite)
     acu_fixtureAddTestCase(fixture, "try throw catch", tryCatchVisitedTests);
     acu_fixtureAddTestCase(fixture, "try throw catch_ expanded", tryCatchVisitedExpandedTests);
     acu_fixtureAddTestCase(fixture, "try throw catch finally", tryCatchFinallyVisitedTests);
+
+    return fixture;
 }

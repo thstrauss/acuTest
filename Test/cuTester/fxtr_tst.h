@@ -3,8 +3,8 @@
 #ifndef __fxtr_tst__
 #define __fxtr_tst__
 
-#include <acu_suit.h>
+#include <acu_fxtr.h>
 
-void fixtureFixture(ACU_Suite* suite);
+ACU_Fixture* fixtureFixture(void);
 
 #endif
