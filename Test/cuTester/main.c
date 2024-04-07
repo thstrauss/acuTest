@@ -11,7 +11,7 @@
 #include "fxtr_tst.h"
 
 static void progress(const ACU_TestCase* testCase) {
-    printf("%s", testCase->result->status == ACU_TEST_PASSED ? "." : "F");
+    fprintf(stdout, "%s", testCase->result->status == ACU_TEST_PASSED ? "." : "F");
 }
 
 int main() {
