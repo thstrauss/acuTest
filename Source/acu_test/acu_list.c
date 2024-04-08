@@ -20,6 +20,11 @@ ACU_ListElement* acu_listNext(ACU_ListElement* element) {
     return element->next;
 }
 
+ACU_List* acu_listMalloc()
+{
+    return (ACU_List*) acu_emalloc(sizeof(ACU_List));
+}
+
 static int acu_listSize(ACU_List* list) {
     return list->size;
 }

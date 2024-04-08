@@ -11,7 +11,7 @@
 #include <acu_tcse.h>
 #include <acu_util.h>
 
-static void acuTest_destroyResult(ACU_Result* result) {
+static void acuTest_resultDestroy(ACU_Result* result) {
     if (result->message != NULL) {
         free(result->message);
     }
@@ -21,9 +21,13 @@ static void acuTest_destroyResult(ACU_Result* result) {
     free(result);
 }
 
+static ACU_Result* acuTest_resultMalloc() {
+    return (ACU_Result*) acu_emalloc(sizeof(ACU_Result));
+}
+
 static int acuTest_run(ACU_TestCase* testCase, const void* context, void (*progress)(const ACU_TestCase* testCase)) {
     ACU_ExecuteEnv environment;
-    ACU_Result* result = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Result* result = acuTest_resultMalloc();
 
     result->status = ACU_TEST_PASSED;
     result->message = NULL;
@@ -55,12 +59,12 @@ static void acuTest_destroyTestCase(void* data) {
     ACU_TestCase* testCase = (ACU_TestCase*) data;
     free(testCase->name);
     if (testCase->result != NULL) {
-        acuTest_destroyResult(testCase->result);
+        acuTest_resultDestroy(testCase->result);
     }
 }
 
 void acu_fixtureInit(ACU_Fixture* fixture, const char* name) {
-    ACU_List* testCases = (ACU_List*) acu_emalloc(sizeof(ACU_List));
+    ACU_List* testCases = acu_listMalloc();
     acu_listInit(testCases, acuTest_destroyTestCase);
     fixture->testCases = testCases;
     fixture->name = acu_estrdup(name);
@@ -102,6 +106,12 @@ void acu_fixtureReport(FILE* stream, ACU_Fixture* fixture) {
     }
 }
 
+ACU_Fixture* acu_fixtureMalloc()
+{
+    return (ACU_Fixture*)acu_emalloc(sizeof(ACU_Fixture));
+}
+
 void acu_fixtureDestroy(void* fixture) {
     acu_listDestroy(((ACU_Fixture*) fixture)->testCases);
+    free(fixture);
 }

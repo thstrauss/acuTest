@@ -26,6 +26,8 @@ int acu_fixtureExecute(ACU_Fixture* fixture, void (*progress)(const ACU_TestCase
 
 void acu_fixtureReport(FILE* stream, ACU_Fixture* fixture);
 
+ACU_Fixture* acu_fixtureMalloc();
+
 void acu_fixtureDestroy(void* fixture);
 
 #endif

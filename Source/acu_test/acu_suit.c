@@ -14,7 +14,7 @@ void acu_suiteAddFixture(ACU_Suite* suite, const ACU_Fixture* fixture)
 
 void acu_suiteInit(ACU_Suite* suite, const char* name)
 {
-    ACU_List* testFixtures = (ACU_List*)acu_emalloc(sizeof(ACU_List));
+    ACU_List* testFixtures = acu_listMalloc();
     acu_listInit(testFixtures, acu_fixtureDestroy);
     suite->testFixtures = testFixtures;
     suite->name = acu_estrdup(name);
@@ -44,11 +44,16 @@ void acu_suiteReport(FILE* stream, ACU_Suite* suite)
     }
 }
 
+ACU_Suite* acu_suiteMalloc()
+{
+    return (ACU_Suite*) acu_emalloc(sizeof(ACU_Suite));
+}
+
 void acu_suiteDestroy(ACU_Suite* suite)
 {
     free(suite->name);
     if (suite->testFixtures != NULL) {
         acu_listDestroy(suite->testFixtures);
     }
-    /*free(suite);*/
+    free(suite);
 }

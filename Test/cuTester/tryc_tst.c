@@ -86,7 +86,7 @@ static void tryCatchFinallyVisitedTests(ACU_ExecuteEnv* environment, const void*
 
 ACU_Fixture* tryCatchFixture(void)
 {
-    ACU_Fixture* fixture = acu_emalloc(sizeof(ACU_Fixture));
+    ACU_Fixture* fixture = acu_fixtureMalloc();
     
     acu_fixtureInit(fixture, "try catch finally");
 

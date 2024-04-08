@@ -24,6 +24,8 @@ ACU_ListElement* acu_listHead(ACU_List* list);
 
 ACU_ListElement* acu_listNext(ACU_ListElement* element);
 
+ACU_List* acu_listMalloc();
+
 void acu_listDestroy(ACU_List* list);
 
 int acu_listAppend(ACU_List* list, void* data);

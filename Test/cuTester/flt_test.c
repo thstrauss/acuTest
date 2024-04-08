@@ -67,7 +67,7 @@ static void doubleNotEqual(ACU_ExecuteEnv* environment, const void* context) {
 
 ACU_Fixture* floatFixture(void)
 {
-    ACU_Fixture* fixture = acu_emalloc(sizeof(ACU_Fixture));
+    ACU_Fixture* fixture = acu_fixtureMalloc();
 
     acu_fixtureInit(fixture, "float tests");
 

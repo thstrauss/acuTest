@@ -14,9 +14,9 @@ static void progress(const ACU_TestCase* testCase) {
 }
 
 int main() {
-    ACU_Suite* suite = (ACU_Suite*) acu_emalloc(sizeof(ACU_Suite*));
     int returnValue;
-
+    ACU_Suite* suite = acu_suiteMalloc();
+    
     acu_suiteInit(suite, "Suite");
 
     acu_suiteAddFixture(suite, fixtureFixture());
