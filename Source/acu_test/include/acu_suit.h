@@ -12,7 +12,7 @@ typedef struct ACU_Suite_ {
     ACU_List* testFixtures;
 } ACU_Suite;
 
-void acu_suiteAddFixture(ACU_Suite* suite, const ACU_Fixture* fixture);
+void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture);
 
 void acu_suiteInit(ACU_Suite* suite, const char* name);
 

@@ -79,6 +79,7 @@ void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char* name, void (*testF
     testCase->name = acu_estrdup(name);
     testCase->testFunc = testFunc;
     testCase->result = NULL;
+    testCase->fixture = fixture;
     acu_listAppend(fixture->testCases, (void*)testCase);
 }
 

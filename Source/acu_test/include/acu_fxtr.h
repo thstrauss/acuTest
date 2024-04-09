@@ -10,10 +10,13 @@
 #include <acu_rslt.h>
 #include <acu_tcse.h>
 
+struct ACU_Suite_;
+
 typedef struct ACU_Fixture_ {
     const char* name;
     const void* context;
     ACU_List* testCases;
+    struct ACU_Suite_* suite;
 } ACU_Fixture;
 
 void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char *name, void (*testFunc)(ACU_ExecuteEnv* environment, const void* context));

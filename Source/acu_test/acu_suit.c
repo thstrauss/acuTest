@@ -7,8 +7,9 @@
 #include <acu_suit.h>
 #include <acu_util.h>
 
-void acu_suiteAddFixture(ACU_Suite* suite, const ACU_Fixture* fixture)
+void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture)
 {
+    fixture->suite = suite;
     acu_listAppend(suite->testFixtures, (void*) fixture);
 }
 
