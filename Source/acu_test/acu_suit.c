@@ -33,14 +33,13 @@ int acu_suiteExecute(ACU_Suite* suite, void (*progress)(const ACU_TestCase* test
     return result;
 }
 
-void acu_suiteReport(FILE* stream, ACU_Suite* suite)
+void acu_suiteReport(ACU_Suite* suite, void (*report)(const ACU_TestCase* testCase))
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
 
-    fprintf(stream, "Suite: %s\n\r", suite->name);
     while (fixtureElement != NULL) {
         ACU_Fixture* fixture = (ACU_Fixture*)fixtureElement->data;
-        acu_fixtureReport(stream, fixture);
+        acu_fixtureReport(fixture, report);
         fixtureElement = acu_listNext(fixtureElement);
     }
 }

@@ -99,15 +99,12 @@ int acu_fixtureExecute(ACU_Fixture* fixture, void (*progress)(const ACU_TestCase
     return result;
 }
 
-void acu_fixtureReport(FILE* stream, ACU_Fixture* fixture) {
+void acu_fixtureReport(ACU_Fixture* fixture, void (*report)(const ACU_TestCase* testCase)) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
    
-    fprintf(stream, "  Fixture: %s\n\r", fixture->name);
     while (testElement != NULL) {
         ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
-        if (testCase->result != NULL && testCase->result->status != ACU_TEST_PASSED) {
-            fprintf(stream, "    %s: %s:%d:\n\r      %s\n\r", testCase->name, testCase->result->file, testCase->result->line, testCase->result->message);
-        }
+        report(testCase);
         testElement = acu_listNext(testElement);
     }
 }

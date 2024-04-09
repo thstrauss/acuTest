@@ -18,7 +18,7 @@ void acu_suiteInit(ACU_Suite* suite, const char* name);
 
 int acu_suiteExecute(ACU_Suite* suite, void (*progress)(const ACU_TestCase* testCase));
 
-void acu_suiteReport(FILE * stream, ACU_Suite* suite);
+void acu_suiteReport(ACU_Suite* suite, void (*report)(const ACU_TestCase* testCase));
 
 ACU_Suite* acu_suiteMalloc(void);
 
