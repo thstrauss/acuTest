@@ -20,7 +20,7 @@ ACU_ListElement* acu_listNext(ACU_ListElement* element) {
     return element->next;
 }
 
-ACU_List* acu_listMalloc()
+ACU_List* acu_listMalloc(void)
 {
     return (ACU_List*) acu_emalloc(sizeof(ACU_List));
 }
@@ -29,11 +29,15 @@ static int acu_listSize(ACU_List* list) {
     return list->size;
 }
 
+static ACU_ListElement* acu_listElementMalloc(void) {
+    return (ACU_ListElement*)acu_emalloc(sizeof(ACU_ListElement));
+}
+
 int acu_listAppend(ACU_List* list, void* data) {
     ACU_ListElement* newElement;
     ACU_ListElement* tailElement = list->tail;
 
-    if ((newElement = (ACU_ListElement*) acu_emalloc(sizeof(ACU_ListElement))) == NULL) {
+    if ((newElement = acu_listElementMalloc()) == NULL) {
         return -1;
     }
     newElement->next = NULL; 

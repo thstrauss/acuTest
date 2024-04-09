@@ -20,7 +20,7 @@ int acu_suiteExecute(ACU_Suite* suite, void (*progress)(const ACU_TestCase* test
 
 void acu_suiteReport(FILE * stream, ACU_Suite* suite);
 
-ACU_Suite* acu_suiteMalloc();
+ACU_Suite* acu_suiteMalloc(void);
 
 void acu_suiteDestroy(ACU_Suite* suite);
 

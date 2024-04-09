@@ -44,7 +44,7 @@ void acu_suiteReport(FILE* stream, ACU_Suite* suite)
     }
 }
 
-ACU_Suite* acu_suiteMalloc()
+ACU_Suite* acu_suiteMalloc(void)
 {
     return (ACU_Suite*) acu_emalloc(sizeof(ACU_Suite));
 }
