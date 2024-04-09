@@ -10,6 +10,7 @@
 #include <acu_rslt.h>
 #include <acu_tcse.h>
 #include <acu_util.h>
+#include <acu_suit.h>
 
 static void acuTest_resultDestroy(ACU_Result* result) {
     if (result->message != NULL) {
