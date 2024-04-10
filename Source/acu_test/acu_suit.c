@@ -6,6 +6,7 @@
 #include <acu_list.h>
 #include <acu_suit.h>
 #include <acu_util.h>
+#include <acu_rprt.h>
 
 void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture)
 {
@@ -21,7 +22,7 @@ void acu_suiteInit(ACU_Suite* suite, const char* name)
     suite->name = acu_estrdup(name);
 }
 
-int acu_suiteExecute(ACU_Suite* suite, void (*progress)(const ACU_TestCase* testCase))
+int acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
     int result = ACU_TEST_PASSED;
@@ -33,15 +34,16 @@ int acu_suiteExecute(ACU_Suite* suite, void (*progress)(const ACU_TestCase* test
     return result;
 }
 
-void acu_suiteReport(ACU_Suite* suite, void (*report)(const ACU_TestCase* testCase))
+void* acu_suiteReport(ACU_Suite* suite, void* context, ACU_ReportFunc report)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
 
     while (fixtureElement != NULL) {
         ACU_Fixture* fixture = (ACU_Fixture*)fixtureElement->data;
-        acu_fixtureReport(fixture, report);
+        context = acu_fixtureReport(fixture, context, report);
         fixtureElement = acu_listNext(fixtureElement);
     }
+    return context;
 }
 
 ACU_Suite* acu_suiteMalloc(void)

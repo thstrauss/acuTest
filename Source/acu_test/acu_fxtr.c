@@ -26,7 +26,7 @@ static ACU_Result* acuTest_resultMalloc() {
     return (ACU_Result*) acu_emalloc(sizeof(ACU_Result));
 }
 
-static int acuTest_run(ACU_TestCase* testCase, const void* context, void (*progress)(const ACU_TestCase* testCase)) {
+static int acuTest_run(ACU_TestCase* testCase, const void* context, ACU_ProgressFunc progress) {
     ACU_ExecuteEnv environment;
     ACU_Result* result = acuTest_resultMalloc();
 
@@ -75,7 +75,7 @@ void acu_fixtureInit(ACU_Fixture* fixture, const char* name) {
     fixture->name = acu_estrdup(name);
 }
 
-void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char* name, void (*testFunc)(ACU_ExecuteEnv* environment, const void* context)) {
+void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char* name, ACU_TestFunc testFunc) {
     ACU_TestCase* testCase = acuTest_testCaseMalloc();
     testCase->name = acu_estrdup(name);
     testCase->testFunc = testFunc;
@@ -89,7 +89,7 @@ void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
     fixture->context = context;
 }
 
-int acu_fixtureExecute(ACU_Fixture* fixture, void (*progress)(const ACU_TestCase* testCase)) {
+int acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
     int result = ACU_TEST_PASSED;
     while (testElement != NULL) {
@@ -99,14 +99,15 @@ int acu_fixtureExecute(ACU_Fixture* fixture, void (*progress)(const ACU_TestCase
     return result;
 }
 
-void acu_fixtureReport(ACU_Fixture* fixture, void (*report)(const ACU_TestCase* testCase)) {
+void* acu_fixtureReport(ACU_Fixture* fixture, void* context, ACU_ReportFunc report) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
    
     while (testElement != NULL) {
         ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
-        report(testCase);
+        context = report(testCase, context);
         testElement = acu_listNext(testElement);
     }
+    return context;
 }
 
 ACU_Fixture* acu_fixtureMalloc(void)

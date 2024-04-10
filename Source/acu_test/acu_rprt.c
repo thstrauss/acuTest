@@ -7,12 +7,13 @@
 #include <acu_tcse.h>
 #include <acu_fxtr.h>
 #include <acu_suit.h>
+#include <acu_util.h>
 
 void acu_progress(const ACU_TestCase* testCase) {
     fprintf(stdout, "%s", testCase->result->status == ACU_TEST_PASSED ? "." : "F");
 }
 
-void acu_report(const ACU_TestCase* testCase) {
+void* acu_report(const ACU_TestCase* testCase, void* context) {
     static const char* fixtureName = NULL;
     static const char* suiteName = NULL;
     if (suiteName == NULL || strcmp(suiteName, testCase->fixture->suite->name) != 0) {
@@ -26,5 +27,17 @@ void acu_report(const ACU_TestCase* testCase) {
     if (testCase->result != NULL && testCase->result->status != ACU_TEST_PASSED) {
         fprintf(stdout, "    %s: %s\n\r      %s:%d:\n\r      %s\n\r", testCase->name, testCase->result->status == ACU_TEST_PASSED ? "passed" : "failed", testCase->result->file, testCase->result->line, testCase->result->message);
     }
+    UNUSED(context);
+    return NULL;
+}
+
+void* acu_reportSummary(const ACU_TestCase* testCase, void* context)
+{
+    ACU_Summary* summary = (ACU_Summary*) context;
+    summary->totalTestCases++;
+    if (testCase->result->status == ACU_TEST_FAILED) {
+        summary->failedTestCases++;
+    }
+    return context;
 }
 

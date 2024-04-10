@@ -4,11 +4,11 @@
 
 #include <setjmp.h>
 
-#include <acu_rslt.h>
+struct ACU_Result_;
 
 typedef struct ACU_ExecuteEnv_ {
     jmp_buf assertBuf;
-    ACU_Result* result;
+    struct ACU_Result_* result;
 } ACU_ExecuteEnv;
 
 #endif

@@ -5,20 +5,21 @@
 #include <stdio.h>
 
 #include <acu_fxtr.h>
-#include <acu_list.h>
+
+struct ACU_List_;
 
 typedef struct ACU_Suite_ {
     char* name;
-    ACU_List* testFixtures;
+    struct ACU_List_* testFixtures;
 } ACU_Suite;
 
 void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture);
 
 void acu_suiteInit(ACU_Suite* suite, const char* name);
 
-int acu_suiteExecute(ACU_Suite* suite, void (*progress)(const ACU_TestCase* testCase));
+int acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress);
 
-void acu_suiteReport(ACU_Suite* suite, void (*report)(const ACU_TestCase* testCase));
+void* acu_suiteReport(ACU_Suite* suite, void* context, ACU_ReportFunc report);
 
 ACU_Suite* acu_suiteMalloc(void);
 

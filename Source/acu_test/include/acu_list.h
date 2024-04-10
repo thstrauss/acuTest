@@ -9,16 +9,18 @@ typedef struct ACU_ListElement_ {
     struct ACU_ListElement_* next;
 } ACU_ListElement;
 
+typedef void ACU_Destroy(void* data);
+
 typedef struct ACU_List_ {
     int size;
 
-    void (*destroy)(void* data);
+    ACU_Destroy* destroy;
 
     ACU_ListElement* head;
     ACU_ListElement* tail;
 } ACU_List;
 
-void acu_listInit(ACU_List* list, void (*destroy)(void* data));
+void acu_listInit(ACU_List* list, ACU_Destroy destroy);
 
 ACU_ListElement* acu_listHead(ACU_List* list);
 
