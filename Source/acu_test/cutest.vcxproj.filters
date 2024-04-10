@@ -30,6 +30,9 @@
     <ClCompile Include="acu_suit.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="acu_rprt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\acu_asrt.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\tryctch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\acu_rprt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

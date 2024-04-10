@@ -136,11 +136,13 @@
     <ClCompile Include="acu_asrt.c" />
     <ClCompile Include="acu_fxtr.c" />
     <ClCompile Include="acu_list.c" />
+    <ClCompile Include="acu_rprt.c" />
     <ClCompile Include="acu_suit.c" />
     <ClCompile Include="acu_util.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\acu_cmmn.h" />
+    <ClInclude Include="include\acu_rprt.h" />
     <ClInclude Include="include\acu_suit.h" />
     <ClInclude Include="include\acu_tcse.h" />
     <ClInclude Include="include\acu_eenv.h" />
