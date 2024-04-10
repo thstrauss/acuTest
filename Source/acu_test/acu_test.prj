@@ -1,2 +1,13 @@
-..\..\lib\acu_test.lib
-.C [-Iinclude].L [-J] =acu_asrtacu_fxtracu_listacu_suitacu_util
+..\..\lib\acu_test.lib
+
+.C [-Iinclude]
+.L [-J] 
+
+=
+
+acu_asrt
+acu_fxtr
+acu_list
+acu_rprt
+acu_suit
+acu_util
