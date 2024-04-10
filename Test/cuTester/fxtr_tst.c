@@ -31,7 +31,7 @@ static void test3(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert_strNotEqual(environment, "str", "str", "assert2");
 }
 
-static ACU_Fixture* failingFixture() {
+static ACU_Fixture* failingFixture(void) {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
     acu_fixtureInit(fixture, "testFixture");
@@ -43,7 +43,7 @@ static ACU_Fixture* failingFixture() {
     return fixture;
 }
 
-static ACU_Fixture* passingFixture() {
+static ACU_Fixture* passingFixture(void) {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
     acu_fixtureInit(fixture, "testFixture");
@@ -53,7 +53,7 @@ static ACU_Fixture* passingFixture() {
     return fixture;
 }
 
-static ACU_Fixture* emptyFixture() {
+static ACU_Fixture* emptyFixture(void) {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
     acu_fixtureInit(fixture, "testFixture");
@@ -80,7 +80,7 @@ static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     UNUSED(context);
 }
 
-static void passíngFixtureTest(ACU_ExecuteEnv* environment, const void* context)
+static void passingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 {
     int result = ACU_TEST_PASSED;
     ACU_Suite* localSuite = acu_suiteMalloc();
@@ -113,7 +113,7 @@ ACU_Fixture* fixtureFixture(void)
     ACU_Fixture* fixture = acu_fixtureMalloc();
     acu_fixtureInit(fixture, "fixture tests");
     acu_fixtureAddTestCase(fixture, "Failing Fixture", failingFixtureTest);
-    acu_fixtureAddTestCase(fixture, "Passing Fixture", passíngFixtureTest);
+    acu_fixtureAddTestCase(fixture, "Passing Fixture", passingFixtureTest);
     acu_fixtureAddTestCase(fixture, "Empty Fixture", emptyFixtureTest);
     return fixture;
 }
