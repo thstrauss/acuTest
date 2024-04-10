@@ -1,14 +1,14 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define __ACU_EMIT_ASSERT_FUNCS__
-#include <acu_asrt.h>
-#undef __ACU_EMIT_ASSERT_FUNCS__
-
 #include <acu_cmmn.h>
 #include <acu_eenv.h>
 #include <acu_util.h>
 #include <acu_rslt.h>
+
+#define __ACU_EMIT_ASSERT_FUNCS__
+#include <acu_asrt.h>
+#undef __ACU_EMIT_ASSERT_FUNCS__
 
 int acu_equalPtr(const ACU_AssertParameter* parameter) {
     return *(void**) parameter->actual == *(void**) parameter->expected;

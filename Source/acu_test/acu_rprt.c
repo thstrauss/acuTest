@@ -7,6 +7,7 @@
 #include <acu_tcse.h>
 #include <acu_fxtr.h>
 #include <acu_suit.h>
+#include <acu_list.h>
 #include <acu_util.h>
 
 void acu_progress(const ACU_TestCase* testCase) {
