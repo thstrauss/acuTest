@@ -22,7 +22,7 @@ static void acuTest_resultDestroy(ACU_Result* result) {
     free(result);
 }
 
-static ACU_Result* acuTest_resultMalloc() {
+static ACU_Result* acuTest_resultMalloc(void) {
     return (ACU_Result*) acu_emalloc(sizeof(ACU_Result));
 }
 

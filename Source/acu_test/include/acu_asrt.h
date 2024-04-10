@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <acu_eenv.h> 
-#include <acu_util.h>
 #include <tryctch.h>
 
 typedef struct ACU_AssertParameter_ {

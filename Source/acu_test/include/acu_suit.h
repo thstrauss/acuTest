@@ -5,12 +5,11 @@
 #include <stdio.h>
 
 #include <acu_fxtr.h>
-
-struct ACU_List_;
+#include <acu_list.h>
 
 typedef struct ACU_Suite_ {
     char* name;
-    struct ACU_List_* testFixtures;
+    ACU_List* testFixtures;
 } ACU_Suite;
 
 void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture);
