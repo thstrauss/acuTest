@@ -1,6 +1,6 @@
 cutester.tos
 
-.C [ -I..\..\Source\acu_test\include ]
+.C [ -I..\acu_test\include ]
 
 =
 
@@ -11,7 +11,7 @@ flt_test.c
 tryc_tst.c [-R]
 fxtr_tst.c
 
-..\..\LIB\acu_test.lib
+..\LIB\acu_test.lib
 
 PCFLTLIB.LIB
 PCSTDLIB.lib

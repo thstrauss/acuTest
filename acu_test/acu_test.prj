@@ -1,4 +1,4 @@
-..\..\lib\acu_test.lib
+..\lib\acu_test.lib
 
 .C [-Iinclude]
 .L [-J] 
