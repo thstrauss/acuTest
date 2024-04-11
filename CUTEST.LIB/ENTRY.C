@@ -2,9 +2,9 @@
 #include <acu_fxtr.h>
 #include <acu_suit.h>
 
-#include <fxtr_tst.h>
-#include <flt_test.h>
-#include <tryc_tst.h>
+#include "fxtr_tst.h"
+#include "flt_test.h"
+#include "tryc_tst.h"
 
 ACU_Entry entry;
 ACU_Suite* suite;

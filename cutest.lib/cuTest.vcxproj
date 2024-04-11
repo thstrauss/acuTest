@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -21,10 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{29cf31e8-6e05-447b-ac13-361860a2aacc}</ProjectGuid>
-    <RootNamespace>cutest</RootNamespace>
+    <ProjectGuid>{C482F98A-DAC2-4E97-91E1-A2A568F1392F}</ProjectGuid>
+    <RootNamespace>cuTester</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>acu_test</ProjectName>
+    <ProjectName>cutest</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -42,9 +42,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <UseDebugLibraries>true</UseDebugLibraries>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -72,7 +72,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>.\include;$(IncludePath)</IncludePath>
+    <PublicIncludeDirectories>$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <IncludePath>..\acu_test\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -110,6 +111,7 @@
       <ConformanceMode>true</ConformanceMode>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
       <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>UninitializedLocalUsageCheck</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,29 +135,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="acu_asrt.c" />
-    <ClCompile Include="acu_fxtr.c" />
-    <ClCompile Include="acu_list.c" />
-    <ClCompile Include="acu_rprt.c" />
-    <ClCompile Include="acu_suit.c" />
-    <ClCompile Include="acu_util.c" />
+    <ClCompile Include="entry.c" />
+    <ClCompile Include="flt_test.c" />
+    <ClCompile Include="fxtr_tst.c" />
+    <ClCompile Include="tryc_tst.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\acu_cmmn.h" />
-    <ClInclude Include="include\acu_entr.h" />
-    <ClInclude Include="include\acu_rprt.h" />
-    <ClInclude Include="include\acu_suit.h" />
-    <ClInclude Include="include\acu_tcse.h" />
-    <ClInclude Include="include\acu_eenv.h" />
-    <ClInclude Include="include\acu_fxtr.h" />
-    <ClInclude Include="include\acu_list.h" />
-    <ClInclude Include="include\acu_rslt.h" />
-    <ClInclude Include="include\acu_util.h" />
-    <ClInclude Include="include\acu_asrt.h" />
-    <ClInclude Include="include\tryctch.h" />
+    <ClInclude Include="flt_test.h" />
+    <ClInclude Include="fxtr_tst.h" />
+    <ClInclude Include="tryc_tst.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="acu_test.licenseheader" />
+    <None Include="cuTest.licenseheader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

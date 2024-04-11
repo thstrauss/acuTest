@@ -135,15 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="flt_test.c" />
-    <ClCompile Include="fxtr_tst.c" />
     <ClCompile Include="main.c" />
-    <ClCompile Include="tryc_tst.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="flt_test.h" />
-    <ClInclude Include="fxtr_tst.h" />
-    <ClInclude Include="tryc_tst.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cuTester.licenseheader" />
@@ -151,6 +143,9 @@
   <ItemGroup>
     <ProjectReference Include="..\acu_test\acu_test.vcxproj">
       <Project>{29cf31e8-6e05-447b-ac13-361860a2aacc}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\cutest.lib\cuTest.vcxproj">
+      <Project>{c482f98a-dac2-4e97-91e1-a2a568f1392f}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

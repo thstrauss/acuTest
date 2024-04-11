@@ -1,3 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="acu_asrt.c" />
+    <ClCompile Include="acu_fxtr.c" />
+    <ClCompile Include="acu_list.c" />
+    <ClCompile Include="acu_rprt.c" />
+    <ClCompile Include="acu_suit.c" />
+    <ClCompile Include="acu_util.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\acu_cmmn.h" />
+    <ClInclude Include="include\acu_rprt.h" />
+    <ClInclude Include="include\acu_suit.h" />
+    <ClInclude Include="include\acu_tcse.h" />
+    <ClInclude Include="include\acu_eenv.h" />
+    <ClInclude Include="include\acu_fxtr.h" />
+    <ClInclude Include="include\acu_list.h" />
+    <ClInclude Include="include\acu_rslt.h" />
+    <ClInclude Include="include\acu_util.h" />
+    <ClInclude Include="include\acu_asrt.h" />
+    <ClInclude Include="include\tryctch.h" />
+    <ClInclude Include="include\acu_entr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="acu_test.licenseheader" />
+  </ItemGroup>
 </Project>
