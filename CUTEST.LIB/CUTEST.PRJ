@@ -1,0 +1,3 @@
+..\lib\cutest.lib.C [ -I..\acu_test\include ]
+.L [ -J ]=
+entry.cflt_test.ctryc_tst.c [-R]fxtr_tst.c

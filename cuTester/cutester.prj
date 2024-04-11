@@ -1,17 +1,2 @@
-cutester.tos
-
-.C [ -I..\acu_test\include ]
-
-=
-
-pcstart.o
-
-main.c
-flt_test.c
-tryc_tst.c [-R]
-fxtr_tst.c
-
-..\LIB\acu_test.lib
-
-PCFLTLIB.LIB
-PCSTDLIB.lib
+cutester.tos.C [ -I..\acu_test\include ]=pcstart.omain.c..\LIB\acu_test.lib
+..\LIB\cutest.libPCFLTLIB.LIBPCSTDLIB.lib
