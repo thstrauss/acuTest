@@ -150,6 +150,9 @@
     <ClInclude Include="fxtr_tst.h" />
     <ClInclude Include="tryc_tst.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="cuTester.licenseheader" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
