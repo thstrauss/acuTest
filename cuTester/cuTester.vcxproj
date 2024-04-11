@@ -73,7 +73,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PublicIncludeDirectories>$(PublicIncludeDirectories)</PublicIncludeDirectories>
-    <IncludePath>..\..\Source\acu_test\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\acu_test\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -141,17 +141,17 @@
     <ClCompile Include="tryc_tst.c" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Source\acu_test\cutest.vcxproj">
-      <Project>{29cf31e8-6e05-447b-ac13-361860a2aacc}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="flt_test.h" />
     <ClInclude Include="fxtr_tst.h" />
     <ClInclude Include="tryc_tst.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cuTester.licenseheader" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\acu_test\acu_test.vcxproj">
+      <Project>{29cf31e8-6e05-447b-ac13-361860a2aacc}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
