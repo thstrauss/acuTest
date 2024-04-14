@@ -1,19 +1,21 @@
 #ifndef __entry__
 #define __entry__
 
-#include <acu_rprt.h>
+#include <acu_suit.h>
 
-typedef int ACU_Execute(ACU_ProgressFunc progress);
-typedef void ACU_Report(void* context, ACU_ReportFunc report);
-typedef void ACU_Fini(void);
+struct ACU_Suite_;
+
 
 typedef struct ACU_Entry_ {
-	ACU_Execute* execute;
-	ACU_Report* report;
-	ACU_Fini* fini;
+	ACU_SuiteExecuteFunc* execute;
+	ACU_SuiteReportFunc* report;
+	ACU_SuiteDestroyFunc* destroy;
+	struct ACU_Suite_* suite;
 } ACU_Entry;
 
 ACU_Entry* acu_init(void);
-void acu_fini(void);
+void __exit(int status);
+
+typedef ACU_Entry* ACU_init(void);
 
 #endif
