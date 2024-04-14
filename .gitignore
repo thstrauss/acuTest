@@ -372,3 +372,5 @@ FodyWeavers.xsd
 /CMake/Utils.cmake
 
 *.O
+/cu_plg/cu_plg.cup
+/cutester/cutester.cov
