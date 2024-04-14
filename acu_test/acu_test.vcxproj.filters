@@ -22,7 +22,4 @@
     <ClInclude Include="include\tryctch.h" />
     <ClInclude Include="include\acu_entr.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="acu_test.licenseheader" />
-  </ItemGroup>
 </Project>
