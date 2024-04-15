@@ -29,8 +29,6 @@
 #include <portab.h>
 #include <tos.h>
 
-
-
 #define PH_MAGIC 0x601a
 
 typedef struct PH_
@@ -81,15 +79,15 @@ static void relocate(const void* code, const unsigned char* relocData)
     }
 }
 
-static void* load_and_reloc(long handle, long fsize, PH* phead)
+static void* load_and_reloc(long handle, long fsize, PH* programHeader)
 {
     void* addr = NULL;
     long TD_len, TDB_len;
 
     /* Laenge von Text- und Data-Segment */
-    TD_len = phead->ph_tlen + phead->ph_dlen;
+    TD_len = programHeader->ph_tlen + programHeader->ph_dlen;
     /* Laenge von Text-, Data- und BSS-Segment */
-    TDB_len = TD_len + phead->ph_blen;
+    TDB_len = TD_len + programHeader->ph_blen;
     
     /* Speicher fuer Text-, Data- und BSS-Segment anfordern */
     addr = malloc(TDB_len);
@@ -98,19 +96,19 @@ static void* load_and_reloc(long handle, long fsize, PH* phead)
         long relo_len;
 
         /* Laenge der Relokationsdaten */
-        relo_len = fsize - sizeof(PH) - TD_len - phead->ph_slen;
+        relo_len = fsize - sizeof(PH) - TD_len - programHeader->ph_slen;
 
         /* Text- und Data-Segment laden */
         if (Fread((int)handle, TD_len, addr) == TD_len)
         {   
             /* Symboltabelle ueberspringen */
-            Fseek(phead->ph_slen, (int)handle, 1);
+            Fseek(programHeader->ph_slen, (int)handle, 1);
 
             /* BSS-Segment loeschen */
-            memset((char*)addr + TD_len, 0, phead->ph_blen);
+            memset((char*)addr + TD_len, 0, programHeader->ph_blen);
 
             /* Datei relozieren */
-            if ((phead->ph_absflag == 0) && relo_len)
+            if ((programHeader->ph_absflag == 0) && relo_len)
             {
                 unsigned char* relo_mem;
 
@@ -148,7 +146,9 @@ static void* load_and_reloc(long handle, long fsize, PH* phead)
     return addr;
 }
 
-static void* load_cu(const char* cu_name)
+typedef ACU_Entry* ACU_init(void);
+
+static ACU_init* load_cu(const char* cu_name)
 {
     void* addr = NULL;
     long handle;
@@ -157,34 +157,36 @@ static void* load_cu(const char* cu_name)
     handle = Fopen(cu_name, O_RDONLY);
     if (handle > 0)
     {
-        PH phead;
+        PH programHeader;
         
-        /* load program header */
-        if (Fread((int)handle, sizeof(phead), &phead) == sizeof(phead))
+        if (!Fread((int)handle, sizeof(PH), &programHeader) == sizeof(PH))
         {
-            /* bra.s am Anfang? */
-            if (phead.ph_branch == PH_MAGIC)
-                filesize = Fseek(0, (int) handle, 2);
-                Fseek(sizeof(PH), (int) handle, 0);
-            
-                /* load and relocate */
-                addr = load_and_reloc(handle, filesize, &phead);
+            return NULL;
         }
+        /* bra.s am Anfang? */
+        if (programHeader.ph_branch != PH_MAGIC) {
+        	Fclose((short)handle);
+        	return NULL;
+        }
+        filesize = Fseek(0, (int) handle, 2); 
+        Fseek(sizeof(PH), (int) handle, 0);
+            
+        addr = load_and_reloc(handle, filesize, &programHeader);
         Fclose((short)handle);
-    } else {
-        printf("%s not opened", cu_name);
     }
 
-    return addr;
+    return (ACU_init*) addr;
 }
 
-typedef ACU_Entry* ACU_init(void);
-
 ACU_Entry* cup_load(const char* cu_name) {
-	void* addr = load_cu(cu_name);
-	ACU_init* init = addr;
-	ACU_Entry* entry = init();
-	entry->cup_code = addr;
+	ACU_init* init = load_cu(cu_name);
+	ACU_Entry* entry;
+	
+	if (init == NULL) {
+		return NULL;
+	}
+	entry = init();
+	entry->cup_code = init;
 	return entry;
 }
 
@@ -205,7 +207,6 @@ ACU_Entry* cup_load(const char* cu_name) {
     swprintf(name, 100, L"%hs", cu_name);
     HMODULE module = LoadLibraryW(name);
     if (module == 0) {
-        acu_eprintf("Could not load: %s", cu_name);
         return NULL;
     }
     ACU_init* init = (ACU_init*) GetProcAddress(module, "acu_init");
