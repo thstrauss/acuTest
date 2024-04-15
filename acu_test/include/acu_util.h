@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauss
+ * Copyright (c) 2024 Thomas Strauﬂ
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -23,15 +23,19 @@
 #ifndef _ACU_UTILS_H_
 #define _ACU_UTILS_H_
 
+#include <acu_cmmn.h>
+
 #define UNUSED(x) (void)(x);
 
-void acu_eprintf(const char* format, ...);
-void acu_weprintf(const char* format, ...);
-char* acu_estrdup(const char* s);
-void* acu_emalloc(size_t n);
-char* acu_progName(void);
-void acu_setProgName(const char* progName);
+__EXPORT void acu_eprintf(const char* format, ...);
+__EXPORT void acu_weprintf(const char* format, ...);
+__EXPORT char* acu_estrdup(const char* s);
+__EXPORT void* acu_emalloc(size_t n);
+__EXPORT char* acu_progName(void);
+__EXPORT void acu_setProgName(const char* progName);
 
-int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
+__EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
+
+void __exit(int status);
 
 #endif

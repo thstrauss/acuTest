@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauss
+ * Copyright (c) 2024 Thomas Strauﬂ
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -18,6 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 #pragma once
 #ifndef _ACU_ASSERT_H_
 #define _ACU_ASSERT_H_
@@ -25,6 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <acu_cmmn.h>
 #include <tryctch.h>
 
 typedef struct ACU_AssertParameter_ {
@@ -33,7 +35,7 @@ typedef struct ACU_AssertParameter_ {
     char* message;
 } ACU_AssertParameter;
 
-void acu_assert(
+__EXPORT void acu_assert(
     ACU_ExecuteEnv* environment,
     int (*assertFunc)(const ACU_AssertParameter* parameter),
     void (*formatMessage)(char* buffer, int bufferSize, const ACU_AssertParameter* parameter),
@@ -57,7 +59,7 @@ char formatBuffer[128]; memset(formatBuffer, 0, 128); \
 acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "actual value %s not %%s to value %s: %%s", #format, #format); \
 acu_sprintf_s(buffer, bufferSize, formatBuffer, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
 } \
-void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) { \
+__EXPORT void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) { \
     acu_assert(environment, acu_##type##op, acu_##type##op##FormatMessage, parameter); \
 }
 #else
@@ -152,16 +154,16 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
                 __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notEqualStr) \
             };
 
-int acu_equalPtr(const ACU_AssertParameter* parameter);
-void acu_equalPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+__EXPORT int acu_equalPtr(const ACU_AssertParameter* parameter);
+__EXPORT void acu_equalPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
 
-int acu_notEqualPtr(const ACU_AssertParameter* parameter);
-void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+__EXPORT int acu_notEqualPtr(const ACU_AssertParameter* parameter);
+__EXPORT void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
 
-int acu_equalStr(const ACU_AssertParameter* parameter);
-void acu_equalStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+__EXPORT int acu_equalStr(const ACU_AssertParameter* parameter);
+__EXPORT void acu_equalStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
 
-int acu_notEqualStr(const ACU_AssertParameter* parameter);
-void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+__EXPORT int acu_notEqualStr(const ACU_AssertParameter* parameter);
+__EXPORT void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
 
 #endif

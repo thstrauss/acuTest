@@ -19,24 +19,29 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __entry__
-#define __entry__
-
+#include <acu_ldr.h>
+#include <acu_fxtr.h>
 #include <acu_suit.h>
+#include <acu_util.h>
 
-struct ACU_Suite_;
+#include "fxtr_tst.h"
+#include "flt_test.h"
+#include "tryc_tst.h"
+
+ACU_Entry* acu_init(void) {
+    ACU_Entry* entry = acu_emalloc(sizeof(ACU_Entry));
+	ACU_Suite* suite = acu_suiteMalloc();
+    acu_suiteInit(suite, "Suite");
+    entry->suite = suite;
+    entry->execute = acu_suiteExecute;
+    entry->report = acu_suiteReport;
+    entry->destroy = acu_suiteDestroy;
+    
+    acu_suiteAddFixture(suite, fixtureFixture()); 
+    acu_suiteAddFixture(suite, floatFixture());
+    acu_suiteAddFixture(suite, tryCatchFixture());
+
+	return entry;
+}
 
 
-typedef struct ACU_Entry_ {
-	ACU_SuiteExecuteFunc* execute;
-	ACU_SuiteReportFunc* report;
-	ACU_SuiteDestroyFunc* destroy;
-	struct ACU_Suite_* suite;
-} ACU_Entry;
-
-ACU_Entry* acu_init(void);
-void __exit(int status);
-
-typedef ACU_Entry* ACU_init(void);
-
-#endif

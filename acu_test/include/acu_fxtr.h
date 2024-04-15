@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauss
+ * Copyright (c) 2024 Thomas Strauﬂ
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -41,18 +41,18 @@ typedef struct ACU_Fixture_ {
     struct ACU_Suite_* suite;
 } ACU_Fixture;
 
-void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char *name, ACU_TestFunc testFunc);
+__EXPORT void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char *name, ACU_TestFunc testFunc);
 
-void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context);
+__EXPORT void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context);
 
-void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
+__EXPORT void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
 
-int acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress);
+__EXPORT int acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress);
 
-void* acu_fixtureReport(ACU_Fixture* fixture, void* context, ACU_ReportFunc report);
+__EXPORT void* acu_fixtureReport(ACU_Fixture* fixture, void* context, ACU_ReportFunc report);
 
-ACU_Fixture* acu_fixtureMalloc(void);
+__EXPORT ACU_Fixture* acu_fixtureMalloc(void);
 
-void acu_fixtureDestroy(void* fixture);
+__EXPORT void acu_fixtureDestroy(void* fixture);
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauss
+ * Copyright (c) 2024 Thomas Strauﬂ
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -19,35 +19,27 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <acu_entr.h>
-#include <acu_fxtr.h>
-#include <acu_suit.h>
+#include <stdio.h>
 
-#include "fxtr_tst.h"
-#include "flt_test.h"
-#include "tryc_tst.h"
+#include <acu_rprt.h>
+#include <acu_cmmn.h>
+#include <acu_ldr.h>
 
-ACU_Entry entry;
+int main() {
+    int returnValue;
+    ACU_Summary summary = { 0,0 };
+	
+	ACU_Entry* entry = cup_load("..\\cu_plg\\cu_plg.cup");
 
-ACU_Entry* acu_init(void) {
-	ACU_Suite* suite;
-    suite = acu_suiteMalloc();
+    returnValue = entry->execute(entry->suite, acu_progress) == ACU_TEST_PASSED ? 0 : 2;
+    fprintf(stdout, "\n\r");
+
+    entry->report(entry->suite, NULL, acu_report);
+    entry->report(entry->suite, &summary, acu_reportSummary);
     
-    acu_suiteInit(suite, "Suite");
+    cup_unload(entry);
+    
+    fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
 
-    acu_suiteAddFixture(suite, fixtureFixture()); 
-    acu_suiteAddFixture(suite, floatFixture());
-    acu_suiteAddFixture(suite, tryCatchFixture());
-    
-    entry.execute = acu_suiteExecute;
-    entry.report = acu_suiteReport;
-    entry.destroy = acu_suiteDestroy;
-    entry.suite = suite;
-    
-	return &entry;
+    return returnValue;
 }
-
-void __exit(int status) {
-	exit(status);
-}
-

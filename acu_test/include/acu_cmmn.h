@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauss
+ * Copyright (c) 2024 Thomas Strauﬂ
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -22,6 +22,12 @@
 #pragma once
 #ifndef _ACU_COMMON_H_
 #define _ACU_COMMON_H_
+
+#ifdef __TOS__
+#define __EXPORT 
+#else
+#define __EXPORT __declspec(dllexport) 
+#endif
 
 enum {
     ACU_TEST_PASSED = 0,

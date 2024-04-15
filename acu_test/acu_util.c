@@ -125,3 +125,7 @@ int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
     va_end(args);
     return result;
 }
+
+void __exit(int status) {
+	exit(status);
+}
