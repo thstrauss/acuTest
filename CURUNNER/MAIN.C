@@ -24,6 +24,7 @@
 #include <acu_rprt.h>
 #include <acu_cmmn.h>
 #include <acu_ldr.h>
+#include <acu_util.h>
 
 #ifdef __TOS__
 #define TEST_FILE "cutest.cup"
@@ -36,6 +37,10 @@ int main() {
     ACU_Summary summary = { 0,0 };
 	
 	ACU_Entry* entry = cup_load(TEST_FILE);
+	
+	if (entry == NULL) {
+		acu_eprintf("Could not load: %s", "TEST_FILE"); 
+	}
 
     returnValue = entry->execute(entry->suite, acu_progress) == ACU_TEST_PASSED ? 0 : 2;
     fprintf(stdout, "\n\r");
