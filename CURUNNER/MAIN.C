@@ -25,11 +25,17 @@
 #include <acu_cmmn.h>
 #include <acu_ldr.h>
 
+#ifdef __TOS__
+#define TEST_FILE "cutest.cup"
+#else
+#define TEST_FILE "cutest.dll"
+#endif
+
 int main() {
     int returnValue;
     ACU_Summary summary = { 0,0 };
 	
-	ACU_Entry* entry = cup_load("..\\cu_plg\\cu_plg.cup");
+	ACU_Entry* entry = cup_load(TEST_FILE);
 
     returnValue = entry->execute(entry->suite, acu_progress) == ACU_TEST_PASSED ? 0 : 2;
     fprintf(stdout, "\n\r");

@@ -81,8 +81,7 @@ static void relocate(const void* code, const unsigned char* relocData)
     }
 }
 
-static void*
-load_and_reloc(long handle, long fsize, PH* phead)
+static void* load_and_reloc(long handle, long fsize, PH* phead)
 {
     void* addr = NULL;
     long TD_len, TDB_len;
@@ -192,6 +191,7 @@ ACU_Entry* cup_load(const char* cu_name) {
 void cup_unload(ACU_Entry* entry) {
 	entry->destroy(entry->suite);
 	free(entry->cup_code);
+	free(entry);
 }
 
 #else

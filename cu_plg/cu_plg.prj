@@ -1,3 +1,0 @@
-cu_plg.cup.C [ -I..\acu_test\include ]=plgstart.s..\acu_test\acu_test.prj
-..\cutest.lib\cutest.prj
-PCFLTLIB.LIBPCSTDLIB.lib

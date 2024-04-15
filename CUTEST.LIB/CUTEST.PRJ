@@ -19,14 +19,20 @@
 ; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ;
 
-..\lib\cutest.lib
+..\curunner\cutest.cup
 
 .C [ -I..\acu_test\include ]
-.L [ -J ]
 
 =
+
+plgstart.s
 
 acu_entr.c
 flt_test.c
 tryc_tst.c [-R]
 fxtr_tst.c
+
+..\acu_test\acu_test.prj
+
+PCFLTLIB.LIB
+PCSTDLIB.LIB
