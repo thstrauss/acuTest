@@ -167,6 +167,9 @@
     <ClCompile Include="acu_util.c" />
     <ClCompile Include="dllmain.c" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="acu_test.licenseheader" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
