@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauß
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -35,21 +35,22 @@
 int main() {
     int returnValue;
     ACU_Summary summary = { 0,0 };
-	
-	ACU_Entry* entry = cup_load(TEST_FILE);
-	
-	if (entry == NULL) {
-		acu_eprintf("Could not load: %s", "TEST_FILE"); 
-	}
+
+    ACU_Entry* entry = cup_load(TEST_FILE);
+
+    if (entry == NULL) {
+        acu_eprintf("Could not load: %s", TEST_FILE);
+        return;
+    }
 
     returnValue = entry->execute(entry->suite, acu_progress) == ACU_TEST_PASSED ? 0 : 2;
     fprintf(stdout, "\n\r");
 
     entry->report(entry->suite, NULL, acu_report);
     entry->report(entry->suite, &summary, acu_reportSummary);
-    
+
     cup_unload(entry);
-    
+
     fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
 
     return returnValue;

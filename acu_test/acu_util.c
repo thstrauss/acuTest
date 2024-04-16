@@ -69,9 +69,9 @@ static void va_acu_printf(ACU_Level level, const char* format, va_list args) {
     if (acu_progName() != NULL) {
         fprintf(stderr, "%s: ", acu_progName());
     }
-    va_start(args, format);
+
     vfprintf(stderr, format, args);
-    va_end(args);
+
     if (format[0] != '\0' && format[strlen(format) - 1] == ':') {
 #ifdef __TOS__
         fprintf(stderr, " %s", strerror(errno));
