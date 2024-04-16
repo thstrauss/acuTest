@@ -46,7 +46,7 @@ typedef struct PH_
    WORD  ph_absflag;       /* 0 = Relozierungsinf. vorhanden   */
 } PH;
 
-static void relocate(const void* code, const unsigned char* relocData)
+static void* relocate(const void* code, const unsigned char* relocData)
 {
     unsigned char *	lpText;
     unsigned char *	lpRelocTable;
@@ -77,11 +77,39 @@ static void relocate(const void* code, const unsigned char* relocData)
             }
         };
     }
+    return code;
 }
 
-static void* load_and_reloc(long handle, long fsize, PH* programHeader)
+static unsigned char* readRelocationData(long handle, long fsize, const PH* programHeader) {
+    unsigned char* relo_mem = NULL;
+	long relo_len;
+	long TD_len = programHeader->ph_tlen + programHeader->ph_dlen;
+
+    relo_len = fsize - sizeof(PH) - TD_len - programHeader->ph_slen;
+   
+    if ((programHeader->ph_absflag == 0) && relo_len) {
+        relo_mem = malloc(relo_len);
+        if (relo_mem) {
+        	if (!Fread((int)handle, relo_len, relo_mem) == relo_len) {
+        		free(relo_mem);
+        	}
+        }
+    }
+    return relo_mem;
+}
+
+static void skipSymbolTable(long handle, const PH* programHeader) {
+	Fseek(programHeader->ph_slen, (int)handle, 1);
+}
+
+static void cleanBSS(const PH* programHeader, void* textAndData) {
+	memset((char*)textAndData + programHeader->ph_tlen + programHeader->ph_dlen, 0, programHeader->ph_blen);
+}
+
+static void* load_and_reloc(long handle, long fsize, const PH* programHeader)
 {
-    void* addr = NULL;
+    void* textAndData = NULL;
+    void* relocatedTextAndData = NULL;
     long TD_len, TDB_len;
 
     /* Laenge von Text- und Data-Segment */
@@ -90,60 +118,30 @@ static void* load_and_reloc(long handle, long fsize, PH* programHeader)
     TDB_len = TD_len + programHeader->ph_blen;
     
     /* Speicher fuer Text-, Data- und BSS-Segment anfordern */
-    addr = malloc(TDB_len);
-    if (addr)
-    {
-        long relo_len;
-
-        /* Laenge der Relokationsdaten */
-        relo_len = fsize - sizeof(PH) - TD_len - programHeader->ph_slen;
+    textAndData = malloc(TDB_len);
+    if (textAndData) {
 
         /* Text- und Data-Segment laden */
-        if (Fread((int)handle, TD_len, addr) == TD_len)
-        {   
-            /* Symboltabelle ueberspringen */
-            Fseek(programHeader->ph_slen, (int)handle, 1);
+        if (Fread((int)handle, TD_len, textAndData) == TD_len) {  
+        	unsigned char* relocationData;
+    		
+        	cleanBSS(programHeader, textAndData);        
+			
+			skipSymbolTable(handle, programHeader);
 
-            /* BSS-Segment loeschen */
-            memset((char*)addr + TD_len, 0, programHeader->ph_blen);
-
-            /* Datei relozieren */
-            if ((programHeader->ph_absflag == 0) && relo_len)
-            {
-                unsigned char* relo_mem;
-
-                /* Speicher fuer Relokationsdaten anfordern */
-                relo_mem = malloc(relo_len);
-                if (relo_mem)
-                {
-                    if (Fread((int)handle, relo_len, relo_mem) == relo_len)
-                    {
-                        relocate(addr, relo_mem);
-                    }
-                    else
-                    {
-                        free(addr);
-                        addr = NULL;
-                    }
-
-                    /* Speicher fuer Relokationsdaten freigeben */
-                    free(relo_mem);
-                }
-                else
-                {
-                    free(addr);
-                    addr = NULL;
-                }
-            }
-        }
-        else
-        {
-            free(addr);
-            addr = NULL;
+			relocationData = readRelocationData(handle, fsize, programHeader);
+			if (relocationData != NULL) {
+				relocatedTextAndData = relocate(textAndData, relocationData);
+				free(relocationData);
+			}
         }
     }
+    
+	if (relocatedTextAndData == NULL) {
+		free(textAndData);
+	}
 
-    return addr;
+    return relocatedTextAndData;
 }
 
 typedef ACU_Entry* ACU_init(void);

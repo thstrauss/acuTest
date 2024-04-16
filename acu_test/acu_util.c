@@ -94,7 +94,7 @@ void acu_eprintf(const char* format, ...) {
     va_end(args);
 }
 
-void acu_weprintf(const char* format, ...) {
+void acu_wprintf(const char* format, ...) {
     va_list args;
     va_start(args, format);
     va_acu_printf(acu_warning, format, args);

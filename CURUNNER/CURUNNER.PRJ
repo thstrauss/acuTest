@@ -19,7 +19,7 @@
 ; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ;
 
-curunner.tos
+curunner.ttp
 
 .C [ -I..\acu_test\include ]
 

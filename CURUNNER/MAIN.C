@@ -26,21 +26,27 @@
 #include <acu_ldr.h>
 #include <acu_util.h>
 
-#ifdef __TOS__
-#define TEST_FILE "cutest.cup"
-#else
-#define TEST_FILE "cutest.dll"
-#endif
+static void printHelp(void) {
+    acu_eprintf("Shall provide file name for test.");
+} 
 
-int main() {
+int main(int argc, const char *argv[]) {
     int returnValue;
     ACU_Summary summary = { 0,0 };
+    char* testFile = NULL;
+    ACU_Entry* entry;
+    
+    if (argc < 2) {
+    	printHelp();
+    }
+    
+    testFile = argv[1];
 
-    ACU_Entry* entry = cup_load(TEST_FILE);
+    entry = cup_load(testFile);
 
     if (entry == NULL) {
-        acu_eprintf("Could not load: %s", TEST_FILE);
-        return;
+        acu_eprintf("Could not load: %s", testFile);
+        return 2;
     }
 
     returnValue = entry->execute(entry->suite, acu_progress) == ACU_TEST_PASSED ? 0 : 2;

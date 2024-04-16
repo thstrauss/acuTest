@@ -28,7 +28,7 @@
 #define UNUSED(x) (void)(x);
 
 __EXPORT void acu_eprintf(const char* format, ...);
-__EXPORT void acu_weprintf(const char* format, ...);
+__EXPORT void acu_wprintf(const char* format, ...);
 __EXPORT char* acu_estrdup(const char* s);
 __EXPORT void* acu_emalloc(size_t n);
 __EXPORT char* acu_progName(void);
