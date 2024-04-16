@@ -143,7 +143,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h" />
     <ClInclude Include="include\acu_asrt.h" />
     <ClInclude Include="include\acu_cmmn.h" />
     <ClInclude Include="include\acu_eenv.h" />

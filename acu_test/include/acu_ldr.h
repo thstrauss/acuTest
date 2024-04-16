@@ -29,12 +29,12 @@
 #endif
 
 typedef struct ACU_Entry_ {
-	ACU_SuiteExecuteFunc* execute;
-	ACU_SuiteReportFunc* report;
-	ACU_SuiteDestroyFunc* destroy;
-	ACU_Suite* suite;
+    ACU_SuiteExecuteFunc* execute;
+    ACU_SuiteReportFunc* report;
+    ACU_SuiteDestroyFunc* destroy;
+    ACU_Suite* suite;
 #ifdef __TOS__
-	void* cup_code;
+    void* cup_code;
 #else
     HMODULE module;
 #endif

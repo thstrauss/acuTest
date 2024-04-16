@@ -82,28 +82,28 @@ static void* relocate(const void* code, const unsigned char* relocData)
 
 static unsigned char* readRelocationData(long handle, long fsize, const PH* programHeader) {
     unsigned char* relo_mem = NULL;
-	long relo_len;
-	long TD_len = programHeader->ph_tlen + programHeader->ph_dlen;
+    long relo_len;
+    long TD_len = programHeader->ph_tlen + programHeader->ph_dlen;
 
     relo_len = fsize - sizeof(PH) - TD_len - programHeader->ph_slen;
    
     if ((programHeader->ph_absflag == 0) && relo_len) {
         relo_mem = malloc(relo_len);
         if (relo_mem) {
-        	if (!Fread((int)handle, relo_len, relo_mem) == relo_len) {
-        		free(relo_mem);
-        	}
+            if (!Fread((int)handle, relo_len, relo_mem) == relo_len) {
+                free(relo_mem);
+            }
         }
     }
     return relo_mem;
 }
 
 static void skipSymbolTable(long handle, const PH* programHeader) {
-	Fseek(programHeader->ph_slen, (int)handle, 1);
+    Fseek(programHeader->ph_slen, (int)handle, 1);
 }
 
 static void cleanBSS(const PH* programHeader, void* textAndData) {
-	memset((char*)textAndData + programHeader->ph_tlen + programHeader->ph_dlen, 0, programHeader->ph_blen);
+    memset((char*)textAndData + programHeader->ph_tlen + programHeader->ph_dlen, 0, programHeader->ph_blen);
 }
 
 static void* load_and_reloc(long handle, long fsize, const PH* programHeader)
@@ -123,23 +123,23 @@ static void* load_and_reloc(long handle, long fsize, const PH* programHeader)
 
         /* Text- und Data-Segment laden */
         if (Fread((int)handle, TD_len, textAndData) == TD_len) {  
-        	unsigned char* relocationData;
-    		
-        	cleanBSS(programHeader, textAndData);        
-			
-			skipSymbolTable(handle, programHeader);
+            unsigned char* relocationData;
+            
+            cleanBSS(programHeader, textAndData);        
+            
+            skipSymbolTable(handle, programHeader);
 
-			relocationData = readRelocationData(handle, fsize, programHeader);
-			if (relocationData != NULL) {
-				relocatedTextAndData = relocate(textAndData, relocationData);
-				free(relocationData);
-			}
+            relocationData = readRelocationData(handle, fsize, programHeader);
+            if (relocationData != NULL) {
+                relocatedTextAndData = relocate(textAndData, relocationData);
+                free(relocationData);
+            }
         }
     }
     
-	if (relocatedTextAndData == NULL) {
-		free(textAndData);
-	}
+    if (relocatedTextAndData == NULL) {
+        free(textAndData);
+    }
 
     return relocatedTextAndData;
 }
@@ -163,8 +163,8 @@ static ACU_init* load_cu(const char* cu_name)
         }
         /* bra.s am Anfang? */
         if (programHeader.ph_branch != PH_MAGIC) {
-        	Fclose((short)handle);
-        	return NULL;
+            Fclose((short)handle);
+            return NULL;
         }
         filesize = Fseek(0, (int) handle, 2); 
         Fseek(sizeof(PH), (int) handle, 0);
@@ -177,21 +177,21 @@ static ACU_init* load_cu(const char* cu_name)
 }
 
 ACU_Entry* cup_load(const char* cu_name) {
-	ACU_init* init = load_cu(cu_name);
-	ACU_Entry* entry;
-	
-	if (init == NULL) {
-		return NULL;
-	}
-	entry = init();
-	entry->cup_code = init;
-	return entry;
+    ACU_init* init = load_cu(cu_name);
+    ACU_Entry* entry;
+    
+    if (init == NULL) {
+        return NULL;
+    }
+    entry = init();
+    entry->cup_code = init;
+    return entry;
 }
 
 void cup_unload(ACU_Entry* entry) {
-	entry->destroy(entry->suite);
-	free(entry->cup_code);
-	free(entry);
+    entry->destroy(entry->suite);
+    free(entry->cup_code);
+    free(entry);
 }
 
 #else
