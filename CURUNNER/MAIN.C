@@ -20,6 +20,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include <acu_rprt.h>
 #include <acu_cmmn.h>
@@ -30,33 +31,59 @@ static void printHelp(void) {
     acu_eprintf("Shall provide file name for test.");
 } 
 
+static int executeEntry(const char* cupName, const ACU_Summary* summary) {
+	int returnValue;
+	ACU_Entry* entry = cup_load(cupName);
+
+    if (entry == NULL) {
+       	acu_eprintf("Could not load: %s", cupName);
+       	return 2;
+    }
+
+    returnValue = entry->execute(entry->suite, acu_progress);
+    fprintf(stdout, "\n\r");
+   	entry->report(entry->suite, NULL, acu_report);
+    entry->report(entry->suite, summary, acu_reportSummary);
+
+    cup_unload(entry);
+    return returnValue;
+}
+
+static int executeEntries(const char** testFiles, const ACU_Summary* summary) {
+    int returnValue = ACU_TEST_PASSED;
+	int fileIndex = 0;
+	while (testFiles[fileIndex] != NULL) {
+		int retValue = executeEntry(testFiles[fileIndex++], summary);
+		returnValue = returnValue | retValue;
+	}
+	return returnValue;
+}
+
 int main(int argc, const char *argv[]) {
     int returnValue;
     ACU_Summary summary = { 0,0 };
-    char* testFile = NULL;
-    ACU_Entry* entry;
+    const char** testFiles = NULL;
     
     if (argc < 2) {
     	printHelp();
     }
     
-    testFile = argv[1];
-
-    entry = cup_load(testFile);
-
-    if (entry == NULL) {
-        acu_eprintf("Could not load: %s", testFile);
-        return 2;
+    if (argc == 2) {
+    	testFiles = acu_emalloc(sizeof(char*)*2);
+    	memset(testFiles, 0, sizeof(char*)*2);
+    	
+        testFiles[0] = argv[1];
+    } else if (argc == 3) {
+    	if (strcmp(argv[1], "--path") == 0) {
+    	} 
     }
 
-    returnValue = entry->execute(entry->suite, acu_progress) == ACU_TEST_PASSED ? 0 : 2;
-    fprintf(stdout, "\n\r");
-
-    entry->report(entry->suite, NULL, acu_report);
-    entry->report(entry->suite, &summary, acu_reportSummary);
-
-    cup_unload(entry);
-
+	returnValue = executeEntries(testFiles, &summary) == ACU_TEST_PASSED ? 0 : 2;
+	
+	if (testFiles != NULL) {
+		free(testFiles);
+	}
+    
     fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
 
     return returnValue;
