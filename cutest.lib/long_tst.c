@@ -19,30 +19,39 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <acu_ldr.h>
 #include <acu_fxtr.h>
+#include <acu_asrt.h>
 #include <acu_suit.h>
 #include <acu_util.h>
+#include <acu_rslt.h>
 
-#include "fxtr_tst.h"
-#include "flt_test.h"
-#include "tryc_tst.h"
-#include "int_tst.h"
 #include "long_tst.h"
 
-ACU_Entry* acu_init(void) {
-    ACU_Suite* suite = acu_suiteMalloc();
-    ACU_Entry* entry = acu_entryInit(suite);
-    
-    acu_suiteInit(suite, "cutest");
+#include "tst_bed.h"
 
-    acu_suiteAddFixture(suite, fixtureFixture()); 
-    acu_suiteAddFixture(suite, floatFixture());
-    acu_suiteAddFixture(suite, tryCatchFixture());
-    acu_suiteAddFixture(suite, intFixture());
-    acu_suiteAddFixture(suite, longFixture());
+TESTBED(, long, Equal, 0, 0)
+TESTBED(, long, NotEqual, 0, 1)
+TESTBED(, long, Less, 0, 1)
+TESTBED(, long, LessEqual, 0, 1)
+TESTBED(Eq, long, LessEqual, 1, 1)
+TESTBED(, long, Greater, 1, 0)
+TESTBED(, long, GreaterEqual, 1, 0)
+TESTBED(Eq, long, GreaterEqual, 1, 1)
 
-	return entry;
+ACU_Fixture* longFixture(void)
+{
+    ACU_Fixture* fixture = acu_fixtureMalloc();
+
+    acu_fixtureInit(fixture, "long tests");
+
+    acu_fixtureAddTestCase(fixture, "long Equal", testlongEqual);
+    acu_fixtureAddTestCase(fixture, "long NotEqual", testlongNotEqual);
+    acu_fixtureAddTestCase(fixture, "long Less", testlongLess);
+    acu_fixtureAddTestCase(fixture, "long LessEqual", testlongLessEqual);
+    acu_fixtureAddTestCase(fixture, "long LessEqualEq", testlongLessEqualEq);
+    acu_fixtureAddTestCase(fixture, "long Greater", testlongGreater);
+    acu_fixtureAddTestCase(fixture, "long GreaterEqualEq", testlongGreaterEqualEq);
+    acu_fixtureAddTestCase(fixture, "long GreaterEqual", testlongGreaterEqual);
+
+    return fixture;
 }
-
-
