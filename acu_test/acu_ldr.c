@@ -201,7 +201,7 @@ typedef __EXPORT  ACU_Entry* (ACU_init)(void);
 
 ACU_Entry* cup_load(const char* cu_name) {
     wchar_t  name[256];
-    swprintf(name, 100, L"%hs", cu_name);
+    swprintf(name, 255, L"%hs", cu_name);
     HMODULE module = LoadLibraryW(name);
     if (module == 0) {
         return NULL;
