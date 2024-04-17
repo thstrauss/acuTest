@@ -19,9 +19,6 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <string.h>
-#include <setjmp.h>
-
 #include <acu_fxtr.h>
 #include <acu_asrt.h>
 #include <acu_suit.h>

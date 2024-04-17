@@ -19,32 +19,41 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __ACU_LOADER__
-#define __ACU_LOADER__
 
+
+#include <acu_fxtr.h>
+#include <acu_asrt.h>
 #include <acu_suit.h>
+#include <acu_util.h>
+#include <acu_rslt.h>
 
-#ifndef __TOS__
-#include <windows.h>
-#endif
+#include "int_tst.h"
 
-typedef struct ACU_Entry_ {
-    ACU_SuiteExecuteFunc* execute;
-    ACU_SuiteReportFunc* report;
-    ACU_SuiteDestroyFunc* destroy;
-    ACU_Suite* suite;
-#ifdef __TOS__
-    void* cup_code;
-#else
-    HMODULE module;
-#endif
-} ACU_Entry;
+#include "tst_bed.h"
 
-__EXPORT ACU_Entry* acu_init(void);
+TESTBED(, int, Equal, 0, 0)
+TESTBED(, int, NotEqual, 0, 1)
+TESTBED(, int, Less, 0, 1)
+TESTBED(, int, LessEqual, 0, 1)
+TESTBED(Eq, int, LessEqual, 1, 1)
+TESTBED(, int, Greater, 1, 0)
+TESTBED(, int, GreaterEqual, 1, 0)
+TESTBED(Eq, int, GreaterEqual, 1, 1)
 
-__EXPORT ACU_Entry* cup_load(const char* cu_name);
-__EXPORT void cup_unload(ACU_Entry* entry);
+ACU_Fixture* intFixture(void)
+{
+    ACU_Fixture* fixture = acu_fixtureMalloc();
 
-__EXPORT ACU_Entry* acu_entryInit(ACU_Suite* suite);
- 
-#endif
+    acu_fixtureInit(fixture, "int tests");
+
+    acu_fixtureAddTestCase(fixture, "int Equal", testintEqual);
+    acu_fixtureAddTestCase(fixture, "int NotEqual", testintNotEqual);
+    acu_fixtureAddTestCase(fixture, "int Less", testintLess);
+    acu_fixtureAddTestCase(fixture, "int LessEqual", testintLessEqual);
+    acu_fixtureAddTestCase(fixture, "int LessEqualEq", testintLessEqualEq);
+    acu_fixtureAddTestCase(fixture, "int Greater", testintGreater);
+    acu_fixtureAddTestCase(fixture, "int GreaterEqualEq", testintGreaterEqualEq);
+    acu_fixtureAddTestCase(fixture, "int GreaterEqual", testintGreaterEqual);
+
+    return fixture;
+}

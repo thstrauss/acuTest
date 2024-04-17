@@ -20,33 +20,11 @@
  */
 
 #pragma once
-#ifndef __test_bed__
-#define __test_bed__
+#ifndef __int_test__
+#define __int_test__
 
-#include <string.h>
-#include <setjmp.h>
+#include <acu_fxtr.h>
 
-#define TESTBED(postfix, type, operation, actual, expetced) static void test##type##operation##postfix(ACU_ExecuteEnv* environment, const void* context) { \
-    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv)); \
-    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result)); \
-    testEnvironment->result = resultBuf; \
-    resultBuf->status = ACU_TEST_PASSED; \
-    resultBuf->message = NULL; \
-    resultBuf->file = NULL; \
-    if (!setjmp(testEnvironment->assertBuf)) { \
-        ACU_assert(testEnvironment, type, operation, actual, expetced, #type#operation#postfix); \
-    } \
-    TRY \
-    ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, #type#operation#postfix); \
-    ACU_assert_strEqual(environment, testEnvironment->result->message, "", #type#operation#postfix); \
-    FINALLY \
-    if (resultBuf->message != NULL) { \
-        free(resultBuf->message); \
-    } \
-    free(resultBuf); \
-    free(testEnvironment); \
-    ETRY; \
-    UNUSED(context); \
-}\
+ACU_Fixture* intFixture(void);
 
 #endif

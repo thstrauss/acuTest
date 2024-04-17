@@ -374,3 +374,4 @@ FodyWeavers.xsd
 *.O
 /cu_plg/cu_plg.cup
 /cutester/cutester.cov
+/LIB/ACU_TEST.LIB

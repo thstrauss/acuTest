@@ -189,8 +189,8 @@ ACU_Entry* cup_load(const char* cu_name) {
 }
 
 void cup_unload(ACU_Entry* entry) {
-    entry->destroy(entry->suite);
     free(entry->cup_code);
+    entry->destroy(entry->suite);
     free(entry);
 }
 
@@ -214,8 +214,18 @@ ACU_Entry* cup_load(const char* cu_name) {
 }
 
 void cup_unload(ACU_Entry* entry) {
-    entry->destroy(entry->suite);
     FreeLibrary(entry->module);
+    entry->destroy(entry->suite);
+    free(entry);
 }
 
 #endif
+
+ACU_Entry* acu_entryInit(ACU_Suite* suite) {
+    ACU_Entry* entry = acu_emalloc(sizeof(ACU_Entry));
+    entry->suite = suite;
+    entry->execute = acu_suiteExecute;
+    entry->report = acu_suiteReport;
+    entry->destroy = acu_suiteDestroy;
+    return entry;
+}

@@ -30,6 +30,9 @@
     <ClCompile Include="tryc_tst.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="int_tst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="flt_test.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tst_bed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="int_tst.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

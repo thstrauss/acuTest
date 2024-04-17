@@ -27,19 +27,18 @@
 #include "fxtr_tst.h"
 #include "flt_test.h"
 #include "tryc_tst.h"
+#include "int_tst.h"
 
 ACU_Entry* acu_init(void) {
-    ACU_Entry* entry = acu_emalloc(sizeof(ACU_Entry));
-	ACU_Suite* suite = acu_suiteMalloc();
-    acu_suiteInit(suite, "Suite");
-    entry->suite = suite;
-    entry->execute = acu_suiteExecute;
-    entry->report = acu_suiteReport;
-    entry->destroy = acu_suiteDestroy;
+    ACU_Suite* suite = acu_suiteMalloc();
+    ACU_Entry* entry = acu_entryInit(suite);
     
+    acu_suiteInit(suite, "cutest");
+
     acu_suiteAddFixture(suite, fixtureFixture()); 
     acu_suiteAddFixture(suite, floatFixture());
     acu_suiteAddFixture(suite, tryCatchFixture());
+    acu_suiteAddFixture(suite, intFixture());
 
 	return entry;
 }
