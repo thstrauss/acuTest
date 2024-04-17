@@ -372,5 +372,6 @@ FodyWeavers.xsd
 /CMake/Utils.cmake
 
 *.O
-*.cup
+*.CUP
 /lib/*.lib
+*.COV
