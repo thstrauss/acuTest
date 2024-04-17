@@ -22,6 +22,8 @@
 ..\curunner\cutest.cup
 
 .C [ -I..\acu_test\include ]
+.C [ -P ]
+.L [ -S=0 ]
 
 =
 
