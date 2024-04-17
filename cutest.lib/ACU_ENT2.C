@@ -25,7 +25,9 @@
 #include <acu_util.h>
 
 ACU_Entry* acu_init(void) {
-	ACU_Suite* suite = acu_suiteMalloc();    ACU_Entry* entry = acu_entryInit(suite);        acu_suiteInit(suite, "empty");
+	ACU_Suite* suite = acu_suiteMalloc();    ACU_Entry* entry = acu_entryMalloc();
+    
+    acu_entryInit(entry, suite);        acu_suiteInit(suite, "empty");
     entry->suite = suite;
     entry->execute = acu_suiteExecute;
     entry->report = acu_suiteReport;

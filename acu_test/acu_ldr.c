@@ -33,17 +33,17 @@
 
 typedef struct PH_
 {
-   WORD  ph_branch;        /* Branch zum Anfang des Programms  */
+    WORD  ph_branch;        /* Branch zum Anfang des Programms  */
                            /* (muss 0x601a sein!)               */
 
-   LONG  ph_tlen;          /* Länge  des TEXT - Segments       */
-   LONG  ph_dlen;          /* Länge  des DATA - Segments       */
-   LONG  ph_blen;          /* Länge  des BSS  - Segments       */
-   LONG  ph_slen;          /* Länge  der Symboltabelle         */
-   LONG  ph_res1;          /* reserviert, sollte 0 sein        */
+    LONG  ph_tlen;          /* Länge  des TEXT - Segments       */
+    LONG  ph_dlen;          /* Länge  des DATA - Segments       */
+    LONG  ph_blen;          /* Länge  des BSS  - Segments       */
+    LONG  ph_slen;          /* Länge  der Symboltabelle         */
+    LONG  ph_res1;          /* reserviert, sollte 0 sein        */
                            /* wird von PureC benötigt          */
-   LONG  ph_prgflags;      /* Programmflags                    */
-   WORD  ph_absflag;       /* 0 = Relozierungsinf. vorhanden   */
+    LONG  ph_prgflags;      /* Programmflags                    */
+    WORD  ph_absflag;       /* 0 = Relozierungsinf. vorhanden   */
 } PH;
 
 static void* relocate(const void* code, const unsigned char* relocData)
@@ -190,8 +190,7 @@ ACU_Entry* cup_load(const char* cu_name) {
 
 void cup_unload(ACU_Entry* entry) {
     free(entry->cup_code);
-    entry->destroy(entry->suite);
-    free(entry);
+    acu_entryDestroy(entry);
 }
 
 #else
@@ -215,17 +214,23 @@ ACU_Entry* cup_load(const char* cu_name) {
 
 void cup_unload(ACU_Entry* entry) {
     FreeLibrary(entry->module);
-    entry->destroy(entry->suite);
-    free(entry);
+    acu_entryDestroy(entry);
 }
 
 #endif
 
-ACU_Entry* acu_entryInit(ACU_Suite* suite) {
-    ACU_Entry* entry = acu_emalloc(sizeof(ACU_Entry));
+ACU_Entry* acu_entryMalloc(void) {
+    return acu_emalloc(sizeof(ACU_Entry));
+}
+
+void acu_entryInit(ACU_Entry* entry, const ACU_Suite* suite) {
     entry->suite = suite;
     entry->execute = acu_suiteExecute;
     entry->report = acu_suiteReport;
     entry->destroy = acu_suiteDestroy;
-    return entry;
+}
+
+void acu_entryDestroy(ACU_Entry* entry) {
+    entry->destroy((ACU_Suite*) entry->suite);
+    free(entry);
 }

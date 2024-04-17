@@ -32,7 +32,9 @@
 
 ACU_Entry* acu_init(void) {
     ACU_Suite* suite = acu_suiteMalloc();
-    ACU_Entry* entry = acu_entryInit(suite);
+    ACU_Entry* entry = acu_entryMalloc();
+
+    acu_entryInit(entry, suite);
     
     acu_suiteInit(suite, "cutest");
 
