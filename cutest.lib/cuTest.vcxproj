@@ -162,6 +162,10 @@
     <ClInclude Include="flt_test.h" />
     <ClInclude Include="fxtr_tst.h" />
     <ClInclude Include="tryc_tst.h" />
+    <ClInclude Include="tst_bed.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cutest.lib.licenseheader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -41,5 +41,11 @@
     <ClInclude Include="tryc_tst.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tst_bed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cutest.lib.licenseheader" />
   </ItemGroup>
 </Project>
