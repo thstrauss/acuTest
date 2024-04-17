@@ -43,7 +43,7 @@ void acu_suiteInit(ACU_Suite* suite, const char* name)
     suite->name = acu_estrdup(name);
 }
 
-int acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress)
+int acu_suiteExecute(const ACU_Suite* suite, ACU_ProgressFunc progress)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
     int result = ACU_TEST_PASSED;
@@ -55,7 +55,7 @@ int acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress)
     return result;
 }
 
-void* acu_suiteReport(ACU_Suite* suite, void* context, ACU_ReportFunc report)
+void* acu_suiteReport(const ACU_Suite* suite, void* context, ACU_ReportFunc report)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
 

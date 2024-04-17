@@ -43,7 +43,7 @@ static int executeEntry(const char* cupName, const ACU_Summary* summary) {
     returnValue = entry->execute(entry->suite, acu_progress);
     fprintf(stdout, "\n\r");
    	entry->report(entry->suite, NULL, acu_report);
-    entry->report(entry->suite, summary, acu_reportSummary);
+    entry->report(entry->suite, (void*) summary, acu_reportSummary);
 
     cup_unload(entry);
     return returnValue;

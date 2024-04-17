@@ -35,16 +35,16 @@ typedef struct ACU_Suite_ {
 } ACU_Suite;
 
 typedef void ACU_SuiteDestroyFunc(ACU_Suite* suite);
-typedef int ACU_SuiteExecuteFunc(ACU_Suite* suite, ACU_ProgressFunc progress);
-typedef void* ACU_SuiteReportFunc(ACU_Suite* suite, void* context, ACU_ReportFunc report);
+typedef int ACU_SuiteExecuteFunc(const ACU_Suite* suite, ACU_ProgressFunc progress);
+typedef void* ACU_SuiteReportFunc(const ACU_Suite* suite, void* context, ACU_ReportFunc report);
 
 __EXPORT void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture);
 
 __EXPORT void acu_suiteInit(ACU_Suite* suite, const char* name);
 
-__EXPORT int acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress);
+__EXPORT int acu_suiteExecute(const ACU_Suite* suite, ACU_ProgressFunc progress);
 
-__EXPORT void* acu_suiteReport(ACU_Suite* suite, void* context, ACU_ReportFunc report);
+__EXPORT void* acu_suiteReport(const ACU_Suite* suite, void* context, ACU_ReportFunc report);
 
 __EXPORT ACU_Suite* acu_suiteMalloc(void);
 

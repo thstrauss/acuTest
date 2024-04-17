@@ -34,44 +34,33 @@
 typedef struct PH_
 {
     WORD  ph_branch;        /* Branch zum Anfang des Programms  */
-                           /* (muss 0x601a sein!)               */
+                            /* (muss 0x601a sein!)              */
 
-    LONG  ph_tlen;          /* LÃ¤nge  des TEXT - Segments       */
-    LONG  ph_dlen;          /* LÃ¤nge  des DATA - Segments       */
-    LONG  ph_blen;          /* LÃ¤nge  des BSS  - Segments       */
-    LONG  ph_slen;          /* LÃ¤nge  der Symboltabelle         */
+    LONG  ph_tlen;          /* L„nge  des TEXT - Segments       */
+    LONG  ph_dlen;          /* L„nge  des DATA - Segments       */
+    LONG  ph_blen;          /* L„nge  des BSS  - Segments       */
+    LONG  ph_slen;          /* L„nge  der Symboltabelle         */
     LONG  ph_res1;          /* reserviert, sollte 0 sein        */
-                           /* wird von PureC benÃ¶tigt          */
+                            /* wird von PureC ben”tigt          */
     LONG  ph_prgflags;      /* Programmflags                    */
     WORD  ph_absflag;       /* 0 = Relozierungsinf. vorhanden   */
 } PH;
 
 static void* relocate(const void* code, const unsigned char* relocData)
 {
-    unsigned char *	lpText;
-    unsigned char *	lpRelocTable;
-    unsigned char		lFix;
-    unsigned long		lOffset;
-
-    lpText  = (unsigned char*) code;
-
-    lpRelocTable  = (unsigned char*) relocData;
-
-    lOffset = *(unsigned long*)lpRelocTable;
+    unsigned char *	lpText = (unsigned char*) code;
+    unsigned char *	lpRelocTable = (unsigned char*) relocData;
+    unsigned long lOffset = *(unsigned long*) lpRelocTable;
+    
     lpRelocTable += sizeof(unsigned long*);
 
-    if( lOffset )
-    {
+    if( lOffset ) {
         *(unsigned long*)&lpText[ lOffset ] += (unsigned long)lpText;
-        while( *lpRelocTable )
-        {
-            lFix = *lpRelocTable++;
-            if( 1 == lFix )
-            {
+        while( *lpRelocTable ) {
+        	unsigned char lFix = *lpRelocTable++;
+            if( 1 == lFix ) {
                 lOffset += 254;
-            }
-            else
-            {
+            } else {
                 lOffset += lFix;
                 *(unsigned long*)&lpText[ lOffset ] += (unsigned long)lpText;
             }
@@ -82,10 +71,8 @@ static void* relocate(const void* code, const unsigned char* relocData)
 
 static unsigned char* readRelocationData(long handle, long fsize, const PH* programHeader) {
     unsigned char* relo_mem = NULL;
-    long relo_len;
     long TD_len = programHeader->ph_tlen + programHeader->ph_dlen;
-
-    relo_len = fsize - sizeof(PH) - TD_len - programHeader->ph_slen;
+    long relo_len = fsize - sizeof(PH) - TD_len - programHeader->ph_slen;
    
     if ((programHeader->ph_absflag == 0) && relo_len) {
         relo_mem = malloc(relo_len);
@@ -110,12 +97,11 @@ static void* load_and_reloc(long handle, long fsize, const PH* programHeader)
 {
     void* textAndData = NULL;
     void* relocatedTextAndData = NULL;
-    long TD_len, TDB_len;
 
     /* Laenge von Text- und Data-Segment */
-    TD_len = programHeader->ph_tlen + programHeader->ph_dlen;
+    long TD_len = programHeader->ph_tlen + programHeader->ph_dlen;
     /* Laenge von Text-, Data- und BSS-Segment */
-    TDB_len = TD_len + programHeader->ph_blen;
+    long TDB_len = TD_len + programHeader->ph_blen;
     
     /* Speicher fuer Text-, Data- und BSS-Segment anfordern */
     textAndData = malloc(TDB_len);
