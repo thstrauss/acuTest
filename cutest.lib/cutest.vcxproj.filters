@@ -18,9 +18,6 @@
     <ClCompile Include="dllmain.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="acu_entry.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="flt_test.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -31,6 +28,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="int_tst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="long_tst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ACU_ENTR.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UCHR_TST.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UINT_TST.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ULNG_TST.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHAR_TST.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PTR_TST.C">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -48,6 +66,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="int_tst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="long_tst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UCHR_TST.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UINT_TST.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ULNG_TST.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHAR_TST.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PTR_TST.H">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

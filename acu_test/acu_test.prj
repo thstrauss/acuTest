@@ -1,2 +1,3 @@
-..\lib\acu_test.lib.C [-Iinclude].L [-J] =acu_asrtacu_fxtracu_listacu_rprtacu_suitacu_util
+..\lib\acu_test.lib.C [ -Iinclude ]
+.C [ -P ].L [-J] =acu_asrt (include\acu_asrt.h, include\acu_cmmn.h, include\acu_eenv.h, include\acu_rslt.h)acu_fxtracu_listacu_rprtacu_suitacu_util
 acu_ldr

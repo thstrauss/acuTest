@@ -21,9 +21,10 @@
 
 #include <acu_fxtr.h>
 #include <acu_asrt.h>
-#include <acu_suit.h>
+#include <acu_list.h>
 #include <acu_util.h>
 #include <acu_rslt.h>
+#include <acu_suit.h>
 
 #include "flt_test.h"
 #include <math.h>

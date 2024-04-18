@@ -19,32 +19,12 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <acu_ldr.h>
+#pragma once
+#ifndef __uint_test__
+#define __uint_test__
+
 #include <acu_fxtr.h>
-#include <acu_suit.h>
-#include <acu_util.h>
 
-#include "fxtr_tst.h"
-#include "flt_test.h"
-#include "tryc_tst.h"
-#include "int_tst.h"
-#include "long_tst.h"
+ACU_Fixture* unsignedIntFixture(void);
 
-ACU_Entry* acu_init(void) {
-    ACU_Suite* suite = acu_suiteMalloc();
-    ACU_Entry* entry = acu_entryMalloc();
-
-    acu_entryInit(entry, suite);
-    
-    acu_suiteInit(suite, "cutest");
-
-    acu_suiteAddFixture(suite, fixtureFixture()); 
-    acu_suiteAddFixture(suite, floatFixture());
-    acu_suiteAddFixture(suite, tryCatchFixture());
-    acu_suiteAddFixture(suite, intFixture());
-    acu_suiteAddFixture(suite, longFixture());
-
-	return entry;
-}
-
-
+#endif

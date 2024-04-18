@@ -34,7 +34,12 @@ flt_test.c
 tryc_tst.c [-R]
 fxtr_tst.c
 int_tst.c
+uint_tst.c
 long_tst.c
+ulng_tst.c
+char_tst.c
+uchr_tst.c
+ptr_tst.c (ptr_tst.h)
 
 ..\acu_test\acu_test.prj
 
