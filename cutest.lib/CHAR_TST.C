@@ -20,10 +20,6 @@
  */
 
 #include <acu_fxtr.h>
-#include <acu_asrt.h>
-#include <acu_suit.h>
-#include <acu_util.h>
-#include <acu_rslt.h>
 
 #include "uchr_tst.h"
 

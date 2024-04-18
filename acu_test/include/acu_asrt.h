@@ -169,7 +169,7 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
             if (environment->result->file != NULL) free(environment->result->file); \
             environment->result->file = acu_estrdup(__FILE__); \
             environment->result->line = __LINE__; \
-            acu_assert(environment, acu_notEqualStr, acu_notEqualPtrFormatMessage, &parameter); \
+            acu_assert(environment, acu_notEqualPtr, acu_notEqualPtrFormatMessage, &parameter); \
             };
 
 #define __ACU_assert_str(environment, actualValue, expectedValue, messageValue, assertFunc) {\

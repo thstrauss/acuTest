@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauß
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -79,6 +79,9 @@ void acu_assert(ACU_ExecuteEnv* environment, int(*assertFunc)(const ACU_AssertPa
         if (!assertResult) {
             environment->result->status = ACU_TEST_FAILED;
             longjmp(environment->assertBuf, ACU_TEST_FAILED);
+        }
+        else {
+            environment->result->status = ACU_TEST_PASSED;
         }
     FINALLY
         free(buffer);

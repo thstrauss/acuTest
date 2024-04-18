@@ -20,13 +20,129 @@
  */
 
 #include <acu_fxtr.h>
+#include <acu_asrt.h>
 #include <acu_suit.h>
+#include <acu_util.h>
+#include <acu_rslt.h>
+ 
+static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
+	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    testEnvironment->result = resultBuf;
+    resultBuf->status = ACU_TEST_PASSED;
+    resultBuf->message = NULL;
+    resultBuf->file = NULL; 
+    
+    if (!setjmp(testEnvironment->assertBuf)) {
+        ACU_assert_ptrEqual(testEnvironment, NULL, NULL, "ptrEqualNull"); \
+    }
+    TRY
+    	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqualNull"); \
+    	ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrEqualNull"); \
+    FINALLY
+    	if (resultBuf->message != NULL) {
+        	free(resultBuf->message);
+    	}
+    	free(resultBuf);
+    	free(testEnvironment);
+    ETRY;
+    UNUSED(context);
+} 
+
+static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
+	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    testEnvironment->result = resultBuf;
+    resultBuf->status = ACU_TEST_PASSED;
+    resultBuf->message = NULL;
+    resultBuf->file = NULL; 
+    
+    if (!setjmp(testEnvironment->assertBuf)) {
+        void* ptr1 = (void*)123;
+        void* ptr2 = (void*)123;
+        ACU_assert_ptrEqual(testEnvironment, ptr1, ptr2, "ptrEqual");
+        UNUSED(ptr1);
+        UNUSED(ptr2);
+    }
+    TRY
+    	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqual"); \
+    	ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrEqual"); \
+    FINALLY
+    	if (resultBuf->message != NULL) {
+        	free(resultBuf->message);
+    	}
+    	free(resultBuf);
+    	free(testEnvironment);
+    ETRY;
+    UNUSED(context);
+}
+
+static void ptrNotEqual(ACU_ExecuteEnv* environment, const void* context) {
+	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    testEnvironment->result = resultBuf;
+    resultBuf->status = ACU_TEST_PASSED;
+    resultBuf->message = NULL;
+    resultBuf->file = NULL; 
+    
+    if (!setjmp(testEnvironment->assertBuf)) {
+        void* ptr1 = (void*)123;
+        void* ptr2 = (void*)124;
+        ACU_assert_ptrNotEqual(testEnvironment, ptr1, ptr2, "ptrNotEqual");
+        UNUSED(ptr1);
+        UNUSED(ptr2);
+    }
+    TRY
+    	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqual"); \
+    	ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrNotEqual"); \
+    FINALLY
+    	if (resultBuf->message != NULL) {
+        	free(resultBuf->message);
+    	}
+    	free(resultBuf);
+    	free(testEnvironment);
+    ETRY;
+    UNUSED(context);
+}
+
+static void ptrNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
+	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    testEnvironment->result = resultBuf;
+    resultBuf->status = ACU_TEST_PASSED;
+    resultBuf->message = NULL;
+    resultBuf->file = NULL; 
+    
+    if (!setjmp(testEnvironment->assertBuf)) {
+        void* ptr1 = (void*)123;
+        void* ptr2 = NULL;
+        ACU_assert_ptrNotEqual(testEnvironment, ptr1, ptr2, "ptrNotEqualNull");
+        UNUSED(ptr1);
+        UNUSED(ptr2);
+    }
+    TRY
+    	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqualNull"); \
+    	ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrNotEqualNull"); \
+    FINALLY
+    	if (resultBuf->message != NULL) {
+        	free(resultBuf->message);
+    	}
+    	free(resultBuf);
+    	free(testEnvironment);
+    ETRY;
+    UNUSED(context);
+}  
  
 ACU_Fixture* ptrFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
     acu_fixtureInit(fixture, "ptr tests");
+    
+    acu_fixtureAddTestCase(fixture, "ptr Equal NULL", ptrEqualNull);
+    acu_fixtureAddTestCase(fixture, "ptr Equal", ptrEqual);
+    acu_fixtureAddTestCase(fixture, "ptr Not Equal", ptrNotEqual);
+    acu_fixtureAddTestCase(fixture, "ptr Not Equal NULL", ptrNotEqualNull);
 
 	return fixture;
 }

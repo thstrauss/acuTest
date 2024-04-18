@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauﬂ
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -19,26 +19,30 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-#ifndef _ACU_TEST_RESULT_H_
-#define _ACU_TEST_RESULT_H_
-
-#include <time.h>
+#include <stdlib.h>
+#include <acu_rslt.h>
 #include <acu_cmmn.h>
+#include <acu_util.h>
 
-#define CALC_RESULT(aggregatedresult, result) ((result) == ACU_TEST_FAILED ? ACU_TEST_FAILED : aggregatedresult)
+void acuTest_resultDestroy(ACU_Result* result) {
+    if (result->message != NULL) {
+        free(result->message);
+    }
+    if (result->file != NULL) {
+        free(result->file);
+    }
+    free(result);
+}
 
-typedef struct ACU_Result_ {
-    int status;
-    char* message;
-    char* file;
-    int line;
-    clock_t start;
-    clock_t end;
-} ACU_Result;
+ACU_Result* acuTest_resultMalloc(void) {
+    return (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+}
 
-__EXPORT ACU_Result* acuTest_resultMalloc();
-__EXPORT void acuTest_resultInit(ACU_Result* result);
-__EXPORT void acuTest_resultDestroy(ACU_Result* result);
-
-#endif
+void acuTest_resultInit(ACU_Result* result) {
+    result->status = ACU_TEST_UNDEFINED;
+    result->message = NULL;
+    result->file = NULL;
+    result->line = -1;
+    result->start = (clock_t)(-1);
+    result->end = (clock_t)(-1);
+}

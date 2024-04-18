@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauﬂ
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -30,8 +30,9 @@
 #endif
 
 enum {
-    ACU_TEST_PASSED = 0,
-    ACU_TEST_FAILED = 1
+    ACU_TEST_UNDEFINED = 0,
+    ACU_TEST_PASSED = 1,
+    ACU_TEST_FAILED = 2
 };
 
 #endif

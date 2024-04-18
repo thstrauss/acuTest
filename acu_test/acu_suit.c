@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauß
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -49,7 +49,7 @@ int acu_suiteExecute(const ACU_Suite* suite, ACU_ProgressFunc progress)
     int result = ACU_TEST_PASSED;
 
     while (fixtureElement != NULL) {
-        result |= acu_fixtureExecute((ACU_Fixture *) fixtureElement->data, progress);
+        result = CALC_RESULT(result, acu_fixtureExecute((ACU_Fixture*)fixtureElement->data, progress));
         fixtureElement = acu_listNext(fixtureElement);
     }
     return result;

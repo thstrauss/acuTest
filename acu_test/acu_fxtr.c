@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauﬂ
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -33,28 +33,13 @@
 #include <acu_util.h>
 #include <acu_suit.h>
 
-static void acuTest_resultDestroy(ACU_Result* result) {
-    if (result->message != NULL) {
-        free(result->message);
-    }
-    if (result->file != NULL) {
-        free(result->file);
-    }
-    free(result);
-}
 
-static ACU_Result* acuTest_resultMalloc(void) {
-    return (ACU_Result*) acu_emalloc(sizeof(ACU_Result));
-}
 
 static int acuTest_run(ACU_TestCase* testCase, const void* context, ACU_ProgressFunc progress) {
     ACU_ExecuteEnv environment;
     ACU_Result* result = acuTest_resultMalloc();
 
-    result->status = ACU_TEST_PASSED;
-    result->message = NULL;
-    result->file = NULL;
-    result->line = -1;
+    acuTest_resultInit(result);
 
     environment.result = result;
 
@@ -114,7 +99,7 @@ int acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
     int result = ACU_TEST_PASSED;
     while (testElement != NULL) {
-        result |= acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress);
+        result = CALC_RESULT(result, acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress));
         testElement = acu_listNext(testElement);
     }
     return result;

@@ -21,10 +21,10 @@
 
 #include <stdlib.h>
 
-#include <acu_eenv.h>
-#include <acu_asrt.h>
-#include <acu_tcse.h> 
+#include <acu_cmmn.h>
+#include <acu_fxtr.h>
 #include <acu_suit.h>
+#include <acu_asrt.h>
 #include <acu_util.h>
 
 #include "fxtr_tst.h"
