@@ -24,6 +24,7 @@
 #define _ACU_FIXTURE_H_
 
 #include <stdio.h>
+#include <time.h>
 
 #include <acu_cmmn.h>
 #include <acu_eenv.h>
@@ -39,6 +40,8 @@ typedef struct ACU_Fixture_ {
     const void* context;
     struct ACU_List_* testCases;
     struct ACU_Suite_* suite;
+    clock_t start;
+    clock_t end;
 } ACU_Fixture;
 
 __EXPORT void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char *name, ACU_TestFunc testFunc);

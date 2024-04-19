@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <time.h>
 
 #include <acu_cmmn.h>
 #include <acu_eenv.h>
@@ -40,7 +41,7 @@ static int acuTest_run(ACU_TestCase* testCase, const void* context, ACU_Progress
     acuTest_resultInit(result);
 
     environment.result = result;
-
+    result->start = clock();
     do {
         switch (setjmp(environment.assertBuf)) {
             case 0: {
@@ -55,6 +56,7 @@ static int acuTest_run(ACU_TestCase* testCase, const void* context, ACU_Progress
             }
         }
     } while (0);
+    result->end = clock();
     testCase->result = result;
     progress(testCase);
     return result->status;
@@ -77,6 +79,8 @@ void acu_fixtureInit(ACU_Fixture* fixture, const char* name) {
     acu_listInit(testCases, acuTest_testCaseDestroy);
     fixture->testCases = testCases;
     fixture->name = acu_estrdup(name);
+    fixture->start = (clock_t)-1;
+    fixture->end = (clock_t)-1;
 }
 
 void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char* name, ACU_TestFunc testFunc) {
@@ -96,10 +100,12 @@ void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
 int acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
     int result = ACU_TEST_PASSED;
+    fixture->start = clock();
     while (testElement != NULL) {
         result = CALC_RESULT(result, acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress));
         testElement = acu_listNext(testElement);
     }
+    fixture->end = clock();
     return result;
 }
 

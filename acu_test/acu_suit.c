@@ -41,17 +41,21 @@ void acu_suiteInit(ACU_Suite* suite, const char* name)
     acu_listInit(testFixtures, acu_fixtureDestroy);
     suite->testFixtures = testFixtures;
     suite->name = acu_estrdup(name);
+    suite->start = (clock_t)-1;
+    suite->end = (clock_t)-1;
 }
 
-int acu_suiteExecute(const ACU_Suite* suite, ACU_ProgressFunc progress)
+int acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
     int result = ACU_TEST_PASSED;
 
+    suite->start = clock();
     while (fixtureElement != NULL) {
         result = CALC_RESULT(result, acu_fixtureExecute((ACU_Fixture*)fixtureElement->data, progress));
         fixtureElement = acu_listNext(fixtureElement);
     }
+    suite->end = clock();
     return result;
 }
 

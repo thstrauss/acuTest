@@ -24,6 +24,7 @@
 #define _ACU_SUITE_H_
 
 #include <stdio.h>
+#include <time.h>
 
 #include <acu_cmmn.h>
 #include <acu_fxtr.h>
@@ -32,6 +33,8 @@
 typedef struct ACU_Suite_ {
     char* name;
     ACU_List* testFixtures;
+    clock_t start;
+    clock_t end;
 } ACU_Suite;
 
 typedef void ACU_SuiteDestroyFunc(ACU_Suite* suite);
@@ -42,7 +45,7 @@ __EXPORT void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture);
 
 __EXPORT void acu_suiteInit(ACU_Suite* suite, const char* name);
 
-__EXPORT int acu_suiteExecute(const ACU_Suite* suite, ACU_ProgressFunc progress);
+__EXPORT int acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress);
 
 __EXPORT void* acu_suiteReport(const ACU_Suite* suite, void* context, ACU_ReportFunc report);
 
