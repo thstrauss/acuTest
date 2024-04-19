@@ -151,10 +151,12 @@
     <ClCompile Include="int_tst.c" />
     <ClCompile Include="long_tst.c" />
     <ClCompile Include="PTR_TST.C" />
+    <ClCompile Include="shrt_tst.c" />
     <ClCompile Include="tryc_tst.c" />
     <ClCompile Include="UCHR_TST.C" />
     <ClCompile Include="UINT_TST.C" />
     <ClCompile Include="ULNG_TST.C" />
+    <ClCompile Include="usht_tst.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\acu_test\acu_test.vcxproj">
@@ -172,11 +174,13 @@
     <ClInclude Include="int_tst.h" />
     <ClInclude Include="long_tst.h" />
     <ClInclude Include="PTR_TST.H" />
+    <ClInclude Include="shrt_tst.h" />
     <ClInclude Include="tryc_tst.h" />
     <ClInclude Include="tst_bed.h" />
     <ClInclude Include="UCHR_TST.H" />
     <ClInclude Include="UINT_TST.H" />
     <ClInclude Include="ULNG_TST.H" />
+    <ClInclude Include="usht_tst.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cutest.lib.licenseheader" />

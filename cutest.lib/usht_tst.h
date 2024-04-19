@@ -19,20 +19,12 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <acu_ldr.h>
+#pragma once
+#ifndef __ushort_test__
+#define __ushort_test__
+
 #include <acu_fxtr.h>
-#include <acu_suit.h>
-#include <acu_util.h>
 
-ACU_Entry* acu_init(void) {
-	ACU_Suite* suite = acu_suiteMalloc();
-    ACU_Entry* entry = acu_entryMalloc();
-    
-    acu_entryInit(entry, suite);
-    
-    acu_suiteInit(suite, "empty");
-        
-	return entry;
-}
+ACU_Fixture* unsignedShortFixture(void);
 
-
+#endif

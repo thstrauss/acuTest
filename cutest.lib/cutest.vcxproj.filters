@@ -51,6 +51,12 @@
     <ClCompile Include="PTR_TST.C">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="shrt_tst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="usht_tst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="flt_test.h">
@@ -84,6 +90,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PTR_TST.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shrt_tst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="usht_tst.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

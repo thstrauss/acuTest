@@ -34,6 +34,8 @@
 #include "ulng_tst.h"
 #include "char_tst.h"
 #include "uchr_tst.h"
+#include "shrt_tst.h"
+#include "usht_tst.h"
 #include "ptr_tst.h"
 
 ACU_Entry* acu_init(void) {
@@ -53,6 +55,8 @@ ACU_Entry* acu_init(void) {
     acu_suiteAddFixture(suite, unsignedLongFixture());
     acu_suiteAddFixture(suite, signedCharFixture());
     acu_suiteAddFixture(suite, unsignedCharFixture());
+    acu_suiteAddFixture(suite, shortFixture());
+    acu_suiteAddFixture(suite, unsignedShortFixture());
     acu_suiteAddFixture(suite, ptrFixture());
 
     return entry;

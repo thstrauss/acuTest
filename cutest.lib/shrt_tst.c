@@ -19,20 +19,36 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <acu_ldr.h>
 #include <acu_fxtr.h>
 #include <acu_suit.h>
-#include <acu_util.h>
 
-ACU_Entry* acu_init(void) {
-	ACU_Suite* suite = acu_suiteMalloc();
-    ACU_Entry* entry = acu_entryMalloc();
-    
-    acu_entryInit(entry, suite);
-    
-    acu_suiteInit(suite, "empty");
-        
-	return entry;
+#include "shrt_tst.h"
+
+#include "tst_bed.h"
+
+TESTBED(, short, Equal, 0, 0)
+TESTBED(, short, NotEqual, 0, 1)
+TESTBED(, short, Less, 0, 1)
+TESTBED(, short, LessEqual, 0, 1)
+TESTBED(Eq, short, LessEqual, 1, 1)
+TESTBED(, short, Greater, 1, 0)
+TESTBED(, short, GreaterEqual, 1, 0)
+TESTBED(Eq, short, GreaterEqual, 1, 1)
+
+ACU_Fixture* shortFixture(void)
+{
+    ACU_Fixture* fixture = acu_fixtureMalloc();
+
+    acu_fixtureInit(fixture, "short tests");
+
+    acu_fixtureAddTestCase(fixture, "short Equal", testshortEqual);
+    acu_fixtureAddTestCase(fixture, "short NotEqual", testshortNotEqual);
+    acu_fixtureAddTestCase(fixture, "short Less", testshortLess);
+    acu_fixtureAddTestCase(fixture, "short LessEqual", testshortLessEqual);
+    acu_fixtureAddTestCase(fixture, "short LessEqualEq", testshortLessEqualEq);
+    acu_fixtureAddTestCase(fixture, "short Greater", testshortGreater);
+    acu_fixtureAddTestCase(fixture, "short GreaterEqualEq", testshortGreaterEqualEq);
+    acu_fixtureAddTestCase(fixture, "short GreaterEqual", testshortGreaterEqual);
+
+    return fixture;
 }
-
-
