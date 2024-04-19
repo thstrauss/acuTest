@@ -39,7 +39,7 @@ void* acu_report(const ACU_TestCase* testCase, void* context) {
     static const char* suiteName = NULL;
     if (suiteName == NULL || strcmp(suiteName, testCase->fixture->suite->name) != 0) {
         suiteName = testCase->fixture->suite->name;
-        fprintf(stdout, "%s\n\r", suiteName);
+        fprintf(stdout, "%s tooks %lf ms\n\r", suiteName, (testCase->fixture->suite->end - testCase->fixture->suite->start)*1000.0/CLK_TCK);
     }
     if (fixtureName == NULL || strcmp(fixtureName, testCase->fixture->name) != 0) {
         fixtureName = testCase->fixture->name;

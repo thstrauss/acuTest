@@ -89,7 +89,7 @@
     <ClInclude Include="CHAR_TST.H">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PTR_TST.H">
+    <ClInclude Include="ptr_tst.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="shrt_tst.h">

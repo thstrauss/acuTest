@@ -209,7 +209,7 @@ ACU_Entry* acu_entryMalloc(void) {
     return acu_emalloc(sizeof(ACU_Entry));
 }
 
-void acu_entryInit(ACU_Entry* entry, const ACU_Suite* suite) {
+void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
     entry->suite = suite;
 }
 

@@ -31,5 +31,6 @@ main.c
 
 ..\acu_test\acu_test.prj
 
+PCFLTLIB.LIB
 PCTOSLIB.LIB
 PCSTDLIB.LIB

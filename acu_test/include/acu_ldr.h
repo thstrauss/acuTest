@@ -29,7 +29,7 @@
 #endif
 
 typedef struct ACU_Entry_ {
-    const ACU_Suite* suite;
+    ACU_Suite* suite;
 #ifdef __TOS__
     void* cup_code;
 #else
@@ -43,7 +43,7 @@ __EXPORT ACU_Entry* cup_load(const char* cu_name);
 __EXPORT void cup_unload(ACU_Entry* entry);
 
 __EXPORT ACU_Entry* acu_entryMalloc(void);
-__EXPORT void acu_entryInit(ACU_Entry* entry, const ACU_Suite* suite);
+__EXPORT void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite);
 __EXPORT void acu_entryDestroy(ACU_Entry* entry);
  
 #endif
