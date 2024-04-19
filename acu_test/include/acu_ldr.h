@@ -29,9 +29,6 @@
 #endif
 
 typedef struct ACU_Entry_ {
-    ACU_SuiteExecuteFunc* execute;
-    ACU_SuiteReportFunc* report;
-    ACU_SuiteDestroyFunc* destroy;
     const ACU_Suite* suite;
 #ifdef __TOS__
     void* cup_code;

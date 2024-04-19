@@ -20,6 +20,7 @@
  */
 
 #include <acu_fxtr.h>
+#include <acu_suit.h>
 
 #include "ulng_tst.h"
 

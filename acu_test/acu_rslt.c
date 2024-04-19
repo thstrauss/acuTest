@@ -20,6 +20,7 @@
  */
 
 #include <stdlib.h>
+#include <stddef.h>
 #include <acu_rslt.h>
 #include <acu_cmmn.h>
 #include <acu_util.h>

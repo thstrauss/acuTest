@@ -211,12 +211,9 @@ ACU_Entry* acu_entryMalloc(void) {
 
 void acu_entryInit(ACU_Entry* entry, const ACU_Suite* suite) {
     entry->suite = suite;
-    entry->execute = acu_suiteExecute;
-    entry->report = acu_suiteReport;
-    entry->destroy = acu_suiteDestroy;
 }
 
 void acu_entryDestroy(ACU_Entry* entry) {
-    entry->destroy((ACU_Suite*) entry->suite);
+    acu_suiteDestroy((ACU_Suite*) entry->suite);
     free(entry);
 }

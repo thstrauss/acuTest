@@ -33,8 +33,6 @@
 #include <acu_util.h>
 #include <acu_suit.h>
 
-
-
 static int acuTest_run(ACU_TestCase* testCase, const void* context, ACU_ProgressFunc progress) {
     ACU_ExecuteEnv environment;
     ACU_Result* result = acuTest_resultMalloc();

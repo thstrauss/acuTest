@@ -40,10 +40,10 @@ static int executeEntry(const char* cupName, const ACU_Summary* summary) {
        	return 2;
     }
 
-    returnValue = entry->execute(entry->suite, acu_progress);
+    returnValue = acu_suiteExecute(entry->suite, acu_progress);
     fprintf(stdout, "\n\r");
-   	entry->report(entry->suite, NULL, acu_report);
-    entry->report(entry->suite, (void*) summary, acu_reportSummary);
+   	acu_suiteReport(entry->suite, NULL, acu_report);
+    acu_suiteReport(entry->suite, (void*) summary, acu_reportSummary);
 
     cup_unload(entry);
     return returnValue;

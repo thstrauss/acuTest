@@ -26,7 +26,7 @@
 #include <time.h>
 #include <acu_cmmn.h>
 
-#define CALC_RESULT(aggregatedresult, result) ((result) == ACU_TEST_FAILED ? ACU_TEST_FAILED : aggregatedresult)
+#define CALC_RESULT(aggregatedresult, result) ((result) == ACU_TEST_FAILED ? ACU_TEST_FAILED : (aggregatedresult))
 
 typedef struct ACU_Result_ {
     int status;
@@ -37,7 +37,7 @@ typedef struct ACU_Result_ {
     clock_t end;
 } ACU_Result;
 
-__EXPORT ACU_Result* acuTest_resultMalloc();
+__EXPORT ACU_Result* acuTest_resultMalloc(void);
 __EXPORT void acuTest_resultInit(ACU_Result* result);
 __EXPORT void acuTest_resultDestroy(ACU_Result* result);
 
