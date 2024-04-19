@@ -173,7 +173,7 @@
     <ClInclude Include="fxtr_tst.h" />
     <ClInclude Include="int_tst.h" />
     <ClInclude Include="long_tst.h" />
-    <ClInclude Include="PTR_TST.H" />
+    <ClInclude Include="ptr_tst.h" />
     <ClInclude Include="shrt_tst.h" />
     <ClInclude Include="tryc_tst.h" />
     <ClInclude Include="tst_bed.h" />
