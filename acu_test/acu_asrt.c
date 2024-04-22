@@ -78,7 +78,7 @@ void acu_assert(ACU_ExecuteEnv* environment, int(*assertFunc)(const ACU_AssertPa
         environment->result->message = acu_estrdup(buffer);
         if (!assertResult) {
             environment->result->status = ACU_TEST_FAILED;
-            longjmp(environment->assertBuf, ACU_TEST_FAILED);
+            longjmp(environment->assertBuf, ACU_TEST_ABORTED);
         }
         else {
             environment->result->status = ACU_TEST_PASSED;

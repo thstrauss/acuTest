@@ -45,7 +45,7 @@ __EXPORT void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture);
 
 __EXPORT void acu_suiteInit(ACU_Suite* suite, const char* name);
 
-__EXPORT int acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress);
+__EXPORT enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress);
 
 __EXPORT void* acu_suiteReport(const ACU_Suite* suite, void* context, ACU_ReportFunc report);
 

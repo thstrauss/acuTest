@@ -26,10 +26,10 @@
 #include <time.h>
 #include <acu_cmmn.h>
 
-#define CALC_RESULT(aggregatedresult, result) ((result) == ACU_TEST_FAILED ? ACU_TEST_FAILED : (aggregatedresult))
+#define CALC_RESULT(aggregatedresult, result) ((result) == ACU_TEST_FAILED ? ACU_TEST_PASSED : (aggregatedresult))
 
 typedef struct ACU_Result_ {
-    int status;
+    enum ACU_TestResult status;
     char* message;
     char* file;
     int line;

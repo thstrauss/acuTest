@@ -45,10 +45,10 @@ void acu_suiteInit(ACU_Suite* suite, const char* name)
     suite->end = (clock_t)-1;
 }
 
-int acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress)
+enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
-    int result = ACU_TEST_PASSED;
+    enum ACU_TestResult result = ACU_TEST_PASSED;
 
     suite->start = clock();
     while (fixtureElement != NULL) {

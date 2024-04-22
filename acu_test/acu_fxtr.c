@@ -34,7 +34,7 @@
 #include <acu_util.h>
 #include <acu_suit.h>
 
-static int acuTest_run(ACU_TestCase* testCase, const void* context, ACU_ProgressFunc progress) {
+static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_ProgressFunc progress) {
     ACU_ExecuteEnv environment;
     ACU_Result* result = acuTest_resultMalloc();
 
@@ -51,7 +51,7 @@ static int acuTest_run(ACU_TestCase* testCase, const void* context, ACU_Progress
                 }
                 break;
             }
-            case ACU_TEST_FAILED: {
+            case ACU_TEST_ABORTED: {
                 break;
             }
         }
@@ -97,9 +97,9 @@ void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
     fixture->context = context;
 }
 
-int acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress) {
+enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
-    int result = ACU_TEST_PASSED;
+    enum ACU_TestResult result = ACU_TEST_PASSED;
     fixture->start = clock();
     while (testElement != NULL) {
         result = CALC_RESULT(result, acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress));

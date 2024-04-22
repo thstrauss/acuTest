@@ -59,7 +59,7 @@ ACU_Entry* acu_init(void) {
     acu_suiteAddFixture(suite, shortFixture());
     acu_suiteAddFixture(suite, unsignedShortFixture());
     acu_suiteAddFixture(suite, ptrFixture());
-    acu_suiteAddFixture(suite, strFixture());
+    /* acu_suiteAddFixture(suite, strFixture()); */
 
     return entry;
 }

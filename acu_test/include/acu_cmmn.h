@@ -29,10 +29,14 @@
 #define __EXPORT __declspec(dllexport) 
 #endif
 
-enum {
-    ACU_TEST_UNDEFINED = 0,
+typedef enum ACU_TestResult_ {
+    ACU_TEST_FAILED = 0,
     ACU_TEST_PASSED = 1,
-    ACU_TEST_FAILED = 2
-};
+    ACU_TEST_UNDEFINED = -1,
+} ACU_TestResult;
+
+typedef enum ACU_Exception_ {
+    ACU_TEST_ABORTED = 3
+} ACU_Exception;
 
 #endif
