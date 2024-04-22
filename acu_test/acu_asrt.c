@@ -37,6 +37,7 @@ enum ACU_TestResult acu_equalPtr(const ACU_AssertParameter* parameter) {
 
 void acu_equalPtrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) {
     acu_sprintf_s(buffer, bufferSize, "%actual value %p not equal to expected value %p: %s", *(void**)parameter->actual, *(void**)parameter->expected, parameter->message);
+    UNUSED(result);
 }
 
 enum ACU_TestResult acu_notEqualPtr(const ACU_AssertParameter* parameter) {
@@ -44,6 +45,7 @@ enum ACU_TestResult acu_notEqualPtr(const ACU_AssertParameter* parameter) {
 }
 
 void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) {
+    UNUSED(result);
     acu_sprintf_s(buffer, bufferSize, "actual value %p equal to expected value %p: %s", *(void**)parameter->actual, *(void**)parameter->expected, parameter->message);
 }
 
@@ -58,8 +60,8 @@ void acu_equalStrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult
     if (result == ACU_TEST_FAILED) {
         acu_sprintf_s(buffer, bufferSize, "actual value \"%s\" not equal to expected value \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
     }
-    else {
-        acu_sprintf_s(buffer, bufferSize, "");
+    else if (result == ACU_TEST_ERROR) {
+        acu_sprintf_s(buffer, bufferSize, "Error in: %s", "acu_equalStr");
     }
 }
 
@@ -68,6 +70,7 @@ enum ACU_TestResult acu_notEqualStr(const ACU_AssertParameter* parameter) {
 }
 
 void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) {
+    UNUSED(result);
     acu_sprintf_s(buffer, bufferSize, "actual value \"%s\" equal to expected value \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
 }
 
@@ -80,18 +83,17 @@ void acu_assert(ACU_ExecuteEnv* environment,
     enum ACU_TestResult assertResult = assert(parameter);
 
     TRY_CTX(acu_assert)
-        acu_sprintf_s(buffer, bufferSize, "");
         if (assertResult != ACU_TEST_PASSED) {
             if (formatMessage != NULL) {
                 formatMessage(buffer, bufferSize, assertResult, parameter);
             }
+        } else {
+            acu_sprintf_s(buffer, bufferSize, "");
         }
-        environment->result->message = acu_estrdup(buffer);
+        environment->result->message = buffer;
         environment->result->status = assertResult;
         if (assertResult != ACU_TEST_PASSED) {
             longjmp(environment->assertBuf, ACU_TEST_ABORTED);
         }
-    FINALLY
-        free(buffer);
     ETRY;
 }

@@ -26,7 +26,7 @@
 #include <acu_rslt.h>
  
 static void strEqualBothNull(ACU_ExecuteEnv* environment, const void* context) {
-	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
@@ -37,14 +37,14 @@ static void strEqualBothNull(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert_strEqual(testEnvironment, NULL, NULL, "strEqualBothNull"); \
     }
     TRY
-    	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strEqualBothNull"); \
-        ACU_assert_strEqual(environment, testEnvironment->result->message, "", "strEqualBothNull"); \
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strEqualBothNull"); \
+        ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_equalStr", "strEqualBothNull"); \
     FINALLY
-    	if (resultBuf->message != NULL) {
-        	free(resultBuf->message);
-    	}
-    	free(resultBuf);
-    	free(testEnvironment);
+        if (resultBuf->message != NULL) {
+            free(resultBuf->message);
+        }
+        free(resultBuf);
+        free(testEnvironment);
     ETRY;
     UNUSED(context);
 } 
@@ -62,19 +62,19 @@ static void strEqualActualNull(ACU_ExecuteEnv* environment, const void* context)
     }
     TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strEqualActualNull"); \
-        ACU_assert_strEqual(environment, testEnvironment->result->message, "", "strEqualActualNull"); \
+        ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_equalStr", "strEqualActualNull"); \
         FINALLY
         if (resultBuf->message != NULL) {
             free(resultBuf->message);
         }
-    free(resultBuf);
-    free(testEnvironment);
+        free(resultBuf);
+        free(testEnvironment);
     ETRY;
     UNUSED(context);
 }
 
 static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
-	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
@@ -85,20 +85,20 @@ static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert_strEqual(testEnvironment, "abc", "abc", "ptrEqual");
     }
     TRY
-    	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqual"); \
-    	ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrEqual"); \
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqual"); \
+        ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrEqual"); \
     FINALLY
-    	if (resultBuf->message != NULL) {
-        	free(resultBuf->message);
-    	}
-    	free(resultBuf);
-    	free(testEnvironment);
+        if (resultBuf->message != NULL) {
+            free(resultBuf->message);
+        }
+        free(resultBuf);
+        free(testEnvironment);
     ETRY;
     UNUSED(context);
 }
 
 static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
-	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
@@ -113,20 +113,20 @@ static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
         UNUSED(ptr2);
     }
     TRY
-    	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqual"); \
-    	ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrNotEqual"); \
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqual"); \
+        ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrNotEqual"); \
     FINALLY
-    	if (resultBuf->message != NULL) {
-        	free(resultBuf->message);
-    	}
-    	free(resultBuf);
-    	free(testEnvironment);
+        if (resultBuf->message != NULL) {
+            free(resultBuf->message);
+        }
+        free(resultBuf);
+        free(testEnvironment);
     ETRY;
     UNUSED(context);
 }
 
 static void strNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
-	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
@@ -141,14 +141,14 @@ static void strNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
         UNUSED(ptr2);
     }
     TRY
-    	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqualNull"); \
-    	ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrNotEqualNull"); \
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqualNull"); \
+        ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrNotEqualNull"); \
     FINALLY
-    	if (resultBuf->message != NULL) {
-        	free(resultBuf->message);
-    	}
-    	free(resultBuf);
-    	free(testEnvironment);
+        if (resultBuf->message != NULL) {
+            free(resultBuf->message);
+        }
+        free(resultBuf);
+        free(testEnvironment);
     ETRY;
     UNUSED(context);
 }  
@@ -165,5 +165,5 @@ ACU_Fixture* strFixture(void)
     acu_fixtureAddTestCase(fixture, "str Not Equal", strNotEqual);
     acu_fixtureAddTestCase(fixture, "str Not Equal NULL", strNotEqualNull);
 
-	return fixture;
+    return fixture;
 }

@@ -61,6 +61,7 @@ static void acu_##type##op##FormatMessage(char* buffer, int bufferSize, enum ACU
 char formatBuffer[128]; memset(formatBuffer, 0, 128); \
 acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "actual value %s not %%s to value %s: %%s", #format, #format); \
 acu_sprintf_s(buffer, bufferSize, formatBuffer, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
+UNUSED(result); \
 } \
 __EXPORT void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) { \
     acu_assert(environment, acu_##type##op, acu_##type##op##FormatMessage, parameter); \
