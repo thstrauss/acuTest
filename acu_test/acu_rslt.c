@@ -25,6 +25,10 @@
 #include <acu_cmmn.h>
 #include <acu_util.h>
 
+enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedresult, enum ACU_TestResult result) {
+    return result == ACU_TEST_FAILED ? ACU_TEST_FAILED : aggregatedresult;
+}
+
 void acuTest_resultDestroy(ACU_Result* result) {
     if (result->message != NULL) {
         free(result->message);

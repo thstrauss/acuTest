@@ -33,6 +33,7 @@ typedef enum ACU_TestResult_ {
     ACU_TEST_FAILED = 0,
     ACU_TEST_PASSED = 1,
     ACU_TEST_UNDEFINED = -1,
+    ACU_TEST_ERROR = -2
 } ACU_TestResult;
 
 typedef enum ACU_Exception_ {

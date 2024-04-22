@@ -31,7 +31,7 @@
 #include <acu_util.h>
 
 void acu_progress(const ACU_TestCase* testCase) {
-    fprintf(stdout, "%s", testCase->result->status == ACU_TEST_FAILED ? "F" : ".");
+    fprintf(stdout, "%s", testCase->result->status == ACU_TEST_FAILED ? "F" : testCase->result->status == ACU_TEST_ERROR ? "E" : ".");
 }
 
 void* acu_report(const ACU_TestCase* testCase, void* context) {

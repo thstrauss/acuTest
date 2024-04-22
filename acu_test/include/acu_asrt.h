@@ -35,10 +35,13 @@ typedef struct ACU_AssertParameter_ {
     char* message;
 } ACU_AssertParameter;
 
+typedef enum ACU_TestResult(assertFunc)(const struct ACU_AssertParameter_* parameter);
+typedef void (formatMessageFunc)(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter);
+
 __EXPORT void acu_assert(
     ACU_ExecuteEnv* environment,
-    int (*assertFunc)(const ACU_AssertParameter* parameter),
-    void (*formatMessage)(char* buffer, int bufferSize, const ACU_AssertParameter* parameter),
+    assertFunc assert,
+    formatMessageFunc formatMessage,
     const ACU_AssertParameter* parameter);
 
 #define ACU_PrepareParameter(type, actualValue, expectedValue, messageValue) \
@@ -51,10 +54,10 @@ __EXPORT void acu_assert(
 
 #ifdef __ACU_EMIT_ASSERT_FUNCS__
 #define CREATE_ASSERT_FUNC(type, op, opcode, format) \
-static int acu_##type##op(const ACU_AssertParameter* parameter) { \
+static enum ACU_TestResult acu_##type##op(const ACU_AssertParameter* parameter) { \
     return *(type*)parameter->actual opcode *(type*)parameter->expected; \
 } \
-static void acu_##type##op##FormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter) { \
+static void acu_##type##op##FormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) { \
 char formatBuffer[128]; memset(formatBuffer, 0, 128); \
 acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "actual value %s not %%s to value %s: %%s", #format, #format); \
 acu_sprintf_s(buffer, bufferSize, formatBuffer, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
@@ -177,8 +180,8 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
             char* __expected = NULL; \
             TRY_CTX(_ACU_assert_str_) \
                 ACU_AssertParameter parameter; \
-                __actual = acu_estrdup(actualValue); \
-                __expected = acu_estrdup(expectedValue); \
+                __actual = actualValue != NULL ? acu_estrdup(actualValue) : NULL; \
+                __expected = expectedValue != NULL ? acu_estrdup(expectedValue) : NULL; \
                 parameter.actual = __actual; \
                 parameter.expected = __expected; \
                 if (environment->result->file != NULL) free(environment->result->file); \
@@ -200,16 +203,16 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
                 __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notEqualStr) \
             };
 
-__EXPORT int acu_equalPtr(const ACU_AssertParameter* parameter);
-__EXPORT void acu_equalPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+__EXPORT enum ACU_TestResult acu_equalPtr(const ACU_AssertParameter* parameter);
+__EXPORT void acu_equalPtrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter);
 
-__EXPORT int acu_notEqualPtr(const ACU_AssertParameter* parameter);
-__EXPORT void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+__EXPORT enum ACU_TestResult acu_notEqualPtr(const ACU_AssertParameter* parameter);
+__EXPORT void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter);
 
-__EXPORT int acu_equalStr(const ACU_AssertParameter* parameter);
-__EXPORT void acu_equalStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+__EXPORT enum ACU_TestResult acu_equalStr(const ACU_AssertParameter* parameter);
+__EXPORT void acu_equalStrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter);
 
-__EXPORT int acu_notEqualStr(const ACU_AssertParameter* parameter);
-__EXPORT void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, const ACU_AssertParameter* parameter);
+__EXPORT enum ACU_TestResult acu_notEqualStr(const ACU_AssertParameter* parameter);
+__EXPORT void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter);
 
 #endif

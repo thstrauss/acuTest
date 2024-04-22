@@ -37,8 +37,8 @@ static void strEqualBothNull(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert_strEqual(testEnvironment, NULL, NULL, "strEqualBothNull"); \
     }
     TRY
-    	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strEqualBothNull"); \
-    	ACU_assert_strEqual(environment, testEnvironment->result->message, "", "strEqualBothNull"); \
+    	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strEqualBothNull"); \
+        ACU_assert_strEqual(environment, testEnvironment->result->message, "", "strEqualBothNull"); \
     FINALLY
     	if (resultBuf->message != NULL) {
         	free(resultBuf->message);
@@ -61,7 +61,7 @@ static void strEqualActualNull(ACU_ExecuteEnv* environment, const void* context)
         ACU_assert_strEqual(testEnvironment, NULL, "abc", "strEqualActualNull"); \
     }
     TRY
-        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strEqualActualNull"); \
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strEqualActualNull"); \
         ACU_assert_strEqual(environment, testEnvironment->result->message, "", "strEqualActualNull"); \
         FINALLY
         if (resultBuf->message != NULL) {

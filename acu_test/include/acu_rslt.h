@@ -26,8 +26,6 @@
 #include <time.h>
 #include <acu_cmmn.h>
 
-#define CALC_RESULT(aggregatedresult, result) ((result) == ACU_TEST_FAILED ? ACU_TEST_PASSED : (aggregatedresult))
-
 typedef struct ACU_Result_ {
     enum ACU_TestResult status;
     char* message;
@@ -40,5 +38,6 @@ typedef struct ACU_Result_ {
 __EXPORT ACU_Result* acuTest_resultMalloc(void);
 __EXPORT void acuTest_resultInit(ACU_Result* result);
 __EXPORT void acuTest_resultDestroy(ACU_Result* result);
+enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedresult, enum ACU_TestResult result);
 
 #endif

@@ -7,7 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "acu_test", "acu_test\acu_te
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cutest", "cutest.lib\cutest.vcxproj", "{9DD20EBA-2907-4B1B-B96B-701DE0E32587}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "curunner", "CURUNNER\Project1.vcxproj", "{2890CB96-7FBD-440D-8A69-FD5AF0A20546}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "curunner", "curunner\Project1.vcxproj", "{2890CB96-7FBD-440D-8A69-FD5AF0A20546}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9DD20EBA-2907-4B1B-B96B-701DE0E32587} = {9DD20EBA-2907-4B1B-B96B-701DE0E32587}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

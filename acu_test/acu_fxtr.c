@@ -102,7 +102,7 @@ enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc pr
     enum ACU_TestResult result = ACU_TEST_PASSED;
     fixture->start = clock();
     while (testElement != NULL) {
-        result = CALC_RESULT(result, acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress));
+        result = acuTest_calcResult(result, acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress));
         testElement = acu_listNext(testElement);
     }
     fixture->end = clock();

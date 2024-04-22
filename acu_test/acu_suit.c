@@ -52,7 +52,7 @@ enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress
 
     suite->start = clock();
     while (fixtureElement != NULL) {
-        result = CALC_RESULT(result, acu_fixtureExecute((ACU_Fixture*)fixtureElement->data, progress));
+        result = acuTest_calcResult(result, acu_fixtureExecute((ACU_Fixture*)fixtureElement->data, progress));
         fixtureElement = acu_listNext(fixtureElement);
     }
     suite->end = clock();

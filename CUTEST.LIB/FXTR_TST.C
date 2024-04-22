@@ -89,7 +89,7 @@ static void progress(const ACU_TestCase* testCase) {
 
 static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 {
-    int result = ACU_TEST_PASSED;
+    enum ACU_TestResult result = ACU_TEST_PASSED;
     ACU_Suite* localSuite = acu_suiteMalloc();
 
     acu_suiteInit(localSuite, "testSuite");
@@ -103,7 +103,7 @@ static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 
 static void passingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 {
-    int result = ACU_TEST_PASSED;
+    enum ACU_TestResult result = ACU_TEST_PASSED;
     ACU_Suite* localSuite = acu_suiteMalloc();
 
     acu_suiteInit(localSuite, "testSuite");
@@ -117,7 +117,7 @@ static void passingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 
 static void emptyFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 {
-    int result = ACU_TEST_PASSED;
+    enum ACU_TestResult result = ACU_TEST_PASSED;
     ACU_Suite* localSuite = acu_suiteMalloc();
 
     acu_suiteInit(localSuite, "testSuite");
