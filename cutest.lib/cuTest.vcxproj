@@ -150,8 +150,9 @@
     <ClCompile Include="fxtr_tst.c" />
     <ClCompile Include="int_tst.c" />
     <ClCompile Include="long_tst.c" />
-    <ClCompile Include="PTR_TST.C" />
+    <ClCompile Include="ptr_tst.c" />
     <ClCompile Include="shrt_tst.c" />
+    <ClCompile Include="str_tst.c" />
     <ClCompile Include="tryc_tst.c" />
     <ClCompile Include="UCHR_TST.C" />
     <ClCompile Include="UINT_TST.C" />
@@ -175,6 +176,7 @@
     <ClInclude Include="long_tst.h" />
     <ClInclude Include="ptr_tst.h" />
     <ClInclude Include="shrt_tst.h" />
+    <ClInclude Include="str_tst.h" />
     <ClInclude Include="tryc_tst.h" />
     <ClInclude Include="tst_bed.h" />
     <ClInclude Include="UCHR_TST.H" />
