@@ -45,17 +45,17 @@ char* acu_estrdup(const char* s) {
 #else
     char* temp = _strdup(s);
 #endif
-    if (temp == NULL) {
+    if (!temp) {
         acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
     }
     return temp;
 }
 
 void acu_setProgName(const char* progName) {
-    if (programName != NULL) {
+    if (programName) {
         free(programName);
     }
-    if (progName != NULL) {
+    if (progName) {
         programName = acu_estrdup(progName);
     }
     else {
@@ -104,7 +104,7 @@ void acu_wprintf(const char* format, ...) {
 void* acu_emalloc(size_t size) {
     void* p;
     p = malloc(size);
-    if (p == NULL) {
+    if (!p) {
         acu_eprintf("acu_emalloc of %u bytes failed:", size);
     }
     return p;

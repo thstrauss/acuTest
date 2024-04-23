@@ -65,7 +65,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
 static void acuTest_testCaseDestroy(void* data) {
     ACU_TestCase* testCase = (ACU_TestCase*) data;
     free(testCase->name);
-    if (testCase->result != NULL) {
+    if (testCase->result) {
         acuTest_resultDestroy(testCase->result);
     }
 }

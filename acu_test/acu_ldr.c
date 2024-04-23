@@ -123,7 +123,7 @@ static void* load_and_reloc(long handle, long fsize, const PH* programHeader)
         }
     }
     
-    if (relocatedTextAndData == NULL) {
+    if (!relocatedTextAndData) {
         free(textAndData);
     }
 

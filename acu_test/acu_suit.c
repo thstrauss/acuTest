@@ -51,7 +51,7 @@ enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress
     enum ACU_TestResult result = ACU_TEST_PASSED;
 
     suite->start = clock();
-    while (fixtureElement != NULL) {
+    while (fixtureElement) {
         result = acuTest_calcResult(result, acu_fixtureExecute((ACU_Fixture*)fixtureElement->data, progress));
         fixtureElement = acu_listNext(fixtureElement);
     }
@@ -63,7 +63,7 @@ void* acu_suiteReport(const ACU_Suite* suite, void* context, ACU_ReportFunc repo
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
 
-    while (fixtureElement != NULL) {
+    while (fixtureElement) {
         ACU_Fixture* fixture = (ACU_Fixture*)fixtureElement->data;
         context = acu_fixtureReport(fixture, context, report);
         fixtureElement = acu_listNext(fixtureElement);
@@ -79,7 +79,7 @@ ACU_Suite* acu_suiteMalloc(void)
 void acu_suiteDestroy(ACU_Suite* suite)
 {
     free(suite->name);
-    if (suite->testFixtures != NULL) {
+    if (suite->testFixtures) {
         acu_listDestroy(suite->testFixtures);
     }
     free(suite);

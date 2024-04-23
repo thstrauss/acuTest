@@ -87,18 +87,17 @@ void acu_assert(ACU_ExecuteEnv* environment,
     const ACU_AssertParameter* parameter) {
     enum ACU_TestResult assertResult = assert(parameter);
 
-    TRY_CTX(acu_assert)
-        char* buffer;
-        if (assertResult != ACU_TEST_PASSED && formatMessage != NULL) {
-            buffer = acu_emalloc(1024);
-            formatMessage(buffer, 1024, assertResult, parameter);
-        } else {
-            buffer = NULL;
-        }
-        environment->result->message = buffer;
-        environment->result->status = assertResult;
-        if (assertResult != ACU_TEST_PASSED) {
-            longjmp(environment->assertBuf, ACU_TEST_ABORTED);
-        }
-    ETRY;
+    char* buffer;
+    if (assertResult != ACU_TEST_PASSED && formatMessage) {
+        buffer = acu_emalloc(1024);
+        formatMessage(buffer, 1024, assertResult, parameter);
+    }
+    else {
+        buffer = NULL;
+    }
+    environment->result->message = buffer;
+    environment->result->status = assertResult;
+    if (assertResult != ACU_TEST_PASSED) {
+        longjmp(environment->assertBuf, ACU_TEST_ABORTED);
+    }
 }

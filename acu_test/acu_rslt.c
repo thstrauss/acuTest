@@ -30,10 +30,10 @@ enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedresult, enu
 }
 
 void acuTest_resultDestroy(ACU_Result* result) {
-    if (result->message != NULL) {
+    if (result->message) {
         free(result->message);
     }
-    if (result->file != NULL) {
+    if (result->file) {
         free(result->file);
     }
     free(result);
