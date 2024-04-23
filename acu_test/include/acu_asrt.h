@@ -30,9 +30,9 @@
 #include <tryctch.h>
 
 typedef struct ACU_AssertParameter_ {
-    void* actual;
-    void* expected;
-    char* message;
+    const void* actual;
+    const void* expected;
+    const char* message;
 } ACU_AssertParameter;
 
 typedef enum ACU_TestResult(assertFunc)(const struct ACU_AssertParameter_* parameter);
@@ -58,8 +58,8 @@ static enum ACU_TestResult acu_##type##op(const ACU_AssertParameter* parameter) 
     return *(type*)parameter->actual opcode *(type*)parameter->expected; \
 } \
 static void acu_##type##op##FormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) { \
-char formatBuffer[128]; memset(formatBuffer, 0, 128); \
-acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "actual value %s not %%s to value %s: %%s", #format, #format); \
+char formatBuffer[128];\
+acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "actual value %s not %%s to %s: %%s", #format, #format); \
 acu_sprintf_s(buffer, bufferSize, formatBuffer, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
 UNUSED(result); \
 } \
@@ -154,45 +154,49 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 
 #define ACU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
             ACU_PrepareParameter(type, actualValue, expectedValue, messageValue) \
-            if (environment->result->file != NULL) free(environment->result->file); \
-            environment->result->file = acu_estrdup(__FILE__); \
-            environment->result->line = __LINE__; \
             acu_assert_##type##op(environment, &parameter); \
-            };
+            if (environment->result->status != ACU_TEST_PASSED) { \
+                if (environment->result->file == NULL) environment->result->file = acu_estrdup(__FILE__); \
+                environment->result->line = __LINE__; \
+            } \
+        };
 
 #define ACU_assert_ptrEqual(environment, actualValue, expectedValue, messageValue) {\
             ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue) \
-            if (environment->result->file != NULL) free(environment->result->file); \
-            environment->result->file = acu_estrdup(__FILE__); \
-            environment->result->line = __LINE__; \
             acu_assert(environment, acu_equalPtr, acu_equalPtrFormatMessage, &parameter); \
+            if (environment->result->status != ACU_TEST_PASSED) { \
+                if (environment->result->file == NULL) environment->result->file = acu_estrdup(__FILE__); \
+                environment->result->line = __LINE__; \
+            } \
             };
 
 #define ACU_assert_ptrNotEqual(environment, actualValue, expectedValue, messageValue) {\
             ACU_PrepareParameter(void*, actualValue, expectedValue, messageValue) \
-            if (environment->result->file != NULL) free(environment->result->file); \
-            environment->result->file = acu_estrdup(__FILE__); \
-            environment->result->line = __LINE__; \
             acu_assert(environment, acu_notEqualPtr, acu_notEqualPtrFormatMessage, &parameter); \
+            if (environment->result->status != ACU_TEST_PASSED) { \
+                if (environment->result->file == NULL) environment->result->file = acu_estrdup(__FILE__); \
+                environment->result->line = __LINE__; \
+            } \
             };
 
 #define __ACU_assert_str(environment, actualValue, expectedValue, messageValue, assertFunc) {\
-            char* __actual = NULL; \
-            char* __expected = NULL; \
+            char* __actual; \
+            char* __expected; \
             TRY_CTX(_ACU_assert_str_) \
                 ACU_AssertParameter parameter; \
                 __actual = actualValue != NULL ? acu_estrdup(actualValue) : NULL; \
                 __expected = expectedValue != NULL ? acu_estrdup(expectedValue) : NULL; \
                 parameter.actual = __actual; \
                 parameter.expected = __expected; \
-                if (environment->result->file != NULL) free(environment->result->file); \
-                environment->result->file = acu_estrdup(__FILE__); \
-                environment->result->line = __LINE__; \
                 parameter.message = (messageValue); \
                 acu_assert(environment, assertFunc, assertFunc##FormatMessage, &parameter); \
+                if (environment->result->status != ACU_TEST_PASSED) { \
+                    if (environment->result->file == NULL) environment->result->file = acu_estrdup(__FILE__); \
+                    environment->result->line = __LINE__; \
+                } \
             FINALLY \
-                free(__expected); \
-                free(__actual); \
+                if (__expected != NULL ) free(__expected); \
+                if (__actual != NULL) free(__actual); \
             ETRY; \
             };
 

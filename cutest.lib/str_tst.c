@@ -86,7 +86,7 @@ static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
     }
     TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqual"); \
-        ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrEqual"); \
+        ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrEqual"); \
     FINALLY
         if (resultBuf->message != NULL) {
             free(resultBuf->message);
@@ -106,15 +106,13 @@ static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     resultBuf->file = NULL; 
     
     if (!setjmp(testEnvironment->assertBuf)) {
-        void* ptr1 = (void*)123;
-        void* ptr2 = (void*)124;
-        ACU_assert_ptrNotEqual(testEnvironment, ptr1, ptr2, "ptrNotEqual");
-        UNUSED(ptr1);
-        UNUSED(ptr2);
+        int i;
+        for (i = 0; i < 10000; i++)
+        ACU_assert_strNotEqual(testEnvironment, "ptr1", "ptr2", "strNotEqual");
     }
     TRY
-        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqual"); \
-        ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrNotEqual"); \
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strNotEqual"); \
+        ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strNotEqual"); \
     FINALLY
         if (resultBuf->message != NULL) {
             free(resultBuf->message);
@@ -134,15 +132,11 @@ static void strNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     resultBuf->file = NULL; 
     
     if (!setjmp(testEnvironment->assertBuf)) {
-        void* ptr1 = (void*)123;
-        void* ptr2 = NULL;
-        ACU_assert_ptrNotEqual(testEnvironment, ptr1, ptr2, "ptrNotEqualNull");
-        UNUSED(ptr1);
-        UNUSED(ptr2);
+        ACU_assert_strNotEqual(testEnvironment, NULL, NULL, "ptrNotEqualNull");
     }
     TRY
-        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqualNull"); \
-        ACU_assert_strEqual(environment, testEnvironment->result->message, "", "ptrNotEqualNull"); \
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "ptrNotEqualNull"); \
+        ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_notEqualStr", "ptrNotEqualNull"); \
     FINALLY
         if (resultBuf->message != NULL) {
             free(resultBuf->message);

@@ -48,16 +48,16 @@ typedef struct PH_
 
 static void* relocate(const void* code, const unsigned char* relocData)
 {
-    unsigned char *	lpText = (unsigned char*) code;
     unsigned char *	lpRelocTable = (unsigned char*) relocData;
-    unsigned long lOffset = *(unsigned long*) lpRelocTable;
+    register unsigned long lOffset = *(unsigned long*) lpRelocTable;
+    unsigned char *	lpText = (unsigned char*) code;
     
     lpRelocTable += sizeof(unsigned long*);
 
     if( lOffset ) {
         *(unsigned long*)&lpText[ lOffset ] += (unsigned long)lpText;
         while( *lpRelocTable ) {
-        	unsigned char lFix = *lpRelocTable++;
+        	register unsigned char lFix = *lpRelocTable++;
             if( 1 == lFix ) {
                 lOffset += 254;
             } else {

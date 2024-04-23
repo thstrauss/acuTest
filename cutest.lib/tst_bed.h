@@ -41,7 +41,7 @@
     } \
     TRY \
     ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, #type#operation#postfix); \
-    ACU_assert_strEqual(environment, testEnvironment->result->message, "", #type#operation#postfix); \
+    ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, #type#operation#postfix); \
     FINALLY \
     acuTest_resultDestroy(resultBuf); \
     free(testEnvironment); \

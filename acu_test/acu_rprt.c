@@ -39,11 +39,11 @@ void* acu_report(const ACU_TestCase* testCase, void* context) {
     static const char* suiteName = NULL;
     if (suiteName == NULL || strcmp(suiteName, testCase->fixture->suite->name) != 0) {
         suiteName = testCase->fixture->suite->name;
-        fprintf(stdout, "%s tooks %lf ms\n\r", suiteName, (testCase->fixture->suite->end - testCase->fixture->suite->start)*1000.0/CLK_TCK);
+        fprintf(stdout, "%s tooks %ld ms\n\r", suiteName, ((testCase->fixture->suite->end - testCase->fixture->suite->start)*1000)/CLK_TCK);
     }
     if (fixtureName == NULL || strcmp(fixtureName, testCase->fixture->name) != 0) {
         fixtureName = testCase->fixture->name;
-        fprintf(stdout, "  %s\n\r", fixtureName);
+        fprintf(stdout, "  %s tooks %ld ms\n\r", fixtureName, ((testCase->fixture->end - testCase->fixture->start) * 1000) / CLK_TCK);
     }
     if (testCase->result != NULL && testCase->result->status != ACU_TEST_PASSED) {
         fprintf(stdout, "    %s: %s\n\r      %s:%d:\n\r      %s\n\r", testCase->name, testCase->result->status == ACU_TEST_PASSED ? "passed" : "failed", testCase->result->file, testCase->result->line, testCase->result->message);
