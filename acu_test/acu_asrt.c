@@ -81,16 +81,13 @@ void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, enum ACU_TestRes
     }
 }
 
-void acu_assert(ACU_ExecuteEnv* environment,
-    assertFunc assert,
-    formatMessageFunc formatMessage,
-    const ACU_AssertParameter* parameter) {
-    enum ACU_TestResult assertResult = assert(parameter);
+void acu_assert(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
+    enum ACU_TestResult assertResult = parameter->assert(parameter);
 
     char* buffer;
-    if (assertResult != ACU_TEST_PASSED && formatMessage) {
+    if (assertResult != ACU_TEST_PASSED) {
         buffer = acu_emalloc(1024);
-        formatMessage(buffer, 1024, assertResult, parameter);
+        parameter->formatMessage(buffer, 1024, assertResult, parameter);
     }
     else {
         buffer = NULL;
