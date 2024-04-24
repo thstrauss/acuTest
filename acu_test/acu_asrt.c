@@ -32,21 +32,21 @@
 #undef __ACU_EMIT_ASSERT_FUNCS__
 
 enum ACU_TestResult acu_equalPtr(const ACU_AssertParameter* parameter) {
-    return *(void**) parameter->actual == *(void**) parameter->expected;
+    return parameter->actual == parameter->expected;
 }
 
 void acu_equalPtrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) {
-    acu_sprintf_s(buffer, bufferSize, "%actual value %p not equal to %p: %s", *(void**)parameter->actual, *(void**)parameter->expected, parameter->message);
+    acu_sprintf_s(buffer, bufferSize, "%actual value %p not equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
     UNUSED(result);
 }
 
 enum ACU_TestResult acu_notEqualPtr(const ACU_AssertParameter* parameter) {
-    return *(void**)parameter->actual != *(void**)parameter->expected;
+    return parameter->actual != parameter->expected;
 }
 
 void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) {
     UNUSED(result);
-    acu_sprintf_s(buffer, bufferSize, "actual value %p equal to %p: %s", *(void**)parameter->actual, *(void**)parameter->expected, parameter->message);
+    acu_sprintf_s(buffer, bufferSize, "actual value %p equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
 }
 
 enum ACU_TestResult acu_equalStr(const ACU_AssertParameter* parameter) {

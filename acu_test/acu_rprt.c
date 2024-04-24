@@ -45,7 +45,7 @@ void* acu_report(const ACU_TestCase* testCase, void* context) {
         fixtureName = testCase->fixture->name;
         fprintf(stdout, "  %s tooks %ld ms\n\r", fixtureName, ((testCase->fixture->end - testCase->fixture->start) * 1000) / CLK_TCK);
     }
-    if (!testCase->result && testCase->result->status != ACU_TEST_PASSED) {
+    if (testCase->result && testCase->result->status != ACU_TEST_PASSED) {
         fprintf(stdout, "    %s: %s\n\r      %s:%d:\n\r      %s\n\r", testCase->name, testCase->result->status == ACU_TEST_PASSED ? "passed" : "failed", testCase->result->file, testCase->result->line, testCase->result->message);
     }
     UNUSED(context);
@@ -56,7 +56,7 @@ void* acu_reportSummary(const ACU_TestCase* testCase, void* context)
 {
     ACU_Summary* summary = (ACU_Summary*) context;
     summary->totalTestCases++;
-    if (testCase->result->status == ACU_TEST_FAILED) {
+    if (testCase->result && testCase->result->status == ACU_TEST_FAILED) {
         summary->failedTestCases++;
     }
     return context;
