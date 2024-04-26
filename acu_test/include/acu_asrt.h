@@ -30,14 +30,15 @@
 #include <tryctch.h>
 
 typedef enum ACU_TestResult(assertFunc)(const struct ACU_AssertParameter_* parameter);
-typedef void (formatMessageFunc)(char* buffer, int bufferSize, enum ACU_TestResult result, const struct ACU_AssertParameter_* parameter);
+typedef char* (formatMessageFunc)(const struct ACU_AssertParameter_* parameter);
 
 typedef struct ACU_AssertParameter_ {
+    assertFunc* assert;
+    formatMessageFunc* formatFailedMessage;
+    formatMessageFunc* formatErrorMessage;
     const void* actual;
     const void* expected;
     const char* message;
-    assertFunc* assert;
-    formatMessageFunc* formatMessage;
 } ACU_AssertParameter;
 
 __EXPORT void acu_assert(
@@ -48,25 +49,26 @@ __EXPORT void acu_assert(
             type __actual = (actualValue); \
             type __expected = (expectedValue); \
             ACU_AssertParameter parameter; \
+            parameter.formatErrorMessage = NULL; \
             parameter.actual = &__actual; \
             parameter.expected = &__expected; \
             parameter.message = (messageValue);
-            
+
 
 #ifdef __ACU_EMIT_ASSERT_FUNCS__
+#define STR(str) #str
 #define CREATE_ASSERT_FUNC(type, op, opcode, format) \
 static enum ACU_TestResult acu_##type##op(const ACU_AssertParameter* parameter) { \
     return *(type*)parameter->actual opcode *(type*)parameter->expected; \
 } \
-static void acu_##type##op##FormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) { \
-char formatBuffer[128];\
-acu_sprintf_s(formatBuffer, sizeof(formatBuffer), "actual value %s not %%s to %s: %%s", #format, #format); \
-acu_sprintf_s(buffer, bufferSize, formatBuffer, *(const type*)parameter->actual, #opcode, *(const type*)parameter->expected, parameter->message); \
-UNUSED(result); \
+static char* acu_##type##op##FormatMessage(const ACU_AssertParameter* parameter) { \
+    char* buffer = acu_emalloc(256); \
+    acu_sprintf_s(buffer, 256, STR(actual value format not opcode to format: %s), *(const type*)parameter->actual, *(const type*)parameter->expected, parameter->message); \
+    return buffer; \
 } \
 __EXPORT void acu_assert_##type##op(ACU_ExecuteEnv* environment, ACU_AssertParameter* parameter) { \
     parameter->assert = acu_##type##op; \
-    parameter->formatMessage = acu_##type##op##FormatMessage; \
+    parameter->formatFailedMessage = acu_##type##op##FormatMessage; \
     acu_assert(environment, parameter); \
 }
 #else
@@ -170,7 +172,8 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
     parameter.expected = expectedValue; \
     parameter.message = (messageValue); \
     parameter.assert = acu_equalPtr; \
-    parameter.formatMessage = acu_equalPtrFormatMessage; \
+    parameter.formatFailedMessage = acu_notEqualPtrFormatMessage; \
+    parameter.formatErrorMessage = NULL; \
     acu_assert(environment, &parameter); \
     if (environment->result->status != ACU_TEST_PASSED) { \
         if (environment->result->file == NULL) environment->result->file = acu_estrdup(__FILE__); \
@@ -179,12 +182,13 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 };
 
 #define ACU_assert_ptrNotEqual(environment, actualValue, expectedValue, messageValue) {\
-ACU_AssertParameter parameter; \
+    ACU_AssertParameter parameter; \
     parameter.actual = actualValue; \
     parameter.expected = expectedValue; \
     parameter.message = (messageValue); \
     parameter.assert = acu_notEqualPtr; \
-    parameter.formatMessage = acu_notEqualPtrFormatMessage; \
+    parameter.formatFailedMessage = acu_notEqualPtrFormatMessage; \
+    parameter.formatErrorMessage = NULL; \
     acu_assert(environment, &parameter); \
     if (environment->result->status != ACU_TEST_PASSED) { \
         if (environment->result->file == NULL) environment->result->file = acu_estrdup(__FILE__); \
@@ -198,7 +202,8 @@ ACU_AssertParameter parameter; \
     parameter.expected = expectedValue; \
     parameter.message = (messageValue); \
     parameter.assert = assertFunc; \
-    parameter.formatMessage = assertFunc##FormatMessage; \
+    parameter.formatFailedMessage = assertFunc##FailedFormatMessage; \
+    parameter.formatErrorMessage = assertFunc##ErrorFormatMessage; \
     acu_assert(environment, &parameter); \
     if (environment->result->status != ACU_TEST_PASSED) { \
         if (!environment->result->file) environment->result->file = acu_estrdup(__FILE__); \
@@ -215,15 +220,17 @@ ACU_AssertParameter parameter; \
 };
 
 __EXPORT enum ACU_TestResult acu_equalPtr(const ACU_AssertParameter* parameter);
-__EXPORT void acu_equalPtrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter);
+__EXPORT char* acu_equalPtrFormatMessage(const ACU_AssertParameter* parameter);
 
 __EXPORT enum ACU_TestResult acu_notEqualPtr(const ACU_AssertParameter* parameter);
-__EXPORT void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter);
+__EXPORT char* acu_notEqualPtrFormatMessage(const ACU_AssertParameter* parameter);
 
 __EXPORT enum ACU_TestResult acu_equalStr(const ACU_AssertParameter* parameter);
-__EXPORT void acu_equalStrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter);
+__EXPORT char* acu_equalStrFailedFormatMessage(const ACU_AssertParameter* parameter);
+__EXPORT char* acu_equalStrErrorFormatMessage(const ACU_AssertParameter* parameter);
 
 __EXPORT enum ACU_TestResult acu_notEqualStr(const ACU_AssertParameter* parameter);
-__EXPORT void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter);
+__EXPORT char* acu_notEqualStrFailedFormatMessage(const ACU_AssertParameter* parameter);
+__EXPORT char* acu_notEqualStrErrorFormatMessage(const ACU_AssertParameter* parameter);
 
 #endif

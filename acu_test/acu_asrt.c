@@ -35,66 +35,78 @@ enum ACU_TestResult acu_equalPtr(const ACU_AssertParameter* parameter) {
     return parameter->actual == parameter->expected;
 }
 
-void acu_equalPtrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) {
-    acu_sprintf_s(buffer, bufferSize, "%actual value %p not equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
-    UNUSED(result);
+char* acu_equalPtrFormatMessage(const ACU_AssertParameter* parameter) {
+    char* buffer = acu_emalloc(256);
+    acu_sprintf_s(buffer, 256, "%actual value %p not equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
+    return buffer;
 }
 
 enum ACU_TestResult acu_notEqualPtr(const ACU_AssertParameter* parameter) {
     return parameter->actual != parameter->expected;
 }
 
-void acu_notEqualPtrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) {
-    UNUSED(result);
-    acu_sprintf_s(buffer, bufferSize, "actual value %p equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
+char* acu_notEqualPtrFormatMessage(const ACU_AssertParameter* parameter) {
+    char* buffer = acu_emalloc(256);
+    acu_sprintf_s(buffer, 256, "actual value %p equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
+    return buffer;
 }
 
 enum ACU_TestResult acu_equalStr(const ACU_AssertParameter* parameter) {
-    if (parameter->actual == NULL || parameter->expected == NULL) {
+    if (!parameter->actual || !parameter->expected) {
         return ACU_TEST_ERROR;
     }
     return strcmp((const char*)(parameter->actual), (const char*)(parameter->expected)) == 0;
 }
 
-void acu_equalStrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) {
-    if (result == ACU_TEST_FAILED) {
-        acu_sprintf_s(buffer, bufferSize, "actual value \"%s\" not equal to \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
-    }
-    else if (result == ACU_TEST_ERROR) {
-        acu_sprintf_s(buffer, bufferSize, "Error in: %s", "acu_equalStr");
-    }
+char* acu_equalStrFailedFormatMessage(const ACU_AssertParameter* parameter) {
+    char* buffer = acu_emalloc(1024);
+    acu_sprintf_s(buffer, 1024, "actual value \"%s\" not equal to \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
+    return buffer;
+}
+
+char* acu_equalStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
+    char* buffer = acu_emalloc(256);
+    acu_sprintf_s(buffer, 256, "Error in: %s", "acu_equalStr");
+    UNUSED(parameter);
+    return buffer;
 }
 
 enum ACU_TestResult acu_notEqualStr(const ACU_AssertParameter* parameter) {
-    if (parameter->actual == NULL || parameter->expected == NULL) {
+    if (!parameter->actual || !parameter->expected) {
         return ACU_TEST_ERROR;
     }
     return strcmp((const char*)(parameter->actual), (const char*)(parameter->expected)) != 0;
 }
 
-void acu_notEqualStrFormatMessage(char* buffer, int bufferSize, enum ACU_TestResult result, const ACU_AssertParameter* parameter) {
-    if (result == ACU_TEST_FAILED) {
-        acu_sprintf_s(buffer, bufferSize, "actual value \"%s\" equal to \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
-    }
-    else if (result == ACU_TEST_ERROR) {
-        acu_sprintf_s(buffer, bufferSize, "Error in: %s", "acu_notEqualStr");
+char* acu_notEqualStrFailedFormatMessage(const ACU_AssertParameter* parameter) {
+    char* buffer = acu_emalloc(1024); 
+    acu_sprintf_s(buffer, 1024, "actual value \"%s\" equal to \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
+    return buffer;
+}
+
+char* acu_notEqualStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
+    char* buffer = acu_emalloc(256); 
+    acu_sprintf_s(buffer, 256, "Error in: %s", "acu_notEqualStr");
+    UNUSED(parameter);
+    return buffer;
+}
+
+static char* acu_formatMessage(enum ACU_TestResult assertResult, const ACU_AssertParameter* parameter) {
+    if (assertResult == ACU_TEST_FAILED) {
+        return parameter->formatFailedMessage(parameter);
+    } else if (parameter->formatErrorMessage) {
+        return parameter->formatErrorMessage(parameter);
+    } else {
+       return acu_estrdup("");
     }
 }
 
 void acu_assert(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
     enum ACU_TestResult assertResult = parameter->assert(parameter);
-
-    char* buffer;
-    if (assertResult != ACU_TEST_PASSED) {
-        buffer = acu_emalloc(1024);
-        parameter->formatMessage(buffer, 1024, assertResult, parameter);
-    }
-    else {
-        buffer = NULL;
-    }
-    environment->result->message = buffer;
+    
     environment->result->status = assertResult;
     if (assertResult != ACU_TEST_PASSED) {
+        environment->result->message = acu_formatMessage(assertResult, parameter);
         longjmp(environment->assertBuf, ACU_TEST_ABORTED);
     }
 }
