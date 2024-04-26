@@ -112,17 +112,27 @@ void* acu_emalloc(size_t size) {
 
 int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
 {
-    int result = 0;
+    int result;
     va_list args;
     va_start(args, format);
 #ifdef __TOS__
-    vsprintf(buffer, format, args);
+    result = vsprintf(buffer, format, args);
     UNUSED(sizeOfBuffer);
 #else
     result = vsprintf_s(buffer, sizeOfBuffer, format, args);
 #endif
     va_end(args);
     return result;
+}
+
+int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args)
+{
+#ifdef __TOS__
+    UNUSED(sizeOfBuffer);
+    return vsprintf(buffer, format, args);
+#else
+    return vsprintf_s(buffer, sizeOfBuffer, format, args);
+#endif
 }
 
 void __exit(int status) {

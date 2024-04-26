@@ -23,6 +23,7 @@
 #ifndef _ACU_UTILS_H_
 #define _ACU_UTILS_H_
 
+#include <stdarg.h>
 #include <acu_cmmn.h>
 
 #define UNUSED(x) (void)(x);
@@ -35,6 +36,7 @@ __EXPORT char* acu_progName(void);
 __EXPORT void acu_setProgName(const char* progName);
 
 __EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
+__EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
 
 void __exit(int status);
 

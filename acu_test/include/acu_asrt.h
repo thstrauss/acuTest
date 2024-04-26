@@ -45,6 +45,8 @@ __EXPORT void acu_assert(
     ACU_ExecuteEnv* environment,
     const ACU_AssertParameter* parameter);
 
+__EXPORT char* acu_sformatMessage(const char* format, ...);
+
 #define ACU_PrepareParameter(type, actualValue, expectedValue, messageValue) \
             type __actual = (actualValue); \
             type __expected = (expectedValue); \
@@ -62,9 +64,7 @@ static enum ACU_TestResult acu_##type##op(const ACU_AssertParameter* parameter) 
     return *(type*)parameter->actual opcode *(type*)parameter->expected; \
 } \
 static char* acu_##type##op##FormatMessage(const ACU_AssertParameter* parameter) { \
-    char* buffer = acu_emalloc(256); \
-    acu_sprintf_s(buffer, 256, STR(actual value format not opcode to format: %s), *(const type*)parameter->actual, *(const type*)parameter->expected, parameter->message); \
-    return buffer; \
+    return acu_sformatMessage(STR(actual value format not opcode to format: %s), *(const type*)parameter->actual, *(const type*)parameter->expected, parameter->message); \
 } \
 __EXPORT void acu_assert_##type##op(ACU_ExecuteEnv* environment, ACU_AssertParameter* parameter) { \
     parameter->assert = acu_##type##op; \
@@ -73,7 +73,7 @@ __EXPORT void acu_assert_##type##op(ACU_ExecuteEnv* environment, ACU_AssertParam
 }
 #else
 #define CREATE_ASSERT_FUNC(type, op, opCode, format) \
-void acu_assert_##type##op(ACU_ExecuteEnv* environment, ACU_AssertParameter* parameter);
+void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter);
 #endif
 
 typedef signed char signedChar;

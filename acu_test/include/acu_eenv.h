@@ -28,8 +28,8 @@
 struct ACU_Result_;
 
 typedef struct ACU_ExecuteEnv_ {
-    jmp_buf assertBuf;
     struct ACU_Result_* result;
+    jmp_buf assertBuf;
 } ACU_ExecuteEnv;
 
 #endif

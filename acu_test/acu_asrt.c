@@ -19,8 +19,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <string.h>
+#include <stdarg.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <acu_cmmn.h>
 #include <acu_eenv.h>
@@ -103,10 +104,20 @@ static char* acu_formatMessage(enum ACU_TestResult assertResult, const ACU_Asser
 
 void acu_assert(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
     enum ACU_TestResult assertResult = parameter->assert(parameter);
-    
+
     environment->result->status = assertResult;
     if (assertResult != ACU_TEST_PASSED) {
         environment->result->message = acu_formatMessage(assertResult, parameter);
         longjmp(environment->assertBuf, ACU_TEST_ABORTED);
     }
+}
+
+char* acu_sformatMessage(const char* format, ...)
+{
+    char* buffer = acu_emalloc(256); 
+    va_list args;
+    va_start(args, format);
+    acu_vsprintf_s(buffer, 256, format, args);
+    va_end(args);
+    return buffer; 
 }
