@@ -130,8 +130,6 @@ static void* load_and_reloc(long handle, long fsize, const PH* programHeader)
     return relocatedTextAndData;
 }
 
-typedef ACU_Entry* ACU_init(void);
-
 static ACU_init* load_cu(const char* cu_name)
 {
     void* addr = NULL;
@@ -182,8 +180,6 @@ void cup_unload(ACU_Entry* entry) {
 #else
 
 #include <windows.h>
-
-typedef __EXPORT  ACU_Entry* (ACU_init)(void);
 
 ACU_Entry* cup_load(const char* cu_name) {
     wchar_t  name[256];

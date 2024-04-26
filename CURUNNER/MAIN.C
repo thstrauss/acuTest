@@ -32,18 +32,18 @@ static void printHelp(void) {
 } 
 
 static int executeEntry(const char* cupName, const ACU_Summary* summary) {
-	int returnValue;
-	ACU_Entry* entry = cup_load(cupName);
+    int returnValue;
+    ACU_Entry* entry = cup_load(cupName);
 
     if (entry == NULL) {
-       	acu_eprintf("Could not load: %s", cupName);
-       	return 2;
+        acu_eprintf("Could not load: %s", cupName);
+        return 2;
     }
 
     returnValue = acu_suiteExecute(entry->suite, acu_progress);
     fprintf(stdout, "\n\r");
-   	acu_suiteReport(entry->suite, NULL, acu_report);
-    acu_suiteReport(entry->suite, (void*) summary, acu_reportSummary);
+    acu_suiteReport(entry->suite, NULL, acu_report);
+    acu_suiteReport(entry->suite, (void*)summary, acu_reportSummary);
 
     cup_unload(entry);
     return returnValue;
@@ -51,39 +51,39 @@ static int executeEntry(const char* cupName, const ACU_Summary* summary) {
 
 static int executeEntries(const char** testFiles, const ACU_Summary* summary) {
     int returnValue = ACU_TEST_PASSED;
-	int fileIndex = 0;
-	while (testFiles[fileIndex] != NULL) {
-		int retValue = executeEntry(testFiles[fileIndex++], summary);
-		returnValue = returnValue | retValue;
-	}
-	return returnValue;
+    int fileIndex = 0;
+    while (testFiles[fileIndex] != NULL) {
+        int retValue = executeEntry(testFiles[fileIndex++], summary);
+        returnValue = returnValue | retValue;
+    }
+    return returnValue;
 }
 
-int main(int argc, const char *argv[]) {
+int main(int argc, const char* argv[]) {
     int returnValue;
     ACU_Summary summary = { 0,0 };
     const char** testFiles = NULL;
-    
+
     if (argc < 2) {
-    	printHelp();
-    }
-    
-    if (argc == 2) {
-    	testFiles = acu_emalloc(sizeof(char*)*2);
-    	memset(testFiles, 0, sizeof(char*)*2);
-    	
-        testFiles[0] = argv[1];
-    } else if (argc == 3) {
-    	if (strcmp(argv[1], "--path") == 0) {
-    	} 
+        printHelp();
     }
 
-	returnValue = executeEntries(testFiles, &summary) == ACU_TEST_PASSED ? 0 : 2;
-	
-	if (testFiles != NULL) {
-		free(testFiles);
-	}
-    
+    if (argc == 2) {
+        testFiles = acu_emalloc(sizeof(char*) * 2);
+        memset(testFiles, 0, sizeof(char*) * 2);
+
+        testFiles[0] = argv[1];
+    } else if (argc == 3) {
+        if (strcmp(argv[1], "--path") == 0) {
+        }
+    }
+
+    returnValue = executeEntries(testFiles, &summary) == ACU_TEST_PASSED ? 0 : 2;
+
+    if (testFiles != NULL) {
+        free(testFiles);
+    }
+
     fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
 
     return returnValue;

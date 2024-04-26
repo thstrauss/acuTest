@@ -37,6 +37,10 @@ typedef struct ACU_Entry_ {
 #endif
 } ACU_Entry;
 
+typedef __EXPORT  ACU_Entry* (ACU_initFunc)(void);
+
+typedef ACU_Entry* ACU_init(void);
+
 __EXPORT ACU_Entry* acu_init(void);
 
 __EXPORT ACU_Entry* cup_load(const char* cu_name);
