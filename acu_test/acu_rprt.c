@@ -30,11 +30,11 @@
 #include <acu_list.h>
 #include <acu_util.h>
 
-void acu_progress(const ACU_TestCase* testCase) {
+void acu_progress(const ACU_TestCase* testCase, void* pregressContext) {
     fprintf(stdout, "%s", testCase->result->status == ACU_TEST_FAILED ? "F" : testCase->result->status == ACU_TEST_ERROR ? "E" : ".");
 }
 
-void* acu_report(const ACU_TestCase* testCase, void* context) {
+void acu_report(const ACU_TestCase* testCase, void* context) {
     static const char* fixtureName = NULL;
     static const char* suiteName = NULL;
     if (!suiteName || strcmp(suiteName, testCase->fixture->suite->name) != 0) {
@@ -49,16 +49,14 @@ void* acu_report(const ACU_TestCase* testCase, void* context) {
         fprintf(stdout, "    %s: %s\n\r      %s:%d:\n\r      %s\n\r", testCase->name, testCase->result->status == ACU_TEST_PASSED ? "passed" : "failed", testCase->result->file, testCase->result->line, testCase->result->message);
     }
     UNUSED(context);
-    return NULL;
 }
 
-void* acu_reportSummary(const ACU_TestCase* testCase, void* context)
+void acu_reportSummary(const ACU_TestCase* testCase, void* context)
 {
     ACU_Summary* summary = (ACU_Summary*) context;
     summary->totalTestCases++;
     if (testCase->result && testCase->result->status == ACU_TEST_FAILED) {
         summary->failedTestCases++;
     }
-    return context;
 }
 

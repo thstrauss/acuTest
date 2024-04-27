@@ -83,8 +83,9 @@ static ACU_Fixture* emptyFixture(void) {
     return fixture;
 }
 
-static void progress(const ACU_TestCase* testCase) {
+static void progress(const ACU_TestCase* testCase, void* progressContext) {
     printf("%s", testCase->result->status == ACU_TEST_PASSED ? "#" : "f");
+    UNUSED(progressContext);
 }
 
 static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
@@ -94,7 +95,7 @@ static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 
     acu_suiteInit(localSuite, "testSuite");
     acu_suiteAddFixture(localSuite, failingFixture());
-    result = acu_suiteExecute(localSuite, progress);
+    result = acu_suiteExecute(localSuite, progress, NULL);
     acu_suiteDestroy(localSuite);
 
     ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "assert2");
@@ -108,7 +109,7 @@ static void passingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 
     acu_suiteInit(localSuite, "testSuite");
     acu_suiteAddFixture(localSuite, passingFixture());
-    result = acu_suiteExecute(localSuite, progress);
+    result = acu_suiteExecute(localSuite, progress, NULL);
     acu_suiteDestroy(localSuite);
 
     ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "assert2");
@@ -122,7 +123,7 @@ static void emptyFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 
     acu_suiteInit(localSuite, "testSuite");
     acu_suiteAddFixture(localSuite, emptyFixture());
-    result = acu_suiteExecute(localSuite, progress);
+    result = acu_suiteExecute(localSuite, progress, NULL);
     acu_suiteDestroy(localSuite);
 
     ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "assert2");

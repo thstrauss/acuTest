@@ -34,7 +34,7 @@
 #include <acu_util.h>
 #include <acu_suit.h>
 
-static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_ProgressFunc progress) {
+static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_ProgressFunc progress, void* progressContext) {
     ACU_ExecuteEnv environment;
     ACU_Result* result = acuTest_resultMalloc();
 
@@ -58,7 +58,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
     } while (0);
     result->end = clock();
     testCase->result = result;
-    progress(testCase);
+    progress(testCase, progressContext);
     return result->status;
 }
 
@@ -97,27 +97,26 @@ void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
     fixture->context = context;
 }
 
-enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress) {
+enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress, void* progressContext) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
     enum ACU_TestResult result = ACU_TEST_PASSED;
     fixture->start = clock();
     while (testElement != NULL) {
-        result = acuTest_calcResult(result, acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress));
+        result = acuTest_calcResult(result, acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress, progressContext));
         testElement = acu_listNext(testElement);
     }
     fixture->end = clock();
     return result;
 }
 
-void* acu_fixtureReport(ACU_Fixture* fixture, void* context, ACU_ReportFunc report) {
+void acu_fixtureReport(ACU_Fixture* fixture, ACU_ReportFunc report, void* context) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
    
     while (testElement != NULL) {
         ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
-        context = report(testCase, context);
+        report(testCase, context);
         testElement = acu_listNext(testElement);
     }
-    return context;
 }
 
 ACU_Fixture* acu_fixtureMalloc(void)

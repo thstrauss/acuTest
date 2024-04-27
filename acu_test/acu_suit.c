@@ -45,30 +45,29 @@ void acu_suiteInit(ACU_Suite* suite, const char* name)
     suite->end = (clock_t)-1;
 }
 
-enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress)
+enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress, void* progressContext)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
     enum ACU_TestResult result = ACU_TEST_PASSED;
 
     suite->start = clock();
     while (fixtureElement) {
-        result = acuTest_calcResult(result, acu_fixtureExecute((ACU_Fixture*)fixtureElement->data, progress));
+        result = acuTest_calcResult(result, acu_fixtureExecute((ACU_Fixture*)fixtureElement->data, progress, progressContext));
         fixtureElement = acu_listNext(fixtureElement);
     }
     suite->end = clock();
     return result;
 }
 
-void* acu_suiteReport(const ACU_Suite* suite, void* context, ACU_ReportFunc report)
+void acu_suiteReport(const ACU_Suite* suite, ACU_ReportFunc report, void* context)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
 
     while (fixtureElement) {
         ACU_Fixture* fixture = (ACU_Fixture*)fixtureElement->data;
-        context = acu_fixtureReport(fixture, context, report);
+        acu_fixtureReport(fixture, report, context);
         fixtureElement = acu_listNext(fixtureElement);
     }
-    return context;
 }
 
 ACU_Suite* acu_suiteMalloc(void)
