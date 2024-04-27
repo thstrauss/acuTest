@@ -82,6 +82,7 @@ static void va_acu_printf(ACU_Level level, const char* format, va_list args) {
 #endif
     }
     fprintf(stderr, "\r\n");
+    fflush(stderr);
     if (level == acu_error) {
         exit(2);
     }

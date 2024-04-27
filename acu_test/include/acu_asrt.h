@@ -219,6 +219,10 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
     __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notEqualStr) \
 };
 
+#define ACU_assert_strContains(environment, actualValue, expectedValue, messageValue) {\
+    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_containsStr) \
+};
+
 __EXPORT enum ACU_TestResult acu_equalPtr(const ACU_AssertParameter* parameter);
 __EXPORT char* acu_equalPtrFormatMessage(const ACU_AssertParameter* parameter);
 
@@ -228,6 +232,10 @@ __EXPORT char* acu_notEqualPtrFormatMessage(const ACU_AssertParameter* parameter
 __EXPORT enum ACU_TestResult acu_equalStr(const ACU_AssertParameter* parameter);
 __EXPORT char* acu_equalStrFailedFormatMessage(const ACU_AssertParameter* parameter);
 __EXPORT char* acu_equalStrErrorFormatMessage(const ACU_AssertParameter* parameter);
+
+__EXPORT enum ACU_TestResult acu_containsStr(const ACU_AssertParameter* parameter);
+__EXPORT char* acu_containsStrFailedFormatMessage(const ACU_AssertParameter* parameter);
+__EXPORT char* acu_containsStrErrorFormatMessage(const ACU_AssertParameter* parameter);
 
 __EXPORT enum ACU_TestResult acu_notEqualStr(const ACU_AssertParameter* parameter);
 __EXPORT char* acu_notEqualStrFailedFormatMessage(const ACU_AssertParameter* parameter);

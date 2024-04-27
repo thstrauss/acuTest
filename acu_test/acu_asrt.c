@@ -19,8 +19,6 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <stdarg.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include <acu_cmmn.h>
@@ -49,6 +47,26 @@ enum ACU_TestResult acu_notEqualPtr(const ACU_AssertParameter* parameter) {
 char* acu_notEqualPtrFormatMessage(const ACU_AssertParameter* parameter) {
     char* buffer = acu_emalloc(256);
     acu_sprintf_s(buffer, 256, "actual value %p equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
+    return buffer;
+}
+
+enum ACU_TestResult acu_containsStr(const ACU_AssertParameter* parameter) {
+    if (!parameter->actual || !parameter->expected) {
+        return ACU_TEST_ERROR;
+    }
+    return (strstr((const char*)(parameter->actual), (const char*)(parameter->expected)) != NULL);
+}
+
+char* acu_containsStrFailedFormatMessage(const ACU_AssertParameter* parameter) {
+    char* buffer = acu_emalloc(1024);
+    acu_sprintf_s(buffer, 1024, "actual value \"%s\" not does not contain \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
+    return buffer;
+}
+
+char* acu_containsStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
+    char* buffer = acu_emalloc(256);
+    acu_sprintf_s(buffer, 256, "Error in: %s", "acu_containsStr");
+    UNUSED(parameter);
     return buffer;
 }
 
@@ -92,6 +110,16 @@ char* acu_notEqualStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
     return buffer;
 }
 
+char* acu_sformatMessage(const char* format, ...)
+{
+    char* buffer = acu_emalloc(256);
+    va_list args;
+    va_start(args, format);
+    acu_vsprintf_s(buffer, 256, format, args);
+    va_end(args);
+    return buffer;
+}
+
 static char* acu_formatMessage(enum ACU_TestResult assertResult, const ACU_AssertParameter* parameter) {
     if (assertResult == ACU_TEST_FAILED) {
         return parameter->formatFailedMessage(parameter);
@@ -110,14 +138,4 @@ void acu_assert(ACU_ExecuteEnv* environment, const ACU_AssertParameter* paramete
         environment->result->message = acu_formatMessage(assertResult, parameter);
         longjmp(environment->assertBuf, ACU_TEST_ABORTED);
     }
-}
-
-char* acu_sformatMessage(const char* format, ...)
-{
-    char* buffer = acu_emalloc(256); 
-    va_list args;
-    va_start(args, format);
-    acu_vsprintf_s(buffer, 256, format, args);
-    va_end(args);
-    return buffer; 
 }

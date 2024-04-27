@@ -20,8 +20,8 @@
  */
 
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
+
 #include <acu_rprt.h>
 #include <acu_cmmn.h>
 #include <acu_tcse.h>

@@ -19,8 +19,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <stdlib.h>
 #include <stddef.h>
+#include <stdlib.h>
+
 #include <acu_rslt.h>
 #include <acu_cmmn.h>
 #include <acu_util.h>
