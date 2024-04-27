@@ -42,8 +42,8 @@ static int executeEntry(const char* cupName, const ACU_Summary* summary) {
 
     returnValue = acu_suiteExecute(entry->suite, acu_progress, NULL);
     fprintf(stdout, "\n\r");
-    acu_suiteReport(entry->suite,acu_report, NULL);
-    acu_suiteReport(entry->suite, acu_reportSummary, (void*)summary);
+    acu_suiteAccept(entry->suite,acu_report, NULL);
+    acu_suiteAccept(entry->suite, acu_reportSummary, (void*)summary);
 
     cup_unload(entry);
     return returnValue;

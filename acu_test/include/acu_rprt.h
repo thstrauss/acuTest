@@ -27,7 +27,7 @@
 #include <acu_tcse.h>
 
 typedef void ACU_ProgressFunc(const ACU_TestCase* testCase, void* progressContext);
-typedef void ACU_ReportFunc(const ACU_TestCase* testCase, void* context);
+typedef void ACU_VisitorFunc(const ACU_TestCase* testCase, void* context);
 
 __EXPORT void acu_progress(const ACU_TestCase* testCase, void* progressContext);
 __EXPORT void acu_report(const ACU_TestCase* testCase, void* context);

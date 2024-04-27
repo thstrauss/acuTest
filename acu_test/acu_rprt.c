@@ -30,8 +30,9 @@
 #include <acu_list.h>
 #include <acu_util.h>
 
-void acu_progress(const ACU_TestCase* testCase, void* pregressContext) {
+void acu_progress(const ACU_TestCase* testCase, void* progressContext) {
     fprintf(stdout, "%s", testCase->result->status == ACU_TEST_FAILED ? "F" : testCase->result->status == ACU_TEST_ERROR ? "E" : ".");
+	UNUSED(progressContext);
 }
 
 void acu_report(const ACU_TestCase* testCase, void* context) {

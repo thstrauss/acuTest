@@ -52,7 +52,7 @@ __EXPORT void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
 
 __EXPORT enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress, void* progressContext);
 
-__EXPORT void acu_fixtureReport(ACU_Fixture* fixture, ACU_ReportFunc report, void* context);
+__EXPORT void acu_fixtureAccept(ACU_Fixture* fixture, ACU_VisitorFunc visitor, void* visitorContext);
 
 __EXPORT ACU_Fixture* acu_fixtureMalloc(void);
 

@@ -109,12 +109,12 @@ enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc pr
     return result;
 }
 
-void acu_fixtureReport(ACU_Fixture* fixture, ACU_ReportFunc report, void* context) {
+void acu_fixtureAccept(ACU_Fixture* fixture, ACU_VisitorFunc visitor, void* visitorContext) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
    
     while (testElement != NULL) {
         ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
-        report(testCase, context);
+        visitor(testCase, visitorContext);
         testElement = acu_listNext(testElement);
     }
 }
