@@ -54,7 +54,9 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
     } while (0);
     result->end = clock();
     testCase->result = result;
-    progress(testCase, progressContext);
+    if (progress) {
+        progress(testCase, progressContext);
+    }
     return result->status;
 }
 

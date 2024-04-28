@@ -10,7 +10,7 @@ int main(void) {
 	
 	acu_suiteAccept(entry->suite, acu_countTestCases, (void*) &count);
 	fprintf(stdout, "count = %d \n\r", count);
-	acu_suiteExecute(entry->suite, acu_progress, NULL);
+	acu_suiteExecute(entry->suite, (ACU_VisitorFunc*) NULL, NULL);
 	fprintf(stdout, "\n\r");
 	acu_suiteAccept(entry->suite, acu_report, NULL);
 	acu_suiteAccept(entry->suite, acu_reportSummary, &summary);
