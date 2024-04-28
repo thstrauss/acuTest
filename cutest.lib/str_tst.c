@@ -40,7 +40,7 @@ static void strEqualBothNull(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strEqualBothNull"); \
         ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_equalStr", "strEqualBothNull"); \
     FINALLY
-        if (resultBuf->message != NULL) {
+        if (resultBuf->message) {
             free(resultBuf->message);
         }
         free(resultBuf);
@@ -64,7 +64,7 @@ static void strEqualActualNull(ACU_ExecuteEnv* environment, const void* context)
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strEqualActualNull"); \
         ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_equalStr", "strEqualActualNull"); \
         FINALLY
-        if (resultBuf->message != NULL) {
+        if (resultBuf->message) {
             free(resultBuf->message);
         }
         free(resultBuf);
@@ -88,7 +88,7 @@ static void strContains(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strContains"); 
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strContains"); 
     FINALLY
-        if (resultBuf->message != NULL) {
+        if (resultBuf->message) {
             free(resultBuf->message);
         }
     free(resultBuf);
@@ -112,7 +112,7 @@ static void strNotContains(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strNotContains");
     ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strNotContains");
     FINALLY
-        if (resultBuf->message != NULL) {
+        if (resultBuf->message) {
             free(resultBuf->message);
         }
     free(resultBuf);
@@ -136,7 +136,7 @@ static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strEqual"); \
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strEqual"); \
     FINALLY
-        if (resultBuf->message != NULL) {
+        if (resultBuf->message) {
             free(resultBuf->message);
         }
         free(resultBuf);
@@ -162,7 +162,7 @@ static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strNotEqual"); \
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strNotEqual"); \
     FINALLY
-        if (resultBuf->message != NULL) {
+        if (resultBuf->message) {
             free(resultBuf->message);
         }
         free(resultBuf);
@@ -186,7 +186,7 @@ static void strNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strNotEqualNull"); \
         ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_notEqualStr", "strNotEqualNull"); \
     FINALLY
-        if (resultBuf->message != NULL) {
+        if (resultBuf->message) {
             free(resultBuf->message);
         }
         free(resultBuf);

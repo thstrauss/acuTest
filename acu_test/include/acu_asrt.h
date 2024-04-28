@@ -165,7 +165,7 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 #define ACU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
     ACU_PrepareParameter(type, actualValue, expectedValue, messageValue) \
     acu_assert_##type##op(environment, &parameter); \
-};
+}
 
 #define ACU_PtrPrepareParameter(type, actualValue, expectedValue, messageValue, __assertFunc) \
     ACU_AssertParameter parameter; \
@@ -181,12 +181,12 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 #define ACU_assert_ptrEqual(environment, actualValue, expectedValue, messageValue) {\
     ACU_PtrPrepareParameter(type, actualValue, expectedValue, messageValue, acu_equalPtr) \
     acu_assert(environment, &parameter); \
-};
+}
 
 #define ACU_assert_ptrNotEqual(environment, actualValue, expectedValue, messageValue) {\
     ACU_PtrPrepareParameter(type, actualValue, expectedValue, messageValue, acu_notEqualPtr) \
     acu_assert(environment, &parameter); \
-};
+}
 
 #define __ACU_assert_str(environment, actualValue, expectedValue, messageValue, assertFunc) { \
     ACU_AssertParameter parameter; \
@@ -199,23 +199,19 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
     parameter.fileName = __FILE__; \
     parameter.line = __LINE__; \
     acu_assert(environment, &parameter); \
-};
+}
 
-#define ACU_assert_strEqual(environment, actualValue, expectedValue, messageValue) {\
-    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_equalStr) \
-};
+#define ACU_assert_strEqual(environment, actualValue, expectedValue, messageValue) \
+    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_equalStr) 
 
-#define ACU_assert_strNotEqual(environment, actualValue, expectedValue, messageValue) {\
-    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notEqualStr) \
-};
+#define ACU_assert_strNotEqual(environment, actualValue, expectedValue, messageValue) \
+    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notEqualStr) 
 
-#define ACU_assert_strContains(environment, actualValue, expectedValue, messageValue) {\
-    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_containsStr) \
-};
+#define ACU_assert_strContains(environment, actualValue, expectedValue, messageValue) \
+    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_containsStr) 
 
-#define ACU_assert_strNotContains(environment, actualValue, expectedValue, messageValue) {\
-    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notContainsStr) \
-};
+#define ACU_assert_strNotContains(environment, actualValue, expectedValue, messageValue) \
+    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notContainsStr) 
 
 __EXPORT enum ACU_TestResult acu_equalPtr(const ACU_AssertParameter* parameter);
 __EXPORT char* acu_equalPtrFailedFormatMessage(const ACU_AssertParameter* parameter);

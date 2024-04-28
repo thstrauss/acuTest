@@ -43,7 +43,7 @@ static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqualNull"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrEqualNull"); \
     FINALLY
-    	if (resultBuf->message != NULL) {
+    	if (resultBuf->message) {
         	free(resultBuf->message);
     	}
     	free(resultBuf);
@@ -74,7 +74,7 @@ static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqual"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrEqual"); \
     FINALLY
-    	if (resultBuf->message != NULL) {
+    	if (resultBuf->message) {
         	free(resultBuf->message);
     	}
     	free(resultBuf);
@@ -102,7 +102,7 @@ static void ptrNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqual"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrNotEqual"); \
     FINALLY
-    	if (resultBuf->message != NULL) {
+    	if (resultBuf->message) {
         	free(resultBuf->message);
     	}
     	free(resultBuf);
@@ -130,7 +130,7 @@ static void ptrNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqualNull"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrNotEqualNull"); \
     FINALLY
-    	if (resultBuf->message != NULL) {
+    	if (resultBuf->message) {
         	free(resultBuf->message);
     	}
     	free(resultBuf);
