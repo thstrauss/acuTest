@@ -97,6 +97,30 @@ static void strContains(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
+static void strNotContains(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    testEnvironment->result = resultBuf;
+    resultBuf->status = ACU_TEST_PASSED;
+    resultBuf->message = NULL;
+    resultBuf->file = NULL;
+
+    if (!setjmp(testEnvironment->assertBuf)) {
+        ACU_assert_strNotContains(testEnvironment, "qwertyabc", "abcd", "strNotContains");
+    }
+    TRY
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strNotContains");
+    ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strNotContains");
+    FINALLY
+        if (resultBuf->message != NULL) {
+            free(resultBuf->message);
+        }
+    free(resultBuf);
+    free(testEnvironment);
+    ETRY;
+    UNUSED(context);
+}
+
 static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
@@ -177,6 +201,7 @@ ACU_Fixture* strFixture(void)
 
     acu_fixtureInit(fixture, "str tests");
     
+    acu_fixtureAddTestCase(fixture, "str Not Contains", strNotContains);
     acu_fixtureAddTestCase(fixture, "str Contains", strContains);
     acu_fixtureAddTestCase(fixture, "str Equal both NULL", strEqualBothNull);
     acu_fixtureAddTestCase(fixture, "str Equal actual NULL", strEqualActualNull);
