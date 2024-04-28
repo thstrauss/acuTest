@@ -52,6 +52,12 @@ void acu_report(const ACU_TestCase* testCase, void* context) {
     UNUSED(context);
 }
 
+void acu_countTestCases(const ACU_TestCase* testCase, void* context)
+{
+    (*(int*) context)++;
+    UNUSED(testCase);
+}
+
 void acu_reportSummary(const ACU_TestCase* testCase, void* context)
 {
     ACU_Summary* summary = (ACU_Summary*) context;

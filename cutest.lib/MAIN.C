@@ -6,7 +6,10 @@
 int main(void) {
 	ACU_Entry* entry = acu_init();
 	ACU_Summary summary = {0,0};
+	int count=0;
 	
+	acu_suiteAccept(entry->suite, acu_countTestCases, (void*) &count);
+	fprintf(stdout, "count = %d \n\r", count);
 	acu_suiteExecute(entry->suite, acu_progress, NULL);
 	fprintf(stdout, "\n\r");
 	acu_suiteAccept(entry->suite, acu_report, NULL);

@@ -35,8 +35,8 @@ enum ACU_TestResult acu_equalPtr(const ACU_AssertParameter* parameter) {
 }
 
 char* acu_equalPtrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(256);
-    acu_sprintf_s(buffer, 256, "%actual value %p not equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
+    char* buffer = acu_emalloc(128);
+    acu_sprintf_s(buffer, 128, "%actual value %p not equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
     return buffer;
 }
 
@@ -45,8 +45,8 @@ enum ACU_TestResult acu_notEqualPtr(const ACU_AssertParameter* parameter) {
 }
 
 char* acu_notEqualPtrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(256);
-    acu_sprintf_s(buffer, 256, "actual value %p equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
+    char* buffer = acu_emalloc(128);
+    acu_sprintf_s(buffer, 128, "actual value %p equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
     return buffer;
 }
 
@@ -57,15 +57,22 @@ enum ACU_TestResult acu_containsStr(const ACU_AssertParameter* parameter) {
     return (strstr((const char*)(parameter->actual), (const char*)(parameter->expected)) != NULL);
 }
 
+static size_t acu_assertAllocBuffer(char** buffer, const ACU_AssertParameter* parameter) {
+    size_t bufSize = 50 + strlen((const char*)parameter->actual) + strlen((const char*)parameter->expected) + strlen(parameter->message);
+    *buffer = acu_emalloc(bufSize);
+    return bufSize;
+}
+
 char* acu_containsStrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(1024);
-    acu_sprintf_s(buffer, 1024, "actual value \"%s\" does not contain \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
+    char* buffer;
+    size_t bufSize = acu_assertAllocBuffer(&buffer, parameter);
+    acu_sprintf_s(buffer, bufSize, "actual value \"%s\" does not contain \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
     return buffer;
 }
 
 char* acu_containsStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(256);
-    acu_sprintf_s(buffer, 256, "Error in: %s", "acu_containsStr");
+    char* buffer = acu_emalloc(50);
+    acu_sprintf_s(buffer, 50, "Error in: %s", "acu_containsStr");
     UNUSED(parameter);
     return buffer;
 }
@@ -78,18 +85,18 @@ enum ACU_TestResult acu_notContainsStr(const ACU_AssertParameter* parameter) {
 }
 
 char* acu_notContainsStrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(1024);
-    acu_sprintf_s(buffer, 1024, "actual value \"%s\" does contain \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
+    char* buffer;
+    size_t bufSize = acu_assertAllocBuffer(&buffer, parameter);
+    acu_sprintf_s(buffer, bufSize, "actual value \"%s\" does contain \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
     return buffer;
 }
 
 char* acu_notContainsStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(256);
-    acu_sprintf_s(buffer, 256, "Error in: %s", "acu_containsStr");
+    char* buffer = acu_emalloc(50);
+    acu_sprintf_s(buffer, 50, "Error in: %s", "acu_notContainsStr");
     UNUSED(parameter);
     return buffer;
 }
-
 
 enum ACU_TestResult acu_equalStr(const ACU_AssertParameter* parameter) {
     if (!parameter->actual || !parameter->expected) {
@@ -99,14 +106,15 @@ enum ACU_TestResult acu_equalStr(const ACU_AssertParameter* parameter) {
 }
 
 char* acu_equalStrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(1024);
-    acu_sprintf_s(buffer, 1024, "actual value \"%s\" not equal to \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
+    char* buffer;
+    size_t bufSize = acu_assertAllocBuffer(&buffer, parameter);
+    acu_sprintf_s(buffer, bufSize, "actual value \"%s\" not equal to \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
     return buffer;
 }
 
 char* acu_equalStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(256);
-    acu_sprintf_s(buffer, 256, "Error in: %s", "acu_equalStr");
+    char* buffer = acu_emalloc(50);
+    acu_sprintf_s(buffer, 50, "Error in: %s", "acu_equalStr");
     UNUSED(parameter);
     return buffer;
 }
@@ -119,14 +127,15 @@ enum ACU_TestResult acu_notEqualStr(const ACU_AssertParameter* parameter) {
 }
 
 char* acu_notEqualStrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(1024); 
-    acu_sprintf_s(buffer, 1024, "actual value \"%s\" equal to \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
+    char* buffer;
+    size_t bufSize = acu_assertAllocBuffer(&buffer, parameter);
+    acu_sprintf_s(buffer, bufSize, "actual value \"%s\" equal to \"%s\": %s", (const char*)parameter->actual, (const char*)parameter->expected, parameter->message);
     return buffer;
 }
 
 char* acu_notEqualStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(256); 
-    acu_sprintf_s(buffer, 256, "Error in: %s", "acu_notEqualStr");
+    char* buffer = acu_emalloc(50); 
+    acu_sprintf_s(buffer, 50, "Error in: %s", "acu_notEqualStr");
     UNUSED(parameter);
     return buffer;
 }
