@@ -30,6 +30,8 @@ pcstart.o
 main.c
 
 ..\acu_test\acu_test.prj
+..\cutest.lib\cutest.prj
+..\cutest.lib\cuempty.prj
 
 PCFLTLIB.LIB
 PCTOSLIB.LIB
