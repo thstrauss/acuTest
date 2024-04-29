@@ -19,47 +19,25 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-#ifndef _ACU_UTILS_H_
-#define _ACU_UTILS_H_
+#include "list_tst.h"
 
-#include <stdarg.h>
-#include "acu_cmmn.h"
+#include <acu_fxtr.h>
+#include <acu_asrt.h>
+#include <acu_util.h>
+#include <acu_suit.h>
 
-/*
-* Can be used to suppress unused variable warnings.
-*/
-#define UNUSED(x) (void)(x);
+static void emptyList(ACU_ExecuteEnv* environment, const void* context) {
+    UNUSED(environment);
+    UNUSED(context);
+}
 
-/*
-* Returns the program name.
-*/
-__EXPORT char* acu_progName(void);
+ACU_Fixture* listFixture(void)
+{
+    ACU_Fixture* fixture = acu_fixtureMalloc();
 
-/*
-* 
-*/
-__EXPORT void acu_setProgName(const char* progName);
+    acu_fixtureInit(fixture, "list tests");
 
-/*
-    Prints an error message to stderr and terminates the program. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_eprintf(const char* format, ...);
+    acu_fixtureAddTestCase(fixture, "emptyList", emptyList);
 
-/*
-    Prints a warning message to stderr. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_wprintf(const char* format, ...);
-__EXPORT char* acu_estrdup(const char* s);
-__EXPORT void* acu_emalloc(size_t n);
-
-__EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
-__EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
-
-#define SAFE_REF(ref) ((ref)?(ref):"NULL")
-
-void __exit(int status);
-
-#endif
+    return fixture;
+}

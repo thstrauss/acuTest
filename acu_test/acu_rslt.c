@@ -27,7 +27,7 @@
 #include "acu_util.h"
 
 enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedresult, enum ACU_TestResult result) {
-    return result == ACU_TEST_FAILED ? ACU_TEST_FAILED : aggregatedresult;
+    return result == ACU_TEST_PASSED ? aggregatedresult : result == ACU_TEST_FAILED ? ACU_TEST_FAILED : ACU_TEST_ERROR;
 }
 
 void acuTest_resultDestroy(ACU_Result* result) {
@@ -45,7 +45,7 @@ ACU_Result* acuTest_resultMalloc(void) {
 }
 
 void acuTest_resultInit(ACU_Result* result) {
-    result->status = ACU_TEST_UNDEFINED;
+    result->status = ACU_TEST_PASSED;
     result->message = NULL;
     result->file = NULL;
     result->line = -1;

@@ -52,6 +52,11 @@ static void test3(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert_strNotEqual(environment, "str", "str", "assert2");
 }
 
+static void noAssertTest(ACU_ExecuteEnv* environment, const void* context) {
+    UNUSED(environment);
+    UNUSED(context);
+}
+
 static ACU_Fixture* failingFixture(void) {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
@@ -77,56 +82,120 @@ static ACU_Fixture* passingFixture(void) {
 static ACU_Fixture* emptyFixture(void) {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
-    acu_fixtureInit(fixture, "testFixture");
-    acu_fixtureSetContext(fixture, "context");
+    acu_fixtureInit(fixture, "emptyFixture");
+
+    return fixture;
+}
+
+static ACU_Fixture* fixtureWithTestWitNoAssert(void) {
+    ACU_Fixture* fixture = acu_fixtureMalloc();
+
+    acu_fixtureInit(fixture, "emptyFixture");
+
+    acu_fixtureAddTestCase(fixture, "no assert", noAssertTest);
 
     return fixture;
 }
 
 static void progress(const ACU_TestCase* testCase, void* progressContext) {
     printf("%s", testCase->result->status == ACU_TEST_PASSED ? "#" : "f");
-    UNUSED(progressContext);
+    *(int*)progressContext += testCase->result->status == ACU_TEST_PASSED ? 0 : 1;
 }
 
-static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
+static void failingFixtureInSuiteTest(ACU_ExecuteEnv* environment, const void* context)
 {
-    enum ACU_TestResult result = ACU_TEST_PASSED;
+    int result = 0;
+    int suiteResult;
     ACU_Suite* localSuite = acu_suiteMalloc();
 
     acu_suiteInit(localSuite, "testSuite");
     acu_suiteAddFixture(localSuite, failingFixture());
-    result = acu_suiteExecute(localSuite, progress, NULL);
+    suiteResult = acu_suiteExecute(localSuite, progress, &result);
     acu_suiteDestroy(localSuite);
 
-    ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "assert2");
+    ACU_assert(environment, int, Equal, result, 2, "Number of failing tests");
+    ACU_assert(environment, int, Equal, suiteResult, ACU_TEST_FAILED, "suite does not return ACU_TEST_FAILED");
+
+    UNUSED(context);
+}
+
+static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
+{
+    int result = 0;
+    int fixtureResult;
+    
+    ACU_Fixture* fixture = failingFixture();
+
+    fixtureResult = acu_fixtureExecute(fixture, progress, &result);
+
+    acu_fixtureDestroy(fixture);
+    
+    ACU_assert(environment, int, Equal, result, 2, "Number of failing tests");
+    ACU_assert(environment, int, Equal, fixtureResult, ACU_TEST_FAILED, "fixture does not return ACU_TEST_FAILED");
+
     UNUSED(context);
 }
 
 static void passingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 {
-    enum ACU_TestResult result = ACU_TEST_PASSED;
+    int result = 0;
+    int suiteResult;
     ACU_Suite* localSuite = acu_suiteMalloc();
 
     acu_suiteInit(localSuite, "testSuite");
     acu_suiteAddFixture(localSuite, passingFixture());
-    result = acu_suiteExecute(localSuite, progress, NULL);
+    suiteResult = acu_suiteExecute(localSuite, progress, &result);
     acu_suiteDestroy(localSuite);
 
-    ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "assert2");
+    ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
+    ACU_assert(environment, int, Equal, suiteResult, ACU_TEST_PASSED, "passingFixtureTest");
+
+    UNUSED(context);
+}
+
+static void emptyFixtureInSuiteTest(ACU_ExecuteEnv* environment, const void* context)
+{
+    int result = 0;
+    int suiteResult;
+    ACU_Suite* localSuite = acu_suiteMalloc();
+
+    acu_suiteInit(localSuite, "testSuite");
+    acu_suiteAddFixture(localSuite, emptyFixture());
+    suiteResult = acu_suiteExecute(localSuite, progress, &result);
+    acu_suiteDestroy(localSuite);
+
+    ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
+    ACU_assert(environment, int, Equal, suiteResult, ACU_TEST_PASSED, "Suite does not return ACU_TEST_PASSED");
     UNUSED(context);
 }
 
 static void emptyFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 {
-    enum ACU_TestResult result = ACU_TEST_PASSED;
-    ACU_Suite* localSuite = acu_suiteMalloc();
+    int result = 0;
+    int fixtureResult;
 
-    acu_suiteInit(localSuite, "testSuite");
-    acu_suiteAddFixture(localSuite, emptyFixture());
-    result = acu_suiteExecute(localSuite, progress, NULL);
-    acu_suiteDestroy(localSuite);
+    ACU_Fixture* fixture = emptyFixture();
 
-    ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "assert2");
+    fixtureResult = acu_fixtureExecute(fixture, progress, &result);
+    acu_fixtureDestroy(fixture);
+
+    ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
+    ACU_assert(environment, int, Equal, fixtureResult, ACU_TEST_PASSED, "Suite does not return ACU_TEST_PASSED");
+    UNUSED(context);
+}
+
+static void noAssertFixtureTest(ACU_ExecuteEnv* environment, const void* context)
+{
+    int result = 0;
+    int fixtureResult;
+
+    ACU_Fixture* fixture = fixtureWithTestWitNoAssert();
+
+    fixtureResult = acu_fixtureExecute(fixture, progress, &result);
+    acu_fixtureDestroy(fixture);
+
+    ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
+    ACU_assert(environment, int, Equal, fixtureResult, ACU_TEST_PASSED, "Suite does not return ACU_TEST_PASSED");
     UNUSED(context);
 }
 
@@ -134,8 +203,12 @@ ACU_Fixture* fixtureFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
     acu_fixtureInit(fixture, "fixture tests");
+
     acu_fixtureAddTestCase(fixture, "Failing Fixture", failingFixtureTest);
+    acu_fixtureAddTestCase(fixture, "Failing Fixture InSuite", failingFixtureInSuiteTest);
     acu_fixtureAddTestCase(fixture, "Passing Fixture", passingFixtureTest);
-    acu_fixtureAddTestCase(fixture, "Empty Fixture", emptyFixtureTest);
+    acu_fixtureAddTestCase(fixture, "Empty Fixture in Suite", emptyFixtureInSuiteTest);
+    acu_fixtureAddTestCase(fixture, "Empty Fixture xxx", emptyFixtureTest);
+    acu_fixtureAddTestCase(fixture, "fixtureWithTestWitNoAssert", noAssertFixtureTest);
     return fixture;
 }

@@ -149,6 +149,7 @@
     <ClCompile Include="flt_test.c" />
     <ClCompile Include="fxtr_tst.c" />
     <ClCompile Include="int_tst.c" />
+    <ClCompile Include="list_tst.c" />
     <ClCompile Include="long_tst.c" />
     <ClCompile Include="ptr_tst.c" />
     <ClCompile Include="shrt_tst.c" />
@@ -173,6 +174,7 @@
     <ClInclude Include="flt_test.h" />
     <ClInclude Include="fxtr_tst.h" />
     <ClInclude Include="int_tst.h" />
+    <ClInclude Include="list_tst.h" />
     <ClInclude Include="long_tst.h" />
     <ClInclude Include="ptr_tst.h" />
     <ClInclude Include="shrt_tst.h" />

@@ -20,46 +20,12 @@
  */
 
 #pragma once
-#ifndef _ACU_UTILS_H_
-#define _ACU_UTILS_H_
+#ifndef __LIST_TEST__
+#define __LIST_TEST__
 
-#include <stdarg.h>
-#include "acu_cmmn.h"
+#include <acu_cmmn.h>
+#include <acu_fxtr.h>
 
-/*
-* Can be used to suppress unused variable warnings.
-*/
-#define UNUSED(x) (void)(x);
-
-/*
-* Returns the program name.
-*/
-__EXPORT char* acu_progName(void);
-
-/*
-* 
-*/
-__EXPORT void acu_setProgName(const char* progName);
-
-/*
-    Prints an error message to stderr and terminates the program. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_eprintf(const char* format, ...);
-
-/*
-    Prints a warning message to stderr. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_wprintf(const char* format, ...);
-__EXPORT char* acu_estrdup(const char* s);
-__EXPORT void* acu_emalloc(size_t n);
-
-__EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
-__EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
-
-#define SAFE_REF(ref) ((ref)?(ref):"NULL")
-
-void __exit(int status);
+__EXPORT ACU_Fixture* listFixture(void);
 
 #endif
