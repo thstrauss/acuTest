@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauﬂ
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -20,24 +20,30 @@
  */
 
 #pragma once
-#ifndef _ACU_TEST_RESULT_H_
-#define _ACU_TEST_RESULT_H_
+#ifndef __acu_dir__
+#define __acu_dir__
 
-#include <time.h>
-#include <acu_cmmn.h>
+#include "acu_cmmn.h"
+#include "acu_list.h"
 
-typedef struct ACU_Result_ {
-    enum ACU_TestResult status;
-    char* message;
-    char* file;
-    int line;
-    clock_t start;
-    clock_t end;
-} ACU_Result;
+typedef struct ACU_FileEntry_ {
+    char* fileName;
+} ACU_FileEntry;
 
-__EXPORT ACU_Result* acuTest_resultMalloc(void);
-__EXPORT void acuTest_resultInit(ACU_Result* result);
-__EXPORT void acuTest_resultDestroy(ACU_Result* result);
-enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedresult, enum ACU_TestResult result);
+typedef struct ACU_Files_ {
+    ACU_List* fileList;
+} ACU_Files;
+
+__EXPORT ACU_Files* acu_filesMalloc(void);
+
+__EXPORT void acu_filesInit(ACU_Files* files);
+
+__EXPORT void acu_filesDestroy(ACU_Files* files);
+
+__EXPORT void acu_filesCollect(ACU_Files* files, const char* fileName);
+
+typedef void ACU_FilesVisitorFunc(const ACU_FileEntry* file, void* context);
+
+__EXPORT void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitorFunc visitor, void* visitorContext);
 
 #endif

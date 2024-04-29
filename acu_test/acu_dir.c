@@ -22,9 +22,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <acu_dir.h>
-#include <acu_util.h>
-#include <acu_list.h>
+#include "acu_dir.h"
+#include "acu_util.h"
+#include "acu_list.h"
 
 #ifdef __TOS__
     #include <ext.h>

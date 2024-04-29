@@ -26,8 +26,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <acu_cmmn.h>
-#include <tryctch.h>
+#include "acu_cmmn.h"
+#include "tryctch.h"
 
 typedef enum ACU_TestResult(assertFunc)(const struct ACU_AssertParameter_* parameter);
 typedef char* (formatMessageFunc)(const struct ACU_AssertParameter_* parameter);

@@ -21,14 +21,14 @@
 
 #include <time.h>
 
-#include <acu_cmmn.h>
-#include <acu_eenv.h>
-#include <acu_fxtr.h>
-#include <acu_list.h>
-#include <acu_rslt.h>
-#include <acu_tcse.h>
-#include <acu_util.h>
-#include <acu_suit.h>
+#include "acu_cmmn.h"
+#include "acu_eenv.h"
+#include "acu_fxtr.h"
+#include "acu_list.h"
+#include "acu_rslt.h"
+#include "acu_tcse.h"
+#include "acu_util.h"
+#include "acu_suit.h"
 
 static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_ProgressFunc progress, void* progressContext) {
     ACU_ExecuteEnv environment;

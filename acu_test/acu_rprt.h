@@ -23,8 +23,8 @@
 #ifndef _ACU_RPRT_H_
 #define _ACU_RPRT_H_
 
-#include <acu_cmmn.h>
-#include <acu_tcse.h>
+#include "acu_cmmn.h"
+#include "acu_tcse.h"
 
 typedef void ACU_ProgressFunc(const ACU_TestCase* testCase, void* progressContext);
 typedef void ACU_VisitorFunc(const ACU_TestCase* testCase, void* context);

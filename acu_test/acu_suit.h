@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauﬂ
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -20,44 +20,38 @@
  */
 
 #pragma once
-#ifndef _ACU_UTILS_H_
-#define _ACU_UTILS_H_
+#ifndef _ACU_SUITE_H_
+#define _ACU_SUITE_H_
 
-#include <stdarg.h>
-#include <acu_cmmn.h>
+#include <stdio.h>
+#include <time.h>
 
-/*
-* Can be used to suppress unused variable warnings.
-*/
-#define UNUSED(x) (void)(x);
+#include "acu_cmmn.h"
+#include "acu_fxtr.h"
+#include "acu_list.h"
 
-/*
-* Returns the program name.
-*/
-__EXPORT char* acu_progName(void);
+typedef struct ACU_Suite_ {
+    char* name;
+    ACU_List* testFixtures;
+    clock_t start;
+    clock_t end;
+} ACU_Suite;
 
-/*
-* 
-*/
-__EXPORT void acu_setProgName(const char* progName);
+typedef void ACU_SuiteDestroyFunc(ACU_Suite* suite);
+typedef int ACU_SuiteExecuteFunc(const ACU_Suite* suite, ACU_ProgressFunc progress);
+typedef void* ACU_SuiteReportFunc(const ACU_Suite* suite, void* context, ACU_VisitorFunc report);
 
-/*
-    Prints an error message to stderr and terminates the program. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_eprintf(const char* format, ...);
+__EXPORT void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture);
 
-/*
-    Prints a warning message to stderr. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_wprintf(const char* format, ...);
-__EXPORT char* acu_estrdup(const char* s);
-__EXPORT void* acu_emalloc(size_t n);
+__EXPORT void acu_suiteInit(ACU_Suite* suite, const char* name);
 
-__EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
-__EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
+__EXPORT enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress, void* progressContext);
 
-void __exit(int status);
+__EXPORT void acu_suiteAccept(const ACU_Suite* suite, ACU_VisitorFunc visitor, void* visitorContext);
+
+__EXPORT ACU_Suite* acu_suiteMalloc(void);
+
+__EXPORT void acu_suiteDestroy(ACU_Suite* suite);
+
 
 #endif

@@ -25,7 +25,7 @@
 #include <string.h>
 #include <errno.h>
 
-#include <acu_util.h>
+#include "acu_util.h"
 
 static char* programName = NULL;
 

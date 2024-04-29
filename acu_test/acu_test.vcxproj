@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -143,21 +143,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\acu_asrt.h" />
-    <ClInclude Include="include\acu_cmmn.h" />
-    <ClInclude Include="include\acu_dir.h" />
-    <ClInclude Include="include\acu_eenv.h" />
-    <ClInclude Include="include\acu_fxtr.h" />
-    <ClInclude Include="include\acu_ldr.h" />
-    <ClInclude Include="include\acu_list.h" />
-    <ClInclude Include="include\acu_rprt.h" />
-    <ClInclude Include="include\acu_rslt.h" />
-    <ClInclude Include="include\acu_suit.h" />
-    <ClInclude Include="include\acu_tcse.h" />
-    <ClInclude Include="include\acu_util.h" />
-    <ClInclude Include="include\tryctch.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="acu_asrt.c" />
     <ClCompile Include="acu_dir.c" />
     <ClCompile Include="acu_fxtr.c" />
@@ -171,6 +156,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="acu_test.licenseheader" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="acu_asrt.h" />
+    <ClInclude Include="acu_cmmn.h" />
+    <ClInclude Include="ACU_DIR.H" />
+    <ClInclude Include="acu_eenv.h" />
+    <ClInclude Include="acu_fxtr.h" />
+    <ClInclude Include="ACU_LDR.H" />
+    <ClInclude Include="acu_list.h" />
+    <ClInclude Include="acu_rprt.h" />
+    <ClInclude Include="ACU_RSLT.H" />
+    <ClInclude Include="acu_suit.h" />
+    <ClInclude Include="acu_tcse.h" />
+    <ClInclude Include="acu_util.h" />
+    <ClInclude Include="tryctch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

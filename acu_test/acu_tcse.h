@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauﬂ
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -20,42 +20,21 @@
  */
 
 #pragma once
-#ifndef _ACU_FIXTURE_H_
-#define _ACU_FIXTURE_H_
+#ifndef _ACU_TEST_CASE_H_
+#define _ACU_TEST_CASE_H_
 
-#include <stdio.h>
-#include <time.h>
+#include "acu_eenv.h"
 
-#include <acu_cmmn.h>
-#include <acu_eenv.h>
-#include <acu_rslt.h>
-#include <acu_tcse.h>
-#include <acu_rprt.h>
+struct ACU_Fixture_;
+struct ACU_Result_;
 
-struct ACU_List_;
-struct ACU_Suite_;
+typedef void ACU_TestFunc(ACU_ExecuteEnv* environment, const void* context);
 
-typedef struct ACU_Fixture_ {
-    const char* name;
-    const void* context;
-    struct ACU_List_* testCases;
-    struct ACU_Suite_* suite;
-    clock_t start;
-    clock_t end;
-} ACU_Fixture;
-
-__EXPORT void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char *name, ACU_TestFunc testFunc);
-
-__EXPORT void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context);
-
-__EXPORT void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
-
-__EXPORT enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress, void* progressContext);
-
-__EXPORT void acu_fixtureAccept(ACU_Fixture* fixture, ACU_VisitorFunc visitor, void* visitorContext);
-
-__EXPORT ACU_Fixture* acu_fixtureMalloc(void);
-
-__EXPORT void acu_fixtureDestroy(void* fixture);
+typedef struct ACU_TestCase_ {
+    char* name;
+    ACU_TestFunc* testFunc;
+    struct ACU_Result_* result;
+    struct ACU_Fixture_* fixture;
+} ACU_TestCase;
 
 #endif

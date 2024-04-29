@@ -19,35 +19,17 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __ACU_LOADER__
-#define __ACU_LOADER__
+#pragma once
+#ifndef _ACU_TEST_ENV_H_
+#define _ACU_TEST_ENV_H_
 
-#include <acu_suit.h>
+#include <setjmp.h>
 
-#ifndef __TOS__
-#include <windows.h>
-#endif
+struct ACU_Result_;
 
-typedef struct ACU_Entry_ {
-    ACU_Suite* suite;
-#ifdef __TOS__
-    void* cup_code;
-#else
-    HMODULE module;
-#endif
-} ACU_Entry;
+typedef struct ACU_ExecuteEnv_ {
+    struct ACU_Result_* result;
+    jmp_buf assertBuf;
+} ACU_ExecuteEnv;
 
-typedef __EXPORT  ACU_Entry* (ACU_initFunc)(void);
-
-typedef ACU_Entry* ACU_init(void);
-
-__EXPORT ACU_Entry* acu_init(void);
-
-__EXPORT ACU_Entry* cup_load(const char* cu_name);
-__EXPORT void cup_unload(ACU_Entry* entry);
-
-__EXPORT ACU_Entry* acu_entryMalloc(void);
-__EXPORT void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite);
-__EXPORT void acu_entryDestroy(ACU_Entry* entry);
- 
 #endif

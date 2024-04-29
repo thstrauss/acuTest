@@ -20,38 +20,42 @@
  */
 
 #pragma once
-#ifndef _ACU_SUITE_H_
-#define _ACU_SUITE_H_
+#ifndef _ACU_FIXTURE_H_
+#define _ACU_FIXTURE_H_
 
 #include <stdio.h>
 #include <time.h>
 
-#include <acu_cmmn.h>
-#include <acu_fxtr.h>
-#include <acu_list.h>
+#include "acu_cmmn.h"
+#include "acu_eenv.h"
+#include "acu_rslt.h"
+#include "acu_tcse.h"
+#include "acu_rprt.h"
 
-typedef struct ACU_Suite_ {
-    char* name;
-    ACU_List* testFixtures;
+struct ACU_List_;
+struct ACU_Suite_;
+
+typedef struct ACU_Fixture_ {
+    const char* name;
+    const void* context;
+    struct ACU_List_* testCases;
+    struct ACU_Suite_* suite;
     clock_t start;
     clock_t end;
-} ACU_Suite;
+} ACU_Fixture;
 
-typedef void ACU_SuiteDestroyFunc(ACU_Suite* suite);
-typedef int ACU_SuiteExecuteFunc(const ACU_Suite* suite, ACU_ProgressFunc progress);
-typedef void* ACU_SuiteReportFunc(const ACU_Suite* suite, void* context, ACU_VisitorFunc report);
+__EXPORT void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char *name, ACU_TestFunc testFunc);
 
-__EXPORT void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture);
+__EXPORT void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context);
 
-__EXPORT void acu_suiteInit(ACU_Suite* suite, const char* name);
+__EXPORT void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
 
-__EXPORT enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_ProgressFunc progress, void* progressContext);
+__EXPORT enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress, void* progressContext);
 
-__EXPORT void acu_suiteAccept(const ACU_Suite* suite, ACU_VisitorFunc visitor, void* visitorContext);
+__EXPORT void acu_fixtureAccept(ACU_Fixture* fixture, ACU_VisitorFunc visitor, void* visitorContext);
 
-__EXPORT ACU_Suite* acu_suiteMalloc(void);
+__EXPORT ACU_Fixture* acu_fixtureMalloc(void);
 
-__EXPORT void acu_suiteDestroy(ACU_Suite* suite);
-
+__EXPORT void acu_fixtureDestroy(void* fixture);
 
 #endif

@@ -19,11 +19,11 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <acu_fxtr.h>
-#include <acu_list.h>
-#include <acu_suit.h>
-#include <acu_util.h>
-#include <acu_rprt.h>
+#include "acu_fxtr.h"
+#include "acu_list.h"
+#include "acu_suit.h"
+#include "acu_util.h"
+#include "acu_rprt.h"
 
 void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture)
 {

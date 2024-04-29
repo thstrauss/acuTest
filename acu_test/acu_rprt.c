@@ -22,13 +22,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <acu_rprt.h>
-#include <acu_cmmn.h>
-#include <acu_tcse.h>
-#include <acu_fxtr.h>
-#include <acu_suit.h>
-#include <acu_list.h>
-#include <acu_util.h>
+#include "acu_rprt.h"
+#include "acu_cmmn.h"
+#include "acu_tcse.h"
+#include "acu_fxtr.h"
+#include "acu_suit.h"
+#include "acu_list.h"
+#include "acu_util.h"
 
 void acu_progress(const ACU_TestCase* testCase, void* progressContext) {
     fprintf(stdout, "%s", testCase->result->status == ACU_TEST_FAILED ? "F" : testCase->result->status == ACU_TEST_ERROR ? "E" : ".");

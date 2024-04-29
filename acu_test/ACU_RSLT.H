@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauﬂ
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -20,21 +20,24 @@
  */
 
 #pragma once
-#ifndef _ACU_TEST_CASE_H_
-#define _ACU_TEST_CASE_H_
+#ifndef _ACU_TEST_RESULT_H_
+#define _ACU_TEST_RESULT_H_
 
-#include <acu_eenv.h> 
+#include <time.h>
+#include "acu_cmmn.h"
 
-struct ACU_Fixture_;
-struct ACU_Result_;
+typedef struct ACU_Result_ {
+    enum ACU_TestResult status;
+    char* message;
+    char* file;
+    int line;
+    clock_t start;
+    clock_t end;
+} ACU_Result;
 
-typedef void ACU_TestFunc(ACU_ExecuteEnv* environment, const void* context);
-
-typedef struct ACU_TestCase_ {
-    char* name;
-    ACU_TestFunc* testFunc;
-    struct ACU_Result_* result;
-    struct ACU_Fixture_* fixture;
-} ACU_TestCase;
+__EXPORT ACU_Result* acuTest_resultMalloc(void);
+__EXPORT void acuTest_resultInit(ACU_Result* result);
+__EXPORT void acuTest_resultDestroy(ACU_Result* result);
+enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedresult, enum ACU_TestResult result);
 
 #endif

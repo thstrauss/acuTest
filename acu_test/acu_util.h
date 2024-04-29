@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauﬂ
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -20,16 +20,44 @@
  */
 
 #pragma once
-#ifndef _ACU_TEST_ENV_H_
-#define _ACU_TEST_ENV_H_
+#ifndef _ACU_UTILS_H_
+#define _ACU_UTILS_H_
 
-#include <setjmp.h>
+#include <stdarg.h>
+#include "acu_cmmn.h"
 
-struct ACU_Result_;
+/*
+* Can be used to suppress unused variable warnings.
+*/
+#define UNUSED(x) (void)(x);
 
-typedef struct ACU_ExecuteEnv_ {
-    struct ACU_Result_* result;
-    jmp_buf assertBuf;
-} ACU_ExecuteEnv;
+/*
+* Returns the program name.
+*/
+__EXPORT char* acu_progName(void);
+
+/*
+* 
+*/
+__EXPORT void acu_setProgName(const char* progName);
+
+/*
+    Prints an error message to stderr and terminates the program. 
+    The arguments are according to stdio.h printf().
+*/
+__EXPORT void acu_eprintf(const char* format, ...);
+
+/*
+    Prints a warning message to stderr. 
+    The arguments are according to stdio.h printf().
+*/
+__EXPORT void acu_wprintf(const char* format, ...);
+__EXPORT char* acu_estrdup(const char* s);
+__EXPORT void* acu_emalloc(size_t n);
+
+__EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
+__EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
+
+void __exit(int status);
 
 #endif

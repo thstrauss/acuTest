@@ -21,7 +21,7 @@
 
 curunner.ttp
 
-.C [ -I..\acu_test\include ]
+.C [ -I..\acu_test ]
 
 =
 

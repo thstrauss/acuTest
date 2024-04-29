@@ -19,31 +19,35 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-#ifndef __acu_dir__
-#define __acu_dir__
+#ifndef __ACU_LOADER__
+#define __ACU_LOADER__
 
-#include <acu_cmmn.h>
-#include <acu_list.h>
+#include "acu_suit.h"
 
-typedef struct ACU_FileEntry_ {
-    char* fileName;
-} ACU_FileEntry;
+#ifndef __TOS__
+#include <windows.h>
+#endif
 
-typedef struct ACU_Files_ {
-    ACU_List* fileList;
-} ACU_Files;
+typedef struct ACU_Entry_ {
+    ACU_Suite* suite;
+#ifdef __TOS__
+    void* cup_code;
+#else
+    HMODULE module;
+#endif
+} ACU_Entry;
 
-__EXPORT ACU_Files* acu_filesMalloc(void);
+typedef __EXPORT  ACU_Entry* (ACU_initFunc)(void);
 
-__EXPORT void acu_filesInit(ACU_Files* files);
+typedef ACU_Entry* ACU_init(void);
 
-__EXPORT void acu_filesDestroy(ACU_Files* files);
+__EXPORT ACU_Entry* acu_init(void);
 
-__EXPORT void acu_filesCollect(ACU_Files* files, const char* fileName);
+__EXPORT ACU_Entry* cup_load(const char* cu_name);
+__EXPORT void cup_unload(ACU_Entry* entry);
 
-typedef void ACU_FilesVisitorFunc(const ACU_FileEntry* file, void* context);
-
-__EXPORT void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitorFunc visitor, void* visitorContext);
-
+__EXPORT ACU_Entry* acu_entryMalloc(void);
+__EXPORT void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite);
+__EXPORT void acu_entryDestroy(ACU_Entry* entry);
+ 
 #endif

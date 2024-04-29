@@ -22,9 +22,9 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#include <acu_rslt.h>
-#include <acu_cmmn.h>
-#include <acu_util.h>
+#include "acu_cmmn.h"
+#include "acu_rslt.h"
+#include "acu_util.h"
 
 enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedresult, enum ACU_TestResult result) {
     return result == ACU_TEST_FAILED ? ACU_TEST_FAILED : aggregatedresult;

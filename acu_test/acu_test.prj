@@ -1,6 +1,6 @@
-..\lib\acu_test.lib.C [ -Iinclude ]
-.C [ -P ].L [ -J ] =acu_asrt (include\acu_asrt.h, include\acu_cmmn.h, include\acu_eenv.h, include\acu_rslt.h)acu_dir (include\acu_dir.h, include\acu_cmmn.h, include\acu_util.h)
+..\lib\acu_test.lib
+.C [ -P ].L [ -J ] =acu_asrt (acu_asrt.h, acu_cmmn.h, acu_eenv.h, acu_rslt.h)acu_dir (acu_dir.h, acu_cmmn.h, acu_util.h)
 acu_fxtr
 acu_ldracu_listacu_rprt
-acu_rslt (include\acu_rslt.h, include\acu_cmmn.h) acu_suitacu_util
+acu_rslt (acu_rslt.h, acu_cmmn.h) acu_suitacu_util
 

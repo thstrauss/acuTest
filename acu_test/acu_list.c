@@ -23,8 +23,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <acu_list.h>
-#include <acu_util.h>
+#include "acu_list.h"
+#include "acu_util.h"
 
 void acu_listInit(ACU_List* list, ACU_Destroy destroy) {
     list->size = 0;
