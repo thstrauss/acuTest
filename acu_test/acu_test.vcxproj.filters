@@ -51,6 +51,9 @@
     <ClInclude Include="include\tryctch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\acu_dir.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.c">
@@ -75,6 +78,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="acu_util.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="acu_rslt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="acu_dir.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

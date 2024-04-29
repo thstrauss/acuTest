@@ -3,4 +3,5 @@ main.c acu_entr.c (..\acu_test\include\acu_ldr.h)flt_test.ctryc_tst.c [-R]fx
 shrt_tst.c (shrt_tst.h)
 usht_tst.c (usht_tst.h)ptr_tst.c (ptr_tst.h)
 str_tst.c (str_tst.h)..\acu_test\acu_test.prjPCFLTLIB.LIBPCSTDLIB.LIB
-PCTOSLIB.LIB
+PCTOSLIB.LIB
+PCEXTLIB.LIB

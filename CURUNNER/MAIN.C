@@ -26,6 +26,7 @@
 #include <acu_cmmn.h>
 #include <acu_ldr.h>
 #include <acu_util.h>
+#include <acu_dir.h>
 
 static void printHelp(void) {
     acu_eprintf("Shall provide file name for test.");
@@ -49,6 +50,10 @@ static int executeEntry(const char* cupName, const ACU_Summary* summary) {
     return returnValue;
 }
 
+static void execute(const ACU_FileEntry* file, void* context) {
+	executeEntry(file->fileName, (ACU_Summary*) context);
+}
+
 static int executeEntries(const char** testFiles, const ACU_Summary* summary) {
     int returnValue = ACU_TEST_PASSED;
     int fileIndex = 0;
@@ -60,29 +65,23 @@ static int executeEntries(const char** testFiles, const ACU_Summary* summary) {
 }
 
 int main(int argc, const char* argv[]) {
-    int returnValue;
+    int returnValue = 0;
     ACU_Summary summary = { 0,0 };
-    const char** testFiles = NULL;
+
+    ACU_Files* files;
 
     if (argc < 2) {
         printHelp();
     }
 
-    if (argc == 2) {
-        testFiles = acu_emalloc(sizeof(char*) * 2);
-        memset(testFiles, 0, sizeof(char*) * 2);
+    files = acu_filesMalloc();
+    acu_filesInit(files);
 
-        testFiles[0] = argv[1];
-    } else if (argc == 3) {
-        if (strcmp(argv[1], "--path") == 0) {
-        }
-    }
+    acu_filesCollect(files, argv[1]);
 
-    returnValue = executeEntries(testFiles, &summary) == ACU_TEST_PASSED ? 0 : 2;
+	acu_filesAccept(files, execute, &summary);
 
-    if (testFiles != NULL) {
-        free(testFiles);
-    }
+    acu_filesDestroy(files);
 
     fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
 
