@@ -183,8 +183,18 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
     acu_assert(environment, &parameter); \
 }
 
+#define ACU_assert_ptrIsNull(environment, actualValue, messageValue) {\
+    ACU_PtrPrepareParameter(type, actualValue, NULL, messageValue, acu_equalPtr) \
+    acu_assert(environment, &parameter); \
+}
+
 #define ACU_assert_ptrNotEqual(environment, actualValue, expectedValue, messageValue) {\
     ACU_PtrPrepareParameter(type, actualValue, expectedValue, messageValue, acu_notEqualPtr) \
+    acu_assert(environment, &parameter); \
+}
+
+#define ACU_assert_ptrIsNotNull(environment, actualValue, messageValue) {\
+    ACU_PtrPrepareParameter(type, actualValue, NULL, messageValue, acu_notEqualPtr) \
     acu_assert(environment, &parameter); \
 }
 
@@ -203,6 +213,12 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 
 #define ACU_assert_strEqual(environment, actualValue, expectedValue, messageValue) \
     __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_equalStr) 
+
+#define ACU_assert_strIsEmpty(environment, actualValue, messageValue) \
+    __ACU_assert_str(environment, actualValue, "", messageValue, acu_equalStr) 
+
+#define ACU_assert_strIsNotEmpty(environment, actualValue, messageValue) \
+    __ACU_assert_str(environment, actualValue, "", messageValue, acu_notEqualStr) 
 
 #define ACU_assert_strNotEqual(environment, actualValue, expectedValue, messageValue) \
     __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notEqualStr) 

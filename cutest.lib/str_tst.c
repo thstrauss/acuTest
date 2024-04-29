@@ -73,6 +73,79 @@ static void strEqualActualNull(ACU_ExecuteEnv* environment, const void* context)
     UNUSED(context);
 }
 
+static void strIsEmpty(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    testEnvironment->result = resultBuf;
+    resultBuf->status = ACU_TEST_PASSED;
+    resultBuf->message = NULL;
+    resultBuf->file = NULL;
+
+    if (!setjmp(testEnvironment->assertBuf)) {
+        ACU_assert_strIsEmpty(testEnvironment, "", "strIsEmpty"); \
+    }
+    TRY
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strIsEmpty"); \
+        ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strIsEmpty"); \
+        FINALLY
+        if (resultBuf->message) {
+            free(resultBuf->message);
+        }
+    free(resultBuf);
+    free(testEnvironment);
+    ETRY;
+    UNUSED(context);
+}
+
+
+static void strIsNotEmpty(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    testEnvironment->result = resultBuf;
+    resultBuf->status = ACU_TEST_PASSED;
+    resultBuf->message = NULL;
+    resultBuf->file = NULL;
+
+    if (!setjmp(testEnvironment->assertBuf)) {
+        ACU_assert_strIsNotEmpty(testEnvironment, "abc", "strIsNotEmpty"); \
+    }
+    TRY
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strIsNotEmpty"); \
+        ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strIsNotEmpty"); \
+        FINALLY
+        if (resultBuf->message) {
+            free(resultBuf->message);
+        }
+    free(resultBuf);
+    free(testEnvironment);
+    ETRY;
+    UNUSED(context);
+}
+
+static void strIsNotEmptyFails(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    testEnvironment->result = resultBuf;
+    resultBuf->status = ACU_TEST_PASSED;
+    resultBuf->message = NULL;
+    resultBuf->file = NULL;
+
+    if (!setjmp(testEnvironment->assertBuf)) {
+        ACU_assert_strIsNotEmpty(testEnvironment, "", "strIsNotEmptyFails"); \
+    }
+    TRY
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_FAILED, "strIsNotEmptyFails"); \
+        ACU_assert_ptrIsNotNull(environment, testEnvironment->result->message, "strIsNotEmptyFails"); \
+        FINALLY
+        if (resultBuf->message) {
+            free(resultBuf->message);
+        }
+    free(resultBuf);
+    free(testEnvironment);
+    ETRY;
+    UNUSED(context);
+}
+
 static void strContains(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
@@ -193,7 +266,7 @@ static void strNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
         free(testEnvironment);
     ETRY;
     UNUSED(context);
-}  
+}
  
 ACU_Fixture* strFixture(void)
 {
@@ -201,6 +274,9 @@ ACU_Fixture* strFixture(void)
 
     acu_fixtureInit(fixture, "str tests");
     
+    acu_fixtureAddTestCase(fixture, "str Not Empty Fails", strIsNotEmptyFails);
+    acu_fixtureAddTestCase(fixture, "str Not Empty", strIsNotEmpty);
+    acu_fixtureAddTestCase(fixture, "str Empty", strIsEmpty);
     acu_fixtureAddTestCase(fixture, "str Not Contains", strNotContains);
     acu_fixtureAddTestCase(fixture, "str Contains", strContains);
     acu_fixtureAddTestCase(fixture, "str Equal both NULL", strEqualBothNull);
