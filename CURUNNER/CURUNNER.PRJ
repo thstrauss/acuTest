@@ -33,6 +33,7 @@ main.c
 ..\cutest.lib\cutest.prj
 ..\cutest.lib\cuempty.prj
 ..\cutest.lib\cutstrn.prj
+..\cutest.lib\cutscup.prj
 
 PCFLTLIB.LIB
 PCTOSLIB.LIB
