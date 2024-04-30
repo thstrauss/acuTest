@@ -63,6 +63,9 @@
     <ClCompile Include="list_tst.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rslt_tst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="flt_test.h">
@@ -108,6 +111,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="list_tst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rslt_tst.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

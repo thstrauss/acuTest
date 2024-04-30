@@ -2,4 +2,4 @@
 shrt_tst.c (shrt_tst.h)
 usht_tst.c (usht_tst.h)ptr_tst.c (ptr_tst.h)
 str_tst.c (str_tst.h)
-list_tst.c (list_tst.h)..\acu_test\acu_test.prjPCFLTLIB.LIBPCSTDLIB.LIB
+list_tst.c (list_tst.h)rslt_tst.c (rslt_tst.h)..\acu_test\acu_test.prjPCFLTLIB.LIBPCSTDLIB.LIB

@@ -20,24 +20,12 @@
  */
 
 #pragma once
-#ifndef _ACU_TEST_RESULT_H_
-#define _ACU_TEST_RESULT_H_
+#ifndef __RESULT_TEST__
+#define __RESULT_TEST__
 
-#include <time.h>
-#include "acu_cmmn.h"
+#include <acu_cmmn.h>
+#include <acu_fxtr.h>
 
-typedef struct ACU_Result_ {
-    enum ACU_TestResult status;
-    char* message;
-    char* file;
-    int line;
-    clock_t start;
-    clock_t end;
-} ACU_Result;
-
-__EXPORT ACU_Result* acuTest_resultMalloc(void);
-__EXPORT void acuTest_resultInit(ACU_Result* result);
-__EXPORT void acuTest_resultDestroy(ACU_Result* result);
-__EXPORT enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedresult, enum ACU_TestResult result);
+__EXPORT ACU_Fixture* resultFixture(void);
 
 #endif
