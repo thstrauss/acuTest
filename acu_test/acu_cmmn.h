@@ -29,6 +29,12 @@
 #define __EXPORT __declspec(dllexport) 
 #endif
 
+#ifdef __TOS__
+#define __IMPORT 
+#else
+#define __IMPORT __declspec(dllimport) 
+#endif
+
 typedef enum ACU_TestResult_ {
     ACU_TEST_FAILED = 0,
     ACU_TEST_PASSED = 1,

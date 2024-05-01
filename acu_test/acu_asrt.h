@@ -7,15 +7,19 @@
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
  * and/or sell copies of the Software, and to permit persons to whom the Software
  * is furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall 
+  \
+*
+  \
+* The above copyright notice and this permission notice shall
  * be included in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
+  \
+* PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+  \
+* IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
@@ -32,10 +36,14 @@
 typedef enum ACU_TestResult(assertFunc)(const struct ACU_AssertParameter_* parameter);
 typedef char* (formatMessageFunc)(const struct ACU_AssertParameter_* parameter);
 
-typedef struct ACU_AssertParameter_ {
+typedef struct ACU_Funcs_ {
     assertFunc* assert;
     formatMessageFunc* formatFailedMessage;
     formatMessageFunc* formatErrorMessage;
+} ACU_Funcs;
+
+typedef struct ACU_AssertParameter_ {
+    ACU_Funcs* funcs;
     const void* actual;
     const void* expected;
     const char* message;
@@ -60,13 +68,13 @@ static char* acu_##type##op##FormatMessage(const ACU_AssertParameter* parameter)
     return acu_sformatMessage(STR(actual value format not opcode to format: %s), *(const type*)parameter->actual, *(const type*)parameter->expected, parameter->message); \
 } \
 __EXPORT void acu_assert_##type##op(ACU_ExecuteEnv* environment, ACU_AssertParameter* parameter) { \
-    parameter->assert = acu_##type##op; \
-    parameter->formatFailedMessage = acu_##type##op##FormatMessage; \
     acu_assert(environment, parameter); \
-}
+} \
+__EXPORT const ACU_Funcs acu_##type##op##Funcs = {acu_##type##op, acu_##type##op##FormatMessage, NULL};
 #else
 #define CREATE_ASSERT_FUNC(type, op, opCode, format) \
-void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter);
+void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter); \
+__IMPORT extern ACU_Funcs acu_##type##op##Funcs;
 #endif
 
 typedef signed char signedChar;
@@ -155,7 +163,6 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
             type __actual = (actualValue); \
             type __expected = (expectedValue); \
             ACU_AssertParameter parameter; \
-            parameter.formatErrorMessage = NULL; \
             parameter.actual = &__actual; \
             parameter.expected = &__expected; \
             parameter.message = (messageValue); \
@@ -164,14 +171,22 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 
 #define ACU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
     ACU_PrepareParameter(type, actualValue, expectedValue, messageValue) \
+    parameter.funcs = &acu_##type##op##Funcs; \
     acu_assert_##type##op(environment, &parameter); \
 }
 
+#ifndef __ACU_EMIT_ASSERT_FUNCS__
+__IMPORT extern ACU_Funcs acu_equalPtrFuncs;
+__IMPORT extern ACU_Funcs acu_notEqualPtrFuncs;
+__IMPORT extern ACU_Funcs acu_equalStrFuncs;
+__IMPORT extern ACU_Funcs acu_notEqualStrFuncs;
+__IMPORT extern ACU_Funcs acu_containsStrFuncs;
+__IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
+#endif
+
 #define ACU_PtrPrepareParameter(type, actualValue, expectedValue, messageValue, __assertFunc) \
     ACU_AssertParameter parameter; \
-    parameter.assert = __assertFunc; \
-    parameter.formatFailedMessage = __assertFunc##FailedFormatMessage; \
-    parameter.formatErrorMessage = NULL; \
+    parameter.funcs = &##__assertFunc##Funcs; \
     parameter.actual = (actualValue); \
     parameter.expected = (expectedValue); \
     parameter.message = (messageValue); \
@@ -200,55 +215,37 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 
 #define __ACU_assert_str(environment, actualValue, expectedValue, messageValue, assertFunc) { \
     ACU_AssertParameter parameter; \
-    parameter.assert = assertFunc; \
+    parameter.funcs = &##assertFunc##Funcs; \
     parameter.actual = (actualValue); \
     parameter.expected = (expectedValue); \
     parameter.message = (messageValue); \
-    parameter.formatFailedMessage = assertFunc##FailedFormatMessage; \
-    parameter.formatErrorMessage = assertFunc##ErrorFormatMessage; \
     parameter.fileName = __FILE__; \
     parameter.line = __LINE__; \
     acu_assert(environment, &parameter); \
 }
 
 #define ACU_assert_strEqual(environment, actualValue, expectedValue, messageValue) \
-    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_equalStr) 
+  \
+   __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_equalStr)
 
 #define ACU_assert_strIsEmpty(environment, actualValue, messageValue) \
-    __ACU_assert_str(environment, actualValue, "", messageValue, acu_equalStr) 
+  \
+   __ACU_assert_str(environment, actualValue, "", messageValue, acu_equalStr)
 
 #define ACU_assert_strIsNotEmpty(environment, actualValue, messageValue) \
-    __ACU_assert_str(environment, actualValue, "", messageValue, acu_notEqualStr) 
+  \
+   __ACU_assert_str(environment, actualValue, "", messageValue, acu_notEqualStr)
 
 #define ACU_assert_strNotEqual(environment, actualValue, expectedValue, messageValue) \
-    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notEqualStr) 
+  \
+   __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notEqualStr)
 
 #define ACU_assert_strContains(environment, actualValue, expectedValue, messageValue) \
-    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_containsStr) 
+  \
+   __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_containsStr)
 
 #define ACU_assert_strNotContains(environment, actualValue, expectedValue, messageValue) \
-    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notContainsStr) 
-
-__EXPORT enum ACU_TestResult acu_equalPtr(const ACU_AssertParameter* parameter);
-__EXPORT char* acu_equalPtrFailedFormatMessage(const ACU_AssertParameter* parameter);
-
-__EXPORT enum ACU_TestResult acu_notEqualPtr(const ACU_AssertParameter* parameter);
-__EXPORT char* acu_notEqualPtrFailedFormatMessage(const ACU_AssertParameter* parameter);
-
-__EXPORT enum ACU_TestResult acu_equalStr(const ACU_AssertParameter* parameter);
-__EXPORT char* acu_equalStrFailedFormatMessage(const ACU_AssertParameter* parameter);
-__EXPORT char* acu_equalStrErrorFormatMessage(const ACU_AssertParameter* parameter);
-
-__EXPORT enum ACU_TestResult acu_notEqualStr(const ACU_AssertParameter* parameter);
-__EXPORT char* acu_notEqualStrFailedFormatMessage(const ACU_AssertParameter* parameter);
-__EXPORT char* acu_notEqualStrErrorFormatMessage(const ACU_AssertParameter* parameter);
-
-__EXPORT enum ACU_TestResult acu_containsStr(const ACU_AssertParameter* parameter);
-__EXPORT char* acu_containsStrFailedFormatMessage(const ACU_AssertParameter* parameter);
-__EXPORT char* acu_containsStrErrorFormatMessage(const ACU_AssertParameter* parameter);
-
-__EXPORT enum ACU_TestResult acu_notContainsStr(const ACU_AssertParameter* parameter);
-__EXPORT char* acu_notContainsStrFailedFormatMessage(const ACU_AssertParameter* parameter);
-__EXPORT char* acu_notContainsStrErrorFormatMessage(const ACU_AssertParameter* parameter);
+  \
+   __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notContainsStr)
 
 #endif

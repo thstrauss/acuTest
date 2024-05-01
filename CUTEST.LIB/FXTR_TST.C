@@ -31,6 +31,7 @@
 
 static void test1(ACU_ExecuteEnv* environment, const void* context) {
     ACU_PrepareParameter(int, 1, 2, "assert");
+    parameter.funcs = &acu_intEqualFuncs;
     environment->result->file = acu_estrdup(__FILE__);
     environment->result->line = __LINE__ + 1;
     acu_assert_intEqual(environment, &parameter);
