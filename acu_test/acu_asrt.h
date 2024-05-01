@@ -127,7 +127,6 @@ CREATE_ASSERT_FUNC(unsignedShort, Greater, > , %hu)
 CREATE_ASSERT_FUNC(unsignedShort, LessEqual, <= , %hu)
 CREATE_ASSERT_FUNC(unsignedShort, GreaterEqual, >= , %hu)
 
-
 CREATE_ASSERT_FUNC(long, Equal, == , %ld)
 CREATE_ASSERT_FUNC(long, NotEqual, != , %ld)
 CREATE_ASSERT_FUNC(long, Less, < , %ld)
@@ -159,10 +158,11 @@ CREATE_ASSERT_FUNC(double, LessEqual, <=, %lf)
 CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 
 
-#define ACU_PrepareParameter(type, actualValue, expectedValue, messageValue) \
-            type __actual = (actualValue); \
-            type __expected = (expectedValue); \
+#define ACU_PrepareParameter(type, op, actualValue, expectedValue, messageValue) \
+            const type __actual = (actualValue); \
+            const type __expected = (expectedValue); \
             ACU_AssertParameter parameter; \
+            parameter.funcs = &acu_##type##op##Funcs; \
             parameter.actual = &__actual; \
             parameter.expected = &__expected; \
             parameter.message = (messageValue); \
@@ -170,8 +170,7 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
             parameter.line = __LINE__;
 
 #define ACU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
-    ACU_PrepareParameter(type, actualValue, expectedValue, messageValue) \
-    parameter.funcs = &acu_##type##op##Funcs; \
+    ACU_PrepareParameter(type, op, actualValue, expectedValue, messageValue) \
     acu_assert_##type##op(environment, &parameter); \
 }
 
