@@ -21,6 +21,7 @@
 
 #include "acu_ldr.h"
 #include "acu_util.h"
+#include "acu_tryc.h"
 
 #ifdef __TOS__
 #include <string.h>

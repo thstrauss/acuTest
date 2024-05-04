@@ -23,6 +23,7 @@
 #include <acu_fxtr.h>
 #include <acu_suit.h>
 #include <acu_util.h>
+#include <acu_tryc.h>
 
 ACU_Entry* acu_init(void) {
 	ACU_Suite* suite = acu_suiteMalloc();

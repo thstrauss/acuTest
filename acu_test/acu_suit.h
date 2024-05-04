@@ -31,8 +31,8 @@
 #include "acu_list.h"
 
 typedef struct ACU_Suite_ {
-    char* name;
     ACU_List* testFixtures;
+    char* name;
     clock_t start;
     clock_t end;
 } ACU_Suite;

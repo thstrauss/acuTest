@@ -26,6 +26,7 @@
 #include <acu_util.h>
 #include <acu_suit.h>
 #include <acu_stck.h>
+#include <acu_tryc.h>
 
 #include <acu_rslt.h>
 

@@ -112,22 +112,22 @@ static void resultInitTest(ACU_ExecuteEnv* environment, const void* context) {
 
     jmp_buf outerBuf;
 
-    acu_stackInit(stack, NULL);
+    acu_stackInit(stack, (ACU_StackDataDestroy*) NULL);
     acu_stackPush(stack, &outerBuf);
     printf("before\n\r");
-    if (_setjmp(outerBuf) == 0) {
+    if (setjmp(outerBuf) == 0) {
         do {
-            jmp_buf _test_Buf; acu_stackPush(stack, &_test_Buf); switch (_setjmp(_test_Buf)) {
+            jmp_buf _test_Buf; acu_stackPush(stack, &_test_Buf); switch (setjmp(_test_Buf)) {
             case 0: while (1) {
+            	jmp_buf* localBuf;
                 printf("block\n\r");
-                jmp_buf* localBuf;
                 acu_stackPop(stack, (void**)&localBuf);
                 longjmp(*localBuf, 255);
                 break;
             }
             case 255: {
+            	jmp_buf* localBuf;
                 printf("finally\n\r");
-                jmp_buf* localBuf;
                 acu_stackPop(stack, (void**)&localBuf);
                 longjmp(*localBuf, 1);
                 break;
@@ -139,6 +139,7 @@ static void resultInitTest(ACU_ExecuteEnv* environment, const void* context) {
         printf("outer\n\r");
     }
     UNUSED(context);
+    UNUSED(environment);
 }
 
 static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {

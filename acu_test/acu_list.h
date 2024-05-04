@@ -26,19 +26,17 @@
 #include <stdlib.h>
 
 typedef struct ACU_ListElement_ {
-    void* data;
     struct ACU_ListElement_* next;
+    void* data;
 } ACU_ListElement;
 
 typedef void ACU_Destroy(void* data);
 
 typedef struct ACU_List_ {
-    int size;
-
-    ACU_Destroy* destroy;
-
     ACU_ListElement* head;
     ACU_ListElement* tail;
+    int size;
+    ACU_Destroy* destroy;
 } ACU_List;
 
 void acu_listInit(ACU_List* list, ACU_Destroy destroy);

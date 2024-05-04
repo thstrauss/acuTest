@@ -26,6 +26,7 @@
 #include <acu_suit.h>
 #include <acu_asrt.h>
 #include <acu_util.h>
+#include <acu_tryc.h>
 
 #include "fxtr_tst.h"
 

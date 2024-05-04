@@ -24,6 +24,7 @@
 #include <acu_suit.h>
 #include <acu_util.h>
 #include <acu_list.h>
+#include <acu_tryc.h>
 
 #include "fxtr_tst.h"
 #include "flt_test.h"

@@ -24,6 +24,7 @@
 #include "acu_suit.h"
 #include "acu_util.h"
 #include "acu_rprt.h"
+#include "acu_tryc.h"
 
 void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture)
 {

@@ -2,6 +2,7 @@
 #include <acu_ldr.h>
 #include <acu_suit.h>
 #include <acu_rprt.h>
+#include <acu_tryc.h>
 
 int main(void) {
 	ACU_Entry* entry = acu_init();

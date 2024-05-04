@@ -19,6 +19,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <stdlib.h>
+
 #include "acu_stck.h"
 #include "acu_tryc.h"
 
@@ -28,7 +30,7 @@ ACU_Stack* acu_initTryCatch(void)
 {
     if (!acu_jmpBufFrames) {
         acu_jmpBufFrames = acu_stackMalloc();
-        acu_stackInit(acu_jmpBufFrames, NULL);
+        acu_stackInit(acu_jmpBufFrames, (ACU_StackDataDestroy*) NULL);
     }
     return acu_jmpBufFrames;
 }

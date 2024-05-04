@@ -25,6 +25,7 @@
 #include <acu_asrt.h>
 #include <acu_util.h>
 #include <acu_suit.h>
+#include <acu_tryc.h>
 
 static void emptyList(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(environment);

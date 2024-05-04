@@ -30,7 +30,7 @@ int acu_stackSize(const ACU_Stack* stack)
     return stack->size;
 }
 
-void acu_stackInit(ACU_Stack* stack, ACU_Destroy destroy) {
+void acu_stackInit(ACU_Stack* stack, ACU_StackDataDestroy destroy) {
     stack->size = 0;
     stack->destroy = destroy;
     stack->head = NULL;

@@ -26,23 +26,21 @@
 #include "acu_cmmn.h"
 
 typedef struct ACU_StackElement_ {
-    void* data;
     struct ACU_StackElement_* next;
+    void* data;
 } ACU_StackElement;
 
-typedef void ACU_Destroy(void* data);
+typedef void ACU_StackDataDestroy(void* data);
 
 typedef struct ACU_Stack_ {
-    int size;
-
-    ACU_Destroy* destroy;
-
     ACU_StackElement* head;
+    int size;
+    ACU_StackDataDestroy* destroy;
 } ACU_Stack;
 
 int acu_stackSize(const ACU_Stack* stack);
 
-__EXPORT void acu_stackInit(ACU_Stack* stack, ACU_Destroy destroy);
+__EXPORT void acu_stackInit(ACU_Stack* stack, ACU_StackDataDestroy destroy);
 
 void* acu_stackPeek(const ACU_Stack* stack);
 
