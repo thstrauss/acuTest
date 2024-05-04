@@ -26,10 +26,11 @@
 #include <setjmp.h>
 
 struct ACU_Result_;
+struct ACU_Frame_;
 
 typedef struct ACU_ExecuteEnv_ {
     struct ACU_Result_* result;
-    jmp_buf assertBuf;
+    struct ACU_Frame_ *exceptionFrame;
 } ACU_ExecuteEnv;
 
 #endif

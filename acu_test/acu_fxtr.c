@@ -29,17 +29,24 @@
 #include "acu_tcse.h"
 #include "acu_util.h"
 #include "acu_suit.h"
+#include "acu_tryc.h"
 
 static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_ProgressFunc progress, void* progressContext) {
     ACU_ExecuteEnv environment;
     ACU_Result* result = acuTest_resultMalloc();
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    frame.exception = 0;
 
     acuTest_resultInit(result);
-
     environment.result = result;
+    environment.exceptionFrame = &frame;
+
+    acu_stackPush(frameStack, &frame);
+
     result->start = clock();
     do {
-        switch (setjmp(environment.assertBuf)) {
+        switch (setjmp(frame.exceptionBuf)) {
             case 0: {
                 while (1) {
                     testCase->testFunc(&environment, context);
@@ -50,8 +57,13 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
             case ACU_TEST_ABORTED: {
                 break;
             }
+            default: {
+                acu_stackPop(frameStack, NULL);
+                break;
+            }
         }
     } while (0);
+
     result->end = clock();
     testCase->result = result;
     if (progress) {

@@ -24,16 +24,22 @@
 #include <acu_suit.h>
 #include <acu_util.h>
 #include <acu_rslt.h>
+#include <acu_tryc.h>
  
 static void strEqualBothNull(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
     resultBuf->file = NULL; 
     
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strEqual(testEnvironment, NULL, NULL, "strEqualBothNull"); \
     }
     TRY
@@ -52,12 +58,17 @@ static void strEqualBothNull(ACU_ExecuteEnv* environment, const void* context) {
 static void strEqualActualNull(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
     resultBuf->file = NULL;
 
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strEqual(testEnvironment, NULL, "abc", "strEqualActualNull"); \
     }
     TRY
@@ -76,12 +87,17 @@ static void strEqualActualNull(ACU_ExecuteEnv* environment, const void* context)
 static void strIsEmpty(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
     resultBuf->file = NULL;
 
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strIsEmpty(testEnvironment, "", "strIsEmpty"); \
     }
     TRY
@@ -101,12 +117,17 @@ static void strIsEmpty(ACU_ExecuteEnv* environment, const void* context) {
 static void strIsNotEmpty(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
     resultBuf->file = NULL;
 
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strIsNotEmpty(testEnvironment, "abc", "strIsNotEmpty"); \
     }
     TRY
@@ -125,12 +146,17 @@ static void strIsNotEmpty(ACU_ExecuteEnv* environment, const void* context) {
 static void strIsNotEmptyFails(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
     resultBuf->file = NULL;
 
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strIsNotEmpty(testEnvironment, "", "strIsNotEmptyFails"); \
     }
     TRY
@@ -149,12 +175,17 @@ static void strIsNotEmptyFails(ACU_ExecuteEnv* environment, const void* context)
 static void strContains(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
     resultBuf->file = NULL;
 
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strContains(testEnvironment, "qwertyabc", "abc", "strContains"); 
     }
     TRY
@@ -173,12 +204,17 @@ static void strContains(ACU_ExecuteEnv* environment, const void* context) {
 static void strNotContains(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
     resultBuf->file = NULL;
 
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strNotContains(testEnvironment, "qwertyabc", "abcd", "strNotContains");
     }
     TRY
@@ -197,12 +233,17 @@ static void strNotContains(ACU_ExecuteEnv* environment, const void* context) {
 static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
     testEnvironment->result = resultBuf;
+
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
     resultBuf->file = NULL; 
     
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strEqual(testEnvironment, "abc", "abc", "strEqual");
     }
     TRY
@@ -221,15 +262,21 @@ static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
 static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
     resultBuf->file = NULL; 
     
-    if (!setjmp(testEnvironment->assertBuf)) {
-        int i;
-        for (i = 0; i < 10000; i++)
-        ACU_assert_strNotEqual(testEnvironment, "ptr1", "ptr2", "strNotEqual");
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
+        long i;
+        for (i = 0; i < 10000L; i++) {
+        	ACU_assert_strNotEqual(testEnvironment, "ptr1", "ptr2", "strNotEqual");
+    	}
     }
     TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strNotEqual"); \
@@ -247,12 +294,17 @@ static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
 static void strNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
     resultBuf->file = NULL; 
     
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strNotEqual(testEnvironment, NULL, NULL, "ptrNotEqualNull");
     }
     TRY

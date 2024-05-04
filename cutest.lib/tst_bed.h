@@ -30,13 +30,16 @@
 #include <acu_rslt.h>
 #include <acu_eenv.h>
 #include <acu_util.h>
+#include <acu_tryc.h>
 
 #define TESTBED(postfix, type, operation, actual, expetced) static void test##type##operation##postfix(ACU_ExecuteEnv* environment, const void* context) { \
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv)); \
     ACU_Result* resultBuf = acuTest_resultMalloc(); \
+    ACU_Frame frame; \
     testEnvironment->result = resultBuf; \
+    testEnvironment->exceptionFrame = &frame; \
     acuTest_resultInit(resultBuf); \
-    if (!setjmp(testEnvironment->assertBuf)) { \
+    if (!setjmp(frame.exceptionBuf)) { \
         ACU_assert(testEnvironment, type, operation, actual, expetced, #type#operation#postfix); \
     } \
     TRY \

@@ -20,41 +20,38 @@
  */
 
 #pragma once
-#ifndef _ACU_UTILS_H_
-#define _ACU_UTILS_H_
+#ifndef _ACU_STACK_H_
+#define _ACU_STACK_H_
 
-#include <stdarg.h>
 #include "acu_cmmn.h"
 
-/*
-* Returns the program name.
-*/
-__EXPORT char* acu_progName(void);
+typedef struct ACU_StackElement_ {
+    void* data;
+    struct ACU_StackElement_* next;
+} ACU_StackElement;
 
-/*
-* 
-*/
-__EXPORT void acu_setProgName(const char* progName);
+typedef void ACU_Destroy(void* data);
 
-/*
-    Prints an error message to stderr and terminates the program. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_eprintf(const char* format, ...);
+typedef struct ACU_Stack_ {
+    int size;
 
-/*
-    Prints a warning message to stderr. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_wprintf(const char* format, ...);
-__EXPORT char* acu_estrdup(const char* s);
-__EXPORT void* acu_emalloc(size_t n);
+    ACU_Destroy* destroy;
 
-__EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
-__EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
+    ACU_StackElement* head;
+} ACU_Stack;
 
-#define SAFE_REF(ref) ((ref)?(ref):"NULL")
+int acu_stackSize(const ACU_Stack* stack);
 
-void __exit(int status);
+__EXPORT void acu_stackInit(ACU_Stack* stack, ACU_Destroy destroy);
 
-#endif
+void* acu_stackPeek(const ACU_Stack* stack);
+
+__EXPORT ACU_Stack* acu_stackMalloc(void);
+
+__EXPORT void acu_stackDestroy(ACU_Stack* stack);
+
+__EXPORT int acu_stackPush(ACU_Stack* stack, void* data);
+
+__EXPORT int acu_stackPop(ACU_Stack* stack, void** data);
+
+#endif 

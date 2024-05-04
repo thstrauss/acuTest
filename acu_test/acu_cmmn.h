@@ -46,4 +46,9 @@ typedef enum ACU_Exception_ {
     ACU_TEST_ABORTED = 3
 } ACU_Exception;
 
+/*
+* Can be used to suppress unused variable warnings.
+*/
+#define UNUSED(x) (void)(x);
+
 #endif

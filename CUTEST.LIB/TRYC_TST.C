@@ -24,6 +24,8 @@
 #include <acu_suit.h>
 #include <acu_util.h>
 #include <acu_rslt.h>
+#include <acu_stck.h>
+#include <acu_tryc.h>
 
 #include <tryctch.h>
 
@@ -105,6 +107,55 @@ static void tryCatchFinallyVisitedTests(ACU_ExecuteEnv* environment, const void*
     UNUSED(context);
 }
 
+static void resultInitTest(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_Stack* stack = acu_stackMalloc();
+
+    jmp_buf outerBuf;
+
+    acu_stackInit(stack, NULL);
+    acu_stackPush(stack, &outerBuf);
+    printf("before\n\r");
+    if (_setjmp(outerBuf) == 0) {
+        do {
+            jmp_buf _test_Buf; acu_stackPush(stack, &_test_Buf); switch (_setjmp(_test_Buf)) {
+            case 0: while (1) {
+                printf("block\n\r");
+                jmp_buf* localBuf;
+                acu_stackPop(stack, (void**)&localBuf);
+                longjmp(*localBuf, 255);
+                break;
+            }
+            case 255: {
+                printf("finally\n\r");
+                jmp_buf* localBuf;
+                acu_stackPop(stack, (void**)&localBuf);
+                longjmp(*localBuf, 1);
+                break;
+            }
+            }
+        } while (0);
+    }
+    else {
+        printf("outer\n\r");
+    }
+    UNUSED(context);
+}
+
+static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
+    int visited = 0;
+    int finally = 0;
+    ACU_TRY
+        visited = 1;
+        ACU_assert(environment, int, Equal, 0, 1, "xxx");
+        visited = 2;
+    ACU_FINALLY
+        finally = 1;
+    ACU_ETRY;
+    ACU_assert(environment, int, Equal, visited, 1, "block visited");
+    ACU_assert(environment, int, Equal, finally, 1, "finally not visited");
+    UNUSED(context);
+}
+
 ACU_Fixture* tryCatchFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
@@ -116,6 +167,9 @@ ACU_Fixture* tryCatchFixture(void)
     acu_fixtureAddTestCase(fixture, "try throw catch", tryCatchVisitedTests);
     acu_fixtureAddTestCase(fixture, "try throw catch_ expanded", tryCatchVisitedExpandedTests);
     acu_fixtureAddTestCase(fixture, "try throw catch finally", tryCatchFinallyVisitedTests);
+
+    acu_fixtureAddTestCase(fixture, "resultInitTest", resultInitTest);
+    acu_fixtureAddTestCase(fixture, "visitFinallyTest", visitFinallyTest);
 
     return fixture;
 }

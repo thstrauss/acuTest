@@ -25,6 +25,7 @@
 #include <acu_asrt.h>
 #include <acu_util.h>
 #include <acu_suit.h>
+#include <acu_stck.h>
 
 #include <acu_rslt.h>
 
@@ -58,17 +59,20 @@ static void resultFailedInitialErrorTest(ACU_ExecuteEnv* environment, const void
     UNUSED(context);
 }
 
+
+
 ACU_Fixture* resultFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
     acu_fixtureInit(fixture, "result tests");
 
-    acu_fixtureAddTestCase(fixture, "result Test", resultFailedTest);
-    acu_fixtureAddTestCase(fixture, "result Test", resultErrorTest);
-    acu_fixtureAddTestCase(fixture, "result Test", resultPassedInitialFailedTest);
-    acu_fixtureAddTestCase(fixture, "result Test", resultPassedInitialErrorTest);
-    acu_fixtureAddTestCase(fixture, "result Test", resultFailedInitialErrorTest);
+    acu_fixtureAddTestCase(fixture, "result aggregation Test", resultFailedTest);
+    acu_fixtureAddTestCase(fixture, "result aggregation Test", resultErrorTest);
+    acu_fixtureAddTestCase(fixture, "result aggregation Test", resultPassedInitialFailedTest);
+    acu_fixtureAddTestCase(fixture, "result aggregation Test", resultPassedInitialErrorTest);
+    acu_fixtureAddTestCase(fixture, "result aggregation Test", resultFailedInitialErrorTest);
+
 
     return fixture;
 }

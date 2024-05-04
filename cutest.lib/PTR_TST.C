@@ -24,21 +24,28 @@
 #include <acu_suit.h>
 #include <acu_util.h>
 #include <acu_rslt.h>
+#include <acu_tryc.h>
  
 static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
-	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
     resultBuf->file = NULL; 
     
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
     	int i;
     	for (i = 0; i < 10000; i++) {
         	ACU_assert_ptrEqual(testEnvironment, NULL, NULL, "ptrEqualNull"); \
     	}
     }
+    acu_stackPop(frameStack, NULL);
     TRY
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqualNull"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrEqualNull"); \
@@ -53,14 +60,19 @@ static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
 } 
 
 static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
-	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
-    resultBuf->file = NULL; 
+    resultBuf->file = NULL;
     
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         void* ptr1 = (void*)123;
         void* ptr2 = (void*)123;
     	int i;
@@ -84,14 +96,19 @@ static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
 }
 
 static void ptrNotEqual(ACU_ExecuteEnv* environment, const void* context) {
-	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
-    resultBuf->file = NULL; 
+    resultBuf->file = NULL;
     
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         void* ptr1 = (void*)123;
         void* ptr2 = (void*)124;
         ACU_assert_ptrNotEqual(testEnvironment, ptr1, ptr2, "ptrNotEqual");
@@ -112,14 +129,19 @@ static void ptrNotEqual(ACU_ExecuteEnv* environment, const void* context) {
 }
 
 static void ptrNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
-	ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
-    resultBuf->file = NULL; 
+    resultBuf->file = NULL;
     
-    if (!setjmp(testEnvironment->assertBuf)) {
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         void* ptr1 = (void*)123;
         void* ptr2 = NULL;
         ACU_assert_ptrNotEqual(testEnvironment, ptr1, ptr2, "ptrNotEqualNull");

@@ -19,42 +19,16 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-#ifndef _ACU_UTILS_H_
-#define _ACU_UTILS_H_
+#include "acu_stck.h"
+#include "acu_tryc.h"
 
-#include <stdarg.h>
-#include "acu_cmmn.h"
+static ACU_Stack* acu_jmpBufFrames = NULL;
 
-/*
-* Returns the program name.
-*/
-__EXPORT char* acu_progName(void);
-
-/*
-* 
-*/
-__EXPORT void acu_setProgName(const char* progName);
-
-/*
-    Prints an error message to stderr and terminates the program. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_eprintf(const char* format, ...);
-
-/*
-    Prints a warning message to stderr. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_wprintf(const char* format, ...);
-__EXPORT char* acu_estrdup(const char* s);
-__EXPORT void* acu_emalloc(size_t n);
-
-__EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
-__EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
-
-#define SAFE_REF(ref) ((ref)?(ref):"NULL")
-
-void __exit(int status);
-
-#endif
+ACU_Stack* acu_initTryCatch(void)
+{
+    if (!acu_jmpBufFrames) {
+        acu_jmpBufFrames = acu_stackMalloc();
+        acu_stackInit(acu_jmpBufFrames, NULL);
+    }
+    return acu_jmpBufFrames;
+}

@@ -25,6 +25,8 @@
 #include "acu_eenv.h"
 #include "acu_util.h"
 #include "acu_rslt.h"
+#include "acu_tryc.h"
+#include "acu_stck.h"
 
 #define __ACU_EMIT_ASSERT_FUNCS__
 #include "acu_asrt.h"
@@ -173,10 +175,14 @@ static char* acu_formatMessage(enum ACU_TestResult assertResult, const ACU_Asser
 }
 
 static void acu_finalizeFailed(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame* frame;
+    acu_stackPop(frameStack, &frame);
     environment->result->message = acu_formatMessage(environment->result->status, parameter);
     environment->result->file = acu_estrdup(parameter->fileName); 
-    environment->result->line = parameter->line; 
-    longjmp(environment->assertBuf, ACU_TEST_ABORTED);
+    environment->result->line = parameter->line;
+    environment->exceptionFrame->exception = ACU_TEST_ABORTED;
+    longjmp(frame->exceptionBuf, frame->exception != 0 ? frame->exception: 0xffff);
 }
 
 void acu_assert(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {

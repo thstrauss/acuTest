@@ -131,7 +131,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;ACUTEST2_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -150,7 +150,9 @@
     <ClCompile Include="acu_list.c" />
     <ClCompile Include="acu_rprt.c" />
     <ClCompile Include="acu_rslt.c" />
+    <ClCompile Include="acu_stck.c" />
     <ClCompile Include="acu_suit.c" />
+    <ClCompile Include="acu_tryc.c" />
     <ClCompile Include="acu_util.c" />
     <ClCompile Include="dllmain.c" />
   </ItemGroup>
@@ -167,8 +169,10 @@
     <ClInclude Include="acu_list.h" />
     <ClInclude Include="acu_rprt.h" />
     <ClInclude Include="ACU_RSLT.H" />
+    <ClInclude Include="acu_stck.h" />
     <ClInclude Include="acu_suit.h" />
     <ClInclude Include="acu_tcse.h" />
+    <ClInclude Include="acu_tryc.h" />
     <ClInclude Include="acu_util.h" />
     <ClInclude Include="tryctch.h" />
   </ItemGroup>
