@@ -65,7 +65,7 @@ __EXPORT ACU_Stack* acu_initTryCatch(void);
 #define ACU_CATCH(x) break; case (x):
 #define ACU_FINALLY break; } default: {
 #define ACU_ETRY acu_stackPop(acu_initTryCatch(), NULL); break; } } }while(0) 
-#define ACU_THROW(x) THROW_CTX(exception, x)
-#define ACU_THROW_CTX(CONTEXT, x) {ACU_Frame* f; acu_stackPop(acu_initTryCatch(), (ACU_Frame**) &f); _##CONTEXT##_Frame.excpetion=(x) longjmp(f->excptionBuf, f->exception)}
+#define ACU_THROW(x) ACU_THROW_CTX(exception, x)
+#define ACU_THROW_CTX(CONTEXT, x) {ACU_Frame* f; acu_stackPop(acu_initTryCatch(), (ACU_Frame**) &f); _##CONTEXT##_Frame.exception=(x); longjmp(f->exceptionBuf, f->exception);}
 
 #endif /*!_ACU_TRY_THROW_CATCH_H_*/
