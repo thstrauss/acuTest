@@ -114,7 +114,6 @@ static void resultInitTest(ACU_ExecuteEnv* environment, const void* context) {
 
     acu_stackInit(stack, (ACU_StackDataDestroy*) NULL);
     acu_stackPush(stack, &outerBuf);
-    printf("before\n\r");
     if (setjmp(outerBuf) == 0) {
         do {
             jmp_buf _test_Buf; acu_stackPush(stack, &_test_Buf); switch (setjmp(_test_Buf)) {
@@ -135,9 +134,6 @@ static void resultInitTest(ACU_ExecuteEnv* environment, const void* context) {
             }
         } while (0);
     }
-    else {
-        printf("outer\n\r");
-    }
     UNUSED(context);
     UNUSED(environment);
 }
@@ -145,13 +141,28 @@ static void resultInitTest(ACU_ExecuteEnv* environment, const void* context) {
 static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     int visited = 0;
     int finally = 0;
-    ACU_TRY
-        visited = 1;
-        ACU_assert(environment, int, Equal, 0, 1, "xxx");
+    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
+    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Frame frame;
+    acu_stackPush(frameStack, &frame);
+    testEnvironment->exceptionFrame = &frame;
+
+    testEnvironment->result = resultBuf;
+    resultBuf->status = ACU_TEST_PASSED;
+    resultBuf->message = NULL;
+    resultBuf->file = NULL;
+
+    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
+        ACU_TRY
+            visited = 1;
+        ACU_assert(testEnvironment, int, Equal, 0, 1, "xxx");
         visited = 2;
-    ACU_FINALLY
-        finally = 1;
-    ACU_ETRY;
+        ACU_FINALLY
+            finally = 1;
+        ACU_ETRY;
+    }
+    acu_stackPop(acu_initTryCatch(), (void**)NULL);
     ACU_assert(environment, int, Equal, visited, 1, "block visited");
     ACU_assert(environment, int, Equal, finally, 1, "finally not visited");
     UNUSED(context);
@@ -176,6 +187,32 @@ static void visitFinallyAfterThrowTest(ACU_ExecuteEnv* environment, const void* 
     UNUSED(context);
 }
 
+static void visitOverlappingThrowTest(ACU_ExecuteEnv* environment, const void* context) {
+    volatile int visited = 0;
+    volatile int finally = 0;
+    volatile int outerFinally = 0;
+    volatile int catched = 0;
+    printf("visitOverlappingThrowTest\n\r");
+    ACU_TRY_CTX(outer)
+        ACU_TRY
+            visited = 1;;
+        ACU_THROW_CTX(outer, 12);
+        visited = 2;
+        ACU_FINALLY
+            finally = 1;
+        ACU_ETRY;
+    ACU_CATCH_CTX(outer, 12)
+        catched = 1;
+    ACU_FINALLY_CTX(outer)
+        outerFinally = 1;
+    ACU_ETRY_CTX(outer);
+    ACU_assert(environment, int, Equal, visited, 1, "block visited");
+    ACU_assert(environment, int, Equal, catched, 1, "catch not visited");
+    ACU_assert(environment, int, Equal, finally, 1, "finally not visited");
+    ACU_assert(environment, int, Equal, outerFinally, 1, "outerFinally not visited");
+    UNUSED(context);
+}
+
 ACU_Fixture* tryCatchFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
@@ -191,6 +228,8 @@ ACU_Fixture* tryCatchFixture(void)
     acu_fixtureAddTestCase(fixture, "resultInitTest", resultInitTest);
     acu_fixtureAddTestCase(fixture, "visitFinallyTest", visitFinallyTest);
     acu_fixtureAddTestCase(fixture, "visitFinallyAfterThrowTest", visitFinallyAfterThrowTest);
+    acu_fixtureAddTestCase(fixture, "visitOverlappingThrowTest", visitOverlappingThrowTest);
+
 
 
     return fixture;
