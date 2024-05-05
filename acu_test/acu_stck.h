@@ -42,7 +42,7 @@ int acu_stackSize(const ACU_Stack* stack);
 
 __EXPORT void acu_stackInit(ACU_Stack* stack, ACU_StackDataDestroy destroy);
 
-void* acu_stackPeek(const ACU_Stack* stack);
+__EXPORT void* acu_stackPeek(const ACU_Stack* stack);
 
 __EXPORT ACU_Stack* acu_stackMalloc(void);
 
