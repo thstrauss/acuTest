@@ -57,13 +57,9 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
             case ACU_TEST_ABORTED: {
                 break;
             }
-            default: {
-                acu_stackPop(frameStack, NULL);
-                break;
-            }
         }
     } while (0);
-
+    acu_stackPop(frameStack, (void**) NULL);
     result->end = clock();
     testCase->result = result;
     if (progress) {

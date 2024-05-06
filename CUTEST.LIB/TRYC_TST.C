@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauﬂ
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -68,27 +68,6 @@ static void tryCatchVisitedTests(ACU_ExecuteEnv* environment, const void* contex
     UNUSED(context);
 }
 
-static void tryCatchVisitedExpandedTests(ACU_ExecuteEnv* environment, const void* context) { 
-    int visited = 0;
-    int catched = 0;
-    do {
-        jmp_buf _exception_Buf; switch (setjmp(_exception_Buf)) {
-        case 0: while (1) {
-            visited++;
-            longjmp(_exception_Buf, (1));
-            visited++;
-        break; case (1):
-            catched = 1;
-            break;
-        }
-        }
-    } while (0);
-    ACU_assert(environment, int, Equal, visited, 1, "block visited");
-    ACU_assert(environment, int, Equal, catched, 1, "catch not visited");
-    UNUSED(context);
-}
-
-
 static void tryCatchFinallyVisitedTests(ACU_ExecuteEnv* environment, const void* context) {
     int visited = 0;
     int catched = 0;
@@ -139,7 +118,6 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, visited, 1, "block visited");
     ACU_assert(environment, int, Equal, finally, 1, "finally not visited"); 
     UNUSED(context);
-    printf("after \n\r");
 }
 
 static void visitFinallyAfterThrowTest(ACU_ExecuteEnv* environment, const void* context) {
@@ -148,7 +126,7 @@ static void visitFinallyAfterThrowTest(ACU_ExecuteEnv* environment, const void* 
     int catched = 0;
     ACU_TRY
         visited = 1;;
-        /*ACU_THROW(1); */
+        ACU_THROW(1);
         visited = 2;
     ACU_CATCH(1)
         catched = 1;
@@ -166,7 +144,6 @@ static void visitOverlappingThrowTest(ACU_ExecuteEnv* environment, const void* c
     volatile int finally = 0;
     volatile int outerFinally = 0;
     volatile int catched = 0;
-    printf("visitOverlappingThrowTest\n\r");
     ACU_TRY_CTX(outer)
         ACU_TRY
             visited = 1;;
@@ -196,7 +173,6 @@ ACU_Fixture* tryCatchFixture(void)
     acu_fixtureAddTestCase(fixture, "try etry", tryETryTests);
     acu_fixtureAddTestCase(fixture, "try catch", tryCatchNotVisitedTests);
     acu_fixtureAddTestCase(fixture, "try throw catch", tryCatchVisitedTests);
-    acu_fixtureAddTestCase(fixture, "try throw catch_ expanded", tryCatchVisitedExpandedTests);
     acu_fixtureAddTestCase(fixture, "try throw catch finally", tryCatchFinallyVisitedTests);
 
     acu_fixtureAddTestCase(fixture, "visitFinallyTest", visitFinallyTest);

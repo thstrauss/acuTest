@@ -38,7 +38,7 @@ typedef struct ACU_Stack_ {
     ACU_StackDataDestroy* destroy;
 } ACU_Stack;
 
-int acu_stackSize(const ACU_Stack* stack);
+__EXPORT int acu_stackSize(const ACU_Stack* stack);
 
 __EXPORT void acu_stackInit(ACU_Stack* stack, ACU_StackDataDestroy destroy);
 

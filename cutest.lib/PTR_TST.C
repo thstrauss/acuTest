@@ -37,27 +37,27 @@ static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
-    resultBuf->file = NULL; 
-    
+    resultBuf->file = NULL;
+
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-    	int i;
-    	for (i = 0; i < 10000; i++) {
-        	ACU_assert_ptrEqual(testEnvironment, NULL, NULL, "ptrEqualNull"); \
-    	}
+        int i;
+        for (i = 0; i < 10000; i++) {
+            ACU_assert_ptrEqual(testEnvironment, NULL, NULL, "ptrEqualNull"); \
+        }
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackPop(frameStack, (void**)NULL);
     TRY
-    	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqualNull"); \
-    	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrEqualNull"); \
+        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqualNull"); \
+        ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrEqualNull"); \
     FINALLY
-    	if (resultBuf->message) {
-        	free(resultBuf->message);
-    	}
-    	free(resultBuf);
-    	free(testEnvironment);
+        if (resultBuf->message) {
+            free(resultBuf->message);
+        }
+        free(resultBuf);
+        free(testEnvironment);
     ETRY;
     UNUSED(context);
-} 
+}
 
 static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));

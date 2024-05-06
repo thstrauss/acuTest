@@ -176,7 +176,6 @@ static char* acu_formatMessage(enum ACU_TestResult assertResult, const ACU_Asser
 
 static void acu_finalizeFailed(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
     ACU_Frame* frame = acu_stackPeek(acu_getFrameStack());
-
     environment->result->message = acu_formatMessage(environment->result->status, parameter);
     environment->result->file = acu_estrdup(parameter->fileName); 
     environment->result->line = parameter->line;
