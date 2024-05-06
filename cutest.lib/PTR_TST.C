@@ -29,7 +29,7 @@
 static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -62,7 +62,7 @@ static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
 static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -98,7 +98,7 @@ static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
 static void ptrNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -131,7 +131,7 @@ static void ptrNotEqual(ACU_ExecuteEnv* environment, const void* context) {
 static void ptrNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;

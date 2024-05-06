@@ -54,21 +54,21 @@ typedef struct ACU_Frame_ {
     int exception;
 } ACU_Frame;
 
-__EXPORT ACU_Stack* acu_initTryCatch(void);
+__EXPORT ACU_Stack* acu_getFrameStack(void);
 
  /* For the full documentation and explanation of the code below, please refer to
   * http://www.di.unipi.it/~nids/docs/longjump_try_trow_catch.html
   */
 
-#define ACU_TRY_CTX(CONTEXT) do { ACU_Frame _##CONTEXT##_Frame; _##CONTEXT##_Frame.exception = 0; acu_stackPush(acu_initTryCatch(), &_##CONTEXT##_Frame); switch(setjmp(_##CONTEXT##_Frame.exceptionBuf) ) { case 0: while(1) {
+#define ACU_TRY_CTX(CONTEXT) do { ACU_Frame _##CONTEXT##_Frame; _##CONTEXT##_Frame.exception = 0; acu_stackPush(acu_getFrameStack(), &_##CONTEXT##_Frame); switch(setjmp(_##CONTEXT##_Frame.exceptionBuf) ) { case 0: while(1) {
 #define ACU_TRY ACU_TRY_CTX(exception)
 #define ACU_CATCH_CTX(CONTEXT, x) break; case (x): 
 #define ACU_CATCH(x) ACU_CATCH_CTX(exception, x)
 #define ACU_FINALLY_CTX(CONTEXT) break; } default: 
 #define ACU_FINALLY ACU_FINALLY_CTX(exception)
-#define ACU_ETRY_CTX(CONTEXT) acu_stackPop(acu_initTryCatch(), NULL); { ACU_Frame* f = acu_stackPeek(acu_initTryCatch()); if (f) longjmp(f->exceptionBuf, f->exception); } break; } } while(0) 
+#define ACU_ETRY_CTX(CONTEXT) acu_stackPop(acu_getFrameStack(), NULL); { ACU_Frame* f = acu_stackPeek(acu_getFrameStack()); if (f) longjmp(f->exceptionBuf, f->exception); } break; } } while(0) 
 #define ACU_ETRY ACU_ETRY_CTX(exception)
 #define ACU_THROW(x) ACU_THROW_CTX(exception, x)
-#define ACU_THROW_CTX(CONTEXT, x) {ACU_Frame* f = acu_stackPeek(acu_initTryCatch()); _##CONTEXT##_Frame.exception=(x) != 0 ? (x):0xFFFF; longjmp(f->exceptionBuf, f->exception);}
+#define ACU_THROW_CTX(CONTEXT, x) {ACU_Frame* f = acu_stackPeek(acu_getFrameStack()); _##CONTEXT##_Frame.exception=(x) != 0 ? (x):0xFFFF; longjmp(f->exceptionBuf, f->exception);}
 
 #endif /*!_ACU_TRY_THROW_CATCH_H_*/

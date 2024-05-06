@@ -34,7 +34,7 @@
 static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_ProgressFunc progress, void* progressContext) {
     ACU_ExecuteEnv environment;
     ACU_Result* result = acuTest_resultMalloc();
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     frame.exception = 0;
 

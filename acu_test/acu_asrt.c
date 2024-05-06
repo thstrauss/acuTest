@@ -38,7 +38,7 @@ static enum ACU_TestResult acu_equalPtr(const ACU_AssertParameter* parameter) {
 
 static char* acu_equalPtrFailedFormatMessage(const ACU_AssertParameter* parameter) {
     char* buffer = acu_emalloc(128);
-    acu_sprintf_s(buffer, 128, "%actual value %p not equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
+    acu_sprintf_s(buffer, 128, "actual value %p not equal to %p: %s", parameter->actual, parameter->expected, parameter->message);
     return buffer;
 }
 
@@ -175,9 +175,8 @@ static char* acu_formatMessage(enum ACU_TestResult assertResult, const ACU_Asser
 }
 
 static void acu_finalizeFailed(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
-    ACU_Stack* frameStack = acu_initTryCatch();
-    ACU_Frame* frame;
-    frame = acu_stackPeek(frameStack);
+    ACU_Frame* frame = acu_stackPeek(acu_getFrameStack());
+
     environment->result->message = acu_formatMessage(environment->result->status, parameter);
     environment->result->file = acu_estrdup(parameter->fileName); 
     environment->result->line = parameter->line;
