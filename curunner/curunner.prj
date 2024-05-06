@@ -32,7 +32,7 @@ main.c
 ..\acu_test\acu_test.prj
 ..\cutest.lib\cutest.prj
 ..\cutest.lib\cuempty.prj
-..\cutest.lib\cutstrn.prj
+..\cutest.lib\cutstrun.prj
 ..\cutest.lib\cutscup.prj
 
 PCFLTLIB.LIB

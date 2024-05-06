@@ -54,6 +54,8 @@ typedef struct ACU_Frame_ {
     int exception;
 } ACU_Frame;
 
+typedef void (ACU_setFrameStackFunc)(ACU_Stack* jmpBufFrames);
+
 __EXPORT ACU_Stack* acu_getFrameStack(void);
 void acu_setFrameStack(ACU_Stack* jmpBufFrames);
 
