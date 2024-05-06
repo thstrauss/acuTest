@@ -33,11 +33,8 @@ static void simpleTestCase(ACU_ExecuteEnv* environment, const void* context) {
 ACU_Fixture* listFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
-
     acu_fixtureInit(fixture, "sample tests");
-
     acu_fixtureAddTestCase(fixture, "simpleTestCase", simpleTestCase);
-
     return fixture;
 }
 
@@ -53,6 +50,8 @@ int main()
     result = acu_suiteExecute(suite, acu_progress, NULL);
 
     acu_suiteAccept(suite, acu_report, NULL);
+
+    acu_suiteDestroy(suite);
 
     return result != ACU_TEST_PASSED ? 2 : 0;
 }
