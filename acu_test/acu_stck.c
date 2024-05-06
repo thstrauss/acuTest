@@ -78,6 +78,9 @@ int acu_stackPop(ACU_Stack* stack, void** data)
     ACU_StackElement* oldElement;
 
     if (stack->size == 0) {
+        if (data) {
+            *data = NULL;
+        }
         return -1;
     }
 

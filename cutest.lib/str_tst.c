@@ -29,7 +29,7 @@
 static void strEqualBothNull(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -58,7 +58,7 @@ static void strEqualBothNull(ACU_ExecuteEnv* environment, const void* context) {
 static void strEqualActualNull(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -87,7 +87,7 @@ static void strEqualActualNull(ACU_ExecuteEnv* environment, const void* context)
 static void strIsEmpty(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -117,7 +117,7 @@ static void strIsEmpty(ACU_ExecuteEnv* environment, const void* context) {
 static void strIsNotEmpty(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -146,7 +146,7 @@ static void strIsNotEmpty(ACU_ExecuteEnv* environment, const void* context) {
 static void strIsNotEmptyFails(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -175,7 +175,7 @@ static void strIsNotEmptyFails(ACU_ExecuteEnv* environment, const void* context)
 static void strContains(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -204,7 +204,7 @@ static void strContains(ACU_ExecuteEnv* environment, const void* context) {
 static void strNotContains(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -233,7 +233,7 @@ static void strNotContains(ACU_ExecuteEnv* environment, const void* context) {
 static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -262,7 +262,7 @@ static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
 static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
@@ -294,7 +294,7 @@ static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
 static void strNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-    ACU_Stack* frameStack = acu_initTryCatch();
+    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
