@@ -46,16 +46,16 @@ static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
         }
     }
     acu_stackPop(frameStack, (void**)NULL);
-    TRY
+    ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqualNull"); \
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrEqualNull"); \
-    FINALLY
+    ACU_FINALLY
         if (resultBuf->message) {
             free(resultBuf->message);
         }
         free(resultBuf);
         free(testEnvironment);
-    ETRY;
+    ACU_ETRY;
     UNUSED(context);
 }
 
@@ -82,16 +82,17 @@ static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
         UNUSED(ptr1);
         UNUSED(ptr2);
     }
-    TRY
+    acu_stackPop(frameStack, (void**)NULL);
+    ACU_TRY
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqual"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrEqual"); \
-    FINALLY
+    ACU_FINALLY
     	if (resultBuf->message) {
         	free(resultBuf->message);
     	}
     	free(resultBuf);
     	free(testEnvironment);
-    ETRY;
+    ACU_ETRY;
     UNUSED(context);
 }
 
@@ -115,16 +116,17 @@ static void ptrNotEqual(ACU_ExecuteEnv* environment, const void* context) {
         UNUSED(ptr1);
         UNUSED(ptr2);
     }
-    TRY
+    acu_stackPop(frameStack, NULL);
+    ACU_TRY
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqual"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrNotEqual"); \
-    FINALLY
+    ACU_FINALLY
     	if (resultBuf->message) {
         	free(resultBuf->message);
     	}
     	free(resultBuf);
     	free(testEnvironment);
-    ETRY;
+        ACU_ETRY;
     UNUSED(context);
 }
 
@@ -148,6 +150,7 @@ static void ptrNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
         UNUSED(ptr1);
         UNUSED(ptr2);
     }
+    acu_stackPop(frameStack, NULL);
     TRY
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqualNull"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrNotEqualNull"); \
