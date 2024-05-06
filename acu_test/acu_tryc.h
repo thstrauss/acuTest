@@ -55,6 +55,7 @@ typedef struct ACU_Frame_ {
 } ACU_Frame;
 
 __EXPORT ACU_Stack* acu_getFrameStack(void);
+void acu_setFrameStack(ACU_Stack* jmpBufFrames);
 
  /* For the full documentation and explanation of the code below, please refer to
   * http://www.di.unipi.it/~nids/docs/longjump_try_trow_catch.html

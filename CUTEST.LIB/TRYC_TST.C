@@ -124,15 +124,20 @@ static void visitFinallyAfterThrowTest(ACU_ExecuteEnv* environment, const void* 
     int visited = 0;
     int finally = 0;
     int catched = 0;
+    printf(">> visitFinallyAfterThrowTest %d\r\n", acu_stackSize(acu_getFrameStack()));
     ACU_TRY
+    	printf(">> 1\r\n");
         visited = 1;;
         ACU_THROW(1);
         visited = 2;
     ACU_CATCH(1)
+        printf(">> 2\r\n");
         catched = 1;
     ACU_FINALLY
+        printf(">> 3\r\n");
         finally = 1;
     ACU_ETRY;
+    printf("<< visitFinallyAfterThrowTest\r\n");
     ACU_assert(environment, int, Equal, visited, 1, "block visited");
     ACU_assert(environment, int, Equal, catched, 1, "catch not visited");
     ACU_assert(environment, int, Equal, finally, 1, "finally not visited");

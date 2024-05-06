@@ -22,6 +22,7 @@
 #include "acu_ldr.h"
 #include "acu_util.h"
 #include "acu_tryc.h"
+#include "acu_stck.h"
 
 #ifdef __TOS__
 #include <string.h>
@@ -169,6 +170,7 @@ ACU_Entry* cup_load(const char* cu_name) {
         return NULL;
     }
     entry = init();
+    entry->setFrameStackFunc(acu_getFrameStack());
     entry->cup_code = init;
     return entry;
 }
@@ -190,7 +192,7 @@ ACU_Entry* cup_load(const char* cu_name) {
         return NULL;
     }
     ACU_init* init = (ACU_init*) GetProcAddress(module, "acu_init");
-    ACU_Entry* entry = init();
+    ACU_Entry* entry = init(NULL);
     entry->module = module;
     return entry;
 }
@@ -208,6 +210,9 @@ ACU_Entry* acu_entryMalloc(void) {
 
 void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
     entry->suite = suite;
+#ifdef __TOS__
+    entry->setFrameStackFunc = acu_setFrameStack;
+#endif
 }
 
 void acu_entryDestroy(ACU_Entry* entry) {

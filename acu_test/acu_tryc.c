@@ -34,3 +34,9 @@ ACU_Stack* acu_getFrameStack(void)
     }
     return acu_jmpBufFrames;
 }
+
+void acu_setFrameStack(ACU_Stack* jmpBufFrames)
+{
+    acu_jmpBufFrames = jmpBufFrames;
+}
+
