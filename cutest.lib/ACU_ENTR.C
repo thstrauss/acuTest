@@ -42,7 +42,7 @@
 #include "list_tst.h"
 #include "rslt_tst.h"
 
-ACU_Entry* acu_init(void) {
+ACU_Entry* acu_init() {
     ACU_Suite* suite = acu_suiteMalloc();
     ACU_Entry* entry = acu_entryMalloc();
 

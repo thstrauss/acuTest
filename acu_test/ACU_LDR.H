@@ -23,6 +23,8 @@
 #define __ACU_LOADER__
 
 #include "acu_suit.h"
+#include "acu_stck.h"
+#include "acu_tryc.h"
 
 #ifndef __TOS__
 #include <windows.h>
@@ -32,6 +34,7 @@ typedef struct ACU_Entry_ {
     ACU_Suite* suite;
 #ifdef __TOS__
     void* cup_code;
+    ACU_setFrameStackFunc* setFrameStackFunc;
 #else
     HMODULE module;
 #endif

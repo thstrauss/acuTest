@@ -44,6 +44,8 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
 
     acu_stackPush(frameStack, &frame);
 
+    printf("acuTest_run %p %d\r\n", frameStack, acu_stackSize(frameStack));
+
     result->start = clock();
     do {
         switch (setjmp(frame.exceptionBuf)) {
