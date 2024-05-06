@@ -60,7 +60,7 @@ __EXPORT ACU_Stack* acu_initTryCatch(void);
   * http://www.di.unipi.it/~nids/docs/longjump_try_trow_catch.html
   */
 
-#define ACU_TRY_CTX(CONTEXT) do { ACU_Frame _##CONTEXT##_Frame; acu_stackPush(acu_initTryCatch(), &_##CONTEXT##_Frame); switch(setjmp(_##CONTEXT##_Frame.exceptionBuf) ) { case 0: while(1) {
+#define ACU_TRY_CTX(CONTEXT) do { ACU_Frame _##CONTEXT##_Frame; _##CONTEXT##_Frame.exception = 0; acu_stackPush(acu_initTryCatch(), &_##CONTEXT##_Frame); switch(setjmp(_##CONTEXT##_Frame.exceptionBuf) ) { case 0: while(1) {
 #define ACU_TRY ACU_TRY_CTX(exception)
 #define ACU_CATCH_CTX(CONTEXT, x) break; case (x): 
 #define ACU_CATCH(x) ACU_CATCH_CTX(exception, x)

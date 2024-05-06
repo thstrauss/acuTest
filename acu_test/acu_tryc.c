@@ -24,7 +24,7 @@
 #include "acu_stck.h"
 #include "acu_tryc.h"
 
-static ACU_Stack* acu_jmpBufFrames = NULL;
+ACU_Stack* acu_jmpBufFrames = NULL;
 
 ACU_Stack* acu_initTryCatch(void)
 {

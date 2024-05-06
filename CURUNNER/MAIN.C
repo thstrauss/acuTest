@@ -28,6 +28,7 @@
 #include <acu_util.h>
 #include <acu_dir.h>
 #include <acu_tryc.h>
+#include <acu_stck.h>
 
 static void printHelp(void) {
     acu_eprintf("Shall provide file name for test.");

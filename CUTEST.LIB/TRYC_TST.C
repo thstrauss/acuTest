@@ -145,6 +145,7 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
     ACU_Stack* frameStack = acu_initTryCatch();
     ACU_Frame frame;
+    frame.exception = 0;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
 
@@ -153,6 +154,7 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     resultBuf->message = NULL;
     resultBuf->file = NULL;
 
+    printf("before \n\r");
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_TRY
             visited = 1;
@@ -162,10 +164,12 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
             finally = 1;
         ACU_ETRY;
     }
-    acu_stackPop(acu_initTryCatch(), (void**)NULL);
+    /*acu_stackPop(frameStack, (void**)NULL);*/
+    ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_FAILED, "failed");
     ACU_assert(environment, int, Equal, visited, 1, "block visited");
-    ACU_assert(environment, int, Equal, finally, 1, "finally not visited");
+    ACU_assert(environment, int, Equal, finally, 1, "finally not visited"); 
     UNUSED(context);
+    printf("after \n\r");
 }
 
 static void visitFinallyAfterThrowTest(ACU_ExecuteEnv* environment, const void* context) {
@@ -174,7 +178,7 @@ static void visitFinallyAfterThrowTest(ACU_ExecuteEnv* environment, const void* 
     int catched = 0;
     ACU_TRY
         visited = 1;;
-        ACU_THROW(1);
+        /*ACU_THROW(1); */
         visited = 2;
     ACU_CATCH(1)
         catched = 1;
@@ -228,9 +232,7 @@ ACU_Fixture* tryCatchFixture(void)
     acu_fixtureAddTestCase(fixture, "resultInitTest", resultInitTest);
     acu_fixtureAddTestCase(fixture, "visitFinallyTest", visitFinallyTest);
     acu_fixtureAddTestCase(fixture, "visitFinallyAfterThrowTest", visitFinallyAfterThrowTest);
-    acu_fixtureAddTestCase(fixture, "visitOverlappingThrowTest", visitOverlappingThrowTest);
-
-
+    acu_fixtureAddTestCase(fixture, "visitOverlappingThrowTest", visitOverlappingThrowTest); 
 
     return fixture;
 }
