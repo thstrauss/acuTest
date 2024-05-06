@@ -28,6 +28,21 @@
 #include "acu_tryc.h"
 #include "acu_stck.h"
 
+char* acu_sformatMessage(const char* format, ...);
+
+#define STR(str) #str
+#define CREATE_ASSERT_FUNC(type, op, opcode, format) \
+static enum ACU_TestResult acu_##type##op(const ACU_AssertParameter* parameter) { \
+    return *(type*)parameter->actual opcode *(type*)parameter->expected; \
+} \
+static char* acu_##type##op##FormatMessage(const ACU_AssertParameter* parameter) { \
+    return acu_sformatMessage(STR(actual value format not opcode to format: %s), *(const type*)parameter->actual, *(const type*)parameter->expected, parameter->message); \
+} \
+__EXPORT void acu_assert_##type##op(ACU_ExecuteEnv* environment, ACU_AssertParameter* parameter) { \
+    acu_assert(environment, parameter); \
+} \
+__EXPORT const ACU_Funcs acu_##type##op##Funcs = {acu_##type##op, acu_##type##op##FormatMessage, NULL};
+
 #define __ACU_EMIT_ASSERT_FUNCS__
 #include "acu_asrt.h"
 #undef __ACU_EMIT_ASSERT_FUNCS__
@@ -154,7 +169,7 @@ static char* acu_notEqualStrErrorFormatMessage(const ACU_AssertParameter* parame
 
 __EXPORT const ACU_Funcs acu_notEqualStrFuncs = { acu_notEqualStr, acu_notEqualStrFailedFormatMessage, acu_notEqualStrErrorFormatMessage };
 
-char* acu_sformatMessage(const char* format, ...)
+static char* acu_sformatMessage(const char* format, ...)
 {
     char* buffer = acu_emalloc(256);
     va_list args;

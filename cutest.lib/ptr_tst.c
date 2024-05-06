@@ -151,16 +151,16 @@ static void ptrNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
         UNUSED(ptr2);
     }
     acu_stackPop(frameStack, NULL);
-    TRY
+    ACU_TRY
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqualNull"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrNotEqualNull"); \
-    FINALLY
+    ACU_FINALLY
     	if (resultBuf->message) {
         	free(resultBuf->message);
     	}
     	free(resultBuf);
     	free(testEnvironment);
-    ETRY;
+    ACU_ETRY;
     UNUSED(context);
 }  
  
