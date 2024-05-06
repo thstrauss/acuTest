@@ -35,17 +35,14 @@
 
 typedef struct PH_
 {
-    WORD  ph_branch;        /* Branch zum Anfang des Programms  */
-                            /* (muss 0x601a sein!)              */
-
-    LONG  ph_tlen;          /* L„nge  des TEXT - Segments       */
-    LONG  ph_dlen;          /* L„nge  des DATA - Segments       */
-    LONG  ph_blen;          /* L„nge  des BSS  - Segments       */
-    LONG  ph_slen;          /* L„nge  der Symboltabelle         */
-    LONG  ph_res1;          /* reserviert, sollte 0 sein        */
-                            /* wird von PureC ben”tigt          */
-    LONG  ph_prgflags;      /* Programmflags                    */
-    WORD  ph_absflag;       /* 0 = Relozierungsinf. vorhanden   */
+    WORD  ph_branch; 
+    LONG  ph_tlen;
+    LONG  ph_dlen;
+    LONG  ph_blen;
+    LONG  ph_slen;
+    LONG  ph_res1;
+    LONG  ph_prgflags;
+    WORD  ph_absflag;
 } PH;
 
 static void* relocate(const void* code, const unsigned char* relocData)
@@ -100,12 +97,9 @@ static void* load_and_reloc(long handle, long fsize, const PH* programHeader)
     void* textAndData = NULL;
     void* relocatedTextAndData = NULL;
 
-    /* Laenge von Text- und Data-Segment */
     long TD_len = programHeader->ph_tlen + programHeader->ph_dlen;
-    /* Laenge von Text-, Data- und BSS-Segment */
     long TDB_len = TD_len + programHeader->ph_blen;
     
-    /* Speicher fuer Text-, Data- und BSS-Segment anfordern */
     textAndData = malloc(TDB_len);
     if (textAndData) {
 
@@ -136,7 +130,7 @@ static ACU_init* load_cu(const char* cu_name)
 {
     void* addr = NULL;
     long handle;
-    long filesize;
+    long fileSize;
     
     handle = Fopen(cu_name, O_RDONLY);
     if (handle > 0)
@@ -147,15 +141,15 @@ static ACU_init* load_cu(const char* cu_name)
         {
             return NULL;
         }
-        /* bra.s am Anfang? */
+
         if (programHeader.ph_branch != PH_MAGIC) {
             Fclose((short)handle);
             return NULL;
         }
-        filesize = Fseek(0, (int) handle, 2); 
+        fileSize = Fseek(0, (int) handle, 2);
         Fseek(sizeof(PH), (int) handle, 0);
             
-        addr = load_and_reloc(handle, filesize, &programHeader);
+        addr = load_and_reloc(handle, fileSize, &programHeader);
         Fclose((short)handle);
     }
 
