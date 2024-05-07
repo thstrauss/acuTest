@@ -186,7 +186,7 @@ ACU_Entry* cup_load(const char* cu_name) {
         return NULL;
     }
     ACU_init* init = (ACU_init*) GetProcAddress(module, "acu_init");
-    ACU_Entry* entry = init(NULL);
+    ACU_Entry* entry = init();
     entry->module = module;
     return entry;
 }
