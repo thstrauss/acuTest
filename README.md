@@ -1,6 +1,6 @@
-# acuTest
+# acu_Test 
 
-acuTest is a C89 compliant c unit test framework. The library and unit tests are compiling 
+acu_Test (Atari C Unit Test) is a C89 compliant c unit test framework. The library and unit tests are compiling 
 on Atari ST with PureC and on Windows with VC. 
 
 ## Demo
