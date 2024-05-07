@@ -44,7 +44,6 @@
 #ifndef _ACU_TRY_THROW_CATCH_H_
 #define _ACU_TRY_THROW_CATCH_H_
 
-#include <stdio.h>
 #include <setjmp.h>
 
 #include "acu_stck.h"

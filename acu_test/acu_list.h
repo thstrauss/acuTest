@@ -23,8 +23,6 @@
 #ifndef _ACU_LIST_H_
 #define _ACU_LIST_H_
 
-#include <stdlib.h>
-
 typedef struct ACU_ListElement_ {
     struct ACU_ListElement_* next;
     void* data;

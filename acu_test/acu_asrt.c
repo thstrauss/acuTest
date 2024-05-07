@@ -19,7 +19,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <stdarg.h>
 #include <string.h>
+#include <stddef.h>
 
 #include "acu_cmmn.h"
 #include "acu_eenv.h"

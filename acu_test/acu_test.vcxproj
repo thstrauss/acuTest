@@ -162,13 +162,13 @@
   <ItemGroup>
     <ClInclude Include="acu_asrt.h" />
     <ClInclude Include="acu_cmmn.h" />
-    <ClInclude Include="ACU_DIR.H" />
+    <ClInclude Include="acu_dir.h" />
     <ClInclude Include="acu_eenv.h" />
     <ClInclude Include="acu_fxtr.h" />
-    <ClInclude Include="ACU_LDR.H" />
+    <ClInclude Include="acu_ldr.h" />
     <ClInclude Include="acu_list.h" />
     <ClInclude Include="acu_rprt.h" />
-    <ClInclude Include="ACU_RSLT.H" />
+    <ClInclude Include="acu_rslt.h" />
     <ClInclude Include="acu_stck.h" />
     <ClInclude Include="acu_suit.h" />
     <ClInclude Include="acu_tcse.h" />

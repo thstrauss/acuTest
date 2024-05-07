@@ -19,6 +19,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <stddef.h>
+#include <stdio.h>
+
 #include <acu_ldr.h>
 #include <acu_suit.h>
 #include <acu_rprt.h>

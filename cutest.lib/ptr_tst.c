@@ -18,6 +18,9 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+ 
+#include <stddef.h>
+#include <stdlib.h>
 
 #include <acu_fxtr.h>
 #include <acu_asrt.h>

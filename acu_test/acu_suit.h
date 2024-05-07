@@ -23,7 +23,6 @@
 #ifndef _ACU_SUITE_H_
 #define _ACU_SUITE_H_
 
-#include <stdio.h>
 #include <time.h>
 
 #include "acu_cmmn.h"

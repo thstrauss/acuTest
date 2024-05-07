@@ -23,10 +23,11 @@
 #define __ACU_LOADER__
 
 #include "acu_suit.h"
-#include "acu_stck.h"
-#include "acu_tryc.h"
 
-#ifndef __TOS__
+#ifdef __TOS__
+#include "acu_tryc.h"
+#include "acu_tryc.h"
+#else
 #include <windows.h>
 #endif
 

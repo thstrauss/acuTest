@@ -42,7 +42,7 @@ __EXPORT void acu_filesDestroy(ACU_Files* files);
 
 __EXPORT void acu_filesCollect(ACU_Files* files, const char* fileName);
 
-typedef void ACU_FilesVisitorFunc(const ACU_FileEntry* file, void* context);
+typedef void ACU_FilesVisitorFunc(const ACU_FileEntry* file, void* visitorContext);
 
 __EXPORT void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitorFunc visitor, void* visitorContext);
 

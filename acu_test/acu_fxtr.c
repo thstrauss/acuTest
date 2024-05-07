@@ -20,6 +20,8 @@
  */
 
 #include <time.h>
+#include <stdlib.h>
+#include <stddef.h>
 
 #include "acu_cmmn.h"
 #include "acu_eenv.h"

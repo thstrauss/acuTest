@@ -19,6 +19,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <stdio.h>
+
 #include "acu_ldr.h"
 #include "acu_util.h"
 #include "acu_tryc.h"
@@ -27,7 +29,6 @@
 #ifdef __TOS__
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <portab.h>
 #include <tos.h>
 
