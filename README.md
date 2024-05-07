@@ -25,6 +25,8 @@ A Suite's is aggregating fixtures on the next level. On suite level you typicall
 cases with `result = acu_suiteExecute(suite, acu_progress, NULL)`.
 
 ```C
+#include <stdlib.h>
+
 #include <acu_eenv.h>
 #include <acu_asrt.h>
 #include <acu_fxtr.h>
@@ -55,6 +57,7 @@ int main()
 
     acu_suiteAccept(suite, acu_report, NULL);
     acu_suiteDestroy(suite);
+    free(suite);
     return result != ACU_TEST_PASSED ? 2 : 0;
 }
 ``` 
