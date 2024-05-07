@@ -62,7 +62,7 @@
     <ClInclude Include="acu_cmmn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ACU_DIR.H">
+    <ClInclude Include="acu_dir.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_eenv.h">
@@ -71,7 +71,7 @@
     <ClInclude Include="acu_fxtr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ACU_LDR.H">
+    <ClInclude Include="acu_ldr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_list.h">
@@ -80,7 +80,7 @@
     <ClInclude Include="acu_rprt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ACU_RSLT.H">
+    <ClInclude Include="acu_rslt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_suit.h">

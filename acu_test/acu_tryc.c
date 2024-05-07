@@ -20,6 +20,7 @@
  */
 
 #include <stdlib.h>
+#include <stddef.h>
 
 #include "acu_stck.h"
 #include "acu_tryc.h"

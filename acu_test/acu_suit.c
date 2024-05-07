@@ -19,6 +19,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <stdlib.h>
+
 #include "acu_fxtr.h"
 #include "acu_list.h"
 #include "acu_suit.h"

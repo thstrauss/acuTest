@@ -23,8 +23,6 @@
 #ifndef _ACU_TEST_ENV_H_
 #define _ACU_TEST_ENV_H_
 
-#include <setjmp.h>
-
 struct ACU_Result_;
 struct ACU_Frame_;
 
