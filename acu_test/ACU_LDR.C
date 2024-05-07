@@ -29,7 +29,6 @@
 #ifdef __TOS__
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <portab.h>
 #include <tos.h>
 
