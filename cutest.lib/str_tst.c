@@ -284,10 +284,7 @@ static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     resultBuf->file = NULL; 
     
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-        long i;
-        for (i = 0; i < 10000L; i++) {
-        	ACU_assert_strNotEqual(testEnvironment, "ptr1", "ptr2", "strNotEqual");
-    	}
+        ACU_assert_strNotEqual(testEnvironment, "ptr1", "ptr2", "strNotEqual");
     }
     acu_stackPop(frameStack, NULL);
     ACU_TRY

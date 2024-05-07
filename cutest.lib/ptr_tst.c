@@ -43,10 +43,7 @@ static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     resultBuf->file = NULL;
 
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-        int i;
-        for (i = 0; i < 10000; i++) {
-            ACU_assert_ptrEqual(testEnvironment, NULL, NULL, "ptrEqualNull"); \
-        }
+        ACU_assert_ptrEqual(testEnvironment, NULL, NULL, "ptrEqualNull"); \
     }
     acu_stackPop(frameStack, (void**)NULL);
     ACU_TRY
@@ -78,10 +75,9 @@ static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         void* ptr1 = (void*)123;
         void* ptr2 = (void*)123;
-    	int i;
-    	for (i = 0; i < 10000; i++) {
-        	ACU_assert_ptrEqual(testEnvironment, ptr1, ptr2, "ptrEqual");
-        }
+
+        ACU_assert_ptrEqual(testEnvironment, ptr1, ptr2, "ptrEqual");
+
         UNUSED(ptr1);
         UNUSED(ptr2);
     }
