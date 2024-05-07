@@ -38,7 +38,7 @@ void acu_stackInit(ACU_Stack* stack, ACU_StackDataDestroy destroy) {
 
 void* acu_stackPeek(const ACU_Stack* stack)
 {
-    return stack->head->data;
+    return (stack->size == 0) ? NULL : stack->head->data;
 }
 
 ACU_Stack* acu_stackMalloc(void)

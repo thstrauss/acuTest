@@ -23,30 +23,32 @@
 #ifndef _ACU_LIST_H_
 #define _ACU_LIST_H_
 
+#include "acu_cmmn.h"
+
 typedef struct ACU_ListElement_ {
     struct ACU_ListElement_* next;
     void* data;
 } ACU_ListElement;
 
-typedef void ACU_Destroy(void* data);
+typedef void ACU_ListDestroyFunc(void* data);
 
 typedef struct ACU_List_ {
     ACU_ListElement* head;
     ACU_ListElement* tail;
     int size;
-    ACU_Destroy* destroy;
+    ACU_ListDestroyFunc* destroy;
 } ACU_List;
 
-void acu_listInit(ACU_List* list, ACU_Destroy destroy);
+__EXPORT void acu_listInit(ACU_List* list, ACU_ListDestroyFunc destroy);
 
-ACU_ListElement* acu_listHead(ACU_List* list);
+__EXPORT ACU_ListElement* acu_listHead(ACU_List* list);
 
-ACU_ListElement* acu_listNext(ACU_ListElement* element);
+__EXPORT ACU_ListElement* acu_listNext(ACU_ListElement* element);
 
-ACU_List* acu_listMalloc(void);
+__EXPORT ACU_List* acu_listMalloc(void);
 
-void acu_listDestroy(ACU_List* list);
+__EXPORT void acu_listDestroy(ACU_List* list);
 
-int acu_listAppend(ACU_List* list, void* data);
+__EXPORT int acu_listAppend(ACU_List* list, void* data);
 
 #endif 

@@ -25,7 +25,7 @@
 #include "acu_list.h"
 #include "acu_util.h"
 
-void acu_listInit(ACU_List* list, ACU_Destroy destroy) {
+void acu_listInit(ACU_List* list, ACU_ListDestroyFunc destroy) {
     list->size = 0;
     list->destroy = destroy;
     list->head = NULL;

@@ -19,6 +19,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <stdlib.h>
+#include <stddef.h>
 #include "list_tst.h"
 
 #include <acu_fxtr.h>
@@ -26,8 +28,18 @@
 #include <acu_util.h>
 #include <acu_suit.h>
 #include <acu_tryc.h>
+#include <acu_list.h>
 
 static void emptyList(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_List* list = acu_listMalloc();
+    acu_listInit(list, (ACU_ListDestroyFunc*) NULL);
+    ACU_TRY
+        ACU_assert_ptrIsNull(environment, acu_listHead(list), "head is not null.")
+    ACU_FINALLY
+        acu_listDestroy(list);
+        free(list);
+    ACU_ETRY
+
     UNUSED(environment);
     UNUSED(context);
 }
