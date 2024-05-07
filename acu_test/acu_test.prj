@@ -1,8 +1,8 @@
 ..\lib\acu_test.lib
 .C [ -P ].L [ -J ] =acu_asrt (acu_asrt.h, acu_cmmn.h, acu_eenv.h, acu_rslt.h, acu_stck.h)acu_dir (acu_dir.h, acu_cmmn.h, acu_util.h)
 acu_fxtr (acu_fxtr.h, acu_stck.h, acu_util.h)
-acu_ldracu_listacu_rprt
+acu_ldracu_list (acu_list.h)acu_rprt (acu_rprt.h, acu_cmmn.h, acu_tcse.h, acu_fxtr.h, acu_suit.h, acu_list.h, acu_util.h, acu_tryc.h)
 acu_rslt (acu_rslt.h, acu_cmmn.h)
 acu_stck (acu_stck.h) acu_suit
-acu_tryc (acu_tryc.h, acu_stck.h)acu_util
+acu_tryc (acu_tryc.h, acu_stck.h)acu_util (acu_util.h)
 
