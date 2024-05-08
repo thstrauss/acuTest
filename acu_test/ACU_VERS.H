@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauﬂ
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -19,25 +19,20 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// dllmain.cpp : Defines the entry point for the DLL application.
-#include <windows.h>
-#include <acu_cmmn.h>
+#pragma once
+#ifndef __ACU_VERSION__
+#define __ACU_VERSION__
 
-BOOL APIENTRY DllMain( HMODULE hModule,
-                       DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
-                     )
-{
-    switch (ul_reason_for_call)
-    {
-    case DLL_PROCESS_ATTACH:
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-    case DLL_PROCESS_DETACH:
-        break;
-    }
-    UNUSED(hModule);
-    UNUSED(lpReserved);
-    return TRUE;
-}
+#include "acu_cmmn.h"
 
+typedef struct ACU_Version_ {
+    unsigned char version[4];
+} ACU_Version;
+
+typedef ACU_Version* (ACU_getVersionFunc)(void);
+
+ACU_Version* acu_getVersion(void);
+__EXPORT int acu_compareVersion(const ACU_Version* version1, const ACU_Version* version2);
+__EXPORT char* acu_formatVersion(const ACU_Version* version);
+
+#endif

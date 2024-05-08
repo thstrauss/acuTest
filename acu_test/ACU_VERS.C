@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauﬂ
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -19,25 +19,32 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// dllmain.cpp : Defines the entry point for the DLL application.
-#include <windows.h>
-#include <acu_cmmn.h>
+#include "stddef.h"
+#include "stdlib.h"
+#include "stdio.h"
+#include "acu_vers.h"
+#include "acu_util.h"
 
-BOOL APIENTRY DllMain( HMODULE hModule,
-                       DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
-                     )
+static ACU_Version acuLibraryVersion = { 0,0,1,0 };
+
+ACU_Version* acu_getVersion(void)
 {
-    switch (ul_reason_for_call)
-    {
-    case DLL_PROCESS_ATTACH:
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-    case DLL_PROCESS_DETACH:
-        break;
-    }
-    UNUSED(hModule);
-    UNUSED(lpReserved);
-    return TRUE;
+    return &acuLibraryVersion;
 }
 
+int acu_compareVersion(const ACU_Version* version1, const ACU_Version* version2)
+{
+    return version1->version[0] == version2->version[0] 
+    	&& version1->version[1] == version2->version[1] 
+    	&& version1->version[2] == version2->version[2];
+}
+
+char* acu_formatVersion(const ACU_Version* version) {
+	char* buffer = acu_emalloc(8);
+	acu_sprintf_s(buffer, 8, "%u.%u.%u.%u", 
+		version->version[0], 
+		version->version[1], 
+		version->version[2], 
+		version->version[3]);
+    return buffer;
+}

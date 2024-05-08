@@ -30,7 +30,15 @@
 #include "acu_tryc.h"
 #include "acu_stck.h"
 
-char* acu_sformatMessage(const char* format, ...);
+static char* acu_sformatMessage(const char* format, ...)
+{
+    char* buffer = acu_emalloc(256);
+    va_list args;
+    va_start(args, format);
+    acu_vsprintf_s(buffer, 256, format, args);
+    va_end(args);
+    return buffer;
+}
 
 #define STR(str) #str
 #define CREATE_ASSERT_FUNC(type, op, opcode, format) \
@@ -170,16 +178,6 @@ static char* acu_notEqualStrErrorFormatMessage(const ACU_AssertParameter* parame
 }
 
 __EXPORT const ACU_Funcs acu_notEqualStrFuncs = { acu_notEqualStr, acu_notEqualStrFailedFormatMessage, acu_notEqualStrErrorFormatMessage };
-
-static char* acu_sformatMessage(const char* format, ...)
-{
-    char* buffer = acu_emalloc(256);
-    va_list args;
-    va_start(args, format);
-    acu_vsprintf_s(buffer, 256, format, args);
-    va_end(args);
-    return buffer;
-}
 
 static char* acu_formatMessage(enum ACU_TestResult assertResult, const ACU_AssertParameter* parameter) {
     if (assertResult == ACU_TEST_FAILED) {

@@ -23,6 +23,7 @@
 #define __ACU_LOADER__
 
 #include "acu_suit.h"
+#include "acu_vers.h"
 
 #ifdef __TOS__
 #include "acu_tryc.h"
@@ -33,6 +34,7 @@
 
 typedef struct ACU_Entry_ {
     ACU_Suite* suite;
+    ACU_getVersionFunc* getAcuTestVersion;
 #ifdef __TOS__
     void* cup_code;
     ACU_setFrameStackFunc* setFrameStackFunc;

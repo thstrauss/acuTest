@@ -114,6 +114,7 @@
       <PreprocessorDefinitions>_DEBUG;ACUTEST2_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,6 +134,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -154,6 +156,7 @@
     <ClCompile Include="acu_suit.c" />
     <ClCompile Include="acu_tryc.c" />
     <ClCompile Include="acu_util.c" />
+    <ClCompile Include="acu_vers.c" />
     <ClCompile Include="dllmain.c" />
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +177,7 @@
     <ClInclude Include="acu_tcse.h" />
     <ClInclude Include="acu_tryc.h" />
     <ClInclude Include="acu_util.h" />
+    <ClInclude Include="acu_vers.h" />
     <ClInclude Include="tryctch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
