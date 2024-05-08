@@ -82,7 +82,7 @@ void acu_setFrameStack(ACU_Stack* jmpBufFrames);
             longjmp(f->exceptionBuf, f->exception != 0 ? f->exception : 0xFFFF); \
         } \
     } \
-    break; } } while(0) ;
+    break; } } while(0);
 
 #define ACU_THROW_CTX(CONTEXT, x) { \
     ACU_Frame* f = acu_stackPeek(acu_getFrameStack()); \
