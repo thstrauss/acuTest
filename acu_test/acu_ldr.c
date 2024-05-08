@@ -20,17 +20,34 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "acu_ldr.h"
 #include "acu_util.h"
-#include "acu_tryc.h"
-#include "acu_stck.h"
+#include "acu_vers.h"
+
+static int checkVersion(ACU_Entry* entry) {
+    ACU_Version* libVersion = entry->getAcuTestVersion();
+    ACU_Version* version = acu_getVersion();
+    if (!acu_compareVersion(version, libVersion)) {
+        char* libversionStr = acu_formatVersion(libVersion);
+        char* versionStr = acu_formatVersion(version);
+        acu_eprintf("Version of acu library %s does not match to runner %s", libversionStr, versionStr);
+        free(versionStr);
+        free(libversionStr);
+        return 0;
+    }
+    return 1;
+}
 
 #ifdef __TOS__
+
 #include <string.h>
 #include <stdlib.h>
 #include <portab.h>
 #include <tos.h>
+#include "acu_tryc.h"
+#include "acu_stck.h"
 
 #define PH_MAGIC 0x601a
 
@@ -167,6 +184,10 @@ ACU_Entry* cup_load(const char* cu_name) {
     entry = init();
     entry->setFrameStackFunc(acu_getFrameStack());
     entry->cup_code = init;
+    if (!checkVersion(entry)) {
+        cup_unload(entry);
+        return NULL;
+    };
     return entry;
 }
 
@@ -189,6 +210,10 @@ ACU_Entry* cup_load(const char* cu_name) {
     ACU_init* init = (ACU_init*) GetProcAddress(module, "acu_init");
     ACU_Entry* entry = init();
     entry->module = module;
+    if (!checkVersion(entry)) {
+        cup_unload(entry);
+        return NULL;
+    };
     return entry;
 }
 
@@ -205,6 +230,7 @@ ACU_Entry* acu_entryMalloc(void) {
 
 void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
     entry->suite = suite;
+    entry->getAcuTestVersion = acu_getVersion;
 #ifdef __TOS__
     entry->setFrameStackFunc = acu_setFrameStack;
 #endif
