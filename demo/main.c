@@ -38,7 +38,7 @@ ACU_Fixture* listFixture(void)
     return fixture;
 }
 
-int main()
+int main(void)
 {
     ACU_Suite* suite = acu_suiteMalloc();
 

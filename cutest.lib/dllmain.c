@@ -21,6 +21,7 @@
 
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include <windows.h>
+#include <acu_cmmn.h>
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
@@ -35,6 +36,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     case DLL_PROCESS_DETACH:
         break;
     }
+    UNUSED(hModule);
+    UNUSED(lpReserved);
     return TRUE;
 }
 
