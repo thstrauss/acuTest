@@ -125,7 +125,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -133,6 +133,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -154,6 +155,7 @@
     <ClCompile Include="acu_suit.c" />
     <ClCompile Include="acu_tryc.c" />
     <ClCompile Include="acu_util.c" />
+    <ClCompile Include="acu_vers.c" />
     <ClCompile Include="dllmain.c" />
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +176,7 @@
     <ClInclude Include="acu_tcse.h" />
     <ClInclude Include="acu_tryc.h" />
     <ClInclude Include="acu_util.h" />
+    <ClInclude Include="acu_vers.h" />
     <ClInclude Include="tryctch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -19,41 +19,20 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __ACU_LOADER__
-#define __ACU_LOADER__
+#pragma once
+#ifndef __ACU_VERSION__
+#define __ACU_VERSION__
 
-#include "acu_suit.h"
-#include "acu_vers.h"
+#include "acu_cmmn.h"
 
-#ifdef __TOS__
-#include "acu_tryc.h"
-#include "acu_tryc.h"
-#else
-#include <windows.h>
-#endif
+typedef struct ACU_Version_ {
+    unsigned char version[4];
+} ACU_Version;
 
-typedef struct ACU_Entry_ {
-    ACU_Suite* suite;
-    ACU_getVersionFunc* getAcuTestVersion;
-#ifdef __TOS__
-    void* cup_code;
-    ACU_setFrameStackFunc* setFrameStackFunc;
-#else
-    HMODULE module;
-#endif
-} ACU_Entry;
+typedef ACU_Version* (ACU_getVersionFunc)(void);
 
-typedef __EXPORT  ACU_Entry* (ACU_initFunc)(void);
+ACU_Version* acu_getVersion(void);
+__EXPORT int acu_compareVersion(const ACU_Version* version1, const ACU_Version* version2);
+__EXPORT char* acu_formatVersion(const ACU_Version* version);
 
-typedef ACU_Entry* ACU_init(void);
-
-__EXPORT ACU_Entry* acu_init(void);
-
-__EXPORT ACU_Entry* cup_load(const char* cu_name);
-__EXPORT void cup_unload(ACU_Entry* entry);
-
-__EXPORT ACU_Entry* acu_entryMalloc(void);
-__EXPORT void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite);
-__EXPORT void acu_entryDestroy(ACU_Entry* entry);
- 
 #endif
