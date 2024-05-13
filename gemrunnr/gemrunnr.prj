@@ -1,0 +1,24 @@
+gemrunnr.prg
+
+.C [-P]
+.C [-A]
+.L [-Y]
+
+=
+
+pcstart.o
+
+main.c (gemrunnr.h)
+rsc.c (gemrunnr.h, gemrunnr.rsh) [-A-]
+;xrsrc.c (xrsrc.h)
+
+;..\acu_test\acu_test.prj
+;..\cutest.lib\cutest.prj
+;..\cutest.lib\cuempty.prj
+;..\cutest.lib\cutstrun.prj
+;..\cutest.lib\cutscup.prj
+
+PCSTDLIB.LIB
+PCEXTLIB.LIB
+PCGEMLIB.LIB
+PCTOSLIB.LIB
