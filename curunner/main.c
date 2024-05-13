@@ -40,7 +40,7 @@ static int executeEntry(const char* cupName, const ACU_Summary* summary) {
     ACU_Progress progress = { acu_progress , NULL };
     ACU_Visitor report = { acu_report , NULL};
     ACU_Visitor reportSummary = { acu_reportSummary , NULL };
-    reportSummary.context = summary;
+    reportSummary.context = (void*) summary;
 
     if (entry == NULL) {
         acu_eprintf("Could not load: %s", cupName);
