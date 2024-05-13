@@ -58,13 +58,13 @@ enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_Progress* progress)
     return result;
 }
 
-void acu_suiteAccept(const ACU_Suite* suite, ACU_VisitorFunc visitor, void* visitorContext)
+void acu_suiteAccept(const ACU_Suite* suite, ACU_Visitor* visitor)
 {
     ACU_ListElement* fixtureElement = acu_listHead(suite->testFixtures);
 
     while (fixtureElement) {
         ACU_Fixture* fixture = (ACU_Fixture*)fixtureElement->data;
-        acu_fixtureAccept(fixture, visitor, visitorContext);
+        acu_fixtureAccept(fixture, visitor);
         fixtureElement = acu_listNext(fixtureElement);
     }
 }

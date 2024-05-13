@@ -64,8 +64,8 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
     acu_stackPop(frameStack, (void**) NULL);
     result->end = clock();
     testCase->result = result;
-    if (progress && progress->progressFunc) {
-        progress->progressFunc(testCase, progress->context);
+    if (progress && progress->progress) {
+        progress->progress(testCase, progress->context);
     }
     return result->status;
 }
@@ -117,12 +117,12 @@ enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progr
     return result;
 }
 
-void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_VisitorFunc visitor, void* visitorContext) {
+void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_Visitor* visitor) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
    
     while (testElement != NULL) {
         ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
-        visitor(testCase, visitorContext);
+        visitor->visitor(testCase, visitor->context);
         testElement = acu_listNext(testElement);
     }
 }

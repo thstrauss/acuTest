@@ -110,7 +110,7 @@ static void failingFixtureInSuiteTest(ACU_ExecuteEnv* environment, const void* c
     ACU_Suite* localSuite = acu_suiteMalloc();
 
     ACU_Progress progress;
-    progress.progressFunc = localProgress;
+    progress.progress = localProgress;
     progress.context = &result;
 
     acu_suiteInit(localSuite, "testSuite");
@@ -132,7 +132,7 @@ static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     ACU_Fixture* fixture = failingFixture();
 
     ACU_Progress progress;
-    progress.progressFunc = localProgress;
+    progress.progress = localProgress;
     progress.context = &result;
 
     fixtureResult = acu_fixtureExecute(fixture, &progress);
@@ -151,7 +151,7 @@ static void passingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     int suiteResult;
     ACU_Suite* localSuite = acu_suiteMalloc();
     ACU_Progress progress;
-    progress.progressFunc = localProgress;
+    progress.progress = localProgress;
     progress.context = &result;
 
     acu_suiteInit(localSuite, "testSuite");
@@ -171,7 +171,7 @@ static void emptyFixtureInSuiteTest(ACU_ExecuteEnv* environment, const void* con
     int suiteResult;
     ACU_Suite* localSuite = acu_suiteMalloc();
     ACU_Progress progress;
-    progress.progressFunc = localProgress;
+    progress.progress = localProgress;
     progress.context = &result;
 
     acu_suiteInit(localSuite, "testSuite");
@@ -191,7 +191,7 @@ static void emptyFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 
     ACU_Fixture* fixture = emptyFixture();
     ACU_Progress progress;
-    progress.progressFunc = localProgress;
+    progress.progress = localProgress;
     progress.context = &result;
 
     fixtureResult = acu_fixtureExecute(fixture, &progress);
@@ -209,7 +209,7 @@ static void noAssertFixtureTest(ACU_ExecuteEnv* environment, const void* context
 
     ACU_Fixture* fixture = fixtureWithTestWitNoAssert();
     ACU_Progress progress;
-    progress.progressFunc = localProgress;
+    progress.progress = localProgress;
     progress.context = &result;
 
     fixtureResult = acu_fixtureExecute(fixture, &progress);

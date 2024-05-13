@@ -37,9 +37,10 @@ static void printHelp(void) {
 static int executeEntry(const char* cupName, const ACU_Summary* summary) {
     int returnValue;
     ACU_Entry* entry = cup_load(cupName);
-    ACU_Progress progress;
-    progress.progressFunc = acu_progress;
-    progress.context = NULL;
+    ACU_Progress progress = { acu_progress , NULL };
+    ACU_Visitor report = { acu_report , NULL};
+    ACU_Visitor reportSummary = { acu_reportSummary , NULL };
+    reportSummary.context = summary;
 
     if (entry == NULL) {
         acu_eprintf("Could not load: %s", cupName);
@@ -48,8 +49,8 @@ static int executeEntry(const char* cupName, const ACU_Summary* summary) {
 
     returnValue = acu_suiteExecute(entry->suite, &progress);
     fprintf(stdout, "\n\r");
-    acu_suiteAccept(entry->suite,acu_report, NULL);
-    acu_suiteAccept(entry->suite, acu_reportSummary, (void*)summary);
+    acu_suiteAccept(entry->suite, &report);
+    acu_suiteAccept(entry->suite, &reportSummary);
 
     cup_unload(entry);
     return returnValue;

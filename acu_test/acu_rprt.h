@@ -35,9 +35,14 @@ __EXPORT void acu_report(const ACU_TestCase* testCase, void* context);
 __EXPORT void acu_countTestCases(const ACU_TestCase* testCase, void* context);
 
 typedef struct ACU_Progress_ {
-    ACU_ProgressFunc* progressFunc;
+    ACU_ProgressFunc* progress;
     void* context;
 } ACU_Progress;
+
+typedef struct ACU_Visitor_ {
+    ACU_VisitorFunc* visitor;
+    void* context;
+} ACU_Visitor;
 
 typedef struct ACU_Summary_ {
     int totalTestCases;

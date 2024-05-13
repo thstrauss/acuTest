@@ -46,7 +46,7 @@ __EXPORT void acu_suiteInit(ACU_Suite* suite, const char* name);
 
 __EXPORT enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_Progress* progress);
 
-__EXPORT void acu_suiteAccept(const ACU_Suite* suite, ACU_VisitorFunc visitor, void* visitorContext);
+__EXPORT void acu_suiteAccept(const ACU_Suite* suite, ACU_Visitor* visitor);
 
 __EXPORT ACU_Suite* acu_suiteMalloc(void);
 

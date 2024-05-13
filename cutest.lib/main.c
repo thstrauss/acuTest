@@ -30,14 +30,24 @@
 int main(void) {
 	ACU_Entry* entry = acu_init();
 	ACU_Summary summary = {0,0};
+	
+	ACU_Visitor report = {acu_report, NULL};
+	
+	ACU_Visitor counter = {acu_countTestCases, NULL};
+	
+	ACU_Visitor reportSummary = {acu_reportSummary, NULL};
+	
 	int count=0;
 	
-	acu_suiteAccept(entry->suite, acu_countTestCases, (void*) &count);
+	counter.context = (void*) &count;
+	reportSummary.context = &summary;
+	
+	acu_suiteAccept(entry->suite, &counter);
 	fprintf(stdout, "count = %d \n\r", count);
 	acu_suiteExecute(entry->suite, (ACU_Progress*) NULL);
 	fprintf(stdout, "\n\r");
-	acu_suiteAccept(entry->suite, acu_report, NULL);
-	acu_suiteAccept(entry->suite, acu_reportSummary, &summary);
+	acu_suiteAccept(entry->suite, &report);
+	acu_suiteAccept(entry->suite, &reportSummary);
 	acu_entryDestroy(entry);
 	fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
 	return 0;

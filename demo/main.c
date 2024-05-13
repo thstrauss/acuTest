@@ -44,16 +44,17 @@ int main()
 
     enum ACU_TestResult result;
 
-    ACU_Progress progress;
-    progress.progressFunc = acu_progress;
-    progress.context = NULL;
+    ACU_Visitor report = { acu_report, NULL };
+
+    ACU_Progress progress = { acu_progress , NULL };
+
 
     acu_suiteInit(suite, "Sample  test suite");
     acu_suiteAddFixture(suite, listFixture());
 
     result = acu_suiteExecute(suite, &progress);
 
-    acu_suiteAccept(suite, acu_report, NULL);
+    acu_suiteAccept(suite, &report);
 
     acu_suiteDestroy(suite);
 
