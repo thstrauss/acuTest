@@ -33,7 +33,7 @@
 #include "acu_suit.h"
 #include "acu_tryc.h"
 
-static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_ProgressFunc progress, void* progressContext) {
+static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_Progress* progress) {
     ACU_ExecuteEnv environment;
     ACU_Result* result = acuTest_resultMalloc();
     ACU_Stack* frameStack = acu_getFrameStack();
@@ -64,8 +64,8 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
     acu_stackPop(frameStack, (void**) NULL);
     result->end = clock();
     testCase->result = result;
-    if (progress) {
-        progress(testCase, progressContext);
+    if (progress && progress->progressFunc) {
+        progress->progressFunc(testCase, progress->context);
     }
     return result->status;
 }
@@ -105,12 +105,12 @@ void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
     fixture->context = context;
 }
 
-enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_ProgressFunc progress, void* progressContext) {
+enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progress) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
     enum ACU_TestResult result = ACU_TEST_PASSED;
     fixture->start = clock();
     while (testElement != NULL) {
-        result = acuTest_calcResult(result, acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress, progressContext));
+        result = acuTest_calcResult(result, acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress));
         testElement = acu_listNext(testElement);
     }
     fixture->end = clock();

@@ -98,7 +98,7 @@ static ACU_Fixture* fixtureWithTestWitNoAssert(void) {
     return fixture;
 }
 
-static void progress(const ACU_TestCase* testCase, void* progressContext) {
+static void localProgress(const ACU_TestCase* testCase, void* progressContext) {
     printf("%s", testCase->result->status == ACU_TEST_PASSED ? "#" : "f");
     *(int*)progressContext += testCase->result->status == ACU_TEST_PASSED ? 0 : 1;
 }
@@ -109,9 +109,13 @@ static void failingFixtureInSuiteTest(ACU_ExecuteEnv* environment, const void* c
     int suiteResult;
     ACU_Suite* localSuite = acu_suiteMalloc();
 
+    ACU_Progress progress;
+    progress.progressFunc = localProgress;
+    progress.context = &result;
+
     acu_suiteInit(localSuite, "testSuite");
     acu_suiteAddFixture(localSuite, failingFixture());
-    suiteResult = acu_suiteExecute(localSuite, progress, &result);
+    suiteResult = acu_suiteExecute(localSuite, &progress);
     acu_suiteDestroy(localSuite);
 
     ACU_assert(environment, int, Equal, result, 2, "Number of failing tests");
@@ -127,7 +131,11 @@ static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     
     ACU_Fixture* fixture = failingFixture();
 
-    fixtureResult = acu_fixtureExecute(fixture, progress, &result);
+    ACU_Progress progress;
+    progress.progressFunc = localProgress;
+    progress.context = &result;
+
+    fixtureResult = acu_fixtureExecute(fixture, &progress);
 
     acu_fixtureDestroy(fixture);
     
@@ -142,10 +150,13 @@ static void passingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     int result = 0;
     int suiteResult;
     ACU_Suite* localSuite = acu_suiteMalloc();
+    ACU_Progress progress;
+    progress.progressFunc = localProgress;
+    progress.context = &result;
 
     acu_suiteInit(localSuite, "testSuite");
     acu_suiteAddFixture(localSuite, passingFixture());
-    suiteResult = acu_suiteExecute(localSuite, progress, &result);
+    suiteResult = acu_suiteExecute(localSuite, &progress);
     acu_suiteDestroy(localSuite);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
@@ -159,10 +170,13 @@ static void emptyFixtureInSuiteTest(ACU_ExecuteEnv* environment, const void* con
     int result = 0;
     int suiteResult;
     ACU_Suite* localSuite = acu_suiteMalloc();
+    ACU_Progress progress;
+    progress.progressFunc = localProgress;
+    progress.context = &result;
 
     acu_suiteInit(localSuite, "testSuite");
     acu_suiteAddFixture(localSuite, emptyFixture());
-    suiteResult = acu_suiteExecute(localSuite, progress, &result);
+    suiteResult = acu_suiteExecute(localSuite, &progress);
     acu_suiteDestroy(localSuite);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
@@ -176,8 +190,11 @@ static void emptyFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     int fixtureResult;
 
     ACU_Fixture* fixture = emptyFixture();
+    ACU_Progress progress;
+    progress.progressFunc = localProgress;
+    progress.context = &result;
 
-    fixtureResult = acu_fixtureExecute(fixture, progress, &result);
+    fixtureResult = acu_fixtureExecute(fixture, &progress);
     acu_fixtureDestroy(fixture);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
@@ -191,8 +208,11 @@ static void noAssertFixtureTest(ACU_ExecuteEnv* environment, const void* context
     int fixtureResult;
 
     ACU_Fixture* fixture = fixtureWithTestWitNoAssert();
+    ACU_Progress progress;
+    progress.progressFunc = localProgress;
+    progress.context = &result;
 
-    fixtureResult = acu_fixtureExecute(fixture, progress, &result);
+    fixtureResult = acu_fixtureExecute(fixture, &progress);
     acu_fixtureDestroy(fixture);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");

@@ -37,13 +37,16 @@ static void printHelp(void) {
 static int executeEntry(const char* cupName, const ACU_Summary* summary) {
     int returnValue;
     ACU_Entry* entry = cup_load(cupName);
+    ACU_Progress progress;
+    progress.progressFunc = acu_progress;
+    progress.context = NULL;
 
     if (entry == NULL) {
         acu_eprintf("Could not load: %s", cupName);
         return 2;
     }
 
-    returnValue = acu_suiteExecute(entry->suite, acu_progress, NULL);
+    returnValue = acu_suiteExecute(entry->suite, &progress);
     fprintf(stdout, "\n\r");
     acu_suiteAccept(entry->suite,acu_report, NULL);
     acu_suiteAccept(entry->suite, acu_reportSummary, (void*)summary);
