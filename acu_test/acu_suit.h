@@ -38,7 +38,6 @@ typedef struct ACU_Suite_ {
 
 typedef void ACU_SuiteDestroyFunc(ACU_Suite* suite);
 typedef int ACU_SuiteExecuteFunc(const ACU_Suite* suite, ACU_Progress* progress);
-typedef void* ACU_SuiteReportFunc(const ACU_Suite* suite, void* context, ACU_VisitorFunc report);
 
 __EXPORT void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture);
 
