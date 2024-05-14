@@ -70,6 +70,9 @@ int main(int argc, const char* argv[]) {
 
     ACU_Files* files;
 
+    ACU_FilesVisitor testExecuteVisitor = { execute , NULL };
+    testExecuteVisitor.context = (void*) &result;
+
     if (argc < 2) {
         printHelp();
     }
@@ -79,7 +82,7 @@ int main(int argc, const char* argv[]) {
 
     acu_filesCollect(files, argv[1]);
 
-    acu_filesAccept(files, execute, &result);
+    acu_filesAccept(files, &testExecuteVisitor);
 
     acu_filesDestroy(files);
 

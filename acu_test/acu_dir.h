@@ -34,6 +34,13 @@ typedef struct ACU_Files_ {
     ACU_List* fileList;
 } ACU_Files;
 
+typedef void ACU_FilesVisitorFunc(const ACU_FileEntry* file, void* visitorContext);
+
+typedef struct ACU_FilesVisitor_ {
+    ACU_FilesVisitorFunc* visitor;
+    void* context;
+} ACU_FilesVisitor;
+
 __EXPORT ACU_Files* acu_filesMalloc(void);
 
 __EXPORT void acu_filesInit(ACU_Files* files);
@@ -42,8 +49,6 @@ __EXPORT void acu_filesDestroy(ACU_Files* files);
 
 __EXPORT void acu_filesCollect(ACU_Files* files, const char* fileName);
 
-typedef void ACU_FilesVisitorFunc(const ACU_FileEntry* file, void* visitorContext);
-
-__EXPORT void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitorFunc visitor, void* visitorContext);
+__EXPORT void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor);
 
 #endif
