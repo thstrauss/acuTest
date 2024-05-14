@@ -34,45 +34,39 @@ static void printHelp(void) {
     acu_eprintf("Shall provide file name for test.");
 } 
 
-static int executeEntry(const char* cupName, const ACU_Summary* summary) {
-    int returnValue;
+typedef struct Summary_ {
+    ACU_Summary summary;
+    enum ACU_TestResult returnValue;
+} Summary;
+
+static void executeEntry(const char* cupName, Summary* summary) {
+
     ACU_Entry* entry = cup_load(cupName);
     ACU_Progress progress = { acu_progress , NULL };
     ACU_Visitor report = { acu_report , NULL};
     ACU_Visitor reportSummary = { acu_reportSummary , NULL };
-    reportSummary.context = (void*) summary;
+    reportSummary.context = (void*) &summary->summary;
 
-    if (entry == NULL) {
+    if (!entry) {
         acu_eprintf("Could not load: %s", cupName);
-        return 2;
+        summary->returnValue = ACU_TEST_UNDEFINED;
+        return;
     }
 
-    returnValue = acu_suiteExecute(entry->suite, &progress);
+    summary->returnValue = acu_suiteExecute(entry->suite, &progress);
     fprintf(stdout, "\n\r");
     acu_suiteAccept(entry->suite, &report);
     acu_suiteAccept(entry->suite, &reportSummary);
 
     cup_unload(entry);
-    return returnValue;
 }
 
 static void execute(const ACU_FileEntry* file, void* context) {
-	executeEntry(file->fileName, (ACU_Summary*) context);
-}
-
-static int executeEntries(const char** testFiles, const ACU_Summary* summary) {
-    int returnValue = ACU_TEST_PASSED;
-    int fileIndex = 0;
-    while (testFiles[fileIndex] != NULL) {
-        int retValue = executeEntry(testFiles[fileIndex++], summary);
-        returnValue = returnValue | retValue;
-    }
-    return returnValue;
+    executeEntry(file->fileName, (Summary*) context);
 }
 
 int main(int argc, const char* argv[]) {
-    int returnValue = 0;
-    ACU_Summary summary = { 0,0 };
+    Summary result = { {0,0}, 0 };
 
     ACU_Files* files;
 
@@ -85,11 +79,11 @@ int main(int argc, const char* argv[]) {
 
     acu_filesCollect(files, argv[1]);
 
-	acu_filesAccept(files, execute, &summary);
+    acu_filesAccept(files, execute, &result);
 
     acu_filesDestroy(files);
 
-    fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
+    fprintf(stdout, "%d of %d failed.\n\r", result.summary.failedTestCases, result.summary.totalTestCases);
 
-    return returnValue;
+    return result.returnValue == ACU_TEST_PASSED ? 0 : 2;
 }
