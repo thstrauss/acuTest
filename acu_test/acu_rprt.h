@@ -26,12 +26,23 @@
 #include "acu_cmmn.h"
 #include "acu_tcse.h"
 
+typedef int ACU_MatchFunc(const ACU_TestCase* testCase, void* matchContext);
 typedef void ACU_ProgressFunc(const ACU_TestCase* testCase, void* progressContext);
 typedef void ACU_VisitorFunc(const ACU_TestCase* testCase, void* context);
 
 __EXPORT void acu_progress(const ACU_TestCase* testCase, void* progressContext);
 __EXPORT void acu_report(const ACU_TestCase* testCase, void* context);
 __EXPORT void acu_countTestCases(const ACU_TestCase* testCase, void* context);
+
+typedef struct ACU_Progress_ {
+    ACU_ProgressFunc* progress;
+    void* context;
+} ACU_Progress;
+
+typedef struct ACU_Visitor_ {
+    ACU_VisitorFunc* visitor;
+    void* context;
+} ACU_Visitor;
 
 typedef struct ACU_Summary_ {
     int totalTestCases;
