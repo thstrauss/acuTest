@@ -165,6 +165,7 @@
     <ClCompile Include="uint_tst.c" />
     <ClCompile Include="ulng_tst.c" />
     <ClCompile Include="usht_tst.c" />
+    <ClCompile Include="util_tst.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\acu_test\acu_test.vcxproj">
@@ -192,6 +193,7 @@
     <ClInclude Include="uint_tst.h" />
     <ClInclude Include="ulng_tst.h" />
     <ClInclude Include="usht_tst.h" />
+    <ClInclude Include="util_tst.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cutest.lib.licenseheader" />

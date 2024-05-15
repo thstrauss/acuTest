@@ -63,6 +63,13 @@ void acu_setProgName(const char* progName) {
     }
 }
 
+ACU_ErrorHandlerFunc* acu_errorHandler;
+
+void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler)
+{
+    acu_errorHandler = errorHandler;
+}
+
 static void va_acu_printf(ACU_Level level, const char* format, va_list args) {
 
     fflush(stdout);
@@ -84,7 +91,12 @@ static void va_acu_printf(ACU_Level level, const char* format, va_list args) {
     fprintf(stderr, "\r\n");
     fflush(stderr);
     if (level == acu_error) {
-        exit(2);
+        if (acu_errorHandler) {
+            acu_errorHandler();
+        }
+        else {
+            exit(2);
+        }
     }
 }
 
@@ -136,6 +148,4 @@ int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_lis
 #endif
 }
 
-void __exit(int status) {
-	exit(status);
-}
+

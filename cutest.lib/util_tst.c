@@ -19,46 +19,43 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-#ifndef _ACU_UTILS_H_
-#define _ACU_UTILS_H_
+#include <stddef.h>
 
-#include <stdarg.h>
-#include "acu_cmmn.h"
+#include <acu_fxtr.h>
+#include <acu_asrt.h>
+#include <acu_util.h>
+#include <acu_suit.h>
+#include <acu_tryc.h>
+#include <acu_list.h>
 
-typedef void ACU_ErrorHandlerFunc(void);
+#include "util_tst.h"
 
-/*
-* Returns the program name.
-*/
-__EXPORT char* acu_progName(void);
+static int visited = 0;
 
-/*
-* Sets the program name.
-*/
-__EXPORT void acu_setProgName(const char* progName);
+static void error(void) {
+    visited++;
+}
 
-__EXPORT void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler);
+static void errorHandlerTest(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_TRY
+        acu_setProgName("acu_test");
+         acu_setErrorHandler(error); 
 
-/*
-    Prints an error message to stderr and terminates the program. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_eprintf(const char* format, ...);
+        acu_eprintf("test");
 
-/*
-    Prints a warning message to stderr. 
-    The arguments are according to stdio.h printf().
-*/
-__EXPORT void acu_wprintf(const char* format, ...);
-__EXPORT char* acu_estrdup(const char* s);
-__EXPORT void* acu_emalloc(size_t n);
+        ACU_assert(environment, int, Equal, visited, 1, "zzz");
+    ACU_FINALLY
+        acu_setErrorHandler((ACU_ErrorHandlerFunc*) NULL);
+    ACU_ETRY
+    UNUSED(context);
+}
 
-__EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
-__EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
+ACU_Fixture* utilFixture(void)
+{
+    ACU_Fixture* fixture = acu_fixtureMalloc();
 
-#define SAFE_REF(ref) ((ref)?(ref):"NULL")
+    acu_fixtureInit(fixture, "utility Tests");
+    acu_fixtureAddTestCase(fixture, "errorHandler", errorHandlerTest);
 
-void __exit(int status);
-
-#endif
+    return fixture;
+}

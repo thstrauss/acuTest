@@ -41,6 +41,7 @@
 #include "str_tst.h"
 #include "list_tst.h"
 #include "rslt_tst.h"
+#include "util_tst.h"
 
 ACU_Entry* acu_init() {
     ACU_Suite* suite = acu_suiteMalloc();
@@ -65,6 +66,7 @@ ACU_Entry* acu_init() {
     acu_suiteAddFixture(suite, strFixture());
     acu_suiteAddFixture(suite, listFixture());
     acu_suiteAddFixture(suite, resultFixture());
+    acu_suiteAddFixture(suite, utilFixture());
 
     return entry;
 }

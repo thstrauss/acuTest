@@ -28,6 +28,10 @@
 #ifdef __TOS__
 #include "acu_tryc.h"
 #include "acu_tryc.h"
+
+typedef void ACU_exitFunc(int exitCode);
+typedef void ACU_setExitFunc(ACU_exitFunc* exitFunc);
+
 #else
 #include <windows.h>
 #endif
@@ -37,7 +41,8 @@ typedef struct ACU_Entry_ {
     ACU_getVersionFunc* getAcuTestVersion;
 #ifdef __TOS__
     void* cup_code;
-    ACU_setFrameStackFunc* setFrameStackFunc;
+    ACU_setFrameStackFunc* setFrameStack;
+    ACU_setExitFunc* setExit;
 #else
     HMODULE module;
 #endif

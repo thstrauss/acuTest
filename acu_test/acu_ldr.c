@@ -40,6 +40,7 @@ static int checkVersion(ACU_Entry* entry) {
     return 1;
 }
 
+
 #ifdef __TOS__
 
 #include <string.h>
@@ -50,6 +51,12 @@ static int checkVersion(ACU_Entry* entry) {
 #include "acu_stck.h"
 
 #define PH_MAGIC 0x601a
+
+ACU_exitFunc* exitFunc;
+
+static void setExit(ACU_exitFunc* exit) {
+	exitFunc = exit;
+}
 
 typedef struct PH_
 {
@@ -182,7 +189,8 @@ ACU_Entry* cup_load(const char* cu_name) {
         return NULL;
     }
     entry = init();
-    entry->setFrameStackFunc(acu_getFrameStack());
+    entry->setFrameStack(acu_getFrameStack());
+    entry->setExit(exit);
     entry->cup_code = init;
     if (!checkVersion(entry)) {
         cup_unload(entry);
@@ -232,7 +240,8 @@ void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
     entry->suite = suite;
     entry->getAcuTestVersion = acu_getVersion;
 #ifdef __TOS__
-    entry->setFrameStackFunc = acu_setFrameStack;
+    entry->setFrameStack = acu_setFrameStack;
+    entry->setExit = setExit;
 #endif
 }
 
