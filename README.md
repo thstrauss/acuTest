@@ -50,14 +50,18 @@ int main()
 {
     ACU_Suite* suite = acu_suiteMalloc();
     enum ACU_TestResult result;
+    ACU_Visitor report = { acu_report, NULL };
+    ACU_Progress progress = { acu_progress , NULL };
+
     acu_suiteInit(suite, "Sample  test suite");
     acu_suiteAddFixture(suite, listFixture());
 
-    result = acu_suiteExecute(suite, acu_progress, NULL);
+    result = acu_suiteExecute(suite, &progress);
 
-    acu_suiteAccept(suite, acu_report, NULL);
+    acu_suiteAccept(suite, &report);
+
     acu_suiteDestroy(suite);
-    free(suite);
+
     return result != ACU_TEST_PASSED ? 2 : 0;
 }
 ``` 
