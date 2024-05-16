@@ -59,6 +59,4 @@ __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* forma
 
 #define SAFE_REF(ref) ((ref)?(ref):"NULL")
 
-void __exit(int status);
-
 #endif

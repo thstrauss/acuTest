@@ -38,8 +38,10 @@ static void error(void) {
 
 static void errorHandlerTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_TRY
+        visited = 0;
+
         acu_setProgName("acu_test");
-         acu_setErrorHandler(error); 
+        acu_setErrorHandler(error); 
 
         acu_eprintf("test");
 

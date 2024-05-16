@@ -128,7 +128,6 @@ static void* load_and_reloc(long handle, long fsize, const PH* programHeader)
     textAndData = malloc(TDB_len);
     if (textAndData) {
 
-        /* Text- und Data-Segment laden */
         if (Fread((int)handle, TD_len, textAndData) == TD_len) {  
             unsigned char* relocationData;
             
@@ -246,6 +245,8 @@ void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
 }
 
 void acu_entryDestroy(ACU_Entry* entry) {
-    acu_suiteDestroy((ACU_Suite*) entry->suite);
-    free(entry);
+    if (entry) {
+        acu_suiteDestroy((ACU_Suite*)entry->suite);
+        free(entry);
+    }
 }
