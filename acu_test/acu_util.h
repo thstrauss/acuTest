@@ -26,7 +26,13 @@
 #include <stdarg.h>
 #include "acu_cmmn.h"
 
-typedef void ACU_ErrorHandlerFunc(void);
+typedef enum ACU_Level_
+{
+    acu_error = 1,
+    acu_warning = 2,
+} ACU_Level;
+
+typedef void ACU_ErrorHandlerFunc(enum ACU_Level errorLevel, const char* errorMessage);
 
 /*
 * Returns the program name.

@@ -31,9 +31,13 @@
 #include "util_tst.h"
 
 static int visited = 0;
+static const char* actualErrorMessage;
+static enum ACU_Level actualErrorLevel;
 
-static void error(void) {
+static void error(enum ACU_Level errorLevel, const char* errorMessage) {
     visited++;
+    actualErrorMessage = errorMessage;
+    actualErrorLevel = errorLevel;
 }
 
 static void errorHandlerTest(ACU_ExecuteEnv* environment, const void* context) {
@@ -43,13 +47,27 @@ static void errorHandlerTest(ACU_ExecuteEnv* environment, const void* context) {
         acu_setProgName("acu_test");
         acu_setErrorHandler(error); 
 
-        acu_eprintf("test");
+        acu_eprintf("test:");
 
-        ACU_assert(environment, int, Equal, visited, 1, "zzz");
-    ACU_FINALLY
+        ACU_assert(environment, int, Equal, visited, 1, "Error handler not used");
+        ACU_assert(environment, int, Equal, actualErrorLevel, acu_error, "Error handler not used");
+        ACU_assert_strContains (environment, actualErrorMessage, "acu_test", "Error handler not used");
+        ACU_assert_strContains(environment, actualErrorMessage, "test:", "Error handler not used");
+        ACU_FINALLY
         acu_setErrorHandler((ACU_ErrorHandlerFunc*) NULL);
+        acu_setProgName(NULL);
     ACU_ETRY
     UNUSED(context);
+}
+
+static void programNameTest(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_TRY
+        acu_setProgName("acu_test");
+    ACU_assert_strEqual(environment, acu_progName(), "acu_test", "program name not set.");
+    ACU_FINALLY
+        acu_setProgName(NULL);
+    ACU_ETRY
+        UNUSED(context);
 }
 
 ACU_Fixture* utilFixture(void)
@@ -58,6 +76,7 @@ ACU_Fixture* utilFixture(void)
 
     acu_fixtureInit(fixture, "utility Tests");
     acu_fixtureAddTestCase(fixture, "errorHandler", errorHandlerTest);
+    acu_fixtureAddTestCase(fixture, "programName", programNameTest);
 
     return fixture;
 }
