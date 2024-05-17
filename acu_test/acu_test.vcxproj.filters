@@ -54,6 +54,9 @@
     <ClCompile Include="acu_vers.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="acu_mtch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="acu_test.licenseheader" />
@@ -105,6 +108,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_vers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="acu_mtch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -156,6 +156,7 @@
     <ClCompile Include="int_tst.c" />
     <ClCompile Include="list_tst.c" />
     <ClCompile Include="long_tst.c" />
+    <ClCompile Include="mtch_tst.c" />
     <ClCompile Include="ptr_tst.c" />
     <ClCompile Include="rslt_tst.c" />
     <ClCompile Include="shrt_tst.c" />
@@ -183,6 +184,7 @@
     <ClInclude Include="int_tst.h" />
     <ClInclude Include="list_tst.h" />
     <ClInclude Include="long_tst.h" />
+    <ClInclude Include="mtch_tst.h" />
     <ClInclude Include="ptr_tst.h" />
     <ClInclude Include="rslt_tst.h" />
     <ClInclude Include="shrt_tst.h" />
