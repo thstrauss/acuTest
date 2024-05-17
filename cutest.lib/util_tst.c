@@ -48,13 +48,31 @@ static void errorHandlerTest(ACU_ExecuteEnv* environment, const void* context) {
         acu_setErrorHandler(error); 
 
         acu_eprintf("test:");
-
         ACU_assert(environment, int, Equal, visited, 1, "Error handler not used");
-        ACU_assert(environment, int, Equal, actualErrorLevel, acu_error, "Error handler not used");
-        ACU_assert_strContains (environment, actualErrorMessage, "acu_test", "Error handler not used");
-        ACU_assert_strContains(environment, actualErrorMessage, "test:", "Error handler not used");
-        ACU_FINALLY
+        ACU_assert(environment, int, Equal, actualErrorLevel, acu_error, "no error");
+        ACU_assert_strContains(environment, actualErrorMessage, "acu_test", "Does not contain program name");
+        ACU_assert_strContains(environment, actualErrorMessage, "test:", "Does not contain messsage");
+    ACU_FINALLY
         acu_setErrorHandler((ACU_ErrorHandlerFunc*) NULL);
+        acu_setProgName(NULL);
+    ACU_ETRY
+    UNUSED(context);
+}
+
+static void warningErrorHandlerTest(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_TRY
+        visited = 0;
+
+        acu_setProgName("acu_test");
+        acu_setErrorHandler(error);
+
+        acu_wprintf("test:");
+        ACU_assert(environment, int, Equal, visited, 1, "Error handler not used");
+        ACU_assert(environment, int, Equal, actualErrorLevel, acu_warning, "No warning");
+        ACU_assert_strContains(environment, actualErrorMessage, "acu_test", "Does not contain program name");
+        ACU_assert_strContains(environment, actualErrorMessage, "test:", "Does not contain messsage");
+    ACU_FINALLY
+        acu_setErrorHandler((ACU_ErrorHandlerFunc*)NULL);
         acu_setProgName(NULL);
     ACU_ETRY
     UNUSED(context);
@@ -63,7 +81,7 @@ static void errorHandlerTest(ACU_ExecuteEnv* environment, const void* context) {
 static void programNameTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_TRY
         acu_setProgName("acu_test");
-    ACU_assert_strEqual(environment, acu_progName(), "acu_test", "program name not set.");
+        ACU_assert_strEqual(environment, acu_progName(), "acu_test", "program name not set.");
     ACU_FINALLY
         acu_setProgName(NULL);
     ACU_ETRY
@@ -75,8 +93,9 @@ ACU_Fixture* utilFixture(void)
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
     acu_fixtureInit(fixture, "utility Tests");
-    acu_fixtureAddTestCase(fixture, "errorHandler", errorHandlerTest);
-    acu_fixtureAddTestCase(fixture, "programName", programNameTest);
+    acu_fixtureAddTestCase(fixture, "error Handler", errorHandlerTest);
+    acu_fixtureAddTestCase(fixture, "warning Handler", warningErrorHandlerTest);
+    acu_fixtureAddTestCase(fixture, "program Name", programNameTest);
 
     return fixture;
 }
