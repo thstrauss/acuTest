@@ -55,6 +55,18 @@ static void startMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
+static void endMatchTest(ACU_ExecuteEnv* environment, const void* context) {
+    int result = acu_match("123$", "000123");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    UNUSED(context);
+}
+
+static void noEndMatchTest(ACU_ExecuteEnv* environment, const void* context) {
+    int result = acu_match("123$", "1230000");
+    ACU_assert(environment, int, Equal, result, 0, "Does not Match");
+    UNUSED(context);
+}
+
 static void noMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("1234", "0012300");
     ACU_assert(environment, int, Equal, result, 0, "Does match");
@@ -71,6 +83,8 @@ ACU_Fixture* matchFixture(void)
     acu_fixtureAddTestCase(fixture, "Not Start Match test", notStartMatchTest);
     acu_fixtureAddTestCase(fixture, "Start Match test", startMatchTest);
     acu_fixtureAddTestCase(fixture, "No Match test", noMatchTest);
+    acu_fixtureAddTestCase(fixture, "End Match test", endMatchTest);
+    acu_fixtureAddTestCase(fixture, "No End Match test", noEndMatchTest);
 
     return fixture;
 }
