@@ -40,13 +40,12 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
     ACU_Frame frame;
     frame.exception = 0;
 
-    acuTest_resultInit(result);
     environment.result = result;
     environment.exceptionFrame = &frame;
 
     acu_stackPush(frameStack, &frame);
 
-    result->start = clock();
+    acuTest_resultInit(result);
     do {
         switch (setjmp(frame.exceptionBuf)) {
             case 0: {

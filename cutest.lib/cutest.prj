@@ -29,14 +29,14 @@
 
 acu_entr.c (..\acu_test\acu_ldr.h)
 flt_test.c
-tryc_tst.c [-R]
+tryc_tst.c (tryc_tst.h) [-R]
 fxtr_tst.c
 int_tst.c
 uint_tst.c
-long_tst.c
-ulng_tst.c
-char_tst.c
-uchr_tst.c 
+long_tst.c (long_tst.h)
+ulng_tst.c (ulng_tst.h)
+char_tst.c (char_tst.h)
+uchr_tst.c (uchr_tst.h)
 shrt_tst.c (shrt_tst.h)
 usht_tst.c (usht_tst.h)
 ptr_tst.c (ptr_tst.h)

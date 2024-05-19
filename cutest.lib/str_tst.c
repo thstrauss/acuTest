@@ -45,7 +45,7 @@ static void strEqualBothNull(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strEqual(testEnvironment, NULL, NULL, "strEqualBothNull"); \
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strEqualBothNull"); \
         ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_equalStr", "strEqualBothNull"); \
@@ -75,7 +75,7 @@ static void strEqualActualNull(ACU_ExecuteEnv* environment, const void* context)
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strEqual(testEnvironment, NULL, "abc", "strEqualActualNull"); \
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strEqualActualNull"); \
         ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_equalStr", "strEqualActualNull"); \
@@ -105,7 +105,7 @@ static void strIsEmpty(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strIsEmpty(testEnvironment, "", "strIsEmpty"); \
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strIsEmpty"); \
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strIsEmpty"); \
@@ -136,7 +136,7 @@ static void strIsNotEmpty(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strIsNotEmpty(testEnvironment, "abc", "strIsNotEmpty"); \
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strIsNotEmpty"); \
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strIsNotEmpty"); \
@@ -166,7 +166,7 @@ static void strIsNotEmptyFails(ACU_ExecuteEnv* environment, const void* context)
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strIsNotEmpty(testEnvironment, "", "strIsNotEmptyFails"); \
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_FAILED, "strIsNotEmptyFails"); \
         ACU_assert_ptrIsNotNull(environment, testEnvironment->result->message, "strIsNotEmptyFails"); \
@@ -196,7 +196,7 @@ static void strContains(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strContains(testEnvironment, "qwertyabc", "abc", "strContains"); 
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strContains"); 
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strContains"); 
@@ -226,7 +226,7 @@ static void strNotContains(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strNotContains(testEnvironment, "qwertyabc", "abcd", "strNotContains");
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strNotContains");
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strNotContains");
@@ -256,7 +256,7 @@ static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strEqual(testEnvironment, "abc", "abc", "strEqual");
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strEqual"); \
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strEqual"); \
@@ -286,7 +286,7 @@ static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strNotEqual(testEnvironment, "ptr1", "ptr2", "strNotEqual");
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strNotEqual"); \
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strNotEqual"); \
@@ -316,7 +316,7 @@ static void strNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strNotEqual(testEnvironment, NULL, NULL, "ptrNotEqualNull");
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strNotEqualNull"); \
         ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_notEqualStr", "strNotEqualNull"); \

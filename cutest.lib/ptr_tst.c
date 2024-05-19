@@ -45,7 +45,7 @@ static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_ptrEqual(testEnvironment, NULL, NULL, "ptrEqualNull"); \
     }
-    acu_stackPop(frameStack, (void**)NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqualNull"); \
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrEqualNull"); \
@@ -81,7 +81,7 @@ static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
         UNUSED(ptr1);
         UNUSED(ptr2);
     }
-    acu_stackPop(frameStack, (void**)NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrEqual"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrEqual"); \
@@ -115,7 +115,7 @@ static void ptrNotEqual(ACU_ExecuteEnv* environment, const void* context) {
         UNUSED(ptr1);
         UNUSED(ptr2);
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqual"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrNotEqual"); \
@@ -149,7 +149,7 @@ static void ptrNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
         UNUSED(ptr1);
         UNUSED(ptr2);
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
     	ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "ptrNotEqualNull"); \
     	ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "ptrNotEqualNull"); \
