@@ -23,9 +23,9 @@
 #ifndef __test_bed__
 #define __test_bed__
 
+#include <stddef.h>
 #include <stdlib.h>
 #include <setjmp.h>
-#include <tryctch.h>
 #include <acu_asrt.h>
 #include <acu_rslt.h>
 #include <acu_eenv.h>
@@ -33,23 +33,18 @@
 #include <acu_tryc.h>
 
 #define TESTBED(postfix, type, operation, actual, expetced) static void test##type##operation##postfix(ACU_ExecuteEnv* environment, const void* context) { \
-    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv)); \
-    ACU_Result* resultBuf = acuTest_resultMalloc(); \
+    ACU_ExecuteEnv testEnvironment; \
+    ACU_Result resultBuf; \
     ACU_Frame frame; \
-    testEnvironment->result = resultBuf; \
-    testEnvironment->exceptionFrame = &frame; \
-    acuTest_resultInit(resultBuf); \
+    testEnvironment.result = &resultBuf; \
+    testEnvironment.exceptionFrame = &frame; \
+    acuTest_resultInit(&resultBuf); \
     if (!setjmp(frame.exceptionBuf)) { \
-        ACU_assert(testEnvironment, type, operation, actual, expetced, #type#operation#postfix); \
+        ACU_assert(&testEnvironment, type, operation, actual, expetced, #type#operation#postfix); \
     } \
-    TRY \
-    ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, #type#operation#postfix); \
-    ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, #type#operation#postfix); \
-    FINALLY \
-    acuTest_resultDestroy(resultBuf); \
-    free(testEnvironment); \
-    ETRY; \
+    ACU_assert(environment, int, Equal, resultBuf.status, ACU_TEST_PASSED, #type#operation#postfix); \
+    ACU_assert_ptrEqual(environment, resultBuf.message, NULL, #type#operation#postfix); \
     UNUSED(context); \
-}\
+}
 
 #endif
