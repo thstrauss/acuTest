@@ -60,8 +60,8 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
             }
         }
     } while (0);
-    acu_stackPop(frameStack, (void**) NULL);
     result->end = clock();
+    acu_stackDrop(frameStack);
     testCase->result = result;
     if (progress && progress->progress) {
         progress->progress(testCase, progress->context);
