@@ -208,15 +208,16 @@ __EXPORT const ACU_Funcs acu_notEqualStrFuncs = { acu_notEqualStr, acu_notEqualS
 static char* acu_formatMessage(enum ACU_TestResult assertResult, const ACU_AssertParameter* parameter) {
     if (assertResult == ACU_TEST_FAILED) {
         return parameter->funcs->formatFailedMessage(parameter);
-    } else if (parameter->funcs->formatErrorMessage) {
+    } else if (assertResult == ACU_TEST_ERROR && parameter->funcs->formatErrorMessage) {
         return parameter->funcs->formatErrorMessage(parameter);
     } else {
        return acu_estrdup("");
     }
 }
 
-static void acu_finalizeFailed(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
+static void acu_finalizeFailed(enum ACU_TestResult result, ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
     ACU_Frame* frame = acu_stackPeek(acu_getFrameStack());
+    environment->result->status = result;
     environment->result->message = acu_formatMessage(environment->result->status, parameter);
     environment->result->file = acu_estrdup(parameter->fileName); 
     environment->result->line = parameter->line;
@@ -225,9 +226,8 @@ static void acu_finalizeFailed(ACU_ExecuteEnv* environment, const ACU_AssertPara
 }
 
 void acu_assert(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
-    enum ACU_TestResult assertResult = parameter->funcs->assert(parameter);
-    environment->result->status = assertResult;
+    register enum ACU_TestResult assertResult = parameter->funcs->assert(parameter);
     if (assertResult != ACU_TEST_PASSED) {
-        acu_finalizeFailed(environment, parameter);
+        acu_finalizeFailed(assertResult, environment, parameter);
     }
 }
