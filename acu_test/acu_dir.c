@@ -105,10 +105,10 @@ void acu_filesCollect(ACU_Files* files, const char* fileMask)
 #endif
 }
 
-void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitorFunc visitor, void* visitorContext) {
+void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor) {
     ACU_ListElement* fileElement = acu_listHead(files->fileList);
     while (fileElement != NULL) {
-        visitor((ACU_FileEntry*) fileElement->data, visitorContext);
+        visitor->visitor((ACU_FileEntry*) fileElement->data, visitor->context);
         fileElement = acu_listNext(fileElement);
     }
 }

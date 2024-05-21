@@ -114,6 +114,7 @@
       <PreprocessorDefinitions>_DEBUG;ACUTEST2_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,6 +134,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,12 +150,14 @@
     <ClCompile Include="acu_fxtr.c" />
     <ClCompile Include="acu_ldr.c" />
     <ClCompile Include="acu_list.c" />
+    <ClCompile Include="acu_mtch.c" />
     <ClCompile Include="acu_rprt.c" />
     <ClCompile Include="acu_rslt.c" />
     <ClCompile Include="acu_stck.c" />
     <ClCompile Include="acu_suit.c" />
     <ClCompile Include="acu_tryc.c" />
     <ClCompile Include="acu_util.c" />
+    <ClCompile Include="acu_vers.c" />
     <ClCompile Include="dllmain.c" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +171,7 @@
     <ClInclude Include="acu_fxtr.h" />
     <ClInclude Include="acu_ldr.h" />
     <ClInclude Include="acu_list.h" />
+    <ClInclude Include="acu_mtch.h" />
     <ClInclude Include="acu_rprt.h" />
     <ClInclude Include="acu_rslt.h" />
     <ClInclude Include="acu_stck.h" />
@@ -174,6 +179,7 @@
     <ClInclude Include="acu_tcse.h" />
     <ClInclude Include="acu_tryc.h" />
     <ClInclude Include="acu_util.h" />
+    <ClInclude Include="acu_vers.h" />
     <ClInclude Include="tryctch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

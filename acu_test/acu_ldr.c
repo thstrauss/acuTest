@@ -20,19 +20,43 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "acu_ldr.h"
 #include "acu_util.h"
-#include "acu_tryc.h"
-#include "acu_stck.h"
+#include "acu_vers.h"
+
+static int checkVersion(ACU_Entry* entry) {
+    ACU_Version* libVersion = entry->getAcuTestVersion();
+    ACU_Version* version = acu_getVersion();
+    if (!acu_compareVersion(version, libVersion)) {
+        char* libversionStr = acu_formatVersion(libVersion);
+        char* versionStr = acu_formatVersion(version);
+        acu_eprintf("Version of acu library %s does not match to runner %s", libversionStr, versionStr);
+        free(versionStr);
+        free(libversionStr);
+        return 0;
+    }
+    return 1;
+}
+
 
 #ifdef __TOS__
+
 #include <string.h>
 #include <stdlib.h>
 #include <portab.h>
 #include <tos.h>
+#include "acu_tryc.h"
+#include "acu_stck.h"
 
 #define PH_MAGIC 0x601a
+
+ACU_exitFunc* exitFunc;
+
+static void setExit(ACU_exitFunc* exit) {
+	exitFunc = exit;
+}
 
 typedef struct PH_
 {
@@ -104,7 +128,6 @@ static void* load_and_reloc(long handle, long fsize, const PH* programHeader)
     textAndData = malloc(TDB_len);
     if (textAndData) {
 
-        /* Text- und Data-Segment laden */
         if (Fread((int)handle, TD_len, textAndData) == TD_len) {  
             unsigned char* relocationData;
             
@@ -165,8 +188,13 @@ ACU_Entry* cup_load(const char* cu_name) {
         return NULL;
     }
     entry = init();
-    entry->setFrameStackFunc(acu_getFrameStack());
+    entry->setFrameStack(acu_getFrameStack());
+    entry->setExit(exit);
     entry->cup_code = init;
+    if (!checkVersion(entry)) {
+        cup_unload(entry);
+        return NULL;
+    };
     return entry;
 }
 
@@ -189,6 +217,10 @@ ACU_Entry* cup_load(const char* cu_name) {
     ACU_init* init = (ACU_init*) GetProcAddress(module, "acu_init");
     ACU_Entry* entry = init();
     entry->module = module;
+    if (!checkVersion(entry)) {
+        cup_unload(entry);
+        return NULL;
+    };
     return entry;
 }
 
@@ -205,12 +237,16 @@ ACU_Entry* acu_entryMalloc(void) {
 
 void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
     entry->suite = suite;
+    entry->getAcuTestVersion = acu_getVersion;
 #ifdef __TOS__
-    entry->setFrameStackFunc = acu_setFrameStack;
+    entry->setFrameStack = acu_setFrameStack;
+    entry->setExit = setExit;
 #endif
 }
 
 void acu_entryDestroy(ACU_Entry* entry) {
-    acu_suiteDestroy((ACU_Suite*) entry->suite);
-    free(entry);
+    if (entry) {
+        acu_suiteDestroy((ACU_Suite*)entry->suite);
+        free(entry);
+    }
 }

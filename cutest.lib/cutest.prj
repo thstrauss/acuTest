@@ -28,18 +28,20 @@
 =
 
 acu_entr.c (..\acu_test\acu_ldr.h)
-flt_test.c
-tryc_tst.c [-R]
-fxtr_tst.c
-int_tst.c
-uint_tst.c
-long_tst.c
-ulng_tst.c
-char_tst.c
-uchr_tst.c 
-shrt_tst.c (shrt_tst.h)
-usht_tst.c (usht_tst.h)
-ptr_tst.c (ptr_tst.h)
-str_tst.c (str_tst.h)
+char_tst.c (char_tst.h, tst_bed.h)
+fxtr_tst.c (fxtr_tst.h)
+flt_test.c (flt_test.h, tst_bed.h)
+int_tst.c  (int_tst.h, tst_bed.h)
 list_tst.c (list_tst.h)
+long_tst.c (long_tst.h, tst_bed.h)
+mtch_tst.c (mtch_tst.h)
+ptr_tst.c (ptr_tst.h)
 rslt_tst.c (rslt_tst.h)
+shrt_tst.c (shrt_tst.h, tst_bed.h)
+str_tst.c (str_tst.h)
+tryc_tst.c (tryc_tst.h) [-R]
+uchr_tst.c (uchr_tst.h, tst_bed.h)
+uint_tst.c (uint_tst.h, tst_bed.h)
+ulng_tst.c (ulng_tst.h, tst_bed.h)
+usht_tst.c (usht_tst.h, tst_bed.h)
+util_tst.c (util_tst.h)

@@ -29,12 +29,6 @@
 
 static char* programName = NULL;
 
-typedef enum ACU_Level_ 
-{
-    acu_error = 1,
-    acu_warning = 2,
-} ACU_Level;
-
 char* acu_progName(void) {
     return programName;
 }
@@ -63,29 +57,46 @@ void acu_setProgName(const char* progName) {
     }
 }
 
-static void va_acu_printf(ACU_Level level, const char* format, va_list args) {
-
+static void defaultErrorHandler(enum ACU_Level level, const char* message) {
     fflush(stdout);
-    if (acu_progName() != NULL) {
-        fprintf(stderr, "%s: ", acu_progName());
-    }
-
-    vfprintf(stderr, format, args);
-
-    if (format[0] != '\0' && format[strlen(format) - 1] == ':') {
-#ifdef __TOS__
-        fprintf(stderr, " %s", strerror(errno));
-#else 
-        char buffer[50];
-        strerror_s(buffer, 50, errno);
-        fprintf(stderr, " %s", buffer);
-#endif
-    }
-    fprintf(stderr, "\r\n");
-    fflush(stderr);
+    fprintf(stderr, "%s\r\n", message);
     if (level == acu_error) {
         exit(2);
     }
+}
+
+ACU_ErrorHandlerFunc* acu_errorHandler = defaultErrorHandler;
+
+void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler)
+{
+    if (errorHandler) {
+        acu_errorHandler = errorHandler;
+    }
+    else {
+        acu_errorHandler = defaultErrorHandler;
+    }
+}
+
+static char errorBuffer[1024];
+
+static void va_acu_printf(ACU_Level level, const char* format, va_list args) {
+    int bufPos = 0;
+    if (acu_progName() != NULL) {
+        bufPos += acu_sprintf_s(errorBuffer, sizeof(errorBuffer), "%s: ", acu_progName());
+    }
+
+    bufPos += acu_sprintf_s(errorBuffer+bufPos, sizeof(errorBuffer) - bufPos, format, args);
+
+    if (format[0] != '\0' && format[strlen(format) - 1] == ':') {
+#ifdef __TOS__
+        bufPos += acu_sprintf_s(errorBuffer+bufPos, sizeof(errorBuffer) - bufPos, " %d %s", errno, strerror(errno));
+#else 
+        char buffer[50];
+        strerror_s(buffer, 50, errno);
+        bufPos += acu_sprintf_s(errorBuffer + bufPos, sizeof(errorBuffer) - bufPos, " %d %s", errno, buffer);
+#endif
+    }
+    acu_errorHandler(level, errorBuffer);
 }
 
 void acu_eprintf(const char* format, ...) {
@@ -136,6 +147,4 @@ int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_lis
 #endif
 }
 
-void __exit(int status) {
-	exit(status);
-}
+

@@ -20,35 +20,11 @@
  */
 
 #pragma once
-#ifndef __acu_dir__
-#define __acu_dir__
+#ifndef __match_test__
+#define __match_test__
 
-#include "acu_cmmn.h"
-#include "acu_list.h"
+#include <acu_fxtr.h>
 
-typedef struct ACU_FileEntry_ {
-    char* fileName;
-} ACU_FileEntry;
-
-typedef struct ACU_Files_ {
-    ACU_List* fileList;
-} ACU_Files;
-
-typedef void ACU_FilesVisitorFunc(const ACU_FileEntry* file, void* visitorContext);
-
-typedef struct ACU_FilesVisitor_ {
-    ACU_FilesVisitorFunc* visitor;
-    void* context;
-} ACU_FilesVisitor;
-
-__EXPORT ACU_Files* acu_filesMalloc(void);
-
-__EXPORT void acu_filesInit(ACU_Files* files);
-
-__EXPORT void acu_filesDestroy(ACU_Files* files);
-
-__EXPORT void acu_filesCollect(ACU_Files* files, const char* fileName);
-
-__EXPORT void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor);
+ACU_Fixture* matchFixture(void);
 
 #endif

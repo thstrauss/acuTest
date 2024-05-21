@@ -19,36 +19,34 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-#ifndef __acu_dir__
-#define __acu_dir__
+#include "stddef.h"
+#include "stdlib.h"
+#include "stdio.h"
+#include "acu_vers.h"
+#include "acu_util.h"
 
-#include "acu_cmmn.h"
-#include "acu_list.h"
+static ACU_Version acuLibraryVersion = { 0,0,1,0 };
 
-typedef struct ACU_FileEntry_ {
-    char* fileName;
-} ACU_FileEntry;
+ACU_Version* acu_getVersion(void)
+{
+    return &acuLibraryVersion;
+}
 
-typedef struct ACU_Files_ {
-    ACU_List* fileList;
-} ACU_Files;
+int acu_compareVersion(const ACU_Version* version1, const ACU_Version* version2)
+{
+    return version1->version[0] == version2->version[0] 
+        && version1->version[1] == version2->version[1] 
+        && version1->version[2] == version2->version[2];
+}
 
-typedef void ACU_FilesVisitorFunc(const ACU_FileEntry* file, void* visitorContext);
-
-typedef struct ACU_FilesVisitor_ {
-    ACU_FilesVisitorFunc* visitor;
-    void* context;
-} ACU_FilesVisitor;
-
-__EXPORT ACU_Files* acu_filesMalloc(void);
-
-__EXPORT void acu_filesInit(ACU_Files* files);
-
-__EXPORT void acu_filesDestroy(ACU_Files* files);
-
-__EXPORT void acu_filesCollect(ACU_Files* files, const char* fileName);
-
-__EXPORT void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor);
-
-#endif
+char* acu_formatVersion(const ACU_Version* version) {
+    char* buffer = acu_emalloc(8);
+    if (buffer) {
+        acu_sprintf_s(buffer, 8, "%u.%u.%u.%u",
+            version->version[0],
+            version->version[1],
+            version->version[2],
+            version->version[3]);
+    }
+    return buffer;
+}

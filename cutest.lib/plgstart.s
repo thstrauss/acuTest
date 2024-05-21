@@ -24,7 +24,7 @@
     .EXPORT __text, __data
 
     .IMPORT acu_init
-    .IMPORT __exit
+    .IMPORT exitFunc
     .IMPORT _fpuinit
 
     .DATA
@@ -38,4 +38,5 @@ __text:
     JMP		acu_init
 
 exit:
-    JMP		__exit
+	MOVE.L  exitFunc,A0
+    JMP		(A0)

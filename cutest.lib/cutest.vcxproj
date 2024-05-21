@@ -118,6 +118,7 @@
       <PreprocessorDefinitions>_DEBUG;CUTEST_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,6 +137,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,23 +148,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ACU_ENTR.C" />
-    <ClCompile Include="CHAR_TST.C" />
+    <ClCompile Include="acu_entr.c" />
+    <ClCompile Include="char_tst.c" />
     <ClCompile Include="dllmain.c" />
     <ClCompile Include="flt_test.c" />
     <ClCompile Include="fxtr_tst.c" />
     <ClCompile Include="int_tst.c" />
     <ClCompile Include="list_tst.c" />
     <ClCompile Include="long_tst.c" />
+    <ClCompile Include="mtch_tst.c" />
     <ClCompile Include="ptr_tst.c" />
     <ClCompile Include="rslt_tst.c" />
     <ClCompile Include="shrt_tst.c" />
     <ClCompile Include="str_tst.c" />
     <ClCompile Include="tryc_tst.c" />
-    <ClCompile Include="UCHR_TST.C" />
-    <ClCompile Include="UINT_TST.C" />
-    <ClCompile Include="ULNG_TST.C" />
+    <ClCompile Include="uchr_tst.c" />
+    <ClCompile Include="uint_tst.c" />
+    <ClCompile Include="ulng_tst.c" />
     <ClCompile Include="usht_tst.c" />
+    <ClCompile Include="util_tst.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\acu_test\acu_test.vcxproj">
@@ -174,22 +178,24 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CHAR_TST.H" />
+    <ClInclude Include="char_tst.h" />
     <ClInclude Include="flt_test.h" />
     <ClInclude Include="fxtr_tst.h" />
     <ClInclude Include="int_tst.h" />
     <ClInclude Include="list_tst.h" />
     <ClInclude Include="long_tst.h" />
+    <ClInclude Include="mtch_tst.h" />
     <ClInclude Include="ptr_tst.h" />
     <ClInclude Include="rslt_tst.h" />
     <ClInclude Include="shrt_tst.h" />
     <ClInclude Include="str_tst.h" />
     <ClInclude Include="tryc_tst.h" />
     <ClInclude Include="tst_bed.h" />
-    <ClInclude Include="UCHR_TST.H" />
-    <ClInclude Include="UINT_TST.H" />
-    <ClInclude Include="ULNG_TST.H" />
+    <ClInclude Include="uchr_tst.h" />
+    <ClInclude Include="uint_tst.h" />
+    <ClInclude Include="ulng_tst.h" />
     <ClInclude Include="usht_tst.h" />
+    <ClInclude Include="util_tst.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cutest.lib.licenseheader" />

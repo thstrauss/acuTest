@@ -49,6 +49,6 @@ void acuTest_resultInit(ACU_Result* result) {
     result->message = NULL;
     result->file = NULL;
     result->line = -1;
-    result->start = (clock_t)(-1);
+    result->start = clock();
     result->end = (clock_t)(-1);
 }

@@ -30,242 +30,226 @@
 #include <acu_tryc.h>
  
 static void strEqualBothNull(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
-    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_ExecuteEnv testEnvironment;
+    ACU_Result resultBuf;
     ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
-    testEnvironment->exceptionFrame = &frame;
+    testEnvironment.exceptionFrame = &frame;
 
-    testEnvironment->result = resultBuf;
-    resultBuf->status = ACU_TEST_PASSED;
-    resultBuf->message = NULL;
-    resultBuf->file = NULL; 
+    testEnvironment.result = &resultBuf;
+    resultBuf.status = ACU_TEST_PASSED;
+    resultBuf.message = NULL;
+    resultBuf.file = NULL; 
     
-    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-        ACU_assert_strEqual(testEnvironment, NULL, NULL, "strEqualBothNull"); \
+    if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
+        ACU_assert_strEqual(&testEnvironment, NULL, NULL, "strEqualBothNull"); \
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
-        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strEqualBothNull"); \
-        ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_equalStr", "strEqualBothNull"); \
+        ACU_assert(environment, int, Equal, testEnvironment.result->status, ACU_TEST_ERROR, "strEqualBothNull"); \
+        ACU_assert_strEqual(environment, testEnvironment.result->message, "Error in: acu_equalStr", "strEqualBothNull"); \
     ACU_FINALLY
-        if (resultBuf->message) {
-            free(resultBuf->message);
+        if (resultBuf.message) {
+            free(resultBuf.message);
         }
-        free(resultBuf);
-        free(testEnvironment);
     ACU_ETRY;
     UNUSED(context);
 } 
 
 static void strEqualActualNull(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
-    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_ExecuteEnv testEnvironment;
+    ACU_Result resultBuf;
     ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
-    testEnvironment->exceptionFrame = &frame;
+    testEnvironment.exceptionFrame = &frame;
 
-    testEnvironment->result = resultBuf;
-    resultBuf->status = ACU_TEST_PASSED;
-    resultBuf->message = NULL;
-    resultBuf->file = NULL;
+    testEnvironment.result = &resultBuf;
+    resultBuf.status = ACU_TEST_PASSED;
+    resultBuf.message = NULL;
+    resultBuf.file = NULL;
 
-    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-        ACU_assert_strEqual(testEnvironment, NULL, "abc", "strEqualActualNull"); \
+    if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
+        ACU_assert_strEqual(&testEnvironment, NULL, "abc", "strEqualActualNull"); \
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
-        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strEqualActualNull"); \
-        ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_equalStr", "strEqualActualNull"); \
+        ACU_assert(environment, int, Equal, resultBuf.status, ACU_TEST_ERROR, "strEqualActualNull"); \
+        ACU_assert_strEqual(environment, resultBuf.message, "Error in: acu_equalStr", "strEqualActualNull"); \
     ACU_FINALLY
-        if (resultBuf->message) {
-            free(resultBuf->message);
+        if (resultBuf.message) {
+            free(resultBuf.message);
         }
-        free(resultBuf);
-        free(testEnvironment);
     ACU_ETRY;
     UNUSED(context);
 }
 
 static void strIsEmpty(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
-    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_ExecuteEnv testEnvironment;
+    ACU_Result resultBuf;
     ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
-    testEnvironment->exceptionFrame = &frame;
+    testEnvironment.exceptionFrame = &frame;
 
-    testEnvironment->result = resultBuf;
-    resultBuf->status = ACU_TEST_PASSED;
-    resultBuf->message = NULL;
-    resultBuf->file = NULL;
+    testEnvironment.result = &resultBuf;
+    resultBuf.status = ACU_TEST_PASSED;
+    resultBuf.message = NULL;
+    resultBuf.file = NULL;
 
-    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-        ACU_assert_strIsEmpty(testEnvironment, "", "strIsEmpty"); \
+    if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
+        ACU_assert_strIsEmpty(&testEnvironment, "", "strIsEmpty"); \
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
-        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strIsEmpty"); \
-        ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strIsEmpty"); \
+        ACU_assert(environment, int, Equal, testEnvironment.result->status, ACU_TEST_PASSED, "strIsEmpty"); \
+        ACU_assert_ptrEqual(environment, testEnvironment.result->message, NULL, "strIsEmpty"); \
     ACU_FINALLY
-        if (resultBuf->message) {
-            free(resultBuf->message);
+        if (resultBuf.message) {
+            free(resultBuf.message);
         }
-        free(resultBuf);
-        free(testEnvironment);
     ACU_ETRY;
     UNUSED(context);
 }
 
 
 static void strIsNotEmpty(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
-    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_ExecuteEnv testEnvironment;
+    ACU_Result resultBuf;
     ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
-    testEnvironment->exceptionFrame = &frame;
+    testEnvironment.exceptionFrame = &frame;
 
-    testEnvironment->result = resultBuf;
-    resultBuf->status = ACU_TEST_PASSED;
-    resultBuf->message = NULL;
-    resultBuf->file = NULL;
+    testEnvironment.result = &resultBuf;
+    resultBuf.status = ACU_TEST_PASSED;
+    resultBuf.message = NULL;
+    resultBuf.file = NULL;
 
-    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-        ACU_assert_strIsNotEmpty(testEnvironment, "abc", "strIsNotEmpty"); \
+    if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
+        ACU_assert_strIsNotEmpty(&testEnvironment, "abc", "strIsNotEmpty"); \
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
-        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strIsNotEmpty"); \
-        ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strIsNotEmpty"); \
+        ACU_assert(environment, int, Equal, testEnvironment.result->status, ACU_TEST_PASSED, "strIsNotEmpty"); \
+        ACU_assert_ptrEqual(environment, testEnvironment.result->message, NULL, "strIsNotEmpty"); \
     ACU_FINALLY
-        if (resultBuf->message) {
-            free(resultBuf->message);
+        if (resultBuf.message) {
+            free(resultBuf.message);
         }
-        free(resultBuf);
-        free(testEnvironment);
     ACU_ETRY;
     UNUSED(context);
 }
 
 static void strIsNotEmptyFails(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
-    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_ExecuteEnv testEnvironment;
+    ACU_Result resultBuf;
     ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
-    testEnvironment->exceptionFrame = &frame;
+    testEnvironment.exceptionFrame = &frame;
 
-    testEnvironment->result = resultBuf;
-    resultBuf->status = ACU_TEST_PASSED;
-    resultBuf->message = NULL;
-    resultBuf->file = NULL;
+    testEnvironment.result = &resultBuf;
+    resultBuf.status = ACU_TEST_PASSED;
+    resultBuf.message = NULL;
+    resultBuf.file = NULL;
 
-    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-        ACU_assert_strIsNotEmpty(testEnvironment, "", "strIsNotEmptyFails"); \
+    if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
+        ACU_assert_strIsNotEmpty(&testEnvironment, "", "strIsNotEmptyFails"); \
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
-        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_FAILED, "strIsNotEmptyFails"); \
-        ACU_assert_ptrIsNotNull(environment, testEnvironment->result->message, "strIsNotEmptyFails"); \
+        ACU_assert(environment, int, Equal, testEnvironment.result->status, ACU_TEST_FAILED, "strIsNotEmptyFails"); \
+        ACU_assert_ptrIsNotNull(environment, testEnvironment.result->message, "strIsNotEmptyFails"); \
     ACU_FINALLY
-        if (resultBuf->message) {
-            free(resultBuf->message);
+        if (resultBuf.message) {
+            free(resultBuf.message);
         }
-    free(resultBuf);
-    free(testEnvironment);
     ACU_ETRY;
     UNUSED(context);
 }
 
 static void strContains(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
-    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_ExecuteEnv testEnvironment;
+    ACU_Result resultBuf;
     ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
-    testEnvironment->exceptionFrame = &frame;
+    testEnvironment.exceptionFrame = &frame;
 
-    testEnvironment->result = resultBuf;
-    resultBuf->status = ACU_TEST_PASSED;
-    resultBuf->message = NULL;
-    resultBuf->file = NULL;
+    testEnvironment.result = &resultBuf;
+    resultBuf.status = ACU_TEST_PASSED;
+    resultBuf.message = NULL;
+    resultBuf.file = NULL;
 
-    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-        ACU_assert_strContains(testEnvironment, "qwertyabc", "abc", "strContains"); 
+    if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
+        ACU_assert_strContains(&testEnvironment, "qwertyabc", "abc", "strContains"); 
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
-        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strContains"); 
-        ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strContains"); 
+        ACU_assert(environment, int, Equal, testEnvironment.result->status, ACU_TEST_PASSED, "strContains"); 
+        ACU_assert_ptrEqual(environment, testEnvironment.result->message, NULL, "strContains"); 
     ACU_FINALLY
-        if (resultBuf->message) {
-            free(resultBuf->message);
+        if (resultBuf.message) {
+            free(resultBuf.message);
         }
-        free(resultBuf);
-        free(testEnvironment);
     ACU_ETRY;
     UNUSED(context);
 }
 
 static void strNotContains(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
-    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_ExecuteEnv testEnvironment;
+    ACU_Result resultBuf;
     ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
-    testEnvironment->exceptionFrame = &frame;
+    testEnvironment.exceptionFrame = &frame;
 
-    testEnvironment->result = resultBuf;
-    resultBuf->status = ACU_TEST_PASSED;
-    resultBuf->message = NULL;
-    resultBuf->file = NULL;
+    testEnvironment.result = &resultBuf;
+    resultBuf.status = ACU_TEST_PASSED;
+    resultBuf.message = NULL;
+    resultBuf.file = NULL;
 
-    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-        ACU_assert_strNotContains(testEnvironment, "qwertyabc", "abcd", "strNotContains");
+    if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
+        ACU_assert_strNotContains(&testEnvironment, "qwertyabc", "abcd", "strNotContains");
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
-        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strNotContains");
-        ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strNotContains");
+        ACU_assert(environment, int, Equal, testEnvironment.result->status, ACU_TEST_PASSED, "strNotContains");
+        ACU_assert_ptrEqual(environment, testEnvironment.result->message, NULL, "strNotContains");
     ACU_FINALLY
-        if (resultBuf->message) {
-            free(resultBuf->message);
+        if (resultBuf.message) {
+            free(resultBuf.message);
         }
-        free(resultBuf);
-        free(testEnvironment);
     ACU_ETRY;
     UNUSED(context);
 }
 
 static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
-    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_ExecuteEnv testEnvironment;
+    ACU_Result resultBuf;
     ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
-    testEnvironment->exceptionFrame = &frame;
-    testEnvironment->result = resultBuf;
+    testEnvironment.exceptionFrame = &frame;
 
-    resultBuf->status = ACU_TEST_PASSED;
-    resultBuf->message = NULL;
-    resultBuf->file = NULL; 
-    
-    if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-        ACU_assert_strEqual(testEnvironment, "abc", "abc", "strEqual");
+    testEnvironment.result = &resultBuf;
+    resultBuf.status = ACU_TEST_PASSED;
+    resultBuf.message = NULL;
+    resultBuf.file = NULL;
+
+    if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
+        ACU_assert_strEqual(&testEnvironment, "abc", "abc", "strEqual");
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
-        ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strEqual"); \
-        ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strEqual"); \
+        ACU_assert(environment, int, Equal, testEnvironment.result->status, ACU_TEST_PASSED, "strEqual"); \
+        ACU_assert_ptrEqual(environment, testEnvironment.result->message, NULL, "strEqual"); \
     ACU_FINALLY
-        if (resultBuf->message) {
-            free(resultBuf->message);
+        if (resultBuf.message) {
+            free(resultBuf.message);
         }
-        free(resultBuf);
-        free(testEnvironment);
     ACU_ETRY;
     UNUSED(context);
 }
@@ -286,7 +270,7 @@ static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strNotEqual(testEnvironment, "ptr1", "ptr2", "strNotEqual");
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strNotEqual"); \
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strNotEqual"); \
@@ -316,7 +300,7 @@ static void strNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strNotEqual(testEnvironment, NULL, NULL, "ptrNotEqualNull");
     }
-    acu_stackPop(frameStack, NULL);
+    acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strNotEqualNull"); \
         ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_notEqualStr", "strNotEqualNull"); \

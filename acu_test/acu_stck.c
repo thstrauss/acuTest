@@ -98,3 +98,20 @@ int acu_stackPop(ACU_Stack* stack, void** data)
     return 0;
 }
 
+__EXPORT int acu_stackDrop(ACU_Stack* stack)
+{
+    ACU_StackElement* oldElement;
+
+    if (stack->size == 0) {
+        return -1;
+    }
+
+    oldElement = stack->head;
+
+    stack->head = stack->head->next;
+    free(oldElement);
+    stack->size--;
+
+    return 0;
+}
+

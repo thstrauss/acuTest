@@ -19,36 +19,44 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-#ifndef __acu_dir__
-#define __acu_dir__
+#include "acu_mtch.h"
 
-#include "acu_cmmn.h"
-#include "acu_list.h"
+int matchHere(const char* regexp, const char* text);
 
-typedef struct ACU_FileEntry_ {
-    char* fileName;
-} ACU_FileEntry;
+static int matchStar(int c, const char* regexp, const char* text) {
+    do {
+        if (matchHere(regexp, text)) {
+            return 1;
+        }
+    } while (*text != '\0' && (*text++ == c || c == '.'));
+    return 0;
+}
 
-typedef struct ACU_Files_ {
-    ACU_List* fileList;
-} ACU_Files;
+static int matchHere(const char* regexp, const char* text) {
+    if (regexp[0] == '\0') {
+        return 1;
+    }
+    if (regexp[1] == '*') {
+        return matchStar(regexp[0], regexp + 2, text);
+    }
+    if (regexp[0] == '$' && regexp[1] == '\0') {
+        return *text == '\0';
+    }
+    if (*text != '\0' && (regexp[0] == '.' || regexp[0] == *text)) {
+        return matchHere(regexp + 1, text + 1);
+    }
+    return 0;
+}
 
-typedef void ACU_FilesVisitorFunc(const ACU_FileEntry* file, void* visitorContext);
-
-typedef struct ACU_FilesVisitor_ {
-    ACU_FilesVisitorFunc* visitor;
-    void* context;
-} ACU_FilesVisitor;
-
-__EXPORT ACU_Files* acu_filesMalloc(void);
-
-__EXPORT void acu_filesInit(ACU_Files* files);
-
-__EXPORT void acu_filesDestroy(ACU_Files* files);
-
-__EXPORT void acu_filesCollect(ACU_Files* files, const char* fileName);
-
-__EXPORT void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor);
-
-#endif
+int acu_match(const char* regexp, const char* text)
+{
+    if (regexp[0] == '^') {
+        return matchHere(regexp + 1, text);
+    }
+    do {
+        if (matchHere(regexp, text)) {
+            return 1;
+        }
+    } while (*text++ != '\0');
+    return 0;
+}

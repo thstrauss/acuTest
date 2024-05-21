@@ -20,35 +20,19 @@
  */
 
 #pragma once
-#ifndef __acu_dir__
-#define __acu_dir__
+#ifndef __ACU_VERSION__
+#define __ACU_VERSION__
 
 #include "acu_cmmn.h"
-#include "acu_list.h"
 
-typedef struct ACU_FileEntry_ {
-    char* fileName;
-} ACU_FileEntry;
+typedef struct ACU_Version_ {
+    unsigned char version[4];
+} ACU_Version;
 
-typedef struct ACU_Files_ {
-    ACU_List* fileList;
-} ACU_Files;
+typedef ACU_Version* (ACU_getVersionFunc)(void);
 
-typedef void ACU_FilesVisitorFunc(const ACU_FileEntry* file, void* visitorContext);
-
-typedef struct ACU_FilesVisitor_ {
-    ACU_FilesVisitorFunc* visitor;
-    void* context;
-} ACU_FilesVisitor;
-
-__EXPORT ACU_Files* acu_filesMalloc(void);
-
-__EXPORT void acu_filesInit(ACU_Files* files);
-
-__EXPORT void acu_filesDestroy(ACU_Files* files);
-
-__EXPORT void acu_filesCollect(ACU_Files* files, const char* fileName);
-
-__EXPORT void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor);
+ACU_Version* acu_getVersion(void);
+__EXPORT int acu_compareVersion(const ACU_Version* version1, const ACU_Version* version2);
+__EXPORT char* acu_formatVersion(const ACU_Version* version);
 
 #endif

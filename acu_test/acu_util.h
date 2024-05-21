@@ -26,15 +26,25 @@
 #include <stdarg.h>
 #include "acu_cmmn.h"
 
+typedef enum ACU_Level_
+{
+    acu_error = 1,
+    acu_warning = 2,
+} ACU_Level;
+
+typedef void ACU_ErrorHandlerFunc(enum ACU_Level errorLevel, const char* errorMessage);
+
 /*
 * Returns the program name.
 */
 __EXPORT char* acu_progName(void);
 
 /*
-* 
+* Sets the program name.
 */
 __EXPORT void acu_setProgName(const char* progName);
+
+__EXPORT void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler);
 
 /*
     Prints an error message to stderr and terminates the program. 
@@ -54,7 +64,5 @@ __EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format
 __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
 
 #define SAFE_REF(ref) ((ref)?(ref):"NULL")
-
-void __exit(int status);
 
 #endif

@@ -76,7 +76,7 @@ void acu_setFrameStack(ACU_Stack* jmpBufFrames);
 #define ACU_ETRY_CTX(CONTEXT) \
     { \
         ACU_Frame* f; \
-        acu_stackPop(acu_getFrameStack(), NULL); \
+        acu_stackDrop(acu_getFrameStack()); \
         f = acu_stackPeek(acu_getFrameStack()); \
         if (f && f->exception != 0) { \
             longjmp(f->exceptionBuf, f->exception != 0 ? f->exception : 0xFFFF); \
