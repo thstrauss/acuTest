@@ -54,21 +54,21 @@ ACU_Entry* acu_init() {
 
     acu_suiteAddFixture(suite, fixtureFixture());
     acu_suiteAddFixture(suite, floatFixture());
-    acu_suiteAddFixture(suite, tryCatchFixture());
     acu_suiteAddFixture(suite, intFixture());
-    acu_suiteAddFixture(suite, unsignedIntFixture());
-    acu_suiteAddFixture(suite, longFixture());
-    acu_suiteAddFixture(suite, unsignedLongFixture());
-    acu_suiteAddFixture(suite, signedCharFixture());
-    acu_suiteAddFixture(suite, unsignedCharFixture());
-    acu_suiteAddFixture(suite, shortFixture());
-    acu_suiteAddFixture(suite, unsignedShortFixture());
-    acu_suiteAddFixture(suite, ptrFixture());
-    acu_suiteAddFixture(suite, strFixture());
     acu_suiteAddFixture(suite, listFixture());
-    acu_suiteAddFixture(suite, resultFixture());
-    acu_suiteAddFixture(suite, utilFixture());
+    acu_suiteAddFixture(suite, longFixture());
     acu_suiteAddFixture(suite, matchFixture());
+    acu_suiteAddFixture(suite, ptrFixture());
+    acu_suiteAddFixture(suite, resultFixture());
+    acu_suiteAddFixture(suite, shortFixture());
+    acu_suiteAddFixture(suite, signedCharFixture());
+    acu_suiteAddFixture(suite, strFixture());
+    acu_suiteAddFixture(suite, tryCatchFixture());
+    acu_suiteAddFixture(suite, unsignedCharFixture());
+    acu_suiteAddFixture(suite, unsignedIntFixture());
+    acu_suiteAddFixture(suite, unsignedLongFixture());
+    acu_suiteAddFixture(suite, unsignedShortFixture());
+    acu_suiteAddFixture(suite, utilFixture());
 
     return entry;
 }
