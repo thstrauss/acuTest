@@ -50,57 +50,54 @@ static int acu_listSize(ACU_List* list) {
 }
 
 static ACU_ListElement* acu_listElementMalloc(void) {
-    return (ACU_ListElement*)acu_emalloc(sizeof(ACU_ListElement));
+    return (ACU_ListElement*) acu_emalloc(sizeof(ACU_ListElement));
 }
 
-int acu_listAppend(ACU_List* list, void* data) {
-    ACU_ListElement* newElement;
-    ACU_ListElement* tailElement = list->tail;
+int acu_listAppend(ACU_List* list, const void* data) {
+    ACU_ListElement* newElement = acu_listElementMalloc();
+    if (newElement) {
+        ACU_ListElement* tailElement = list->tail;
+        newElement->next = NULL;
+        newElement->data = data;
 
-    if ((newElement = acu_listElementMalloc()) == NULL) {
-        return -1;
+        if (list->size == 0) {
+            list->head = newElement;
+        }
+
+        if (tailElement) {
+            tailElement->next = newElement;
+        }
+        list->tail = newElement;
+
+        list->size++;
+
+        return 0;
     }
-    newElement->next = NULL; 
-    newElement->data = data;
-
-    if (acu_listSize(list) == 0) {
-        list->head = newElement;
-    }
-    
-    if (tailElement) {
-        tailElement->next = newElement;
-    }
-    list->tail = newElement;
-
-    list->size++;
-
-    return 0;
+    return -1;
 }
 
-static int acu_listRemoveHead(ACU_List* list, void** data) {
+static int acu_listRemoveHead(ACU_List* list, const void** data) {
     ACU_ListElement* oldElement;
-    if (acu_listSize(list) <= 0) {
+    if (list->size <= 0) {
         return -1;
     }
     
     *data = list->head->data;
     oldElement = list->head;
     list->head = list->head->next;
-    if (acu_listSize(list) == 1) {
+    if (list->size == 1) {
         list->tail = NULL;
     }
 
     free(oldElement);
-
     list->size--;
     
     return 0;
 }
 
 void acu_listDestroy(ACU_List* list) {
-    void* data = NULL;
-
-    while (acu_listSize(list) > 0) {
+    while (list->size > 0) {
+        void* data;
         if (acu_listRemoveHead(list, (void**)&data) == 0 && list->destroy) {
             list->destroy(data);
         }

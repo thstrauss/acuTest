@@ -23,6 +23,7 @@
 #ifndef _ACU_RPRT_H_
 #define _ACU_RPRT_H_
 
+#include "acu_list.h"
 #include "acu_cmmn.h"
 #include "acu_tcse.h"
 
@@ -33,6 +34,7 @@ typedef void ACU_VisitorFunc(const ACU_TestCase* testCase, void* context);
 __EXPORT void acu_progress(const ACU_TestCase* testCase, void* progressContext);
 __EXPORT void acu_report(const ACU_TestCase* testCase, void* context);
 __EXPORT void acu_countTestCases(const ACU_TestCase* testCase, void* context);
+__EXPORT void acu_collectTestCases(const ACU_TestCase* testCase, void* context);
 
 typedef struct ACU_Progress_ {
     ACU_ProgressFunc* progress;
@@ -48,6 +50,10 @@ typedef struct ACU_Summary_ {
     int totalTestCases;
     int failedTestCases;
 } ACU_Summary;
+
+typedef struct ACU_TestCases_ {
+    ACU_List* testCases;
+} ACU_TestCases;
 
 __EXPORT void acu_reportSummary(const ACU_TestCase* testCase, void* context);
 

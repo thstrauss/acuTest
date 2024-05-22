@@ -27,7 +27,7 @@
 
 typedef struct ACU_ListElement_ {
     struct ACU_ListElement_* next;
-    void* data;
+    const void* data;
 } ACU_ListElement;
 
 typedef void ACU_ListDestroyFunc(void* data);
@@ -49,6 +49,6 @@ __EXPORT ACU_List* acu_listMalloc(void);
 
 __EXPORT void acu_listDestroy(ACU_List* list);
 
-__EXPORT int acu_listAppend(ACU_List* list, void* data);
+__EXPORT int acu_listAppend(ACU_List* list, const void* data);
 
 #endif 
