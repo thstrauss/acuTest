@@ -39,8 +39,6 @@ static void emptyList(ACU_ExecuteEnv* environment, const void* context) {
         acu_listDestroy(list);
         free(list);
     ACU_ETRY
-
-    UNUSED(environment);
     UNUSED(context);
 }
 
