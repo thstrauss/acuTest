@@ -149,7 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="acu_entr.c" />
-    <ClCompile Include="char_tst.c" />
+    <ClCompile Include="uchr_tst.c" />
     <ClCompile Include="dllmain.c" />
     <ClCompile Include="flt_test.c" />
     <ClCompile Include="fxtr_tst.c" />
@@ -162,7 +162,7 @@
     <ClCompile Include="shrt_tst.c" />
     <ClCompile Include="str_tst.c" />
     <ClCompile Include="tryc_tst.c" />
-    <ClCompile Include="uchr_tst.c" />
+    <ClCompile Include="char_tst.c" />
     <ClCompile Include="uint_tst.c" />
     <ClCompile Include="ulng_tst.c" />
     <ClCompile Include="usht_tst.c" />
