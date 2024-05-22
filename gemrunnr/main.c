@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define RSC_STATIC_FILE 1
+/*#define RSC_STATIC_FILE 1*/
 
 #include <gemrunnr.h>
 
@@ -229,7 +229,7 @@ int startProgram(void) {
 		graf_mouse(ARROW, 0L);
 		wind_get(0, WF_WORKXYWH, &fullx, &fully, &fullw, &fullh);
 	
-		wd.handle = wind_create(NAME | CLOSER | MOVER | SIZER | FULLER, 
+		wd.handle = wind_create(NAME | MOVER | SIZER | FULLER, 
 			fullx, fully, fullw, fullh);
 		wind_set(wd.handle, WF_NAME, "GEM Runner", 0, 0);
 		wind_open(wd.handle, fullx, fully, 300, 200);
