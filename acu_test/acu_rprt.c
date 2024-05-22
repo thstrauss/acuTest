@@ -60,6 +60,12 @@ void acu_countTestCases(const ACU_TestCase* testCase, void* context)
     UNUSED(testCase);
 }
 
+void acu_collectTestCases(const ACU_TestCase* testCase, void* context)
+{
+    ACU_List* testCases = (ACU_List*) context;
+    acu_listAppend(testCases, testCase);
+}
+
 void acu_reportSummary(const ACU_TestCase* testCase, void* context)
 {
     ACU_Summary* summary = (ACU_Summary*) context;
