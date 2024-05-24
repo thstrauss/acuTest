@@ -27,25 +27,13 @@
     <ClCompile Include="acu_ldr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="acu_list.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="acu_rprt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="acu_suit.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="acu_util.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="acu_rslt.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="acu_dir.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="acu_stck.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="acu_tryc.c">
@@ -65,10 +53,7 @@
     <ClInclude Include="acu_asrt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="acu_cmmn.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_dir.h">
+    <ClInclude Include="acu_cmm2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_eenv.h">
@@ -78,9 +63,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_ldr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_rprt.h">
@@ -95,13 +77,7 @@
     <ClInclude Include="acu_tcse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="acu_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="tryctch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_stck.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_tryc.h">

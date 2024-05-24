@@ -72,10 +72,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\acu_test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\acu_util;..\acu_test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\acu_test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\acu_util;..\acu_test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -138,6 +138,9 @@
   <ItemGroup>
     <ProjectReference Include="..\acu_test\acu_test.vcxproj">
       <Project>{9f2aab5a-d806-4669-8e72-7525930721ad}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\acu_util\acu_util.vcxproj">
+      <Project>{b57f816d-dc1a-4a64-aa7f-d9b9b1fe635c}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

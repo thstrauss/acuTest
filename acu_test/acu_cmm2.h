@@ -20,20 +20,8 @@
  */
 
 #pragma once
-#ifndef _ACU_COMMON_H_
-#define _ACU_COMMON_H_
-
-#ifdef __TOS__
-#define __EXPORT 
-#else
-#define __EXPORT __declspec(dllexport) 
-#endif
-
-#ifdef __TOS__
-#define __IMPORT 
-#else
-#define __IMPORT __declspec(dllimport) 
-#endif
+#ifndef _ACU_COMMON2_H_
+#define _ACU_COMMON2_H_
 
 typedef enum ACU_TestResult_ {
     ACU_TEST_FAILED = 0,
@@ -45,10 +33,5 @@ typedef enum ACU_TestResult_ {
 typedef enum ACU_Exception_ {
     ACU_TEST_ABORTED = 3
 } ACU_Exception;
-
-/*
-* Can be used to suppress unused variable warnings.
-*/
-#define UNUSED(x) (void)(x);
 
 #endif

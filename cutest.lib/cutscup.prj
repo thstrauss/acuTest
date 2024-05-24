@@ -30,6 +30,7 @@
 plgstart.s
 
 ..\acu_test\acu_test.prj
+..\acu_util\acu_util.prj
 cutest.prj
 
 PCFLTLIB.LIB
