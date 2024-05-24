@@ -22,6 +22,7 @@
 ..\curunner\cutstrun.tos
 
 .C [ -I..\acu_test ]
+.C [ -I..\acu_util ]
 .C [ -P ]
 .L [ -S=8192 ]	
 
@@ -32,6 +33,7 @@ pcstart.o
 main.c 
 
 ..\acu_test\acu_test.prj
+..\acu_util\acu_util.prj
 cutest.prj
 
 PCFLTLIB.LIB
