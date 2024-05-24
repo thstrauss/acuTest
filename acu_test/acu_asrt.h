@@ -59,8 +59,6 @@ __EXPORT void acu_assert(
 
 #ifndef __ACU_EMIT_ASSERT_FUNCS__
 #define CREATE_ASSERT_FUNC(type, op, opCode, format) \
-/* Assert prototype for type and op */ \
-void acu_assert_##type##op(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter); \
 __IMPORT extern ACU_Funcs acu_##type##op##Funcs;
 #endif
 
@@ -166,7 +164,7 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 */
 #define ACU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
     ACU_PrepareParameter(type, op, actualValue, expectedValue, messageValue) \
-    acu_assert_##type##op(environment, &parameter); \
+    acu_assert(environment, &parameter); \
 }
 
 #ifndef __ACU_EMIT_ASSERT_FUNCS__
