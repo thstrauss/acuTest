@@ -45,8 +45,12 @@
 #define _ACU_TRY_THROW_CATCH_H_
 
 #include <setjmp.h>
-
 #include "acu_stck.h"
+
+typedef enum ACU_Exception_ {
+    ACU_EXCEPTION_ABORTED = 3,
+    ACU_EXCEPTION_DEFAULT = 0xFFFF,
+} ACU_Exception;
 
 typedef struct ACU_Frame_ {
     jmp_buf exceptionBuf;
@@ -79,7 +83,7 @@ void acu_setFrameStack(ACU_Stack* jmpBufFrames);
         acu_stackDrop(acu_getFrameStack()); \
         f = acu_stackPeek(acu_getFrameStack()); \
         if (f && f->exception != 0) { \
-            longjmp(f->exceptionBuf, f->exception != 0 ? f->exception : 0xFFFF); \
+            longjmp(f->exceptionBuf, f->exception != 0 ? f->exception : ACU_EXCEPTION_DEFAULT); \
         } \
     } \
     break; } } while(0);
@@ -87,7 +91,7 @@ void acu_setFrameStack(ACU_Stack* jmpBufFrames);
 #define ACU_THROW_CTX(CONTEXT, x) { \
     ACU_Frame* f = acu_stackPeek(acu_getFrameStack()); \
     _##CONTEXT##_Frame.exception=(x); \
-    longjmp(f->exceptionBuf, f->exception != 0 ? f->exception : 0xFFFF);}
+    longjmp(f->exceptionBuf, f->exception != 0 ? f->exception : ACU_EXCEPTION_DEFAULT);}
 
 #define ACU_TRY ACU_TRY_CTX(exception)
 #define ACU_THROW(x) ACU_THROW_CTX(exception, x)

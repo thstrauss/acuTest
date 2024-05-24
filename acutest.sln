@@ -14,6 +14,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "curunner", "curunner\Projec
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo", "demo\demo.vcxproj", "{D4CD6DDD-DADD-4121-BDC9-D43F6539DD26}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "acu_util", "acu_util\acu_util.vcxproj", "{B57F816D-DC1A-4A64-AA7F-D9B9B1FE635C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -54,6 +56,14 @@ Global
 		{D4CD6DDD-DADD-4121-BDC9-D43F6539DD26}.Release|x64.Build.0 = Release|x64
 		{D4CD6DDD-DADD-4121-BDC9-D43F6539DD26}.Release|x86.ActiveCfg = Release|Win32
 		{D4CD6DDD-DADD-4121-BDC9-D43F6539DD26}.Release|x86.Build.0 = Release|Win32
+		{B57F816D-DC1A-4A64-AA7F-D9B9B1FE635C}.Debug|x64.ActiveCfg = Debug|x64
+		{B57F816D-DC1A-4A64-AA7F-D9B9B1FE635C}.Debug|x64.Build.0 = Debug|x64
+		{B57F816D-DC1A-4A64-AA7F-D9B9B1FE635C}.Debug|x86.ActiveCfg = Debug|Win32
+		{B57F816D-DC1A-4A64-AA7F-D9B9B1FE635C}.Debug|x86.Build.0 = Debug|Win32
+		{B57F816D-DC1A-4A64-AA7F-D9B9B1FE635C}.Release|x64.ActiveCfg = Release|x64
+		{B57F816D-DC1A-4A64-AA7F-D9B9B1FE635C}.Release|x64.Build.0 = Release|x64
+		{B57F816D-DC1A-4A64-AA7F-D9B9B1FE635C}.Release|x86.ActiveCfg = Release|Win32
+		{B57F816D-DC1A-4A64-AA7F-D9B9B1FE635C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

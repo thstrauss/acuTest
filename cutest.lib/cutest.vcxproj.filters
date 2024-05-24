@@ -36,7 +36,7 @@
     <ClCompile Include="ACU_ENTR.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UCHR_TST.C">
+    <ClCompile Include="char_tst.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UINT_TST.C">
@@ -45,7 +45,7 @@
     <ClCompile Include="ULNG_TST.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CHAR_TST.C">
+    <ClCompile Include="uchr_tst.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ptr_tst.c">

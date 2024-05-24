@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-#include "acu_cmmn.h"
 #include "acu_eenv.h"
 #include "acu_fxtr.h"
 #include "acu_list.h"
@@ -55,7 +54,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
                 }
                 break;
             }
-            case ACU_TEST_ABORTED: {
+            case ACU_EXCEPTION_ABORTED: {
                 break;
             }
         }

@@ -21,6 +21,7 @@
 
 ..\curunner\cuempty.cup
 
+.C [ -I..\acu_util ]
 .C [ -I..\acu_test ]
 .L [ -S=0 ]
 
@@ -30,6 +31,7 @@ plgstart.s
 
 acu_ent2.c
 
+..\acu_util\acu_util.prj
 ..\acu_test\acu_test.prj
 
 PCSTDLIB.LIB

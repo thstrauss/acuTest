@@ -19,36 +19,23 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-#ifndef _ACU_COMMON_H_
-#define _ACU_COMMON_H_
+// dllmain.cpp : Defines the entry point for the DLL application.
 
-#ifdef __TOS__
-#define __EXPORT 
-#else
-#define __EXPORT __declspec(dllexport) 
-#endif
+#include <windows.h>
 
-#ifdef __TOS__
-#define __IMPORT 
-#else
-#define __IMPORT __declspec(dllimport) 
-#endif
+BOOL APIENTRY DllMain( HMODULE hModule,
+                       DWORD  ul_reason_for_call,
+                       LPVOID lpReserved
+                     )
+{
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+    case DLL_PROCESS_DETACH:
+        break;
+    }
+    return TRUE;
+}
 
-typedef enum ACU_TestResult_ {
-    ACU_TEST_FAILED = 0,
-    ACU_TEST_PASSED = 1,
-    ACU_TEST_UNDEFINED = -1,
-    ACU_TEST_ERROR = -2
-} ACU_TestResult;
-
-typedef enum ACU_Exception_ {
-    ACU_TEST_ABORTED = 3
-} ACU_Exception;
-
-/*
-* Can be used to suppress unused variable warnings.
-*/
-#define UNUSED(x) (void)(x);
-
-#endif

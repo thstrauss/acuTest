@@ -24,7 +24,14 @@
 #define _ACU_TEST_RESULT_H_
 
 #include <time.h>
-#include "acu_cmmn.h"
+#include <acu_cmmn.h>
+
+typedef enum ACU_TestResult_ {
+    ACU_TEST_FAILED = 0,
+    ACU_TEST_PASSED = 1,
+    ACU_TEST_UNDEFINED = -1,
+    ACU_TEST_ERROR = -2
+} ACU_TestResult;
 
 typedef struct ACU_Result_ {
     enum ACU_TestResult status;

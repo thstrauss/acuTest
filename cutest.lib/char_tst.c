@@ -22,33 +22,33 @@
 #include <acu_fxtr.h>
 #include <acu_suit.h>
 
-#include "uchr_tst.h"
+#include "char_tst.h"
 
 #include "tst_bed.h"
 
-TESTBED(, unsignedChar, Equal, 'a', 'a')
-TESTBED(, unsignedChar, NotEqual, 'a', 'b')
-TESTBED(, unsignedChar, Less, 'a', 'b')
-TESTBED(, unsignedChar, LessEqual, 'a', 'b')
-TESTBED(Eq, unsignedChar, LessEqual, 'b', 'b')
-TESTBED(, unsignedChar, Greater, 'b', 'a')
-TESTBED(, unsignedChar, GreaterEqual, 'b', 'a')
-TESTBED(Eq, unsignedChar, GreaterEqual, 'b', 'b')
+TESTBED(, signedChar, Equal, 'a', 'a')
+TESTBED(, signedChar, NotEqual, 'a', 'b')
+TESTBED(, signedChar, Less, 'a', 'b')
+TESTBED(, signedChar, LessEqual, 'a', 'b')
+TESTBED(Eq, signedChar, LessEqual, 'b', 'b')
+TESTBED(, signedChar, Greater, 'b', 'a')
+TESTBED(, signedChar, GreaterEqual, 'b', 'a')
+TESTBED(Eq, signedChar, GreaterEqual, 'b', 'b')
 
-ACU_Fixture* unsignedCharFixture(void)
+ACU_Fixture* signedCharFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
-    acu_fixtureInit(fixture, "unsigned char tests");
+    acu_fixtureInit(fixture, "signed char tests");
 
-    acu_fixtureAddTestCase(fixture, "unsigned char Equal", testunsignedCharEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned char NotEqual", testunsignedCharNotEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned char Less", testunsignedCharLess);
-    acu_fixtureAddTestCase(fixture, "unsigned char LessEqual", testunsignedCharLessEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned char LessEqualEq", testunsignedCharLessEqualEq);
-    acu_fixtureAddTestCase(fixture, "unsigned char Greater", testunsignedCharGreater);
-    acu_fixtureAddTestCase(fixture, "unsigned char GreaterEqualEq", testunsignedCharGreaterEqualEq);
-    acu_fixtureAddTestCase(fixture, "unsigned char GreaterEqual", testunsignedCharGreaterEqual);
+    acu_fixtureAddTestCase(fixture, "signed char Equal", testsignedCharEqual);
+    acu_fixtureAddTestCase(fixture, "signed char NotEqual", testsignedCharNotEqual);
+    acu_fixtureAddTestCase(fixture, "signed char Less", testsignedCharLess);
+    acu_fixtureAddTestCase(fixture, "signed char LessEqual", testsignedCharLessEqual);
+    acu_fixtureAddTestCase(fixture, "signed char LessEqualEq", testsignedCharLessEqualEq);
+    acu_fixtureAddTestCase(fixture, "signed char Greater", testsignedCharGreater);
+    acu_fixtureAddTestCase(fixture, "signed char GreaterEqualEq", testsignedCharGreaterEqualEq);
+    acu_fixtureAddTestCase(fixture, "signed char GreaterEqual", testsignedCharGreaterEqual);
 
     return fixture;
 }
