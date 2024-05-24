@@ -25,7 +25,6 @@
 
 #include <time.h>
 
-#include "acu_cmm2.h"
 #include "acu_eenv.h"
 #include "acu_rslt.h"
 #include "acu_tcse.h"

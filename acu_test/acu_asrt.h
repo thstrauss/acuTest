@@ -28,7 +28,6 @@
 #define _ACU_ASSERT_H_
 
 #include <acu_cmmn.h>
-#include "acu_cmm2.h"
 
 /* Function prototype for assert functions */
 typedef enum ACU_TestResult (ACU_assertFunc)(const struct ACU_AssertParameter_* parameter);

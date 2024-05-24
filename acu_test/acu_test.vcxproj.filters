@@ -50,9 +50,6 @@
     <ClInclude Include="acu_asrt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="acu_cmm2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="acu_eenv.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -163,7 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="acu_asrt.h" />
-    <ClInclude Include="acu_cmm2.h" />
     <ClInclude Include="acu_eenv.h" />
     <ClInclude Include="acu_fxtr.h" />
     <ClInclude Include="acu_ldr.h" />
