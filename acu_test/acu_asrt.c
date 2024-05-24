@@ -51,9 +51,6 @@ static enum ACU_TestResult acu_##type##op(const ACU_AssertParameter* parameter) 
 static char* acu_##type##op##FormatMessage(const ACU_AssertParameter* parameter) { \
     return acu_sformatMessage(STR(actual value format not opcode to format: %s), *(const type*)parameter->actual, *(const type*)parameter->expected, parameter->message); \
 } \
-__EXPORT void acu_assert_##type##op(ACU_ExecuteEnv* environment, ACU_AssertParameter* parameter) { \
-    acu_assert(environment, parameter); \
-} \
 __EXPORT const ACU_Funcs acu_##type##op##Funcs = {acu_##type##op, acu_##type##op##FormatMessage, NULL};
 
 #define __ACU_EMIT_ASSERT_FUNCS__
