@@ -72,10 +72,10 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>C:\thomas\Atari\Drive\cutest.t\x64\Debug;$(LibraryPath)</LibraryPath>
-    <IncludePath>..\acu_test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\acu_util;..\acu_test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\acu_test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\acu_util;..\acu_test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -175,6 +175,9 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
       <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\acu_util\acu_util.vcxproj">
+      <Project>{b57f816d-dc1a-4a64-aa7f-d9b9b1fe635c}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
