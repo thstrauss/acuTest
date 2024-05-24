@@ -30,8 +30,5 @@ typedef enum ACU_TestResult_ {
     ACU_TEST_ERROR = -2
 } ACU_TestResult;
 
-typedef enum ACU_Exception_ {
-    ACU_TEST_ABORTED = 3
-} ACU_Exception;
 
 #endif

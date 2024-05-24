@@ -221,7 +221,7 @@ static void acu_finalizeFailed(enum ACU_TestResult result, ACU_ExecuteEnv* envir
     environment->result->message = acu_formatMessage(environment->result->status, parameter);
     environment->result->file = acu_estrdup(parameter->fileName); 
     environment->result->line = parameter->line;
-    environment->exceptionFrame->exception = ACU_TEST_ABORTED;
+    environment->exceptionFrame->exception = ACU_EXCEPTION_ABORTED;
     longjmp(frame->exceptionBuf, frame->exception != 0 ? frame->exception: 0xffff);
 }
 

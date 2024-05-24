@@ -113,7 +113,7 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
         ACU_ETRY;
     }
     acu_stackDrop(acu_getFrameStack());
-    ACU_assert(environment, int, Equal, frame.exception, ACU_TEST_ABORTED, "failed");
+    ACU_assert(environment, int, Equal, frame.exception, ACU_EXCEPTION_ABORTED, "failed");
     ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_FAILED, "failed");
     ACU_assert(environment, int, Equal, visited, 1, "block visited");
     ACU_assert(environment, int, Equal, finally, 1, "finally not visited"); 

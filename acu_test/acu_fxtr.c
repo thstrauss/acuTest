@@ -55,7 +55,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
                 }
                 break;
             }
-            case ACU_TEST_ABORTED: {
+            case ACU_EXCEPTION_ABORTED: {
                 break;
             }
         }
