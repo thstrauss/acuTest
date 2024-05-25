@@ -47,8 +47,8 @@ typedef struct ACU_AssertParameter_ {
     const void* actual;
     const void* expected;
     const char* message;
-    const char* fileName;
-    int line;
+    const char* sourceFileName;
+    int sourceLine;
 } ACU_AssertParameter;
 
 /* The assert function which takes the environment and the parameters */
@@ -151,8 +151,8 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
             parameter.actual = &__actual; \
             parameter.expected = &__expected; \
             parameter.message = (messageValue); \
-            parameter.fileName = __FILE__;\
-            parameter.line = __LINE__;
+            parameter.sourceFileName = __FILE__;\
+            parameter.sourceLine = __LINE__;
 
 /* Macro which performs the assert call.
 * environment: filled from framework.
@@ -182,8 +182,8 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
     parameter.actual = (actualValue); \
     parameter.expected = (expectedValue); \
     parameter.message = (messageValue); \
-    parameter.fileName = __FILE__;\
-    parameter.line = __LINE__;
+    parameter.sourceFileName = __FILE__;\
+    parameter.sourceLine = __LINE__;
 
 /* Macro which performs the assert call.for ptr equal
 * environment: filled from framework.
@@ -235,8 +235,8 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
     parameter.actual = (actualValue); \
     parameter.expected = (expectedValue); \
     parameter.message = (messageValue); \
-    parameter.fileName = __FILE__; \
-    parameter.line = __LINE__; \
+    parameter.sourceFileName = __FILE__; \
+    parameter.sourceLine = __LINE__; \
     acu_assert(environment, &parameter); \
 }
 

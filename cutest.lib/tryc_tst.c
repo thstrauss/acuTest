@@ -101,7 +101,7 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     testEnvironment->result = resultBuf;
     resultBuf->status = ACU_TEST_PASSED;
     resultBuf->message = NULL;
-    resultBuf->file = NULL;
+    resultBuf->sourceFileName = NULL;
 
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_TRY

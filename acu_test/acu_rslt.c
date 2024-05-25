@@ -34,8 +34,8 @@ void acuTest_resultDestroy(ACU_Result* result) {
     if (result->message) {
         free(result->message);
     }
-    if (result->file) {
-        free(result->file);
+    if (result->sourceFileName) {
+        free(result->sourceFileName);
     }
     free(result);
 }
@@ -47,8 +47,8 @@ ACU_Result* acuTest_resultMalloc(void) {
 void acuTest_resultInit(ACU_Result* result) {
     result->status = ACU_TEST_PASSED;
     result->message = NULL;
-    result->file = NULL;
-    result->line = -1;
+    result->sourceFileName = NULL;
+    result->sourceLine = -1;
     result->start = clock();
     result->end = (clock_t)(-1);
 }

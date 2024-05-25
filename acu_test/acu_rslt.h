@@ -36,8 +36,8 @@ typedef enum ACU_TestResult_ {
 typedef struct ACU_Result_ {
     enum ACU_TestResult status;
     char* message;
-    char* file;
-    int line;
+    char* sourceFileName;
+    int sourceLine;
     clock_t start;
     clock_t end;
 } ACU_Result;
