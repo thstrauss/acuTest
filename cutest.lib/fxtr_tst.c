@@ -33,7 +33,7 @@
 
 static void test1(ACU_ExecuteEnv* environment, const void* context) {
     ACU_PrepareParameter(int, Equal, 1, 2, "assert");
-    environment->result->line = __LINE__ + 1;
+    environment->result->sourceLine = __LINE__ + 1;
     acu_assert(environment, &parameter);
     UNUSED(context);
 }

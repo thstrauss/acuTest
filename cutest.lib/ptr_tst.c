@@ -40,7 +40,7 @@ static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     testEnvironment.result = &resultBuf;
     resultBuf.status = ACU_TEST_PASSED;
     resultBuf.message = NULL;
-    resultBuf.file = NULL;
+    resultBuf.sourceFileName = NULL;
 
     if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
         ACU_assert_ptrEqual(&testEnvironment, NULL, NULL, "ptrEqualNull"); \
@@ -68,7 +68,7 @@ static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
     testEnvironment.result = &resultBuf;
     resultBuf.status = ACU_TEST_PASSED;
     resultBuf.message = NULL;
-    resultBuf.file = NULL;
+    resultBuf.sourceFileName = NULL;
     
     if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
         void* ptr1 = (void*)123;
@@ -102,7 +102,7 @@ static void ptrNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     testEnvironment.result = &resultBuf;
     resultBuf.status = ACU_TEST_PASSED;
     resultBuf.message = NULL;
-    resultBuf.file = NULL;
+    resultBuf.sourceFileName = NULL;
     
     if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
         void* ptr1 = (void*)123;
@@ -134,7 +134,7 @@ static void ptrNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     testEnvironment.result = &resultBuf;
     resultBuf.status = ACU_TEST_PASSED;
     resultBuf.message = NULL;
-    resultBuf.file = NULL;
+    resultBuf.sourceFileName = NULL;
     
     if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
         void* ptr1 = (void*)123;

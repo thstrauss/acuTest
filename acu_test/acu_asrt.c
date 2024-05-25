@@ -216,8 +216,8 @@ static void acu_finalizeFailed(enum ACU_TestResult result, ACU_ExecuteEnv* envir
     ACU_Frame* frame = acu_stackPeek(acu_getFrameStack());
     environment->result->status = result;
     environment->result->message = acu_formatMessage(environment->result->status, parameter);
-    environment->result->file = acu_estrdup(parameter->fileName); 
-    environment->result->line = parameter->line;
+    environment->result->sourceFileName = acu_estrdup(parameter->sourceFileName); 
+    environment->result->sourceLine = parameter->sourceLine;
     environment->exceptionFrame->exception = ACU_EXCEPTION_ABORTED;
     longjmp(frame->exceptionBuf, frame->exception != 0 ? frame->exception: 0xffff);
 }
