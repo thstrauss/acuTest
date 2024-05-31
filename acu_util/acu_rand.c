@@ -21,10 +21,13 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 
    The state must be seeded so that it is not everywhere zero. */
 
-
-static uint32_t rotl(const uint32_t x, int k) {
+#ifdef __TOS__
+static uint32_t rotl(const uint32_t x, int k) 0xE3B8;
+#else
+static inline uint32_t rotl(const uint32_t x, int k) {
     return (x << k) | (x >> (32 - k));
 }
+#endif
 
 static uint32_t s[4];
 
