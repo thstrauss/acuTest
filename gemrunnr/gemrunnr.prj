@@ -11,6 +11,7 @@ pcstart.o
 main.c (gemrunnr.h)
 rsc.c (gemrunnr.h, gemrunnr.rsh) [-A-]
 
+..\acu_util\acu_util.prj
 ..\acu_test\acu_test.prj
 ..\cutest.lib\cutest.prj
 cutscup.prj
