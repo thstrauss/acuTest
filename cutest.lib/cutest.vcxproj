@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="acu_entr.c" />
+    <ClCompile Include="rnd_tst.c" />
     <ClCompile Include="uchr_tst.c" />
     <ClCompile Include="dllmain.c" />
     <ClCompile Include="flt_test.c" />
@@ -189,6 +190,7 @@
     <ClInclude Include="long_tst.h" />
     <ClInclude Include="mtch_tst.h" />
     <ClInclude Include="ptr_tst.h" />
+    <ClInclude Include="rnd_tst.h" />
     <ClInclude Include="rslt_tst.h" />
     <ClInclude Include="shrt_tst.h" />
     <ClInclude Include="str_tst.h" />

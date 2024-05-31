@@ -30,7 +30,10 @@ static uint32_t s[4];
 
 void acu_srand(uint32_t seed)
 {
-    return s[0] = seed;
+    s[0] = seed;
+    s[1] = 0UL;
+    s[2] = 0UL;
+    s[3] = 0UL;
 }
 
 uint32_t acu_rand(void) {
@@ -72,7 +75,7 @@ void jump(void) {
                 s2 ^= s[2];
                 s3 ^= s[3];
             }
-            rand();
+            acu_rand();
         }
     }
 
@@ -105,7 +108,7 @@ void long_jump(void) {
                 s2 ^= s[2];
                 s3 ^= s[3];
             }
-            rand();
+            acu_rand();
         }
     }
 
