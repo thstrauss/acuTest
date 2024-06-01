@@ -55,8 +55,9 @@ static void resultPassedInitialErrorTest(ACU_ExecuteEnv* environment, const void
 }
 
 static void randomTest(ACU_ExecuteEnv* environment, const void* context) {
-    acu_srand(1);
-    ACU_assert(environment, unsignedLong, NotEqual, acu_rand(), acu_rand(), "Error");
+    ACU_RandState state;
+    acu_srand(&state, 1);
+    ACU_assert(environment, unsignedLong, NotEqual, acu_rand(&state), acu_rand(&state), "Error");
     UNUSED(context);
 }
 

@@ -20,8 +20,8 @@
  */
 
 #pragma once
-#ifndef _ACU_RAND_H_
-#define _ACU_RAND_H_
+#ifndef _ACU_UUID_H_
+#define _ACU_UUID_H_
 
 #include "acu_cmmn.h"
 
@@ -31,12 +31,14 @@ typedef unsigned long uint32_t;
 #include <stdint.h>
 #endif
 
-typedef struct ACU_RandState_ {
-    uint32_t s[4];
-} ACU_RandState;
+typedef union ACU_UUID_ {
+    uint32_t longs[4];
+    unsigned char bytes[16];
+} ACU_UUID;
 
-__EXPORT void acu_srand(ACU_RandState* state, uint32_t seed);
+__EXPORT void acu_uuid(ACU_UUID* uuid);
 
-__EXPORT uint32_t acu_rand(ACU_RandState* state);
+__EXPORT void acu_formatUuid(char* buffer,const ACU_UUID* uuid);
+
 
 #endif

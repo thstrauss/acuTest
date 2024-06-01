@@ -19,24 +19,54 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-#ifndef _ACU_RAND_H_
-#define _ACU_RAND_H_
+#include "acu_uuid.h"
+#include "acu_rand.h"
 
-#include "acu_cmmn.h"
+#include <time.h>
 
-#ifdef __TOS__
-typedef unsigned long uint32_t;
-#else
-#include <stdint.h>
-#endif
+__EXPORT void acu_uuid(ACU_UUID* uuid)
+{
+    static ACU_RandState state = {0,0,0,0};
+    static int init = 0;
+    int i = 3;
 
-typedef struct ACU_RandState_ {
-    uint32_t s[4];
-} ACU_RandState;
+    if (!init) {
+        init = !init;
+        acu_srand(&state, clock());
+    }
+    while (i >= 0) {
+        uuid->longs[i--] = acu_rand(&state);
+    }
+    uuid->bytes[6] = 0x40 | (uuid->bytes[6] & 0x0F);
+    uuid->bytes[8] = 0xA0 | (uuid->bytes[8] & 0x3F);
+}
 
-__EXPORT void acu_srand(ACU_RandState* state, uint32_t seed);
+__EXPORT void acu_formatUuid(char* buffer, const ACU_UUID* uuid)
+{
+#define format(ii) *buffer++ = nibbles[uuid->bytes[(ii)] >> 4]; *buffer++ = nibbles[uuid->bytes[(ii++)] & 0x0f];
+    static const char nibbles[] = "0123456789ABCDEF";
+    int i=0;
+    format(i);
+    format(i);
+    format(i);
+    format(i);
+    *buffer++ = '-';
+    format(i);
+    format(i);
+    *buffer++ = '-';
+    format(i);
+    format(i);
+    *buffer++ = '-';
+    format(i);
+    format(i);
+    *buffer++ = '-';
+    format(i);
+    format(i);
+    format(i);
+    format(i);
+    format(i);
+    format(i);
 
-__EXPORT uint32_t acu_rand(ACU_RandState* state);
-
-#endif
+    *buffer++ = 0;
+#undef format
+}
