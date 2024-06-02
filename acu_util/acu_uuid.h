@@ -36,7 +36,8 @@ typedef union ACU_UUID_ {
     unsigned char bytes[16];
 } ACU_UUID;
 
-__EXPORT void acu_uuid(ACU_UUID* uuid);
+__EXPORT void acu_initUuid(ACU_UUID* uuid);
+__EXPORT int acu_compareUuid(const ACU_UUID* uuid1, const ACU_UUID* uuid2);
 
 __EXPORT void acu_formatUuid(char* buffer,const ACU_UUID* uuid);
 

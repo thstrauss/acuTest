@@ -24,7 +24,7 @@
 
 #include <time.h>
 
-__EXPORT void acu_uuid(ACU_UUID* uuid)
+__EXPORT void acu_initUuid(ACU_UUID* uuid)
 {
     static ACU_RandState state = {0,0,0,0};
     static int init = 0;
@@ -41,9 +41,21 @@ __EXPORT void acu_uuid(ACU_UUID* uuid)
     uuid->bytes[8] = 0xA0 | (uuid->bytes[8] & 0x3F);
 }
 
+__EXPORT int acu_compareUuid(const ACU_UUID* uuid1, const ACU_UUID* uuid2)
+{
+    return uuid1 && uuid2 && uuid1 == uuid2 && 
+        uuid1->longs[0] == uuid2->longs[0] && 
+        uuid1->longs[1] == uuid2->longs[1] &&
+        uuid1->longs[2] == uuid2->longs[2] &&
+        uuid1->longs[3] == uuid2->longs[3];
+}
+
 __EXPORT void acu_formatUuid(char* buffer, const ACU_UUID* uuid)
 {
-#define format(ii) *buffer++ = nibbles[uuid->bytes[(ii)] >> 4]; *buffer++ = nibbles[uuid->bytes[(ii++)] & 0x0f];
+#define format(ii) \
+    *buffer++ = nibbles[uuid->bytes[(ii)] >> 4]; \
+    *buffer++ = nibbles[uuid->bytes[(ii++)] & 0x0f];
+
     static const char nibbles[] = "0123456789ABCDEF";
     int i=0;
     format(i);

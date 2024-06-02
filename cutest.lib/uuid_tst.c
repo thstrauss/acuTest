@@ -38,10 +38,23 @@
 static void uuidTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_UUID uuid;
     char buffer[] = "00000000-0000-0000-0000-000000000000";
-    acu_uuid(&uuid);
+    acu_initUuid(&uuid);
     acu_formatUuid(buffer, &uuid);
     printf("\n\r%08lx %08lx %08lx %08lx, %s\n\r", uuid.longs[0], uuid.longs[1], uuid.longs[2], uuid.longs[3], buffer);
     UNUSED(environment);
+    UNUSED(context);
+}
+
+static void compareTest(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_UUID uuid1;
+    ACU_UUID uuid2;
+    acu_initUuid(&uuid1);
+    acu_initUuid(&uuid2);
+    ACU_assert(environment, int, Equal, acu_compareUuid(&uuid1, &uuid2), 0, "");
+    ACU_assert(environment, int, Equal, acu_compareUuid(&uuid1, &uuid1), 1, "");
+    ACU_assert(environment, int, Equal, acu_compareUuid(NULL, &uuid1), 0, "");
+    ACU_assert(environment, int, Equal, acu_compareUuid(&uuid1, NULL), 0, "");
+    ACU_assert(environment, int, Equal, acu_compareUuid(NULL, NULL), 0, "");
     UNUSED(context);
 }
 
@@ -52,6 +65,8 @@ ACU_Fixture* uuidFixture(void)
     acu_fixtureInit(fixture, "uuid Tests");
 
     acu_fixtureAddTestCase(fixture, "uuid test", uuidTest);
+    acu_fixtureAddTestCase(fixture, "compare uuid test", compareTest);
+
 
     return fixture;
 }
