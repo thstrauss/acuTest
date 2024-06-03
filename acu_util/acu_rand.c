@@ -21,31 +21,36 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 
    The state must be seeded so that it is not everywhere zero. */
 
-
-static uint32_t rotl(const uint32_t x, int k) {
+#ifdef __TOS__
+static uint32_t rotl(const uint32_t x, int k) 0xE3B8;
+#else
+static inline uint32_t rotl(const uint32_t x, int k) {
     return (x << k) | (x >> (32 - k));
 }
+#endif
 
-static uint32_t s[4];
-
-void acu_srand(uint32_t seed)
+void acu_srand(ACU_RandState* state, uint32_t seed)
 {
-    return s[0] = seed;
+    state->s[1] = seed;
+    state->s[0] = 0UL;
+    state->s[2] = 0UL;
+    state->s[3] = 0UL;
+    acu_rand(state);
 }
 
-uint32_t acu_rand(void) {
-    const uint32_t result = rotl(s[1] * 5, 7) * 9;
+uint32_t acu_rand(ACU_RandState* state) {
+    const uint32_t result = rotl(state->s[1] * 5, 7) * 9;
 
-    const uint32_t t = s[1] << 9;
+    const uint32_t t = state->s[1] << 9;
 
-    s[2] ^= s[0];
-    s[3] ^= s[1];
-    s[1] ^= s[2];
-    s[0] ^= s[3];
+    state->s[2] ^= state->s[0];
+    state->s[3] ^= state->s[1];
+    state->s[1] ^= state->s[2];
+    state->s[0] ^= state->s[3];
 
-    s[2] ^= t;
+    state->s[2] ^= t;
 
-    s[3] = rotl(s[3], 11);
+    state->s[3] = rotl(state->s[3], 11);
 
     return result;
 }
@@ -55,7 +60,7 @@ uint32_t acu_rand(void) {
    to 2^64 calls to next(); it can be used to generate 2^64
    non-overlapping subsequences for parallel computations. */
 
-void jump(void) {
+void jump(ACU_RandState* state) {
     static const uint32_t JUMP[] = { 0x8764000bL, 0xf542d2d3L, 0x6fa035c3L, 0x77f2db5bL };
 
     uint32_t s0 = 0;
@@ -67,19 +72,19 @@ void jump(void) {
     	int b;
         for (b = 0; b < 32; b++) {
             if (JUMP[i] & (1UL << b)) {
-                s0 ^= s[0];
-                s1 ^= s[1];
-                s2 ^= s[2];
-                s3 ^= s[3];
+                s0 ^= state->s[0];
+                s1 ^= state->s[1];
+                s2 ^= state->s[2];
+                s3 ^= state->s[3];
             }
-            rand();
+            acu_rand(state);
         }
     }
 
-    s[0] = s0;
-    s[1] = s1;
-    s[2] = s2;
-    s[3] = s3;
+    state->s[0] = s0;
+    state->s[1] = s1;
+    state->s[2] = s2;
+    state->s[3] = s3;
 }
 
 
@@ -88,7 +93,7 @@ void jump(void) {
    from each of which jump() will generate 2^32 non-overlapping
    subsequences for parallel distributed computations. */
 
-void long_jump(void) {
+void long_jump(ACU_RandState* state) {
     static const uint32_t LONG_JUMP[] = { 0xb523952eL, 0x0b6f099fL, 0xccf5a0efL, 0x1c580662L };
 
     uint32_t s0 = 0;
@@ -100,17 +105,17 @@ void long_jump(void) {
     	int b;
         for (b = 0; b < 32; b++) {
             if (LONG_JUMP[i] & (1UL << b)) {
-                s0 ^= s[0];
-                s1 ^= s[1];
-                s2 ^= s[2];
-                s3 ^= s[3];
+                s0 ^= state->s[0];
+                s1 ^= state->s[1];
+                s2 ^= state->s[2];
+                s3 ^= state->s[3];
             }
-            rand();
+            acu_rand(state);
         }
     }
 
-    s[0] = s0;
-    s[1] = s1;
-    s[2] = s2;
-    s[3] = s3;
+    state->s[0] = s0;
+    state->s[1] = s1;
+    state->s[2] = s2;
+    state->s[3] = s3;
 }

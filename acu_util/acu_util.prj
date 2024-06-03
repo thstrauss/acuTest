@@ -11,4 +11,5 @@ acu_mtch (acu_mtch.h)
 acu_rand (acu_rand.h)
 acu_stck (acu_stck.h) 
 acu_util (acu_util.h)
+acu_uuid (acu_uuid.h, acu_rand.h)
 
