@@ -21,8 +21,17 @@
 
 #include "acu_uuid.h"
 #include "acu_rand.h"
+#include "acu_util.h"
 
+
+#include <ctype.h>
+#include <string.h>
 #include <time.h>
+
+__EXPORT ACU_UUID* acu_mallocUuid(void)
+{
+    return acu_emalloc(sizeof(ACU_UUID));
+}
 
 __EXPORT void acu_initUuid(ACU_UUID* uuid)
 {
@@ -81,7 +90,7 @@ __EXPORT void acu_formatUuid(char* buffer, const ACU_UUID* uuid)
     format(i);
     format(i);
 
-    *buffer++ = 0;
+    *buffer = 0;
 #undef format
 }
 
@@ -93,42 +102,89 @@ static unsigned char HexChar(char c)
     return 0xFF;
 }
 
+static int acu_isValidUuid(const char* buffer) {
+    return buffer && strlen(buffer) == 36 &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        *buffer++ == '-' &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        *buffer++ == '-' &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        *buffer++ == '-' &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        *buffer++ == '-' &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer++) &&
+        isxdigit(*buffer);
+}
+
 __EXPORT void acu_parseUuid(const char* buffer, ACU_UUID* uuid)
 {
-    uuid->bytes[0] = HexChar(*buffer++);
-    uuid->bytes[0] = (uuid->bytes[0] << 4) + HexChar(*buffer++);
-    uuid->bytes[1] = HexChar(*buffer++);
-    uuid->bytes[1] = (uuid->bytes[1] << 4) + HexChar(*buffer++);
-    uuid->bytes[2] = HexChar(*buffer++);
-    uuid->bytes[2] = (uuid->bytes[2] << 4) + HexChar(*buffer++);
-    uuid->bytes[3] = HexChar(*buffer++);
-    uuid->bytes[3] = (uuid->bytes[3] << 4) + HexChar(*buffer++);
-    buffer++;
-    uuid->bytes[4] = HexChar(*buffer++);
-    uuid->bytes[4] = (uuid->bytes[4] << 4) + HexChar(*buffer++);
-    uuid->bytes[5] = HexChar(*buffer++);
-    uuid->bytes[5] = (uuid->bytes[5] << 4) + HexChar(*buffer++);
-    buffer++;
-    uuid->bytes[6] = HexChar(*buffer++);
-    uuid->bytes[6] = (uuid->bytes[6] << 4) + HexChar(*buffer++);
-    uuid->bytes[7] = HexChar(*buffer++);
-    uuid->bytes[7] = (uuid->bytes[7] << 4) + HexChar(*buffer++);
-    buffer++;
-    uuid->bytes[8] = HexChar(*buffer++);
-    uuid->bytes[8] = (uuid->bytes[8] << 4) + HexChar(*buffer++);
-    uuid->bytes[9] = HexChar(*buffer++);
-    uuid->bytes[9] = (uuid->bytes[9] << 4) + HexChar(*buffer++);
-    buffer++;
-    uuid->bytes[10] = HexChar(*buffer++);
-    uuid->bytes[10] = (uuid->bytes[10] << 4) + HexChar(*buffer++);
-    uuid->bytes[11] = HexChar(*buffer++);
-    uuid->bytes[11] = (uuid->bytes[11] << 4) + HexChar(*buffer++);
-    uuid->bytes[12] = HexChar(*buffer++);
-    uuid->bytes[12] = (uuid->bytes[12] << 4) + HexChar(*buffer++);
-    uuid->bytes[13] = HexChar(*buffer++);
-    uuid->bytes[13] = (uuid->bytes[13] << 4) + HexChar(*buffer++);    
-    uuid->bytes[14] = HexChar(*buffer++);
-    uuid->bytes[14] = (uuid->bytes[14] << 4) + HexChar(*buffer++);
-    uuid->bytes[15] = HexChar(*buffer++);
-    uuid->bytes[15] = (uuid->bytes[15] << 4) + HexChar(*buffer++);
+    if (acu_isValidUuid(buffer)) {
+        uuid->bytes[0] = HexChar(*buffer++);
+        uuid->bytes[0] = (uuid->bytes[0] << 4) + HexChar(*buffer++);
+        uuid->bytes[1] = HexChar(*buffer++);
+        uuid->bytes[1] = (uuid->bytes[1] << 4) + HexChar(*buffer++);
+        uuid->bytes[2] = HexChar(*buffer++);
+        uuid->bytes[2] = (uuid->bytes[2] << 4) + HexChar(*buffer++);
+        uuid->bytes[3] = HexChar(*buffer++);
+        uuid->bytes[3] = (uuid->bytes[3] << 4) + HexChar(*buffer++);
+        buffer++;
+        uuid->bytes[4] = HexChar(*buffer++);
+        uuid->bytes[4] = (uuid->bytes[4] << 4) + HexChar(*buffer++);
+        uuid->bytes[5] = HexChar(*buffer++);
+        uuid->bytes[5] = (uuid->bytes[5] << 4) + HexChar(*buffer++);
+        buffer++;
+        uuid->bytes[6] = HexChar(*buffer++);
+        uuid->bytes[6] = (uuid->bytes[6] << 4) + HexChar(*buffer++);
+        uuid->bytes[7] = HexChar(*buffer++);
+        uuid->bytes[7] = (uuid->bytes[7] << 4) + HexChar(*buffer++);
+        buffer++;
+        uuid->bytes[8] = HexChar(*buffer++);
+        uuid->bytes[8] = (uuid->bytes[8] << 4) + HexChar(*buffer++);
+        uuid->bytes[9] = HexChar(*buffer++);
+        uuid->bytes[9] = (uuid->bytes[9] << 4) + HexChar(*buffer++);
+        buffer++;
+        uuid->bytes[10] = HexChar(*buffer++);
+        uuid->bytes[10] = (uuid->bytes[10] << 4) + HexChar(*buffer++);
+        uuid->bytes[11] = HexChar(*buffer++);
+        uuid->bytes[11] = (uuid->bytes[11] << 4) + HexChar(*buffer++);
+        uuid->bytes[12] = HexChar(*buffer++);
+        uuid->bytes[12] = (uuid->bytes[12] << 4) + HexChar(*buffer++);
+        uuid->bytes[13] = HexChar(*buffer++);
+        uuid->bytes[13] = (uuid->bytes[13] << 4) + HexChar(*buffer++);
+        uuid->bytes[14] = HexChar(*buffer++);
+        uuid->bytes[14] = (uuid->bytes[14] << 4) + HexChar(*buffer++);
+        uuid->bytes[15] = HexChar(*buffer++);
+        uuid->bytes[15] = (uuid->bytes[15] << 4) + HexChar(*buffer++);
+    }
+    else {
+        uuid->longs[0] = 0;
+        uuid->longs[1] = 0;
+        uuid->longs[2] = 0;
+        uuid->longs[3] = 0;
+    }
 }
