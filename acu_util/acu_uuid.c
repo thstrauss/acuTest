@@ -21,6 +21,7 @@
 
 #include "acu_uuid.h"
 #include "acu_rand.h"
+#include "acu_cmmn.h"
 #include "acu_util.h"
 
 
@@ -30,7 +31,7 @@
 
 __EXPORT ACU_UUID* acu_mallocUuid(void)
 {
-    return acu_emalloc(sizeof(ACU_UUID));
+    return (ACU_UUID*) acu_emalloc(sizeof(ACU_UUID));
 }
 
 __EXPORT void acu_initUuid(ACU_UUID* uuid)

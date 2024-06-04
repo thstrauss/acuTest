@@ -24,6 +24,7 @@
 #define _ACU_UTILS_H_
 
 #include <stdarg.h>
+#include <stddef.h>
 #include "acu_cmmn.h"
 
 typedef enum ACU_Level_
