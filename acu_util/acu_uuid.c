@@ -29,6 +29,14 @@
 #include <string.h>
 #include <time.h>
 
+static ACU_UUID _NIL = { 0,0,0,0 };
+
+ACU_UUID* acu_NIL_UUID = &_NIL;
+
+static ACU_UUID _MAX = { 0xFFFFFFFFUL,0xFFFFFFFFUL, 0xFFFFFFFFUL, 0xFFFFFFFFUL };
+
+ACU_UUID* acu_MAX_UUID = &_MAX;
+
 __EXPORT ACU_UUID* acu_mallocUuid(void)
 {
     return (ACU_UUID*) acu_emalloc(sizeof(ACU_UUID));
@@ -36,7 +44,7 @@ __EXPORT ACU_UUID* acu_mallocUuid(void)
 
 __EXPORT void acu_initUuid(ACU_UUID* uuid)
 {
-    static ACU_RandState state = {0,0,0,0};
+    static ACU_RandState state;
     static int init = 0;
     int i = 3;
 
@@ -48,16 +56,16 @@ __EXPORT void acu_initUuid(ACU_UUID* uuid)
         uuid->longs[i--] = acu_rand(&state);
     }
     uuid->bytes[6] = 0x40 | (uuid->bytes[6] & 0x0F);
-    uuid->bytes[8] = 0xA0 | (uuid->bytes[8] & 0x3F);
+    uuid->bytes[8] = 0x80 | (uuid->bytes[8] & 0x3F);
 }
 
 __EXPORT int acu_compareUuid(const ACU_UUID* uuid1, const ACU_UUID* uuid2)
 {
-    return uuid1 && uuid2 && uuid1 == uuid2 && 
+    return uuid1 && uuid2 && (
         uuid1->longs[0] == uuid2->longs[0] && 
         uuid1->longs[1] == uuid2->longs[1] &&
         uuid1->longs[2] == uuid2->longs[2] &&
-        uuid1->longs[3] == uuid2->longs[3];
+        uuid1->longs[3] == uuid2->longs[3]);
 }
 
 static const char nibbles[] = "0123456789ABCDEF";
@@ -183,9 +191,9 @@ __EXPORT void acu_parseUuid(const char* buffer, ACU_UUID* uuid)
         uuid->bytes[15] = (uuid->bytes[15] << 4) + HexChar(*buffer++);
     }
     else {
-        uuid->longs[0] = 0;
-        uuid->longs[1] = 0;
-        uuid->longs[2] = 0;
-        uuid->longs[3] = 0;
+        int i;
+        for (i = 0; i < 4; i++) {
+            uuid->longs[i] = _NIL.longs[i];
+        }
     }
 }

@@ -45,4 +45,8 @@ __EXPORT void acu_formatUuid(char* buffer,const ACU_UUID* uuid);
 
 __EXPORT void acu_parseUuid(const char* buffer, ACU_UUID* uuid);
 
+__EXPORT ACU_UUID* acu_NIL_UUID;
+
+__EXPORT ACU_UUID* acu_MAX_UUID;
+
 #endif
