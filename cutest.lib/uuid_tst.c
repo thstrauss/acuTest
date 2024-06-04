@@ -37,10 +37,15 @@
 
 static void uuidTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_UUID uuid;
+    ACU_UUID parsed = {0,0,0,0};
     char buffer[] = "00000000-0000-0000-0000-000000000000";
     acu_initUuid(&uuid);
     acu_formatUuid(buffer, &uuid);
     printf("\n\r%08lx %08lx %08lx %08lx, %s\n\r", uuid.longs[0], uuid.longs[1], uuid.longs[2], uuid.longs[3], buffer);
+
+    acu_parseUuid(buffer, &parsed);
+    printf("\n\r%08lx %08lx %08lx %08lx", parsed.longs[0], parsed.longs[1], parsed.longs[2], parsed.longs[3]);
+
     UNUSED(environment);
     UNUSED(context);
 }

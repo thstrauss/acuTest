@@ -41,5 +41,6 @@ __EXPORT int acu_compareUuid(const ACU_UUID* uuid1, const ACU_UUID* uuid2);
 
 __EXPORT void acu_formatUuid(char* buffer,const ACU_UUID* uuid);
 
+__EXPORT void acu_parseUuid(const char* buffer, ACU_UUID* uuid);
 
 #endif
