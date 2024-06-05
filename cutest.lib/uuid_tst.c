@@ -49,7 +49,6 @@ static void uuidTest(ACU_ExecuteEnv* environment, const void* context) {
 
     ACU_assert(environment, int, Equal, acu_compareUuid(&uuid, &parsed), 1, "not equal");
 
-    UNUSED(environment);
     UNUSED(context);
 }
 

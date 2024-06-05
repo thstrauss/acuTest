@@ -61,11 +61,11 @@ __EXPORT void acu_initUuid(ACU_UUID* uuid)
 
 __EXPORT int acu_compareUuid(const ACU_UUID* uuid1, const ACU_UUID* uuid2)
 {
-    return uuid1 && uuid2 && (
-        uuid1->longs[0] == uuid2->longs[0] && 
+    return uuid1 && uuid2 && ((uuid1 == uuid2) || 
+        (uuid1->longs[0] == uuid2->longs[0] && 
         uuid1->longs[1] == uuid2->longs[1] &&
         uuid1->longs[2] == uuid2->longs[2] &&
-        uuid1->longs[3] == uuid2->longs[3]);
+        uuid1->longs[3] == uuid2->longs[3]));
 }
 
 static const char nibbles[] = "0123456789ABCDEF";
