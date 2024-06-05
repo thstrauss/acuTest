@@ -49,8 +49,9 @@ __EXPORT void acu_initUuid(ACU_UUID* uuid)
     int i = 3;
 
     if (init) {
+        clock_t time = clock();
         init = !init;
-        acu_srand(&state, clock());
+        acu_srand(&state, time ? time : 123);
     }
     while (i >= 0) {
         uuid->longs[i--] = acu_rand(&state);
