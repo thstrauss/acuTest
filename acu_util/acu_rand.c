@@ -52,10 +52,11 @@ static inline uint32_t rotl(const uint32_t x, int k) {
 
 void acu_srand(ACU_RandState* state, uint32_t seed)
 {
-    state->s[1] = seed;
     state->s[0] = 0UL;
+    state->s[1] = seed;
     state->s[2] = 0UL;
     state->s[3] = 0UL;
+    acu_rand(state);
     acu_rand(state);
 }
 

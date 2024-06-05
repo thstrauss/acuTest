@@ -45,10 +45,10 @@ __EXPORT ACU_UUID* acu_mallocUuid(void)
 __EXPORT void acu_initUuid(ACU_UUID* uuid)
 {
     static ACU_RandState state;
-    static int init = 0;
+    static int init = 1;
     int i = 3;
 
-    if (!init) {
+    if (init) {
         init = !init;
         acu_srand(&state, clock());
     }
