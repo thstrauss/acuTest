@@ -104,12 +104,9 @@ __EXPORT void acu_formatUuid(char* buffer, const ACU_UUID* uuid)
 #undef format
 }
 
-static unsigned char HexChar(char c)
+static unsigned char acu_hexChar(unsigned char c)
 {
-    if ('0' <= c && c <= '9') return (unsigned char)(c - '0');
-    if ('A' <= c && c <= 'F') return (unsigned char)(c - 'A' + 10);
-    if ('a' <= c && c <= 'f') return (unsigned char)(c - 'a' + 10);
-    return 0xFF;
+    return 9 * (c >> 6) + (c & 0xf);
 }
 
 static int acu_isValidUuid(const char* buffer) {
@@ -153,48 +150,37 @@ static int acu_isValidUuid(const char* buffer) {
 
 __EXPORT void acu_parseUuid(const char* buffer, ACU_UUID* uuid)
 {
+#define parse(ii) \
+    uuid->bytes[ii] = acu_hexChar(*buffer++); \
+    uuid->bytes[ii] = (uuid->bytes[ii++] << 4) | acu_hexChar(*buffer++);
+
     if (acu_isValidUuid(buffer)) {
-        uuid->bytes[0] = HexChar(*buffer++);
-        uuid->bytes[0] = (uuid->bytes[0] << 4) + HexChar(*buffer++);
-        uuid->bytes[1] = HexChar(*buffer++);
-        uuid->bytes[1] = (uuid->bytes[1] << 4) + HexChar(*buffer++);
-        uuid->bytes[2] = HexChar(*buffer++);
-        uuid->bytes[2] = (uuid->bytes[2] << 4) + HexChar(*buffer++);
-        uuid->bytes[3] = HexChar(*buffer++);
-        uuid->bytes[3] = (uuid->bytes[3] << 4) + HexChar(*buffer++);
+        int i = 0;
+        parse(i);
+        parse(i);
+        parse(i);
+        parse(i);
         buffer++;
-        uuid->bytes[4] = HexChar(*buffer++);
-        uuid->bytes[4] = (uuid->bytes[4] << 4) + HexChar(*buffer++);
-        uuid->bytes[5] = HexChar(*buffer++);
-        uuid->bytes[5] = (uuid->bytes[5] << 4) + HexChar(*buffer++);
+        parse(i);
+        parse(i);
         buffer++;
-        uuid->bytes[6] = HexChar(*buffer++);
-        uuid->bytes[6] = (uuid->bytes[6] << 4) + HexChar(*buffer++);
-        uuid->bytes[7] = HexChar(*buffer++);
-        uuid->bytes[7] = (uuid->bytes[7] << 4) + HexChar(*buffer++);
+        parse(i);
+        parse(i);
         buffer++;
-        uuid->bytes[8] = HexChar(*buffer++);
-        uuid->bytes[8] = (uuid->bytes[8] << 4) + HexChar(*buffer++);
-        uuid->bytes[9] = HexChar(*buffer++);
-        uuid->bytes[9] = (uuid->bytes[9] << 4) + HexChar(*buffer++);
+        parse(i);
+        parse(i);
         buffer++;
-        uuid->bytes[10] = HexChar(*buffer++);
-        uuid->bytes[10] = (uuid->bytes[10] << 4) + HexChar(*buffer++);
-        uuid->bytes[11] = HexChar(*buffer++);
-        uuid->bytes[11] = (uuid->bytes[11] << 4) + HexChar(*buffer++);
-        uuid->bytes[12] = HexChar(*buffer++);
-        uuid->bytes[12] = (uuid->bytes[12] << 4) + HexChar(*buffer++);
-        uuid->bytes[13] = HexChar(*buffer++);
-        uuid->bytes[13] = (uuid->bytes[13] << 4) + HexChar(*buffer++);
-        uuid->bytes[14] = HexChar(*buffer++);
-        uuid->bytes[14] = (uuid->bytes[14] << 4) + HexChar(*buffer++);
-        uuid->bytes[15] = HexChar(*buffer++);
-        uuid->bytes[15] = (uuid->bytes[15] << 4) + HexChar(*buffer++);
-    }
-    else {
+        parse(i);
+        parse(i);
+        parse(i);
+        parse(i);
+        parse(i);
+        parse(i);
+    } else {
         int i;
         for (i = 0; i < 4; i++) {
             uuid->longs[i] = _NIL.longs[i];
         }
     }
+#undef parse
 }
