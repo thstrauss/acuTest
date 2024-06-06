@@ -33,6 +33,12 @@
     <ClCompile Include="acu_mtch.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="acu_rand.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="acu_uuid.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="acu_dir.h">
@@ -51,6 +57,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_mtch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="acu_rand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="acu_uuid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

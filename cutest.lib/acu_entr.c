@@ -40,9 +40,11 @@
 #include "ptr_tst.h"
 #include "str_tst.h"
 #include "list_tst.h"
+#include "mtch_tst.h"
+#include "rnd_tst.h"
 #include "rslt_tst.h"
 #include "util_tst.h"
-#include "mtch_tst.h"
+#include "uuid_tst.h"
 
 ACU_Entry* acu_init() {
     ACU_Suite* suite = acu_suiteMalloc();
@@ -59,6 +61,7 @@ ACU_Entry* acu_init() {
     acu_suiteAddFixture(suite, longFixture());
     acu_suiteAddFixture(suite, matchFixture());
     acu_suiteAddFixture(suite, ptrFixture());
+    acu_suiteAddFixture(suite, randomFixture());
     acu_suiteAddFixture(suite, resultFixture());
     acu_suiteAddFixture(suite, shortFixture());
     acu_suiteAddFixture(suite, signedCharFixture());
@@ -69,6 +72,8 @@ ACU_Entry* acu_init() {
     acu_suiteAddFixture(suite, unsignedLongFixture());
     acu_suiteAddFixture(suite, unsignedShortFixture());
     acu_suiteAddFixture(suite, utilFixture());
+    acu_suiteAddFixture(suite, uuidFixture());
+
 
     return entry;
 }

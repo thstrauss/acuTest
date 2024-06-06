@@ -72,6 +72,12 @@
     <ClCompile Include="mtch_tst.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rnd_tst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uuid_tst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="flt_test.h">
@@ -126,6 +132,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mtch_tst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rnd_tst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uuid_tst.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

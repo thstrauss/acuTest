@@ -48,7 +48,8 @@
 #include "acu_stck.h"
 
 typedef enum ACU_Exception_ {
-    ACU_EXCEPTION_ABORTED = 3,
+    ACU_EXCEPTION_NONE = 0,
+    ACU_EXCEPTION_ABORTED = 0xFFFE,
     ACU_EXCEPTION_DEFAULT = 0xFFFF,
 } ACU_Exception;
 
