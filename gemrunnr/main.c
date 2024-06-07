@@ -1,11 +1,30 @@
+/*
+ * Copyright (c) 2024 Thomas Strauss
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall 
+ * be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include <aes.h>
 #include <vdi.h>
 #include <tos.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-/*#define RSC_STATIC_FILE 1*/
 
 #include <gemrunnr.h>
 
@@ -47,10 +66,14 @@ void setClip(const GRECT* rect, int flag) {
 	
 	pxy[0] = rect->g_x;
 	pxy[1] = rect->g_y;
-	pxy[2] = rect->g_x + rect->g_w;
-	pxy[3] = rect->g_y + rect->g_h;
+	pxy[2] = rect->g_x + rect->g_w-1 ;
+	pxy[3] = rect->g_y + rect->g_h-1;
 	
 	vs_clip(appHandle, flag, pxy);
+}
+
+void drawContent(int appHandle, const WinData* wd, int x, int y) {
+	v_gtext(appHandle, x + 10, y + 60, wd->content); 
 }
 
 void drawInterior(const WinData* wd, const GRECT* rect) {
@@ -68,6 +91,8 @@ void drawInterior(const WinData* wd, const GRECT* rect) {
 	pxy[2] = wrkx + wrkw - 1;
 	pxy[3] = wrky + wrkh - 1;
 	vr_recfl(appHandle, pxy);
+
+	drawContent(appHandle, wd, wrkx, wrky);
 
 	setClip(rect, 0);
 	graf_mouse(M_ON, 0L);
@@ -114,7 +139,7 @@ void performRedraw(const WinData* wd, const GRECT* rect) {
 	wind_update(END_UPDATE);
 }
 
-void performResize(const WinData* wd,const int* messageBuf) {
+void performResize(const WinData* wd, const int* messageBuf) {
 	int w1, w2;
 	wind_set(wd->handle, WF_CURRXYWH, 
 		messageBuf[4], 
