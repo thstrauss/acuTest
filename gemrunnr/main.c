@@ -28,14 +28,7 @@
 
 #include <gemrunnr.h>
 
-typedef struct WinData_ {
-	int handle;
-	
-	char* content;
-	char* testFileName;
-	char* testFilePath;
-} WinData;
-
+#include "gem_modl.h"
 
 int work_in[11];
 int work_out[57];
@@ -66,14 +59,14 @@ void setClip(const GRECT* rect, int flag) {
 	
 	pxy[0] = rect->g_x;
 	pxy[1] = rect->g_y;
-	pxy[2] = rect->g_x + rect->g_w - 1;
-	pxy[3] = rect->g_y + rect->g_h - 1;
+	pxy[2] = rect->g_x + rect->g_w-1;
+	pxy[3] = rect->g_y + rect->g_h-1;
 	
 	vs_clip(appHandle, flag, pxy);
 }
 
 void drawContent(int appHandle, const WinData* wd, int x, int y) {
-	v_gtext(appHandle, x + 10, y + 60, wd->content); 
+	/*v_gtext(appHandle, x + 10, y + 60, wd->content); */
 }
 
 void drawInterior(const WinData* wd, const GRECT* rect) {
@@ -239,9 +232,7 @@ int startProgram(void) {
 	int fullx, fully, fullw, fullh;
 	WinData wd;
 	
-	wd.testFileName = NULL;
-	wd.testFilePath = malloc(256);
-	strcpy(wd.testFilePath, "*.cup");
+	gem_initWinData(&wd);
 	
 	if (gemrunnr_rsc_load(8,16) == 0) {
 		form_alert(1, "[3][Could not load rsc][Exit]");
@@ -259,8 +250,6 @@ int startProgram(void) {
 			fullx, fully, fullw, fullh);
 		wind_set(wd.handle, WF_NAME, "GEM Runner", 0, 0);
 		wind_open(wd.handle, fullx, fully, 300, 200);
-	
-		wd.content = "Test";
 	
 		eventLoop(&wd, menu_addr);
 		
