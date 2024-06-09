@@ -66,8 +66,8 @@ void setClip(const GRECT* rect, int flag) {
 	
 	pxy[0] = rect->g_x;
 	pxy[1] = rect->g_y;
-	pxy[2] = rect->g_x + rect->g_w-1 ;
-	pxy[3] = rect->g_y + rect->g_h-1;
+	pxy[2] = rect->g_x + rect->g_w - 1;
+	pxy[3] = rect->g_y + rect->g_h - 1;
 	
 	vs_clip(appHandle, flag, pxy);
 }
@@ -206,6 +206,7 @@ void handleMenueMessage(const WinData* wd, int menuItem) {
 					free(wd->testFileName);
 				}
 				wd->testFileName = strdup(name);
+				wind_set(wd->handle, WF_INFO, wd->testFileName);
 			}
 		} break;	
 	}
@@ -254,7 +255,7 @@ int startProgram(void) {
 		graf_mouse(ARROW, 0L);
 		wind_get(0, WF_WORKXYWH, &fullx, &fully, &fullw, &fullh);
 	
-		wd.handle = wind_create(NAME | MOVER | SIZER | FULLER, 
+		wd.handle = wind_create(NAME | MOVER | SIZER | FULLER | INFO, 
 			fullx, fully, fullw, fullh);
 		wind_set(wd.handle, WF_NAME, "GEM Runner", 0, 0);
 		wind_open(wd.handle, fullx, fully, 300, 200);
