@@ -23,13 +23,14 @@
 #include <acu_list.h>
 
 
-
 typedef struct WinData_ {
-	int handle;
+	int vdiHandle;
+	int applId;
+	int grafHandle;
 	
 	ACU_List* testList;
 	char* testFileName;
 	char* testFilePath;
 } WinData;
 
-void gem_initWinData(WinData* winData);
+void gem_initWinData(WinData* winData, int applId, int grafHandle);

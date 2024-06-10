@@ -38,23 +38,23 @@ int ptsin[128];
 int intout[128];
 int ptsout[128];
 
-int appHandle;
-
-void open_vwork(void) {
+int open_vwork(void) {
 	int dummy;
 	int i;
 
-	appHandle = graf_handle(&dummy, &dummy, &dummy, &dummy);
+	int grafHandle = graf_handle(&dummy, &dummy, &dummy, &dummy);
 	
 	work_in[0] = 2 + Getrez();
 	for (i = 1; i < 10; i++) {
 		work_in[i] = 1;
 	}
 	work_in[10] = 2;
-	v_opnvwk(work_in, &appHandle, work_out);
+	v_opnvwk(work_in, &grafHandle, work_out);
+	
+	return grafHandle;
 }
 
-void setClip(const GRECT* rect, int flag) {
+void setClip(int grafHandle, const GRECT* rect, int flag) {
 	int pxy[4];
 	
 	pxy[0] = rect->g_x;
@@ -62,11 +62,11 @@ void setClip(const GRECT* rect, int flag) {
 	pxy[2] = rect->g_x + rect->g_w-1;
 	pxy[3] = rect->g_y + rect->g_h-1;
 	
-	vs_clip(appHandle, flag, pxy);
+	vs_clip(grafHandle, flag, pxy);
 }
 
-void drawContent(int appHandle, const WinData* wd, int x, int y) {
-	/*v_gtext(appHandle, x + 10, y + 60, wd->content); */
+void drawContent(const WinData* wd, int x, int y) {
+	v_gtext(wd->grafHandle, x + 8, y + 16, "test"); 
 }
 
 void drawInterior(const WinData* wd, const GRECT* rect) {
@@ -74,20 +74,20 @@ void drawInterior(const WinData* wd, const GRECT* rect) {
 	int pxy[4];
 	
 	graf_mouse(M_OFF, 0L);
-	setClip(rect, 1);
+	setClip(wd->grafHandle, rect, 1);
 	
-	wind_get(wd->handle, WF_WORKXYWH, &wrkx, &wrky, &wrkw, &wrkh);
+	wind_get(wd->windowHandle, WF_WORKXYWH, &wrkx, &wrky, &wrkw, &wrkh);
 	
-	vsf_color(appHandle, WHITE);
+	vsf_color(wd->grafHandle, WHITE);
 	pxy[0] = wrkx;
 	pxy[1] = wrky;
 	pxy[2] = wrkx + wrkw - 1;
 	pxy[3] = wrky + wrkh - 1;
-	vr_recfl(appHandle, pxy);
+	vr_recfl(wd->grafHandle, pxy);
 
-	drawContent(appHandle, wd, wrkx, wrky);
+	drawContent(wd, wrkx, wrky);
 
-	setClip(rect, 0);
+	setClip(wd->grafHandle, rect, 0);
 	graf_mouse(M_ON, 0L);
 }
 
@@ -122,19 +122,19 @@ int rc_intersect(const GRECT* r1, GRECT* r2) {
 void performRedraw(const WinData* wd, const GRECT* rect) {
 	GRECT rect2;
 	wind_update(BEG_UPDATE);
-	wind_get(wd->handle, WF_FIRSTXYWH, &rect2.g_x, &rect2.g_y, &rect2.g_w, &rect2.g_h);
+	wind_get(wd->windowHandle, WF_FIRSTXYWH, &rect2.g_x, &rect2.g_y, &rect2.g_w, &rect2.g_h);
 	while (rect2.g_w && rect2.g_h) {
 		if (rc_intersect(rect, &rect2)) {
 			drawInterior(wd, &rect2);
 		} 
-		wind_get(wd->handle, WF_NEXTXYWH, &rect2.g_x, &rect2.g_y, &rect2.g_w, &rect2.g_h);
+		wind_get(wd->windowHandle, WF_NEXTXYWH, &rect2.g_x, &rect2.g_y, &rect2.g_w, &rect2.g_h);
 	}
 	wind_update(END_UPDATE);
 }
 
 void performResize(const WinData* wd, const int* messageBuf) {
 	int w1, w2;
-	wind_set(wd->handle, WF_CURRXYWH, 
+	wind_set(wd->windowHandle, WF_CURRXYWH, 
 		messageBuf[4], 
 		messageBuf[5], 
 		max(w, 300, messageBuf[6]), 
@@ -145,19 +145,19 @@ void performFullScreen(const WinData* wd) {
 	int currx, curry, currw, currh;
 	int fullx, fully, fullw, fullh;
 	
-	wind_get(wd->handle, WF_CURRXYWH, 
+	wind_get(wd->windowHandle, WF_CURRXYWH, 
 		&currx, &curry, &currw, &currh);
-	wind_get(wd->handle, WF_FULLXYWH, 
+	wind_get(wd->windowHandle, WF_FULLXYWH, 
 		&fullx, &fully, &fullw, &fullh);
 		
 	if (currx == fullx && curry == fully && currw == fullw && currh == fullh) {
 		int oldx, oldy, oldw, oldh;	
-		wind_get(wd->handle, WF_PREVXYWH, 
+		wind_get(wd->windowHandle, WF_PREVXYWH, 
 			&oldx, &oldy, &oldw, &oldh);
-		wind_set(wd->handle, WF_CURRXYWH, 
+		wind_set(wd->windowHandle, WF_CURRXYWH, 
 			oldx, oldy, oldw, oldh);
 	} else {
-		wind_set(wd->handle, WF_CURRXYWH, 
+		wind_set(wd->windowHandle, WF_CURRXYWH, 
 			fullx, fully, fullw, fullh);
 	}
 } 
@@ -199,7 +199,7 @@ void handleMenueMessage(const WinData* wd, int menuItem) {
 					free(wd->testFileName);
 				}
 				wd->testFileName = strdup(name);
-				wind_set(wd->handle, WF_INFO, wd->testFileName);
+				wind_set(wd->windowHandle, WF_INFO, wd->testFileName);
 			}
 		} break;	
 	}
@@ -228,11 +228,11 @@ void eventLoop(const WinData* wd, OBJECT* menuAddr) {
 	);
 }
 
-int startProgram(void) {
+int startProgram(int applId, int grafHandle) {
 	int fullx, fully, fullw, fullh;
 	WinData wd;
 	
-	gem_initWinData(&wd);
+	gem_initWinData(&wd, applId, grafHandle);
 	
 	if (gemrunnr_rsc_load(8,16) == 0) {
 		form_alert(1, "[3][Could not load rsc][Exit]");
@@ -246,17 +246,18 @@ int startProgram(void) {
 		graf_mouse(ARROW, 0L);
 		wind_get(0, WF_WORKXYWH, &fullx, &fully, &fullw, &fullh);
 	
-		wd.handle = wind_create(NAME | MOVER | SIZER | FULLER | INFO, 
+		wd.windowHandle = wind_create(NAME | MOVER | SIZER | FULLER | INFO, 
 			fullx, fully, fullw, fullh);
-		wind_set(wd.handle, WF_NAME, "GEM Runner", 0, 0);
-		wind_open(wd.handle, fullx, fully, 300, 200);
+			
+		wind_set(wd.windowHandle, WF_NAME, "GEM Runner", 0, 0);
+		wind_open(wd.windowHandle, fullx, fully, 300, 200);
 	
 		eventLoop(&wd, menu_addr);
 		
 		menu_bar(menu_addr, 0);
 	
-		wind_close(wd.handle);
-		wind_delete(wd.handle);
+		wind_close(wd.windowHandle);
+		wind_delete(wd.windowHandle);
 		
 		gemrunnr_rsc_free();
 	}
@@ -265,17 +266,19 @@ int startProgram(void) {
 
 int main(void) {
 	int result;
+	int grafHandle;
 
-	if (appl_init() < 0) {
+	int applId = appl_init();
+	if (applId < 0) {
 		form_alert(1, "[3][Could not initialize GEM][Exit]");
 		return 2;
 	}
 	
-	open_vwork();
+	grafHandle = open_vwork();
 	
-	result = startProgram();
+	result = startProgram(applId, grafHandle);
 	
-	v_clsvwk(appHandle);
+	v_clsvwk(grafHandle);
 	
 	appl_exit();
 	return result;

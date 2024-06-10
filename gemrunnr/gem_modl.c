@@ -25,7 +25,9 @@
 
 #include "gem_modl.h"
 
-void gem_initWinData(WinData* wd) {
+void gem_initWinData(WinData* wd, int applId, int grafHandle) {
+	wd->applId = applId;
+	wd->grafHandle = grafHandle;
 	wd->testFileName = NULL;
 	wd->testFilePath = acu_emalloc(256);
 	strcpy(wd->testFilePath, "*.cup");
