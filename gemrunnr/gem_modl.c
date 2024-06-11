@@ -19,9 +19,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
+#include <aes.h>
 
 #include <acu_util.h>
+#include <acu_dir.h>
 
 #include "gem_modl.h"
 
@@ -31,4 +35,22 @@ void gem_initWinData(WinData* wd, int applId, int grafHandle) {
 	wd->testFileName = NULL;
 	wd->testFilePath = acu_emalloc(256);
 	strcpy(wd->testFilePath, "*.cup");
+}
+
+void gem_selectFile(WinData* wd) {
+	char buf[256];
+	int button;
+			
+	memset(buf, 0, sizeof(buf));
+	fsel_exinput(wd->testFilePath, buf, &button, "Select test");
+	if (button == 1) {
+		if (wd->testFileName) {
+			free(wd->testFileName);
+		}
+		wd->testFileName = acu_estrdup(buf);
+		wind_set(wd->windowHandle, WF_INFO, wd->testFileName);
+		sprintf(buf, "GEM Runner: %s\\%s", acu_getPath(wd->testFilePath), wd->testFileName);
+		wd->windowTitle = acu_estrdup(buf);
+		wind_set(wd->windowHandle, WF_NAME, wd->windowTitle, 0, 0);
+	}
 }

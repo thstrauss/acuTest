@@ -65,8 +65,20 @@ void setClip(int grafHandle, const GRECT* rect, int flag) {
 	vs_clip(grafHandle, flag, pxy);
 }
 
-void drawContent(const WinData* wd, int x, int y) {
-	v_gtext(wd->grafHandle, x + 8, y + 16, "test"); 
+void drawContent(const WinData* wd, const GRECT* rect, int x, int y, int w, int h) {
+	static OBJECT content[4] = {
+		{-1, 1, 2, G_BOX, NONE, NORMAL, 0, 0, 0, 10*8, 16*3 },
+		{2, -1, -1, G_STRING, SELECTABLE, NORMAL, 0, 0, 0, 3*8, 16 },
+		{3, -1, -1, G_STRING, SELECTABLE, NORMAL, 0, 0, 16, 3*8, 16 },
+		{-1, -1, -1, G_STRING, SELECTABLE | LASTOB, NORMAL, 0, 0, 2*16, 3*8, 16 }
+	};
+
+	content[1].ob_spec.free_string = "123";
+	content[2].ob_spec.free_string = "456";
+	content[3].ob_spec.free_string = "789";
+	content[0].ob_x = x+5;
+	content[0].ob_y = y+5;
+	objc_draw(content, 0, 1, rect->g_x, rect->g_y, rect->g_w, rect->g_h);
 }
 
 void drawInterior(const WinData* wd, const GRECT* rect) {
@@ -85,7 +97,7 @@ void drawInterior(const WinData* wd, const GRECT* rect) {
 	pxy[3] = wrky + wrkh - 1;
 	vr_recfl(wd->grafHandle, pxy);
 
-	drawContent(wd, wrkx, wrky);
+	drawContent(wd, rect, wrkx, wrky, wrkw, wrkh);
 
 	setClip(wd->grafHandle, rect, 0);
 	graf_mouse(M_ON, 0L);
@@ -189,18 +201,7 @@ void handleMenueMessage(const WinData* wd, int menuItem) {
 			form_alert(1, "[0][ASC - GEM Runner|][ OK ]");
 		} break;
 		case FILE_LOAD_TEST: {
-			char name[256];
-			int button;
-			
-			memset(name, 0, sizeof(name));
-			fsel_exinput(wd->testFilePath, name, &button, "Select test");
-			if (button == 1) {
-				if (wd->testFileName) {
-					free(wd->testFileName);
-				}
-				wd->testFileName = strdup(name);
-				wind_set(wd->windowHandle, WF_INFO, wd->testFileName);
-			}
+			gem_selectFile(wd);
 		} break;	
 	}
 }

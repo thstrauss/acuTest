@@ -24,13 +24,16 @@
 
 
 typedef struct WinData_ {
-	int vdiHandle;
+	int windowHandle;
 	int applId;
 	int grafHandle;
 	
 	ACU_List* testList;
 	char* testFileName;
 	char* testFilePath;
+	char* windowTitle;
 } WinData;
 
 void gem_initWinData(WinData* winData, int applId, int grafHandle);
+
+void gem_selectFile(WinData* wd);
