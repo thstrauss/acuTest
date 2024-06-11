@@ -113,6 +113,13 @@ void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor) {
     }
 }
 
-
-
-
+char* acu_getPath(const char* file) {
+    char* buffer = (char*) acu_estrdup(file);
+    char* token = strrchr(buffer, '\\');
+    if (token != NULL) {
+        *token = '\0';
+    } else {
+        *buffer = '\0'; 
+    }
+    return buffer;
+}

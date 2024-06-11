@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="acu_entr.c" />
+    <ClCompile Include="dir_tst.c" />
     <ClCompile Include="rnd_tst.c" />
     <ClCompile Include="uchr_tst.c" />
     <ClCompile Include="dllmain.c" />
@@ -184,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="char_tst.h" />
+    <ClInclude Include="dir_tst.h" />
     <ClInclude Include="flt_test.h" />
     <ClInclude Include="fxtr_tst.h" />
     <ClInclude Include="int_tst.h" />

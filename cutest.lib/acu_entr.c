@@ -26,6 +26,8 @@
 #include <acu_list.h>
 #include <acu_tryc.h>
 
+
+#include "dir_tst.h"
 #include "fxtr_tst.h"
 #include "flt_test.h"
 #include "tryc_tst.h"
@@ -54,6 +56,7 @@ ACU_Entry* acu_init() {
 
     acu_suiteInit(suite, "acu test suite");
 
+    acu_suiteAddFixture(suite, dirFixture());
     acu_suiteAddFixture(suite, fixtureFixture());
     acu_suiteAddFixture(suite, floatFixture());
     acu_suiteAddFixture(suite, intFixture());
