@@ -37,7 +37,7 @@ void gem_initWinData(WinData* wd, int applId, int grafHandle) {
 	strcpy(wd->testFilePath, "*.cup");
 }
 
-void gem_selectFile(WinData* wd) {
+void gem_selectFile(const WinData* wd) {
 	char buf[256];
 	int button;
 			

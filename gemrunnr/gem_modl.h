@@ -36,4 +36,4 @@ typedef struct WinData_ {
 
 void gem_initWinData(WinData* winData, int applId, int grafHandle);
 
-void gem_selectFile(WinData* wd);
+void gem_selectFile(const WinData* wd);

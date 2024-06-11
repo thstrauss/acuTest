@@ -67,7 +67,7 @@ void setClip(int grafHandle, const GRECT* rect, int flag) {
 
 void drawContent(const WinData* wd, const GRECT* rect, int x, int y, int w, int h) {
 	static OBJECT content[4] = {
-		{-1, 1, 2, G_BOX, NONE, NORMAL, 0, 0, 0, 10*8, 16*3 },
+		{-1, 1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 10*8, 16*3 },
 		{2, -1, -1, G_STRING, SELECTABLE, NORMAL, 0, 0, 0, 3*8, 16 },
 		{3, -1, -1, G_STRING, SELECTABLE, NORMAL, 0, 0, 16, 3*8, 16 },
 		{-1, -1, -1, G_STRING, SELECTABLE | LASTOB, NORMAL, 0, 0, 2*16, 3*8, 16 }
