@@ -71,15 +71,15 @@ void acu_filesCollect(ACU_Files* files, const char* fileMask)
     }
 #else
     WIN32_FIND_DATA findFileData;
-    wchar_t wc_maskname[260];
+    wchar_t wc_maskName[260];
     size_t filenameSize=0;
-    mbstowcs_s(&filenameSize, wc_maskname, 260, fileMask, _TRUNCATE);
+    mbstowcs_s(&filenameSize, wc_maskName, 260, fileMask, _TRUNCATE);
 
     wchar_t exeFileName[260];
     GetModuleFileNameW(NULL, exeFileName, 260);
     *wcsrchr(exeFileName, '\\') = '\0';
     SetCurrentDirectoryW(exeFileName);
-    HANDLE hFind = FindFirstFileW(wc_maskname, &findFileData);
+    HANDLE hFind = FindFirstFileW(wc_maskName, &findFileData);
     if (hFind != INVALID_HANDLE_VALUE) {
         do
         {

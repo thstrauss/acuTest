@@ -51,4 +51,6 @@ __EXPORT void acu_filesCollect(ACU_Files* files, const char* fileName);
 
 __EXPORT void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor);
 
+__EXPORT char* acu_getPath(const char* file);
+
 #endif
