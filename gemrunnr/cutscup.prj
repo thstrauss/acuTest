@@ -1,0 +1,19 @@
+cutscup.cup
+
+.C [ -I..\acu_test ]
+.C [ -I..\acu_util ]
+.C [ -P ]
+.L [ -Y ]
+
+=
+
+..\cutest.lib\plgstart.s
+
+..\acu_util\acu_util.prj
+..\acu_test\acu_test.prj
+..\cutest.lib\cutest.prj
+
+PCFLTLIB.LIB
+PCSTDLIB.LIB
+PCTOSLIB.LIB
+PCEXTLIB.LIB

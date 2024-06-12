@@ -1,0 +1,25 @@
+gemrunnr.prg
+
+.C [-P]
+.C [-I..\acu_util]
+.C [-I..\acu_test]
+.C [-A]
+.L [-Y]
+
+=
+
+pcstart.o
+
+main.c (gem_modl.h, gemrunnr.h)
+rsc.c (gemrunnr.h, gemrunnr.rsh) [-A-]
+gem_modl.c (gem_modl.h)
+
+..\acu_util\acu_util.prj
+..\acu_test\acu_test.prj
+..\cutest.lib\cutest.prj
+cutscup.prj
+
+PCSTDLIB.LIB
+PCEXTLIB.LIB
+PCGEMLIB.LIB
+PCTOSLIB.LIB
