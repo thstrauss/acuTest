@@ -21,6 +21,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "acu_dir.h"
 #include "acu_util.h"
@@ -116,11 +117,10 @@ void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor) {
 char* acu_getPath(const char* file) {
     char* buffer;
     char* token;
-
     if (!file) {
         return NULL;
     }
-    buffer = (char*)acu_estrdup(file);
+    buffer = (char*) acu_estrdup(file);
     token = strrchr(buffer, '\\');
     if (token != NULL) {
         *token = '\0';
