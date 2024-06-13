@@ -26,7 +26,7 @@
 #include "acu_vers.h"
 
 #ifdef __TOS__
-#include "acu_tryc.h"
+
 #include "acu_tryc.h"
 
 typedef void ACU_exitFunc(int exitCode);

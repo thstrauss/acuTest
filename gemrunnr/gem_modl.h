@@ -21,17 +21,23 @@
 
 #include <acu_cmmn.h>
 #include <acu_list.h>
-
+#include <acu_suit.h>
+#include <acu_ldr.h>
+#include <acu_tryc.h>
 
 typedef struct WinData_ {
-	int windowHandle;
-	int applId;
-	int grafHandle;
-	
-	ACU_List* testList;
-	char* testFileName;
-	char* testFilePath;
-	char* windowTitle;
+    int windowHandle;
+    int applId;
+    int grafHandle;
+    
+    ACU_List* testList;
+    ACU_Suite* testsuite;
+    ACU_Entry* entry;
+    
+    char* testFileName;
+    char* testFilePath;
+    char* windowTitle;
+    char* infoLine;
 } WinData;
 
 void gem_initWinData(WinData* winData, int applId, int grafHandle);
