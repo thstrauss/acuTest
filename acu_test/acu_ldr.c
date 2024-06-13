@@ -25,6 +25,7 @@
 #include "acu_ldr.h"
 #include "acu_util.h"
 #include "acu_vers.h"
+#include "acu_tryc.h"
 
 static int checkVersion(ACU_Entry* entry) {
     ACU_Version* libVersion = entry->getAcuTestVersion();
