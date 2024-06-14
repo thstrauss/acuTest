@@ -19,28 +19,4 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
  
-#ifndef __GEM_MODEL__
-#define __GEM_MODEL__
-
-#include <acu_cmmn.h>
-#include <acu_list.h>
-#include <acu_ldr.h>
-
-typedef struct WinData_ {
-	int windowHandle;
-	int applId;
-	int grafHandle;
-	
-	ACU_Entry* entry;
-	ACU_List* testList;
-	char* testFileName;
-	char* testFilePath;
-	char* windowTitle;
-	char* infoLine;
-} WinData;
-
-void gem_initWinData(WinData* winData, int applId, int grafHandle);
-
-void gem_selectFile(const WinData* wd);
-
-#endif
+ 
