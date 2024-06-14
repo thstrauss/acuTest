@@ -19,8 +19,23 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
  
- #include <aes.h>
- #include "gem_util.h"
+#include <aes.h>
+#include "gem_util.h"
+#include "gem_modl.h"
  
- void gem_triggerRedraw(const WinData* wd) {
+void gem_triggerRedraw(const WinData* wd) {
+ 	unsigned int message[8];
+	int wrkx, wrky, wrkw, wrkh;
+
+	wind_get(wd->windowHandle, WF_WORKXYWH, &wrkx, &wrky, &wrkw, &wrkh);
+
+ 	message[0] = WM_REDRAW;
+ 	message[1] = wd->applId;
+ 	message[2] = 0;
+ 	message[3] = wd->windowHandle;
+ 	message[4] = wrkx;
+ 	message[5] = wrky;
+ 	message[6] = wrkw;
+ 	message[7] = wrkh;
+ 	appl_write(wd->applId, (int) sizeof(message), &message);
  } 

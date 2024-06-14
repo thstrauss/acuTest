@@ -31,6 +31,7 @@
 #include <acu_rprt.h>
 
 #include "gem_modl.h"
+#include "gem_util.h"
 
 void gem_initWinData(WinData* wd, int applId, int grafHandle) {
     wd->applId = applId;
@@ -57,6 +58,8 @@ static void gem_setInfoLine(const WinData* wd) {
 
     sprintf(wd->infoLine, "Number of tests: %d", count);
     wind_set(wd->windowHandle, WF_INFO, wd->infoLine);
+    
+
 }
 
 static void gem_setWindowTitle(const WinData* wd) {
@@ -90,6 +93,7 @@ void gem_selectFile(const WinData* wd) {
             wd->testFileName = acu_estrdup(buf);
         	gem_setInfoLine(wd);
         	gem_setWindowTitle(wd);
+        	gem_triggerRedraw(wd);
         }
     }
 }
