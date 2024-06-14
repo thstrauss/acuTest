@@ -19,4 +19,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
  
+ #include <aes.h>
+ #include "gem_util.h"
  
+ void gem_triggerRedraw(const WinData* wd) {
+ } 

@@ -22,4 +22,8 @@
 #ifndef __GEM_UTILS__
 #define __GEM_UTILS__
 
+#include "gem_modl.h"
+
+void gem_triggerRedraw(const WinData* wd);
+
 #endif
