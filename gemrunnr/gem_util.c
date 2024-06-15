@@ -20,22 +20,85 @@
  */
  
 #include <aes.h>
+
 #include "gem_util.h"
 #include "gem_modl.h"
- 
+
+void gem_getWorkingRect(const WinData* wd, GRECT* rect) {
+	wind_get(wd->windowHandle, WF_WORKXYWH, &rect->g_x, &rect->g_y, &rect->g_w, &rect->g_h);
+}
+
 void gem_triggerRedraw(const WinData* wd) {
  	unsigned int message[8];
-	int wrkx, wrky, wrkw, wrkh;
+	GRECT rect;
 
-	wind_get(wd->windowHandle, WF_WORKXYWH, &wrkx, &wrky, &wrkw, &wrkh);
+	gem_getWorkingRect(wd, &rect);
 
  	message[0] = WM_REDRAW;
  	message[1] = wd->applId;
  	message[2] = 0;
  	message[3] = wd->windowHandle;
- 	message[4] = wrkx;
- 	message[5] = wrky;
- 	message[6] = wrkw;
- 	message[7] = wrkh;
+ 	message[4] = rect.g_x;
+ 	message[5] = rect.g_y;
+ 	message[6] = rect.g_w;
+ 	message[7] = rect.g_h;
  	appl_write(wd->applId, (int) sizeof(message), &message);
- } 
+}
+
+int gem_sliderSize(int numAvailable, int numShown) {
+	if (numAvailable >= numShown) {
+		return 1000;
+	}
+	return (int) ((1000L * numAvailable) / numShown);
+} 
+
+int gem_sliderPositionN(int numAvailable, int numShown, int offset) {
+	if (numAvailable >= numShown) {
+		return 0;
+	} else {
+		int scrollableRegion = numShown - numAvailable;
+		int temp1 = offset / scrollableRegion;
+		int temp2 = offset % scrollableRegion;
+	
+		return (int) ((1000L * temp1) + ((1000L * temp2) / scrollableRegion));
+	}
+}
+
+void gem_updateSliders(const WinData* wd) {
+	int linesAvailable;
+	GRECT rect;
+	
+	gem_getWorkingRect(wd, &rect);
+	
+	linesAvailable = rect.g_h / wd->cellHeight;
+	
+	wind_set(wd->windowHandle, WF_VSLSIZE, 
+		gem_sliderSize(linesAvailable, wd->linesShown), 0, 0, 0);
+	wind_set(wd->windowHandle, WF_VSLIDE, 
+		gem_sliderPositionN(linesAvailable, wd->linesShown, wd->verticalPositionN), 0, 0, 0);
+}
+
+int gem_rectIntersect(const GRECT* r1, GRECT* r2) {
+	int ret;
+	int tx, tw;	
+	int w1, w2;
+	
+	tx = max(w, r2->g_x, r1->g_x);
+	tw = min(w, r2->g_x + r2->g_w, r1->g_x + r1->g_w);
+	
+	ret = (tw > tx);
+	if (ret) {
+		int ty, th;
+		ty = max(w, r2->g_y, r1->g_y);
+		th = min(w, r2->g_y + r2->g_h, r1->g_y + r1->g_h);
+		ret = (th > ty);
+		if (ret) {
+			r2->g_x = tx;
+			r2->g_y = ty;
+			r2->g_w = tw - tx;
+			r2->g_h = th - ty;
+		}
+	}
+	
+	return ret;
+}

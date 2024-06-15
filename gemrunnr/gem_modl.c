@@ -33,20 +33,19 @@
 #include "gem_modl.h"
 #include "gem_util.h"
 
-void gem_initWinData(WinData* wd, int applId, int grafHandle) {
-    wd->applId = applId;
-    wd->grafHandle = grafHandle;
+void gem_initWinData(WinData* wd) {
     wd->testFileName = NULL;
     wd->testFilePath = acu_emalloc(256);
     wd->infoLine = NULL;
     wd->windowTitle = NULL;
     wd->entry = NULL;
+    wd->linesShown = 15;
     strcpy(wd->testFilePath, "*.cup");
 }
 
 static void gem_setInfoLine(const WinData* wd) {
-    ACU_Visitor counter = { acu_countTestCases, NULL };
-    int count = 0;
+    ACU_Visitor counter = { acu_count, NULL };
+    ACU_Count count = {0,0, {NULL, NULL}};
     counter.context = (void*)&count;
 
     acu_suiteAccept(wd->entry->suite, &counter);
@@ -56,10 +55,8 @@ static void gem_setInfoLine(const WinData* wd) {
     }
     wd->infoLine = acu_emalloc(256);
 
-    sprintf(wd->infoLine, "Number of tests: %d", count);
+    sprintf(wd->infoLine, "%d tests in %d fixtures", count.testCaseCount, count.testFixtureCount);
     wind_set(wd->windowHandle, WF_INFO, wd->infoLine);
-    
-
 }
 
 static void gem_setWindowTitle(const WinData* wd) {

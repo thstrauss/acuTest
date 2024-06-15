@@ -24,6 +24,19 @@
 
 #include "gem_modl.h"
 
+#define max(t, x, y) (##t##1 = (x), ##t##2 =(y), ##t##1 > ##t##2 ? ##t##1 : ##t##2)
+#define min(t, x, y) (##t##1 = (x), ##t##2 =(y), ##t##1 < ##t##2 ? ##t##1 : ##t##2)
+
+void gem_getWorkingRect(const WinData* wd, GRECT* rect);
+
 void gem_triggerRedraw(const WinData* wd);
+
+int gem_sliderSize(int numAvailable, int numShown);
+
+int gem_sliderPositionN(int numAvailable, int numShown, int offset);
+
+void gem_updateSliders(const WinData* wd);
+
+int gem_rectIntersect(const GRECT* r1, GRECT* r2);
 
 #endif

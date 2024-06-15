@@ -26,9 +26,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <gemrunnr.h>
+#include "gemrunnr.h"
 
 #include "gem_modl.h"
+#include "gem_util.h"
 
 int work_in[11];
 int work_out[57];
@@ -38,20 +39,18 @@ int ptsin[128];
 int intout[128];
 int ptsout[128];
 
-int open_vwork(void) {
+void open_vwork(const WinData* wd) {
 	int dummy;
 	int i;
 
-	int grafHandle = graf_handle(&dummy, &dummy, &dummy, &dummy);
+	wd->grafHandle = graf_handle(&wd->cellWidth, &wd->cellHeight, &dummy, &dummy);
 	
 	work_in[0] = 2 + Getrez();
 	for (i = 1; i < 10; i++) {
 		work_in[i] = 1;
 	}
 	work_in[10] = 2;
-	v_opnvwk(work_in, &grafHandle, work_out);
-	
-	return grafHandle;
+	v_opnvwk(work_in, &wd->grafHandle, work_out);
 }
 
 void setClip(int grafHandle, const GRECT* rect, int flag) {
@@ -65,70 +64,43 @@ void setClip(int grafHandle, const GRECT* rect, int flag) {
 	vs_clip(grafHandle, flag, pxy);
 }
 
-void drawContent(const WinData* wd, const GRECT* rect, int x, int y, int w, int h) {
+void drawContent(const WinData* wd, const GRECT* rect, const GRECT* workingRect) {
 	static OBJECT content[4] = {
 		{-1, 1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 10*8, 16*3 },
-		{2, -1, -1, G_STRING, SELECTABLE, NORMAL, 0, 0, 0, 3*8, 16 },
-		{3, -1, -1, G_STRING, SELECTABLE, NORMAL, 0, 0, 16, 3*8, 16 },
-		{-1, -1, -1, G_STRING, SELECTABLE | LASTOB, NORMAL, 0, 0, 2*16, 3*8, 16 }
+		{2, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 3*8, 16 },
+		{3, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 16, 3*8, 16 },
+		{-1, -1, -1, G_STRING, NONE | LASTOB, NORMAL, 0, 0, 2*16, 3*8, 16 }
 	};
 
 	content[1].ob_spec.free_string = "123";
 	content[2].ob_spec.free_string = "456";
 	content[3].ob_spec.free_string = "789";
-	content[0].ob_x = x+5;
-	content[0].ob_y = y+5;
-	objc_draw(content, 0, 1, rect->g_x, rect->g_y, rect->g_w, rect->g_h);
+	content[0].ob_x = workingRect->g_x+5;
+	content[0].ob_y = workingRect->g_y+5;
+	objc_draw(content,0, 1, rect->g_x, rect->g_y, rect->g_w, rect->g_h);
 }
 
 void drawInterior(const WinData* wd, const GRECT* rect) {
-	int wrkx, wrky, wrkw, wrkh;
+	GRECT workingRect;
 	int pxy[4];
 	
 	graf_mouse(M_OFF, 0L);
 	setClip(wd->grafHandle, rect, 1);
 	
-	wind_get(wd->windowHandle, WF_WORKXYWH, &wrkx, &wrky, &wrkw, &wrkh);
+	gem_getWorkingRect(wd, &workingRect);
 	
 	vsf_color(wd->grafHandle, WHITE);
-	pxy[0] = wrkx;
-	pxy[1] = wrky;
-	pxy[2] = wrkx + wrkw - 1;
-	pxy[3] = wrky + wrkh - 1;
+	pxy[0] = workingRect.g_x;
+	pxy[1] = workingRect.g_y;
+	pxy[2] = workingRect.g_x + workingRect.g_w - 1;
+	pxy[3] = workingRect.g_y + workingRect.g_h - 1;
 	vr_recfl(wd->grafHandle, pxy);
 
-	drawContent(wd, rect, wrkx, wrky, wrkw, wrkh);
+	drawContent(wd, rect, &workingRect);
 
 	setClip(wd->grafHandle, rect, 0);
+	gem_updateSliders(wd);
 	graf_mouse(M_ON, 0L);
-}
-
-#define max(t, x, y) (##t##1 = (x), ##t##2 =(y), ##t##1 > ##t##2 ? ##t##1 : ##t##2)
-#define min(t, x, y) (##t##1 = (x), ##t##2 =(y), ##t##1 < ##t##2 ? ##t##1 : ##t##2)
-
-int rc_intersect(const GRECT* r1, GRECT* r2) {
-	int ret;
-	int tx, tw;	
-	int w1, w2;
-	
-	tx = max(w, r2->g_x, r1->g_x);
-	tw = min(w, r2->g_x + r2->g_w, r1->g_x + r1->g_w);
-	
-	ret = (tw > tx);
-	if (ret) {
-		int ty, th;
-		ty = max(w, r2->g_y, r1->g_y);
-		th = min(w, r2->g_y + r2->g_h, r1->g_y + r1->g_h);
-		ret = (th > ty);
-		if (ret) {
-			r2->g_x = tx;
-			r2->g_y = ty;
-			r2->g_w = tw - tx;
-			r2->g_h = th - ty;
-		}
-	}
-	
-	return ret;
 }
 
 void performRedraw(const WinData* wd, const GRECT* rect) {
@@ -136,7 +108,7 @@ void performRedraw(const WinData* wd, const GRECT* rect) {
 	wind_update(BEG_UPDATE);
 	wind_get(wd->windowHandle, WF_FIRSTXYWH, &rect2.g_x, &rect2.g_y, &rect2.g_w, &rect2.g_h);
 	while (rect2.g_w && rect2.g_h) {
-		if (rc_intersect(rect, &rect2)) {
+		if (gem_rectIntersect(rect, &rect2)) {
 			drawInterior(wd, &rect2);
 		} 
 		wind_get(wd->windowHandle, WF_NEXTXYWH, &rect2.g_x, &rect2.g_y, &rect2.g_w, &rect2.g_h);
@@ -151,6 +123,7 @@ void performResize(const WinData* wd, const int* messageBuf) {
 		messageBuf[5], 
 		max(w, 300, messageBuf[6]), 
 		max(w, 200, messageBuf[7]));
+	gem_triggerRedraw(wd);
 }
 
 void performFullScreen(const WinData* wd) {
@@ -174,14 +147,29 @@ void performFullScreen(const WinData* wd) {
 	}
 } 
 
+void doVerticalSlide(const WinData* wd, int verticalPositionN) {
+	GRECT rect;
+	int linesAvailable;
+	
+	gem_getWorkingRect(wd, &rect);
+	linesAvailable = rect.g_h / wd->cellHeight;
+	wd->verticalPositionN = (int) ((verticalPositionN * (long) (wd->linesShown - linesAvailable)) / 1000);
+	if (wd->verticalPositionN < 0) {
+		wd->verticalPositionN = 0;
+	}
+	wind_set(wd->windowHandle, WF_VSLIDE, verticalPositionN, 0, 0, 0);
+	
+	gem_triggerRedraw(wd);
+}
+
 void handleWindowMessage(const WinData* wd, const int* messageBuf) {
 	switch (messageBuf[0]) {
 		case WM_MOVED: {
-			wind_set(messageBuf[3], WF_CURRXYWH, 
+			wind_set(wd->windowHandle, WF_CURRXYWH, 
 				messageBuf[4], messageBuf[5], messageBuf[6], messageBuf[7]);
 		} break;
 		case WM_TOPPED: {
-			wind_set(messageBuf[3], WF_TOP, 0, 0);
+			wind_set(wd->windowHandle, WF_TOP, 0, 0);
 		} break;
 		case WM_REDRAW: {
 			performRedraw(wd, (GRECT*) &messageBuf[4]);
@@ -191,6 +179,10 @@ void handleWindowMessage(const WinData* wd, const int* messageBuf) {
 		} break;
 		case WM_FULLED: {
 			performFullScreen(wd);
+		} break;
+		case WM_VSLID: {
+			wind_set(wd->windowHandle, WF_TOP, 0, 0);
+			doVerticalSlide(wd, messageBuf[4]);
 		} break;
 	}
 }
@@ -229,13 +221,12 @@ void eventLoop(const WinData* wd, OBJECT* menuAddr) {
 	);
 }
 
-int startProgram(int applId, int grafHandle) {
+int startProgram(WinData* wd) {
 	int fullx, fully, fullw, fullh;
-	WinData wd;
 	
-	gem_initWinData(&wd, applId, grafHandle);
+	gem_initWinData(wd);
 	
-	if (gemrunnr_rsc_load(8,16) == 0) {
+	if (gemrunnr_rsc_load(wd->cellWidth, wd->cellHeight) == 0) {
 		form_alert(1, "[3][Could not load rsc][Exit]");
 		return 2;
 	} else {
@@ -247,18 +238,19 @@ int startProgram(int applId, int grafHandle) {
 		graf_mouse(ARROW, 0L);
 		wind_get(0, WF_WORKXYWH, &fullx, &fully, &fullw, &fullh);
 	
-		wd.windowHandle = wind_create(NAME | MOVER | SIZER | FULLER | INFO, 
+		wd->windowHandle = wind_create(
+			NAME | MOVER | SIZER | FULLER | INFO | VSLIDE | UPARROW | DNARROW, 
 			fullx, fully, fullw, fullh);
 			
-		wind_set(wd.windowHandle, WF_NAME, "GEM Runner", 0, 0);
-		wind_open(wd.windowHandle, fullx, fully, 300, 200);
+		wind_set(wd->windowHandle, WF_NAME, "GEM Runner", 0, 0);
+		wind_open(wd->windowHandle, fullx, fully, 300, 200);
 	
-		eventLoop(&wd, menu_addr);
+		eventLoop(wd, menu_addr);
 		
 		menu_bar(menu_addr, 0);
 	
-		wind_close(wd.windowHandle);
-		wind_delete(wd.windowHandle);
+		wind_close(wd->windowHandle);
+		wind_delete(wd->windowHandle);
 		
 		gemrunnr_rsc_free();
 	}
@@ -267,19 +259,19 @@ int startProgram(int applId, int grafHandle) {
 
 int main(void) {
 	int result;
-	int grafHandle;
+	WinData wd;
 
-	int applId = appl_init();
-	if (applId < 0) {
+	wd.applId = appl_init();
+	if (wd.applId < 0) {
 		form_alert(1, "[3][Could not initialize GEM][Exit]");
 		return 2;
 	}
 	
-	grafHandle = open_vwork();
+	open_vwork(&wd);
 	
-	result = startProgram(applId, grafHandle);
+	result = startProgram(&wd);
 	
-	v_clsvwk(grafHandle);
+	v_clsvwk(wd.grafHandle);
 	
 	appl_exit();
 	return result;

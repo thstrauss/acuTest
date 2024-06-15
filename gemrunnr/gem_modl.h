@@ -31,6 +31,12 @@ typedef struct WinData_ {
 	int applId;
 	int grafHandle;
 	
+	int cellWidth;
+	int cellHeight;
+	
+	int linesShown;
+	int verticalPositionN;	
+	
 	ACU_Entry* entry;
 	ACU_List* testList;
 	char* testFileName;
@@ -39,7 +45,7 @@ typedef struct WinData_ {
 	char* infoLine;
 } WinData;
 
-void gem_initWinData(WinData* winData, int applId, int grafHandle);
+void gem_initWinData(WinData* winData);
 
 void gem_selectFile(const WinData* wd);
 
