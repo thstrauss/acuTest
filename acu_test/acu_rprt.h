@@ -20,8 +20,8 @@
  */
 
 #pragma once
-#ifndef _ACU_RPRT_H_
-#define _ACU_RPRT_H_
+#ifndef __ACU_RPRT_H__
+#define __ACU_RPRT_H__
 
 #include <acu_list.h>
 #include "acu_cmmn.h"
@@ -35,6 +35,7 @@ __EXPORT void acu_progress(const ACU_TestCase* testCase, void* progressContext);
 __EXPORT void acu_report(const ACU_TestCase* testCase, void* context);
 __EXPORT void acu_countTestCases(const ACU_TestCase* testCase, void* context);
 __EXPORT void acu_collectTestCases(const ACU_TestCase* testCase, void* context);
+__EXPORT void acu_count(const ACU_TestCase* testCase, void* context);
 
 typedef struct ACU_Progress_ {
     ACU_ProgressFunc* progress;
@@ -50,6 +51,17 @@ typedef struct ACU_Summary_ {
     int totalTestCases;
     int failedTestCases;
 } ACU_Summary;
+
+typedef struct ACU_Report_ {
+    const char* fixtureName;
+    const char* suiteName;
+} ACU_Report;
+
+typedef struct ACU_Count_ {
+    int testCaseCount;
+    int testFixtureCount;
+    ACU_Report last;
+} ACU_Count;
 
 typedef struct ACU_TestCases_ {
     ACU_List* testCases;

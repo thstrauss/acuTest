@@ -43,8 +43,12 @@ static void executeEntry(const char* cupName, Summary* summary) {
 
     ACU_Entry* entry = cup_load(cupName);
     ACU_Progress progress = { acu_progress , NULL };
+    ACU_Report reportHelper = {NULL, NULL};
     ACU_Visitor report = { acu_report , NULL};
     ACU_Visitor reportSummary = { acu_reportSummary , NULL };
+    
+    report.context = (void*) &reportHelper;
+    
     reportSummary.context = (void*) &summary->summary;
 
     if (!entry) {

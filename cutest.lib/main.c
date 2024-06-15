@@ -32,7 +32,8 @@ int main(void) {
 	ACU_Summary summary = {0,0};
 	
 	ACU_Visitor report = {acu_report, NULL};
-	
+	ACU_Report reportHelper = {NULL, NULL};
+
 	ACU_Visitor counter = {acu_countTestCases, NULL};
 	
 	ACU_Visitor reportSummary = {acu_reportSummary, NULL};
@@ -40,6 +41,7 @@ int main(void) {
 	int count=0;
 	
 	counter.context = (void*) &count;
+	report.context = &reportHelper;
 	reportSummary.context = &summary;
 	
 	acu_suiteAccept(entry->suite, &counter);
