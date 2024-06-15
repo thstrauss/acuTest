@@ -52,15 +52,15 @@ typedef struct ACU_Summary_ {
     int failedTestCases;
 } ACU_Summary;
 
-typedef struct ACU_Report_ {
+typedef struct ACU_ReportHelper_ {
     const char* fixtureName;
     const char* suiteName;
-} ACU_Report;
+} ACU_ReportHelper;
 
 typedef struct ACU_Count_ {
     int testCaseCount;
     int testFixtureCount;
-    ACU_Report last;
+    ACU_ReportHelper last;
 } ACU_Count;
 
 typedef struct ACU_TestCases_ {

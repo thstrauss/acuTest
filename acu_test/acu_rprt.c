@@ -38,7 +38,7 @@ void acu_progress(const ACU_TestCase* testCase, void* progressContext) {
 }
 
 void acu_report(const ACU_TestCase* testCase, void* context) {
-	ACU_Report* reportHelper = context;
+	ACU_ReportHelper* reportHelper = context;
     if (!reportHelper->suiteName || strcmp(reportHelper->suiteName, testCase->fixture->suite->name) != 0) {
         reportHelper->suiteName = testCase->fixture->suite->name;
         fprintf(stdout, "%s tooks %ld ms\n\r", reportHelper->suiteName, ((testCase->fixture->suite->end - testCase->fixture->suite->start)*1000)/CLK_TCK);

@@ -42,7 +42,7 @@ static void emptyList(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
-ACU_Fixture* listFixture(void)
+ACU_Fixture* sampleFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 

@@ -30,7 +30,7 @@ static void simpleTestCase(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
-ACU_Fixture* listFixture(void)
+ACU_Fixture* sampleFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
     acu_fixtureInit(fixture, "sample tests");
@@ -41,22 +41,20 @@ ACU_Fixture* listFixture(void)
 int main(void)
 {
     ACU_Suite* suite = acu_suiteMalloc();
-
+    ACU_ReportHelper reporthelper = { NULL, NULL };
+    ACU_Visitor report = { acu_report, NULL };
+    ACU_Progress progress = { acu_progress , NULL };
     enum ACU_TestResult result;
 
-    ACU_Visitor report = { acu_report, NULL };
+    report.context = &reporthelper;
 
-    ACU_Progress progress = { acu_progress , NULL };
-
-
-    acu_suiteInit(suite, "Sample  test suite");
-    acu_suiteAddFixture(suite, listFixture());
+    acu_suiteInit(suite, "Sample test suite");
+    acu_suiteAddFixture(suite, sampleFixture());
 
     result = acu_suiteExecute(suite, &progress);
 
     acu_suiteAccept(suite, &report);
 
     acu_suiteDestroy(suite);
-
     return result != ACU_TEST_PASSED ? 2 : 0;
 }

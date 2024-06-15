@@ -60,7 +60,7 @@ ACU_Entry* acu_init() {
     acu_suiteAddFixture(suite, fixtureFixture());
     acu_suiteAddFixture(suite, floatFixture());
     acu_suiteAddFixture(suite, intFixture());
-    acu_suiteAddFixture(suite, listFixture());
+    acu_suiteAddFixture(suite, sampleFixture());
     acu_suiteAddFixture(suite, longFixture());
     acu_suiteAddFixture(suite, matchFixture());
     acu_suiteAddFixture(suite, ptrFixture());
