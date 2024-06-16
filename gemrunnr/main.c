@@ -53,7 +53,7 @@ void open_vwork(const WinData* wd) {
 	v_opnvwk(work_in, &wd->grafHandle, work_out);
 }
 
-void setClip(int grafHandle, const GRECT* rect, int flag) {
+void setClip(const WinData* wd, const GRECT* rect, int flag) {
 	int pxy[4];
 	
 	pxy[0] = rect->g_x;
@@ -61,10 +61,10 @@ void setClip(int grafHandle, const GRECT* rect, int flag) {
 	pxy[2] = rect->g_x + rect->g_w-1;
 	pxy[3] = rect->g_y + rect->g_h-1;
 	
-	vs_clip(grafHandle, flag, pxy);
+	vs_clip(wd->grafHandle, flag, pxy);
 }
 
-void drawContent(const WinData* wd, const GRECT* rect, const GRECT* workingRect) {
+void drawContent(const WinData* wd, const GRECT* clippingRect, const GRECT* workingRect) {
 	static OBJECT content[4] = {
 		{-1, 1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 10*8, 16*3 },
 		{2, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 3*8, 16 },
@@ -77,15 +77,17 @@ void drawContent(const WinData* wd, const GRECT* rect, const GRECT* workingRect)
 	content[3].ob_spec.free_string = "789";
 	content[0].ob_x = workingRect->g_x+5;
 	content[0].ob_y = workingRect->g_y+5;
-	objc_draw(content,0, 1, rect->g_x, rect->g_y, rect->g_w, rect->g_h);
+	objc_draw(content, 0, 1, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
+
+	UNUSED(wd);
 }
 
-void drawInterior(const WinData* wd, const GRECT* rect) {
+void drawInterior(const WinData* wd, const GRECT* clippingRect) {
 	GRECT workingRect;
 	int pxy[4];
 	
 	graf_mouse(M_OFF, 0L);
-	setClip(wd->grafHandle, rect, 1);
+	setClip(wd, clippingRect, 1);
 	
 	gem_getWorkingRect(wd, &workingRect);
 	
@@ -96,22 +98,22 @@ void drawInterior(const WinData* wd, const GRECT* rect) {
 	pxy[3] = workingRect.g_y + workingRect.g_h - 1;
 	vr_recfl(wd->grafHandle, pxy);
 
-	drawContent(wd, rect, &workingRect);
+	drawContent(wd, clippingRect, &workingRect);
 
-	setClip(wd->grafHandle, rect, 0);
+	setClip(wd, clippingRect, 0);
 	gem_updateSliders(wd);
 	graf_mouse(M_ON, 0L);
 }
 
 void performRedraw(const WinData* wd, const GRECT* rect) {
-	GRECT rect2;
+	GRECT clippingRect;
 	wind_update(BEG_UPDATE);
-	wind_get(wd->windowHandle, WF_FIRSTXYWH, &rect2.g_x, &rect2.g_y, &rect2.g_w, &rect2.g_h);
-	while (rect2.g_w && rect2.g_h) {
-		if (gem_rectIntersect(rect, &rect2)) {
-			drawInterior(wd, &rect2);
+	wind_get(wd->windowHandle, WF_FIRSTXYWH, &clippingRect.g_x, &clippingRect.g_y, &clippingRect.g_w, &clippingRect.g_h);
+	while (clippingRect.g_w && clippingRect.g_h) {
+		if (gem_rectIntersect(rect, &clippingRect)) {
+			drawInterior(wd, &clippingRect);
 		} 
-		wind_get(wd->windowHandle, WF_NEXTXYWH, &rect2.g_x, &rect2.g_y, &rect2.g_w, &rect2.g_h);
+		wind_get(wd->windowHandle, WF_NEXTXYWH, &clippingRect.g_x, &clippingRect.g_y, &clippingRect.g_w, &clippingRect.g_h);
 	}
 	wind_update(END_UPDATE);
 }
