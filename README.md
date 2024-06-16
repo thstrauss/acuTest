@@ -49,14 +49,14 @@ ACU_Fixture* sampleFixture(void)
 int main()
 {
     ACU_Suite* suite = acu_suiteMalloc();
-    ACU_ReportHelper = {NULL, NULL};
+    ACU_ReportHelper reportHelper = {NULL, NULL};
     ACU_Visitor report = { acu_report, NULL };
     ACU_Progress progress = { acu_progress , NULL };
     enum ACU_TestResult result;
-    report.context = &
+    report.context = &reportHelper;
 
     acu_suiteInit(suite, "Sample test suite");
-    acu_suiteAddFixture(suite, listFixture());
+    acu_suiteAddFixture(suite, sampleFixture());
 
     result = acu_suiteExecute(suite, &progress);
 
@@ -68,8 +68,8 @@ int main()
 ``` 
 ## Design Considerations
 
-The Atari PureC compiler has a limitation of 4096 characters for macro expansion. To work arround this
-an hybrid aproach with macro based code generation at compile time to generate the assert functions and 
+The Atari PureC compiler has a limitation of 4096 characters for macro expansion. To work around this
+an hybrid approach with macro based code generation at compile time to generate the assert functions and 
 macro's which are part of the runtime was taken. It acts somehow like templates in C++.
 
  
