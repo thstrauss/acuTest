@@ -49,11 +49,11 @@ ACU_Fixture* sampleFixture(void)
 int main()
 {
     ACU_Suite* suite = acu_suiteMalloc();
-    ACU_ReportHelper = {NULL, NULL};
+    ACU_ReportHelper reportHelper = {NULL, NULL};
     ACU_Visitor report = { acu_report, NULL };
     ACU_Progress progress = { acu_progress , NULL };
     enum ACU_TestResult result;
-    report.context = &
+    report.context = &reportHelper;
 
     acu_suiteInit(suite, "Sample test suite");
     acu_suiteAddFixture(suite, listFixture());
