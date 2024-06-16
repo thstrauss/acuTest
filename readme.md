@@ -56,7 +56,7 @@ int main()
     report.context = &reportHelper;
 
     acu_suiteInit(suite, "Sample test suite");
-    acu_suiteAddFixture(suite, listFixture());
+    acu_suiteAddFixture(suite, sampleFixture());
 
     result = acu_suiteExecute(suite, &progress);
 
