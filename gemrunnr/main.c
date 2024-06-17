@@ -28,6 +28,7 @@
 
 #include "gemrunnr.h"
 
+#include <acu_util.h>
 #include "gem_modl.h"
 #include "gem_util.h"
 
@@ -65,19 +66,36 @@ void setClip(const WinData* wd, const GRECT* rect, int flag) {
 }
 
 void drawContent(const WinData* wd, const GRECT* clippingRect, const GRECT* workingRect) {
-	static OBJECT content[4] = {
-		{-1, 1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 10*8, 16*3 },
-		{2, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 3*8, 16 },
-		{3, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 16, 3*8, 16 },
-		{-1, -1, -1, G_STRING, NONE | LASTOB, NORMAL, 0, 0, 2*16, 3*8, 16 }
-	};
+	int i;
+	static OBJECT box = {-1, 1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 0, 0 };
+	if (wd->content) {
+		free(wd->content);
+	}
+	wd->content = (OBJECT*) acu_emalloc(sizeof(OBJECT)*20);
+	
+	memcpy(&wd->content[0], &box, sizeof(OBJECT));
+	wd->content[0].ob_width = 3 * wd->cellWidth;
+	wd->content[0].ob_height = 19 * wd->cellHeight;
+	for (i=0; i<20; i++) {
+		static OBJECT line = {-1, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 0, 0 };
+		memcpy(&wd->content[i+1], &line, sizeof(OBJECT));
 
-	content[1].ob_spec.free_string = "123";
-	content[2].ob_spec.free_string = "456";
-	content[3].ob_spec.free_string = "789";
-	content[0].ob_x = workingRect->g_x+5;
-	content[0].ob_y = workingRect->g_y+5;
-	objc_draw(content, 0, 1, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
+		wd->content[i+1].ob_next = i+2;
+		wd->content[i+1].ob_y = i * wd->cellHeight;
+		wd->content[i+1].ob_spec.free_string = acu_emalloc(3);
+		sprintf(wd->content[i+1].ob_spec.free_string, "%d", i);
+		wd->content[i+1].ob_width = (int) strlen(wd->content[i+1].ob_spec.free_string) * wd->cellWidth;
+		wd->content[i+1].ob_height = wd->cellHeight;
+	}
+	wd->content[20].ob_next = -1;
+	wd->content[20].ob_flags = NONE | LASTOB;
+		
+	wd->content[0].ob_x = workingRect->g_x;
+	wd->content[0].ob_y = workingRect->g_y - wd->verticalPositionN * wd->cellHeight;
+	
+	wd->linesShown = 19;
+	
+	objc_draw(wd->content, 0, 1, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
 
 	UNUSED(wd);
 }

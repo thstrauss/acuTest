@@ -39,7 +39,10 @@ void gem_initWinData(WinData* wd) {
     wd->infoLine = NULL;
     wd->windowTitle = NULL;
     wd->entry = NULL;
-    wd->linesShown = 15;
+    wd->linesShown = 0;
+    
+    wd->content = NULL;
+    
     strcpy(wd->testFilePath, "*.cup");
 }
 

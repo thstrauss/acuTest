@@ -25,6 +25,7 @@
 #include <acu_cmmn.h>
 #include <acu_list.h>
 #include <acu_ldr.h>
+#include <aes.h>
 
 typedef struct WinData_ {
 	int windowHandle;
@@ -43,6 +44,8 @@ typedef struct WinData_ {
 	char* testFilePath;
 	char* windowTitle;
 	char* infoLine;
+	
+	OBJECT* content; 
 } WinData;
 
 void gem_initWinData(WinData* winData);
