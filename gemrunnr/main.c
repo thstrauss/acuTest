@@ -66,38 +66,11 @@ void setClip(const WinData* wd, const GRECT* rect, int flag) {
 }
 
 void drawContent(const WinData* wd, const GRECT* clippingRect, const GRECT* workingRect) {
-	int i;
-	static OBJECT box = {-1, 1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 0, 0 };
-	if (wd->content) {
-		free(wd->content);
-	}
-	wd->content = (OBJECT*) acu_emalloc(sizeof(OBJECT)*20);
-	
-	memcpy(&wd->content[0], &box, sizeof(OBJECT));
-	wd->content[0].ob_width = 3 * wd->cellWidth;
-	wd->content[0].ob_height = 19 * wd->cellHeight;
-	for (i=0; i<20; i++) {
-		static OBJECT line = {-1, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 0, 0 };
-		memcpy(&wd->content[i+1], &line, sizeof(OBJECT));
-
-		wd->content[i+1].ob_next = i+2;
-		wd->content[i+1].ob_y = i * wd->cellHeight;
-		wd->content[i+1].ob_spec.free_string = acu_emalloc(3);
-		sprintf(wd->content[i+1].ob_spec.free_string, "%d", i);
-		wd->content[i+1].ob_width = (int) strlen(wd->content[i+1].ob_spec.free_string) * wd->cellWidth;
-		wd->content[i+1].ob_height = wd->cellHeight;
-	}
-	wd->content[20].ob_next = -1;
-	wd->content[20].ob_flags = NONE | LASTOB;
-		
 	wd->content[0].ob_x = workingRect->g_x;
 	wd->content[0].ob_y = workingRect->g_y - wd->verticalPositionN * wd->cellHeight;
 	
-	wd->linesShown = 19;
-	
-	objc_draw(wd->content, 0, 1, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
 
-	UNUSED(wd);
+	objc_draw(wd->content, 0, 1, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
 }
 
 void drawInterior(const WinData* wd, const GRECT* clippingRect) {
@@ -179,7 +152,135 @@ void doVerticalSlide(const WinData* wd, int verticalPositionN) {
 	}
 	wind_set(wd->windowHandle, WF_VSLIDE, verticalPositionN, 0, 0, 0);
 	
+	gem_triggerRedrawRect(wd, &rect);
+}
+
+
+void doPageUpDown(const WinData* wd, int arrow) {
+	int linesAvailable;
+	GRECT rect;
+	
+	gem_getWorkingRect(wd, &rect);
+	linesAvailable = rect.g_h / wd->cellHeight;
+	if (arrow == WA_UPPAGE) {
+		if (wd->verticalPositionN == 0) {
+			return;
+		}
+		wd->verticalPositionN -= linesAvailable;
+	} 
+	if (arrow == WA_DNPAGE) {
+		if ((linesAvailable > wd->linesShown && wd->verticalPositionN == 0) || wd->verticalPositionN == wd->linesShown - linesAvailable) {
+			return;
+		}
+		wd->verticalPositionN += linesAvailable;
+	}
+	if (wd->verticalPositionN < 0 || linesAvailable > wd->linesShown) {
+		wd->verticalPositionN = 0;
+	}
+	if (linesAvailable <= wd->linesShown && wd->verticalPositionN > wd->linesShown - linesAvailable) {
+		wd->verticalPositionN = wd->linesShown - linesAvailable;
+	} 
+
 	gem_triggerRedraw(wd);
+}
+
+void doDownLine(const WinData* wd) {
+	MFDB source;
+	MFDB destination;
+	GRECT rect;
+	int pxy[8];
+	int linesAvailable;
+	
+	gem_getWorkingRect(wd, &rect);
+	linesAvailable = rect.g_h / wd->cellHeight;
+	
+	if (wd->verticalPositionN >= wd->linesShown - linesAvailable) {
+		return;
+	}
+	
+	wd->verticalPositionN++;
+	if (wd->verticalPositionN > linesAvailable && wd->verticalPositionN > wd->linesShown - linesAvailable) {
+		wd->verticalPositionN = wd->linesShown - linesAvailable;
+	} else if (linesAvailable >= wd->linesShown) {
+		wd->verticalPositionN = 0;
+	}
+	
+	setClip(wd, &rect, 1);
+	graf_mouse(M_OFF, 0L);
+	
+	source.fd_addr = 0L;
+	destination.fd_addr = 0L;
+	
+	pxy[0] = rect.g_x;
+	pxy[1] = rect.g_y + wd->cellHeight + 1;
+	pxy[2] = rect.g_x + rect.g_w;
+	pxy[3] = rect.g_y + rect.g_h - 1;
+	pxy[4] = rect.g_x;
+	pxy[5] = rect.g_y + 1;
+	pxy[6] = rect.g_x + rect.g_w;
+	pxy[7] = rect.g_y + rect.g_h - wd->cellHeight - 1;
+	
+	vro_cpyfm(wd->applId, S_ONLY, pxy, &source, &destination);
+	
+	graf_mouse(M_ON, 0L);
+	setClip(wd, &rect, 0);
+	
+	rect.g_y = rect.g_y + rect.g_h - 2 * wd->cellHeight;
+	rect.g_h = 2 * wd->cellHeight;
+	gem_triggerRedrawRect(wd, &rect);
+}
+
+void doUpLine(const WinData* wd) {
+	MFDB source;
+	MFDB destination;
+	GRECT rect;
+	int pxy[8];
+	
+	if (wd->verticalPositionN == 0) {
+		return;
+	}
+	gem_getWorkingRect(wd, &rect);
+	wd->verticalPositionN--;
+	if (wd->verticalPositionN < 0) {
+		wd->verticalPositionN = 0;
+	}
+	setClip(wd, &rect, 1);
+	graf_mouse(M_OFF, 0L);
+	
+	source.fd_addr = 0L;
+	destination.fd_addr = 0L;
+	
+	pxy[0] = rect.g_x;
+	pxy[1] = rect.g_y + 1;
+	pxy[2] = rect.g_x + rect.g_w;
+	pxy[3] = rect.g_y + rect.g_h - wd->cellHeight - 1;
+	pxy[4] = rect.g_x;
+	pxy[5] = rect.g_y + wd->cellHeight + 1;
+	pxy[6] = rect.g_x + rect.g_w;
+	pxy[7] = rect.g_y + rect.g_h - 1;
+	
+	vro_cpyfm(wd->applId, S_ONLY, pxy, &source, &destination);
+	
+	graf_mouse(M_ON, 0L);
+	setClip(wd, &rect, 0);
+	
+	rect.g_h = 2 * wd->cellHeight;
+	gem_triggerRedrawRect(wd, &rect);
+}
+
+void doArrowed(const WinData* wd, int arrow) {
+	switch (arrow) {
+		case WA_UPPAGE: 
+		case WA_DNPAGE: {
+			doPageUpDown(wd, arrow);
+		} break;
+		case WA_UPLINE: {
+			doUpLine(wd);
+		} break;
+		case WA_DNLINE: {
+			doDownLine(wd);
+		} break;
+	}
 }
 
 void handleWindowMessage(const WinData* wd, const int* messageBuf) {
@@ -204,6 +305,9 @@ void handleWindowMessage(const WinData* wd, const int* messageBuf) {
 			wind_set(wd->windowHandle, WF_TOP, 0, 0);
 			doVerticalSlide(wd, messageBuf[4]);
 		} break;
+		case WM_ARROWED: {
+			doArrowed(wd, messageBuf[4]);
+		} break;
 	}
 }
 
@@ -218,10 +322,32 @@ void handleMenueMessage(const WinData* wd, int menuItem) {
 	}
 }
 
+void handleKeyboard(const WinData* wd, int mkReturn) {
+	int ascii = mkReturn & 0xFF;
+	int scanCode = (mkReturn >> 8) & 0xFF;
+	
+	switch (scanCode) {
+		case 0x48: {
+			if (ascii == 0x38) {
+				doArrowed(wd, WA_UPPAGE);
+			} else {
+				doArrowed(wd, WA_UPLINE);
+			}
+		} break;
+		case 0x50: {
+			if (ascii == 0x32) {
+				doArrowed(wd, WA_DNPAGE);
+			} else {
+				doArrowed(wd, WA_DNLINE);
+			}
+		} break;
+	}
+}
+
 void eventLoop(const WinData* wd, OBJECT* menuAddr) {
 	EVENT event;
 	
-	event.ev_mflags = MU_MESAG;
+	event.ev_mflags = MU_MESAG | MU_KEYBD;
 	
 	do {
 		int eventType = EvntMulti(&event);
@@ -235,6 +361,12 @@ void eventLoop(const WinData* wd, OBJECT* menuAddr) {
 					handleWindowMessage(wd, event.ev_mmgpbuf);
 				} break;
 			}
+		}
+		if (eventType & MU_KEYBD) {
+			if (event.ev_mkreturn == 0x1011) {
+				break;
+			}
+			handleKeyboard(wd, event.ev_mkreturn);
 		}
 	} while(
 		!(event.ev_mmgpbuf[0] == MN_SELECTED && event.ev_mmgpbuf[4] == FILE_QUIT)

@@ -22,6 +22,7 @@
 #ifndef __GEM_UTILS__
 #define __GEM_UTILS__
 
+#include <aes.h>
 #include "gem_modl.h"
 
 #define max(t, x, y) (##t##1 = (x), ##t##2 =(y), ##t##1 > ##t##2 ? ##t##1 : ##t##2)
@@ -30,6 +31,7 @@
 void gem_getWorkingRect(const WinData* wd, GRECT* rect);
 
 void gem_triggerRedraw(const WinData* wd);
+void gem_triggerRedrawRect(const WinData* wd, GRECT* rect);
 
 int gem_sliderSize(int numAvailable, int numShown);
 

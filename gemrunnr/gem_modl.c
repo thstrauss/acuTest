@@ -44,6 +44,42 @@ void gem_initWinData(WinData* wd) {
     wd->content = NULL;
     
     strcpy(wd->testFilePath, "*.cup");
+    gem_content(wd);
+}
+
+void gem_content(const WinData* wd) {
+	int i;
+	int numberOfLines = 25;
+	
+	static OBJECT box = {-1, 1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 0, 0 };
+	if (wd->content) {
+		for (i=0; i < numberOfLines; i++) {
+			free(wd->content[i+1].ob_spec.free_string);
+		}
+		free(wd->content);
+	}
+	
+	wd->content = (OBJECT*) acu_emalloc(sizeof(OBJECT)*(numberOfLines+1));
+	
+	memcpy(&wd->content[0], &box, sizeof(OBJECT));
+	wd->content[0].ob_width = 80 * wd->cellWidth;
+	wd->content[0].ob_height = numberOfLines * wd->cellHeight;
+	for (i=0; i<numberOfLines; i++) {
+		static OBJECT line = {-1, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 0, 0 };
+		memcpy(&wd->content[i+1], &line, sizeof(OBJECT));
+
+		wd->content[i+1].ob_next = i+2;
+		wd->content[i+1].ob_y = i * wd->cellHeight;
+		wd->content[i+1].ob_spec.free_string = acu_emalloc(256);
+		sprintf(wd->content[i+1].ob_spec.free_string, "%d", i+1);
+		wd->content[i+1].ob_width = (int) strlen(wd->content[i+1].ob_spec.free_string) * wd->cellWidth;
+		wd->content[i+1].ob_height = wd->cellHeight;
+	}
+	wd->content[numberOfLines].ob_next = -1;
+	wd->content[numberOfLines].ob_flags = NONE | LASTOB;
+		
+	wd->linesShown = numberOfLines;
+
 }
 
 static void gem_setInfoLine(const WinData* wd) {

@@ -28,21 +28,26 @@ void gem_getWorkingRect(const WinData* wd, GRECT* rect) {
 	wind_get(wd->windowHandle, WF_WORKXYWH, &rect->g_x, &rect->g_y, &rect->g_w, &rect->g_h);
 }
 
-void gem_triggerRedraw(const WinData* wd) {
+void gem_triggerRedrawRect(const WinData* wd, GRECT* rect) {
  	unsigned int message[8];
-	GRECT rect;
-
-	gem_getWorkingRect(wd, &rect);
 
  	message[0] = WM_REDRAW;
  	message[1] = wd->applId;
  	message[2] = 0;
  	message[3] = wd->windowHandle;
- 	message[4] = rect.g_x;
- 	message[5] = rect.g_y;
- 	message[6] = rect.g_w;
- 	message[7] = rect.g_h;
+ 	message[4] = rect->g_x;
+ 	message[5] = rect->g_y;
+ 	message[6] = rect->g_w;
+ 	message[7] = rect->g_h;
  	appl_write(wd->applId, (int) sizeof(message), &message);
+}
+
+void gem_triggerRedraw(const WinData* wd) {
+	GRECT rect;
+
+	gem_getWorkingRect(wd, &rect);
+
+	gem_triggerRedrawRect(wd, &rect);
 }
 
 int gem_sliderSize(int numAvailable, int numShown) {

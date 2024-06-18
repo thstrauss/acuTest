@@ -50,6 +50,8 @@ typedef struct WinData_ {
 
 void gem_initWinData(WinData* winData);
 
+void gem_content(const WinData* wd);
+
 void gem_selectFile(const WinData* wd);
 
 #endif
