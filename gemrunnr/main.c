@@ -69,7 +69,6 @@ void drawContent(const WinData* wd, const GRECT* clippingRect, const GRECT* work
 	wd->content[0].ob_x = workingRect->g_x;
 	wd->content[0].ob_y = workingRect->g_y - wd->verticalPositionN * wd->cellHeight;
 	
-
 	objc_draw(wd->content, 0, 1, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
 }
 
@@ -318,6 +317,9 @@ void handleMenueMessage(const WinData* wd, int menuItem) {
 		} break;
 		case FILE_LOAD_TEST: {
 			gem_selectFile(wd);
+		} break;
+		case TEST_EXECUTE: {
+			gem_execute(wd);
 		} break;	
 	}
 }
@@ -379,7 +381,7 @@ int startProgram(WinData* wd) {
 	gem_initWinData(wd);
 	
 	if (gemrunnr_rsc_load(wd->cellWidth, wd->cellHeight) == 0) {
-		form_alert(1, "[3][Could not load rsc][Exit]");
+		form_alert(1, "[3][Could not load rsc][ Exit ]");
 		return 2;
 	} else {
 		OBJECT* menu_addr;

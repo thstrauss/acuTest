@@ -29,6 +29,7 @@
 #include <acu_ldr.h>
 #include <acu_tryc.h>
 #include <acu_rprt.h>
+#include <acu_suit.h>
 
 #include "gem_modl.h"
 #include "gem_util.h"
@@ -132,4 +133,12 @@ void gem_selectFile(const WinData* wd) {
         	gem_triggerRedraw(wd);
         }
     }
+}
+
+void gem_execute(const WinData* wd) {
+	if (wd->entry) {
+		acu_suiteExecute(wd->entry->suite, NULL);
+	} else {
+		form_alert(1, "[1][Please load test first!][ OK ]");
+	}
 }

@@ -54,4 +54,6 @@ void gem_content(const WinData* wd);
 
 void gem_selectFile(const WinData* wd);
 
+void gem_execute(const WinData* wd);
+
 #endif
