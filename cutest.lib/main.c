@@ -32,7 +32,7 @@ int main(void) {
 	ACU_Summary summary = {0,0};
 	
 	ACU_Visitor report = {acu_report, NULL};
-	ACU_Report reportHelper = {NULL, NULL};
+	ACU_ReportHelper reportHelper = {NULL, NULL};
 
 	ACU_Visitor counter = {acu_countTestCases, NULL};
 	
