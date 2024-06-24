@@ -30,7 +30,7 @@
 #include "acu_tryc.h"
 #include "acu_stck.h"
 
-static char* acu_sformatMessage(const char* format, ...)
+static char* acu_sFormatMessage(const char* format, ...)
 {
     char* buffer = acu_emalloc(256);
     va_list args;
@@ -49,7 +49,7 @@ static enum ACU_TestResult acu_##type##op(const ACU_AssertParameter* parameter) 
     return *(type*)parameter->actual opcode *(type*)parameter->expected; \
 } \
 static char* acu_##type##op##FormatMessage(const ACU_AssertParameter* parameter) { \
-    return acu_sformatMessage(STR(actual value format not opcode to format: %s), *(const type*)parameter->actual, *(const type*)parameter->expected, parameter->message); \
+    return acu_sFormatMessage(STR(actual value format not opcode to format: %s), *(const type*)parameter->actual, *(const type*)parameter->expected, parameter->message); \
 } \
 __EXPORT const ACU_Funcs acu_##type##op##Funcs = {acu_##type##op, acu_##type##op##FormatMessage, NULL};
 

@@ -100,8 +100,9 @@ void acu_filesCollect(ACU_Files* files, const char* fileMask)
         FindClose(hFind);
     }
     else {
+        char buffer[512];
         DWORD error = GetLastError();
-        printf("FindFirstFile failed (%d)\n", error);
+        acu_printf_s(buffer, sizeof(buffer), "FindFirstFile failed (%d)\n", error);
     }
 #endif
 }

@@ -40,7 +40,7 @@ typedef struct Summary_ {
 } Summary;
 
 static void executeEntry(const char* cupName, Summary* summary) {
-
+    static char buffer[] = "\n\r";
     ACU_Entry* entry = cup_load(cupName);
     ACU_Progress progress = { acu_progress , NULL };
     ACU_ReportHelper reportHelper = {NULL, NULL};
@@ -58,7 +58,7 @@ static void executeEntry(const char* cupName, Summary* summary) {
     }
 
     summary->returnValue = acu_suiteExecute(entry->suite, &progress);
-    fprintf(stdout, "\n\r");
+    acu_printf_s(buffer, sizeof(buffer), "\n\r");
     acu_suiteAccept(entry->suite, &report);
     acu_suiteAccept(entry->suite, &reportSummary);
 
@@ -71,7 +71,7 @@ static void execute(const ACU_FileEntry* file, void* context) {
 
 int main(int argc, const char* argv[]) {
     Summary result = { {0,0}, 0 };
-
+    static char buffer[256];
     ACU_Files* files;
 
     ACU_FilesVisitor testExecuteVisitor = { execute , NULL };
@@ -90,7 +90,7 @@ int main(int argc, const char* argv[]) {
 
     acu_filesDestroy(files);
 
-    fprintf(stdout, "%d of %d failed.\n\r", result.summary.failedTestCases, result.summary.totalTestCases);
+    acu_printf_s(buffer, sizeof(buffer), "%d of %d failed.\n\r", result.summary.failedTestCases, result.summary.totalTestCases);
 
     return result.returnValue == ACU_TEST_PASSED ? 0 : 2;
 }

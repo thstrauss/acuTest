@@ -99,7 +99,8 @@ static ACU_Fixture* fixtureWithTestWitNoAssert(void) {
 }
 
 static void localProgress(const ACU_TestCase* testCase, void* progressContext) {
-    printf("%s", testCase->result->status == ACU_TEST_PASSED ? "#" : "f");
+    char buffer[2];
+    acu_printf_s(buffer, sizeof(buffer), "%s", testCase->result->status == ACU_TEST_PASSED ? "#" : "f");
     *(int*)progressContext += testCase->result->status == ACU_TEST_PASSED ? 0 : 1;
 }
 

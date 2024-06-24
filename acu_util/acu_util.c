@@ -80,7 +80,7 @@ void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler)
 static char errorBuffer[1024];
 
 static void va_acu_printf(ACU_Level level, const char* format, va_list args) {
-    int bufPos = 0;
+    size_t bufPos = 0;
     if (acu_progName() != NULL) {
         bufPos += acu_sprintf_s(errorBuffer, sizeof(errorBuffer), "%s: ", acu_progName());
     }
@@ -113,6 +113,20 @@ void acu_wprintf(const char* format, ...) {
     va_end(args);
 }
 
+__EXPORT size_t acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...)
+{
+    size_t result;
+    va_list args;
+
+    va_start(args, format);
+    result = acu_vsprintf_s(buffer, bufferSize, format, args);
+    va_end(args);
+
+    fwrite(buffer, sizeof(char), strlen(buffer), stdout);
+
+    return result;
+}
+
 void* acu_emalloc(size_t size) {
     void* p;
     p = malloc(size);
@@ -122,7 +136,7 @@ void* acu_emalloc(size_t size) {
     return p;
 }
 
-int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
+size_t acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
 {
     int result;
     va_list args;
@@ -137,7 +151,7 @@ int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
     return result;
 }
 
-int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args)
+size_t acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args)
 {
 #ifdef __TOS__
     UNUSED(sizeOfBuffer);

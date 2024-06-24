@@ -26,8 +26,8 @@
 #include "acu_rslt.h"
 #include "acu_util.h"
 
-enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedresult, enum ACU_TestResult result) {
-    return result == ACU_TEST_PASSED ? aggregatedresult : result == ACU_TEST_FAILED ? ACU_TEST_FAILED : ACU_TEST_ERROR;
+enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedResult, enum ACU_TestResult result) {
+    return result == ACU_TEST_PASSED ? aggregatedResult : result == ACU_TEST_FAILED ? ACU_TEST_FAILED : ACU_TEST_ERROR;
 }
 
 void acuTest_resultDestroy(ACU_Result* result) {

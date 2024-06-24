@@ -58,12 +58,18 @@ __EXPORT void acu_eprintf(const char* format, ...);
     The arguments are according to stdio.h printf().
 */
 __EXPORT void acu_wprintf(const char* format, ...);
+
+__EXPORT size_t acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...);
+
 __EXPORT char* acu_estrdup(const char* s);
 __EXPORT void* acu_emalloc(size_t n);
 
-__EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
-__EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
+__EXPORT size_t acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
+__EXPORT size_t acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
 
+/*
+	Converts a NULL reference to the "NULL" string.
+*/
 #define SAFE_REF(ref) ((ref)?(ref):"NULL")
 
 #endif
