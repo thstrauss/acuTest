@@ -20,6 +20,7 @@
  */
 
 #include <stddef.h>
+#include <stdio.h>
 
 #include <acu_fxtr.h>
 #include <acu_asrt.h>
@@ -51,7 +52,7 @@ static void errorHandlerTest(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert(environment, int, Equal, visited, 1, "Error handler not used");
         ACU_assert(environment, int, Equal, actualErrorLevel, acu_error, "no error");
         ACU_assert_strContains(environment, actualErrorMessage, "acu_test", "Does not contain program name");
-        ACU_assert_strContains(environment, actualErrorMessage, "test:", "Does not contain messsage");
+        ACU_assert_strContains(environment, actualErrorMessage, "test:", "Does not contain message");
     ACU_FINALLY
         acu_setErrorHandler((ACU_ErrorHandlerFunc*) NULL);
         acu_setProgName(NULL);
@@ -70,7 +71,7 @@ static void warningErrorHandlerTest(ACU_ExecuteEnv* environment, const void* con
         ACU_assert(environment, int, Equal, visited, 1, "Error handler not used");
         ACU_assert(environment, int, Equal, actualErrorLevel, acu_warning, "No warning");
         ACU_assert_strContains(environment, actualErrorMessage, "acu_test", "Does not contain program name");
-        ACU_assert_strContains(environment, actualErrorMessage, "test:", "Does not contain messsage");
+        ACU_assert_strContains(environment, actualErrorMessage, "test:", "Does not contain message");
     ACU_FINALLY
         acu_setErrorHandler((ACU_ErrorHandlerFunc*)NULL);
         acu_setProgName(NULL);
@@ -87,6 +88,7 @@ static void programNameTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ETRY
         UNUSED(context);
 }
+
 
 ACU_Fixture* utilFixture(void)
 {

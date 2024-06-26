@@ -34,6 +34,7 @@ typedef enum ACU_Level_
 } ACU_Level;
 
 typedef void ACU_ErrorHandlerFunc(enum ACU_Level errorLevel, const char* errorMessage);
+typedef size_t ACU_WriteHandlerFunc(const char* buffer);
 
 /*
 * Returns the program name.
@@ -47,6 +48,9 @@ __EXPORT void acu_setProgName(const char* progName);
 
 __EXPORT void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler);
 
+__EXPORT void acu_setWriteHandler(ACU_WriteHandlerFunc* writeHandler);
+
+
 /*
     Prints an error message to stderr and terminates the program. 
     The arguments are according to stdio.h printf().
@@ -59,13 +63,13 @@ __EXPORT void acu_eprintf(const char* format, ...);
 */
 __EXPORT void acu_wprintf(const char* format, ...);
 
-__EXPORT size_t acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...);
+__EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...);
 
 __EXPORT char* acu_estrdup(const char* s);
 __EXPORT void* acu_emalloc(size_t n);
 
-__EXPORT size_t acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
-__EXPORT size_t acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
+__EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
+__EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
 
 /*
 	Converts a NULL reference to the "NULL" string.
