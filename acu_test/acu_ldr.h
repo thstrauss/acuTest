@@ -63,5 +63,7 @@ __EXPORT void cup_unload(ACU_Entry* entry);
 __EXPORT ACU_Entry* acu_entryMalloc(void);
 __EXPORT void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite);
 __EXPORT void acu_entryDestroy(ACU_Entry* entry);
+
+__EXPORT void acu_entryExecute(const ACU_Entry* entry, ACU_Progress* progress);
  
 #endif

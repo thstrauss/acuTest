@@ -48,8 +48,8 @@ __EXPORT void acu_setProgName(const char* progName);
 
 __EXPORT void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler);
 
+__EXPORT ACU_WriteHandlerFunc* acu_getWriteHandler(void);
 __EXPORT void acu_setWriteHandler(ACU_WriteHandlerFunc* writeHandler);
-
 
 /*
     Prints an error message to stderr and terminates the program. 

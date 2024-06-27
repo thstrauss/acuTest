@@ -142,8 +142,7 @@ static size_t nullHandler(const char* buffer) {
 void gem_execute(const WinData* wd) {
 	acu_setWriteHandler(nullHandler);
 	if (wd->entry) {
-		wd->entry->setWriteHandler(nullHandler);
-		acu_suiteExecute(wd->entry->suite, NULL);
+		acu_entryExecute(wd->entry, NULL);
 	} else {
 		form_alert(1, "[1][Please load test first!][ OK ]");
 	}

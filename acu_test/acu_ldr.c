@@ -253,3 +253,13 @@ void acu_entryDestroy(ACU_Entry* entry) {
         free(entry);
     }
 }
+
+void acu_entryExecute(const ACU_Entry* entry, ACU_Progress* progress)
+{
+    if (entry) {
+#ifdef __TOS__
+        entry->setWriteHandler(acu_getWriteHandler());
+#endif
+        acu_suiteExecute(entry->suite, progress);
+    }
+}

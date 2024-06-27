@@ -82,6 +82,11 @@ static size_t defaultWriteHandler(const char* buffer) {
 
 static ACU_WriteHandlerFunc* acu_writeHandler = defaultWriteHandler;
 
+ACU_WriteHandlerFunc* acu_getWriteHandler(void)
+{
+    return acu_writeHandler;
+}
+
 __EXPORT void acu_setWriteHandler(ACU_WriteHandlerFunc* writeHandler)
 {
     if (writeHandler) {
