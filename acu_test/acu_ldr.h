@@ -24,6 +24,7 @@
 
 #include "acu_suit.h"
 #include "acu_vers.h"
+#include <acu_util.h>
 
 #ifdef __TOS__
 
@@ -31,6 +32,7 @@
 
 typedef void ACU_exitFunc(int exitCode);
 typedef void ACU_setExitFunc(ACU_exitFunc* exitFunc);
+typedef void ACU_setWriteHandlerFunc(ACU_WriteHandlerFunc* writeHandler);
 
 #else
 #include <windows.h>
@@ -43,6 +45,7 @@ typedef struct ACU_Entry_ {
     void* cup_code;
     ACU_setFrameStackFunc* setFrameStack;
     ACU_setExitFunc* setExit;
+    ACU_setWriteHandlerFunc* setWriteHandler;
 #else
     HMODULE module;
 #endif

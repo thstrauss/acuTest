@@ -135,8 +135,14 @@ void gem_selectFile(const WinData* wd) {
     }
 }
 
+static size_t nullHandler(const char* buffer) {
+	return strlen(buffer);
+}
+
 void gem_execute(const WinData* wd) {
+	acu_setWriteHandler(nullHandler);
 	if (wd->entry) {
+		wd->entry->setWriteHandler(nullHandler);
 		acu_suiteExecute(wd->entry->suite, NULL);
 	} else {
 		form_alert(1, "[1][Please load test first!][ OK ]");

@@ -191,6 +191,7 @@ ACU_Entry* cup_load(const char* cu_name) {
     entry = init();
     entry->setFrameStack(acu_getFrameStack());
     entry->setExit(exit);
+    
     entry->cup_code = init;
     if (!checkVersion(entry)) {
         cup_unload(entry);
@@ -240,6 +241,7 @@ void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
     entry->suite = suite;
     entry->getAcuTestVersion = acu_getVersion;
 #ifdef __TOS__
+    entry->setWriteHandler = acu_setWriteHandler;
     entry->setFrameStack = acu_setFrameStack;
     entry->setExit = setExit;
 #endif
