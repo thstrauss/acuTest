@@ -72,8 +72,8 @@ void acu_countTestCases(const ACU_TestCase* testCase, void* context)
 
 void acu_collectTestCases(const ACU_TestCase* testCase, void* context)
 {
-    ACU_List* testCases = (ACU_List*) context;
-    acu_listAppend(testCases, testCase);
+    ACU_TestCases* testCases = (ACU_TestCases*) context;
+    acu_listAppend(testCases->testCases, testCase);
 }
 
 void acu_reportSummary(const ACU_TestCase* testCase, void* context)

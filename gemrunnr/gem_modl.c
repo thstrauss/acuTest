@@ -108,6 +108,19 @@ static void gem_setWindowTitle(const WinData* wd) {
     wind_set(wd->windowHandle, WF_NAME, wd->windowTitle, 0, 0);
 }
 
+void gem_collectTestCases(const WinData* wd){
+   	ACU_Visitor collect = {acu_collectTestCases, NULL};
+   	ACU_TestCases testCases;
+   	
+    wd->testList = acu_listMalloc();
+    acu_listInit(wd->testList, (ACU_ListDestroyFunc*) NULL);
+        	
+    testCases.testCases = wd->testList;
+    collect.context = (void*) &testCases;
+   	
+   	acu_suiteAccept(wd->entry->suite, &collect); 
+}
+
 void gem_selectFile(const WinData* wd) {
     char buf[256];
     int button;
@@ -119,6 +132,11 @@ void gem_selectFile(const WinData* wd) {
     buf[0] = '\0';
     fsel_exinput(wd->testFilePath, buf, &button, "Select test");
     if (button == 1) {
+        if (wd->testList) {
+	      	acu_listDestroy(wd->testList);
+	       	free(wd->testList);
+	       	wd->testList = NULL;
+        }
 
         if (wd->entry) {
             cup_unload(wd->entry);
@@ -130,6 +148,7 @@ void gem_selectFile(const WinData* wd) {
             wd->testFileName = acu_estrdup(buf);
         	gem_setInfoLine(wd);
         	gem_setWindowTitle(wd);
+        	gem_collectTestCases(wd);
         	gem_triggerRedraw(wd);
         }
     }
