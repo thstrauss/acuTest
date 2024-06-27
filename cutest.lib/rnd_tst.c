@@ -30,38 +30,12 @@
 
 #include <acu_rand.h>
 
-static void resultFailedTest(ACU_ExecuteEnv* environment, const void* context) {
-    enum ACU_TestResult result = acuTest_calcResult(ACU_TEST_PASSED, ACU_TEST_FAILED);
-    ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "Failed");
-    UNUSED(context);
-}
-
-static void resultPassedInitialFailedTest(ACU_ExecuteEnv* environment, const void* context) {
-    enum ACU_TestResult result = acuTest_calcResult(ACU_TEST_FAILED, ACU_TEST_PASSED);
-    ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "Failed");
-    UNUSED(context);
-}
-
-static void resultErrorTest(ACU_ExecuteEnv* environment, const void* context) {
-    enum ACU_TestResult result = acuTest_calcResult(ACU_TEST_PASSED, ACU_TEST_ERROR);
-    ACU_assert(environment, int, Equal, result, ACU_TEST_ERROR, "Error");
-    UNUSED(context);
-}
-
-static void resultPassedInitialErrorTest(ACU_ExecuteEnv* environment, const void* context) {
-    enum ACU_TestResult result = acuTest_calcResult(ACU_TEST_ERROR, ACU_TEST_PASSED);
-    ACU_assert(environment, int, Equal, result, ACU_TEST_ERROR, "Error");
-    UNUSED(context);
-}
-
 static void randomTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_RandState state;
     acu_srand(&state, 1);
     ACU_assert(environment, unsignedLong, NotEqual, acu_rand(&state), acu_rand(&state), "Error");
     UNUSED(context);
 }
-
-
 
 ACU_Fixture* randomFixture(void)
 {

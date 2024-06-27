@@ -20,6 +20,7 @@
  */
 
 
+#include <stdlib.h>
 #include "rprt_tst.h"
 
 #include <acu_fxtr.h>
@@ -29,10 +30,62 @@
 #include <acu_stck.h>
 #include <acu_tryc.h>
 
+static void test1(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_PrepareParameter(int, Equal, 1, 2, "assert");
+    environment->result->sourceLine = __LINE__ + 1;
+    acu_assert(environment, &parameter);
+    UNUSED(context);
+}
+
+static void test2(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_assert(environment, int, Equal, 1, 1, "assert2");
+    ACU_assert(environment, int, NotEqual, 1, 2, "xxx");
+    ACU_assert(environment, float, NotEqual, 1.0, 2.0, "yyy");
+    UNUSED(context);
+}
+
+static void test3(ACU_ExecuteEnv* environment, const void* context) {
+    char str[] = "abc";
+    ACU_assert_strEqual(environment, str, str, "assert2");
+    ACU_assert_strEqual(environment, "abc", "abc", "assert2");
+    ACU_assert_strEqual(environment, (char*)context, "context", "assert context");
+    ACU_assert_strNotEqual(environment, "str", "str", "assert2");
+}
+
+static void collectTest(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_Visitor collect = {acu_collectTestCases, NULL};
+    ACU_TestCases tests;
+
+    ACU_List list;
+    ACU_Fixture* fixture = acu_fixtureMalloc();
+
+    acu_listInit(&list, (ACU_ListDestroyFunc*) NULL);
+
+    tests.testCases = &list;
+    collect.context = &tests;
+
+
+    acu_fixtureInit(fixture, "testFixture");
+    acu_fixtureSetContext(fixture, "context");
+
+    acu_fixtureAddTestCase(fixture, "test1", test1);
+    acu_fixtureAddTestCase(fixture, "test2", test2);
+    acu_fixtureAddTestCase(fixture, "test3", test3);
+
+    acu_fixtureAccept(fixture, &collect);
+
+    ACU_assert(environment, int, Equal, list.size, 3, "Wrong number of tests");
+
+    acu_listDestroy(&list);
+    acu_fixtureDestroy(fixture);
+    
+    UNUSED(context);
+}
+
 ACU_Fixture* reportFixture(void) {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
     acu_fixtureInit(fixture, "report tests");
-
+    acu_fixtureAddTestCase(fixture, "collect", collectTest);
     return fixture;
 }
