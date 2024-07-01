@@ -50,16 +50,11 @@ void gem_initWinData(WinData* wd) {
 
 void gem_content(const WinData* wd) {
 	int i;
-	int numberOfLines = 25;
+	int numberOfLines;
 	
-	static OBJECT box = {-1, 1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 0, 0 };
-	if (wd->content) {
-		for (i=0; i < numberOfLines; i++) {
-			free(wd->content[i+1].ob_spec.free_string);
-		}
-		free(wd->content);
-	}
+	static OBJECT box = {-1, -1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 0, 0 };
 	
+	numberOfLines = (wd->testList) ? wd->testList->size : 0;
 	wd->content = (OBJECT*) acu_emalloc(sizeof(OBJECT)*(numberOfLines+1));
 	
 	memcpy(&wd->content[0], &box, sizeof(OBJECT));
@@ -75,6 +70,9 @@ void gem_content(const WinData* wd) {
 		sprintf(wd->content[i+1].ob_spec.free_string, "%d", i+1);
 		wd->content[i+1].ob_width = (int) strlen(wd->content[i+1].ob_spec.free_string) * wd->cellWidth;
 		wd->content[i+1].ob_height = wd->cellHeight;
+	}
+	if (numberOfLines > 0) {
+		wd->content[0].ob_head = 1;
 	}
 	wd->content[numberOfLines].ob_next = -1;
 	wd->content[numberOfLines].ob_flags = NONE | LASTOB;
@@ -132,7 +130,16 @@ void gem_selectFile(const WinData* wd) {
     buf[0] = '\0';
     fsel_exinput(wd->testFilePath, buf, &button, "Select test");
     if (button == 1) {
+
         if (wd->testList) {
+           	if (wd->content) {
+           		int i;
+				int numberOfLines = wd->linesShown;
+				for (i=0; i < numberOfLines; i++) {
+					free(wd->content[i+1].ob_spec.free_string);
+				}
+				free(wd->content);
+			}
 	      	acu_listDestroy(wd->testList);
 	       	free(wd->testList);
 	       	wd->testList = NULL;
@@ -149,6 +156,7 @@ void gem_selectFile(const WinData* wd) {
         	gem_setInfoLine(wd);
         	gem_setWindowTitle(wd);
         	gem_collectTestCases(wd);
+        	gem_content(wd);
         	gem_triggerRedraw(wd);
         }
     }
