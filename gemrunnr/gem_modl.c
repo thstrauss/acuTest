@@ -51,6 +51,7 @@ void gem_initWinData(WinData* wd) {
 void gem_content(const WinData* wd) {
 	int i;
 	int numberOfLines;
+	ACU_ListElement* testElement;
 	
 	static OBJECT box = {-1, -1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 0, 0 };
 	
@@ -60,16 +61,19 @@ void gem_content(const WinData* wd) {
 	memcpy(&wd->content[0], &box, sizeof(OBJECT));
 	wd->content[0].ob_width = 80 * wd->cellWidth;
 	wd->content[0].ob_height = numberOfLines * wd->cellHeight;
+	if (wd->testList) {
+		testElement = acu_listHead(wd->testList);
+	}
 	for (i=0; i<numberOfLines; i++) {
 		static OBJECT line = {-1, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 0, 0 };
 		memcpy(&wd->content[i+1], &line, sizeof(OBJECT));
 
 		wd->content[i+1].ob_next = i+2;
 		wd->content[i+1].ob_y = i * wd->cellHeight;
-		wd->content[i+1].ob_spec.free_string = acu_emalloc(256);
-		sprintf(wd->content[i+1].ob_spec.free_string, "%d", i+1);
+		wd->content[i+1].ob_spec.free_string = ((ACU_TestCase*) testElement->data)->name;
 		wd->content[i+1].ob_width = (int) strlen(wd->content[i+1].ob_spec.free_string) * wd->cellWidth;
 		wd->content[i+1].ob_height = wd->cellHeight;
+		testElement = acu_listNext(testElement);
 	}
 	if (numberOfLines > 0) {
 		wd->content[0].ob_head = 1;
