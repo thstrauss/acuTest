@@ -27,7 +27,7 @@
 
 =
 
-plgstart.s
+..\acu_test\plgstart.s
 
 acu_ent2.c
 
