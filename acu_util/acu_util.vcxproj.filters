@@ -42,6 +42,9 @@
     <ClCompile Include="windows\acu_utilWindows.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="windows\acu_dirWindows.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="acu_dir.h">

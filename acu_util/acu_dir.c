@@ -27,12 +27,6 @@
 #include "acu_util.h"
 #include "acu_list.h"
 
-#ifdef __TOS__
-    #include <ext.h>
-#else
-    #include <windows.h>
-#endif
-
 ACU_Files* acu_filesMalloc(void)
 {
     return acu_emalloc(sizeof(ACU_Files));
@@ -56,55 +50,6 @@ void acu_filesDestroy(ACU_Files* files)
 {
     acu_listDestroy(files->fileList);
     files->fileList = NULL;
-}
-
-void acu_filesCollect(ACU_Files* files, const char* fileMask)
-{
-#ifdef __TOS__
-    struct ffblk findFirst;
-    
-    if (findfirst(fileMask, &findFirst, 0) == 0) {
-        do {
-            ACU_FileEntry* entry = acu_emalloc(sizeof(ACU_FileEntry));
-            entry->fileName = acu_estrdup(findFirst.ff_name);
-            acu_listAppend(files->fileList, (void*) entry);
-        } while (findnext(&findFirst) == 0);
-    }
-#else
-    WIN32_FIND_DATA findFileData;
-    wchar_t wc_maskName[260];
-    size_t filenameSize=0;
-    mbstowcs_s(&filenameSize, wc_maskName, 260, fileMask, _TRUNCATE);
-
-    wchar_t exeFileName[260];
-    GetModuleFileNameW(NULL, exeFileName, 260);
-    *wcsrchr(exeFileName, '\\') = '\0';
-    SetCurrentDirectoryW(exeFileName);
-    HANDLE hFind = FindFirstFileW(wc_maskName, &findFileData);
-    if (hFind != INVALID_HANDLE_VALUE) {
-        do
-        {
-            if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-
-            }
-            else {
-                char buffer[260];
-                size_t size;
-                wcstombs_s(&size, buffer, 260, findFileData.cFileName, _TRUNCATE);
-                ACU_FileEntry* entry = acu_emalloc(sizeof(ACU_FileEntry));
-                entry->fileName = acu_estrdup(buffer);
-                acu_listAppend(files->fileList, (void*)entry);
-            }
-        } while (FindNextFileW(hFind, &findFileData) != 0);
-
-        FindClose(hFind);
-    }
-    else {
-        char buffer[512];
-        DWORD error = GetLastError();
-        acu_printf_s(buffer, sizeof(buffer), "FindFirstFile failed (%d)\n", error);
-    }
-#endif
 }
 
 void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor) {

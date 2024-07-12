@@ -12,5 +12,6 @@ acu_rand (acu_rand.h)
 acu_stck (acu_stck.h) 
 acu_util (acu_util.h)
 tos\acu_utos (acu_util.h)
+tos\acu_dtos (acu_dir.h, acu_util.h)
 acu_uuid (acu_uuid.h, acu_rand.h)
 
