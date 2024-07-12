@@ -71,6 +71,8 @@ __EXPORT void* acu_emalloc(size_t n);
 __EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
 __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
 
+void va_acu_printf(ACU_Level level, const char* format, va_list args);
+
 /*
 	Converts a NULL reference to the "NULL" string.
 */
