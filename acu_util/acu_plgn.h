@@ -29,11 +29,7 @@
 #endif
 
 typedef struct ACU_Plugin_ {
-#ifdef __TOS__
     void* pluginCode;
-#else
-    HMODULE plugin;
-#endif
 } ACU_Plugin;
 
 __EXPORT ACU_Plugin* acu_pluginMalloc(void);

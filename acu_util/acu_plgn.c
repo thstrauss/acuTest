@@ -179,12 +179,12 @@ void acu_pluginLoad(ACU_Plugin* plugin, const char* cu_name)
     if (module == 0) {
         return;
     }
-    plugin->plugin = module;
+    plugin->pluginCode = module;
 }
 
 void acu_pluginUnload(ACU_Plugin* plugin)
 {
-    FreeLibrary(plugin->plugin);
+    FreeLibrary(plugin->pluginCode);
 }
 
 #endif

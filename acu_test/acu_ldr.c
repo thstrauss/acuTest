@@ -91,11 +91,11 @@ void cup_unload(ACU_Entry* entry) {
 ACU_Entry* cup_load(const char* cu_name) {
     ACU_Plugin* plugin = acu_pluginMalloc();
     acu_pluginLoad(plugin, cu_name);
-    if (!plugin->plugin) {
+    if (!plugin->pluginCode) {
         free(plugin);
         return NULL;
     }
-    ACU_init* init = (ACU_init*) GetProcAddress(plugin->plugin, "acu_init");
+    ACU_init* init = (ACU_init*) GetProcAddress(plugin->pluginCode, "acu_init");
     ACU_Entry* entry = init();
     entry->plugin = plugin;
     if (!checkVersion(entry)) {
