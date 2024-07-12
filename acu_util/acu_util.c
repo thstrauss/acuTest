@@ -35,18 +35,6 @@ char* acu_progName(void) {
     return programName;
 }
 
-char* acu_estrdup(const char* s) {
-#ifdef __TOS__
-    char* temp = strdup(s);
-#else
-    char* temp = _strdup(s);
-#endif
-    if (!temp) {
-        acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
-    }
-    return temp;
-}
-
 void acu_setProgName(const char* progName) {
     if (programName) {
         free(programName);

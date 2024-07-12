@@ -61,3 +61,10 @@ int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_lis
     return vsprintf(buffer, format, args);
 }
 
+char* acu_estrdup(const char* s) {
+    char* temp = strdup(s);
+    if (!temp) {
+        acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
+    }
+    return temp;
+}

@@ -21,6 +21,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "..\acu_util.h"
 
@@ -57,4 +58,12 @@ int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
 int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args)
 {
     return vsprintf_s(buffer, sizeOfBuffer, format, args);
+}
+
+char* acu_estrdup(const char* s) {
+    char* temp = _strdup(s);
+    if (!temp) {
+        acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
+    }
+    return temp;
 }
