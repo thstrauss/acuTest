@@ -27,6 +27,8 @@
 
 #include "acu_util.h"
 
+extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
+
 static char* programName = NULL;
 
 char* acu_progName(void) {
