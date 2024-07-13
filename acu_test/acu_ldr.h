@@ -35,8 +35,6 @@ typedef void ACU_exitFunc(int exitCode);
 typedef void ACU_setExitFunc(ACU_exitFunc* exitFunc);
 typedef void ACU_setWriteHandlerFunc(ACU_WriteHandlerFunc* writeHandler);
 
-#else
-	#include <windows.h>
 #endif
 
 typedef struct ACU_Entry_ {
