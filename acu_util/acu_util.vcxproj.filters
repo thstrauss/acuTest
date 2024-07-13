@@ -48,6 +48,9 @@
     <ClCompile Include="acu_plgn.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="windows\acu_plgnWindows.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="acu_dir.h">

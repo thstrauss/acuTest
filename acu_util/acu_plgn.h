@@ -24,9 +24,6 @@
 #define __acu_plugin__
 
 #include "acu_cmmn.h"
-#ifndef __TOS__
-	#include <windows.h>
-#endif
 
 typedef struct ACU_Plugin_ {
     void* pluginCode;

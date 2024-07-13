@@ -19,11 +19,23 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "acu_plgn.h"
-#include "acu_util.h"
+#include "..\acu_plgn.h"
 
-ACU_Plugin* acu_pluginMalloc(void)
+#include <stdio.h>
+#include <windows.h>
+
+void acu_pluginLoad(ACU_Plugin* plugin, const char* cu_name)
 {
-    return acu_emalloc(sizeof(ACU_Plugin));
+    wchar_t  name[256];
+    swprintf(name, 255, L"%hs", cu_name);
+    HMODULE module = LoadLibraryW(name);
+    if (module == 0) {
+        return;
+    }
+    plugin->pluginCode = module;
 }
 
+void acu_pluginUnload(ACU_Plugin* plugin)
+{
+    FreeLibrary(plugin->pluginCode);
+}
