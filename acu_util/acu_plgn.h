@@ -29,9 +29,12 @@ typedef struct ACU_Plugin_ {
     void* pluginCode;
 } ACU_Plugin;
 
+typedef void ACU_PluginInitFunc(ACU_Plugin* plugin, void* initContext);
+
 __EXPORT ACU_Plugin* acu_pluginMalloc(void);
 
 __EXPORT void acu_pluginLoad(ACU_Plugin* plugin, const char* cu_name);
+__EXPORT void acu_pluginInit(ACU_Plugin* plugin, ACU_PluginInitFunc* initFunc, void* initContext);
 __EXPORT void acu_pluginUnload(ACU_Plugin* plugin);
 
 #endif

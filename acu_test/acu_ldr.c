@@ -42,6 +42,10 @@ static int checkVersion(ACU_Entry* entry) {
     return 1;
 }
 
+typedef struct ACU_PluginContext_ {
+    ACU_Entry* entry;
+} ACU_PluginContext;
+
 #ifdef __TOS__
 
 #include <string.h>
@@ -56,58 +60,28 @@ static void setExit(ACU_exitFunc* exit) {
 	exitFunc = exit;
 }
 
-ACU_Entry* cup_load(const char* cu_name) {
-	ACU_Plugin* plugin = acu_pluginMalloc();
-	ACU_init* init;
-    ACU_Entry* entry;
-    
-	acu_pluginLoad(plugin, cu_name);
-    init = (ACU_init*) plugin->pluginCode;
+static void initFunc(ACU_Plugin* plugin, void* initContext) {
+    ACU_PluginContext* pluginContext = initContext;
+    ACU_init* init = (ACU_init*) plugin->pluginCode;
     
     if (!init) {
-        return NULL;
+        return;
     }
-    entry = init();
-    entry->plugin = plugin;
-    entry->setFrameStack(acu_getFrameStack());
-    entry->setExit(exit);
-    
-    if (!checkVersion(entry)) {
-        cup_unload(entry);
-        return NULL;
-    };
-    return entry;
-}
-
-void cup_unload(ACU_Entry* entry) {
-    acu_pluginUnload(entry->plugin);
-    acu_entryDestroy(entry);
+    pluginContext->entry = init();
+    pluginContext->entry->plugin = plugin;
+    pluginContext->entry->setFrameStack(acu_getFrameStack());
+    pluginContext->entry->setExit(exit);
 }
 
 #else
 
 #include <windows.h>
 
-ACU_Entry* cup_load(const char* cu_name) {
-    ACU_Plugin* plugin = acu_pluginMalloc();
-    acu_pluginLoad(plugin, cu_name);
-    if (!plugin->pluginCode) {
-        free(plugin);
-        return NULL;
-    }
-    ACU_init* init = (ACU_init*) GetProcAddress(plugin->pluginCode, "acu_init");
-    ACU_Entry* entry = init();
-    entry->plugin = plugin;
-    if (!checkVersion(entry)) {
-        cup_unload(entry);
-        return NULL;
-    };
-    return entry;
-}
-
-void cup_unload(ACU_Entry* entry) {
-    acu_pluginUnload(entry->plugin);
-    acu_entryDestroy(entry);
+static void initFunc(ACU_Plugin* plugin, void* initContext) {
+    ACU_PluginContext* pluginContext = initContext;
+    ACU_init* init = (ACU_init*)GetProcAddress(plugin->pluginCode, "acu_init");
+    pluginContext->entry = init();
+    pluginContext->entry->plugin = plugin;
 }
 
 #endif
@@ -142,4 +116,25 @@ void acu_entryExecute(const ACU_Entry* entry, ACU_Progress* progress)
 #endif
         acu_suiteExecute(entry->suite, progress);
     }
+}
+
+ACU_Entry* cup_load(const char* cu_name) {
+    ACU_PluginContext pluginContext = { NULL };
+    ACU_Plugin* plugin = acu_pluginMalloc();
+    acu_pluginLoad(plugin, cu_name);
+    if (!plugin->pluginCode) {
+        free(plugin);
+        return NULL;
+    }
+    acu_pluginInit(plugin, initFunc, &pluginContext);
+    if (!checkVersion(pluginContext.entry)) {
+        cup_unload(pluginContext.entry);
+        return NULL;
+    };
+    return pluginContext.entry;
+}
+
+void cup_unload(ACU_Entry* entry) {
+    acu_pluginUnload(entry->plugin);
+    acu_entryDestroy(entry);
 }

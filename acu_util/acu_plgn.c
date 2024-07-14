@@ -27,3 +27,8 @@ ACU_Plugin* acu_pluginMalloc(void)
     return acu_emalloc(sizeof(ACU_Plugin));
 }
 
+__EXPORT void acu_pluginInit(ACU_Plugin* plugin, ACU_PluginInitFunc* initFunc, void* initContext)
+{
+    initFunc(plugin, initContext);
+}
+
