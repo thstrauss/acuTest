@@ -68,9 +68,14 @@ static void initFunc(ACU_Plugin* plugin, void* initContext) {
         return;
     }
     pluginContext->entry = init();
-    pluginContext->entry->plugin = plugin;
+    pluginContext->entry->setWriteHandler = acu_setWriteHandler;
+    pluginContext->entry->setFrameStack = acu_setFrameStack;
+    pluginContext->entry->setExit = setExit;
+
     pluginContext->entry->setFrameStack(acu_getFrameStack());
     pluginContext->entry->setExit(exit);
+    
+    pluginContext->entry->plugin = plugin;
 }
 
 #else
@@ -93,11 +98,6 @@ ACU_Entry* acu_entryMalloc(void) {
 void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
     entry->suite = suite;
     entry->getAcuTestVersion = acu_getVersion;
-#ifdef __TOS__
-    entry->setWriteHandler = acu_setWriteHandler;
-    entry->setFrameStack = acu_setFrameStack;
-    entry->setExit = setExit;
-#endif
 }
 
 void acu_entryDestroy(ACU_Entry* entry) {
