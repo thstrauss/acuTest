@@ -26,9 +26,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <string.h>
-#include <stdlib.h>
-
 #include "acu_tryc.h"
 #include "acu_stck.h"
 
