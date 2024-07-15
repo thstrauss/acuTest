@@ -42,52 +42,7 @@ static int checkVersion(ACU_Entry* entry) {
     return 1;
 }
 
-typedef struct ACU_PluginContext_ {
-    ACU_Entry* entry;
-} ACU_PluginContext;
-
 #ifdef __TOS__
-
-#include <string.h>
-#include <stdlib.h>
-
-#include "acu_tryc.h"
-#include "acu_stck.h"
-
-ACU_exitFunc* exitFunc;
-
-static void setExit(ACU_exitFunc* exit) {
-	exitFunc = exit;
-}
-
-static void initFunc(ACU_Plugin* plugin, void* initContext) {
-    ACU_PluginContext* pluginContext = initContext;
-    ACU_init* init = (ACU_init*) plugin->pluginCode;
-    
-    if (!init) {
-        return;
-    }
-    pluginContext->entry = init();
-    pluginContext->entry->setWriteHandler = acu_setWriteHandler;
-    pluginContext->entry->setFrameStack = acu_setFrameStack;
-    pluginContext->entry->setExit = setExit;
-
-    pluginContext->entry->setFrameStack(acu_getFrameStack());
-    pluginContext->entry->setExit(exit);
-    
-    pluginContext->entry->plugin = plugin;
-}
-
-#else
-
-#include <windows.h>
-
-static void initFunc(ACU_Plugin* plugin, void* initContext) {
-    ACU_PluginContext* pluginContext = initContext;
-    ACU_init* init = (ACU_init*)GetProcAddress(plugin->pluginCode, "acu_init");
-    pluginContext->entry = init();
-    pluginContext->entry->plugin = plugin;
-}
 
 #endif
 
@@ -117,6 +72,8 @@ void acu_entryExecute(const ACU_Entry* entry, ACU_Progress* progress)
         acu_suiteExecute(entry->suite, progress);
     }
 }
+
+extern void initFunc(ACU_Plugin* plugin, void* initContext);
 
 ACU_Entry* cup_load(const char* cu_name) {
     ACU_PluginContext pluginContext = { NULL };

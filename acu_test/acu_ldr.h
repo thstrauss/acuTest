@@ -48,6 +48,10 @@ typedef struct ACU_Entry_ {
     ACU_Plugin* plugin;
 } ACU_Entry;
 
+typedef struct ACU_PluginContext_ {
+    ACU_Entry* entry;
+} ACU_PluginContext;
+
 typedef __EXPORT  ACU_Entry* (ACU_initFunc)(void);
 
 typedef ACU_Entry* ACU_init(void);
