@@ -58,7 +58,6 @@ void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
 void acu_entryDestroy(ACU_Entry* entry) {
     if (entry) {
         acu_suiteDestroy((ACU_Suite*)entry->suite);
-        free(entry->plugin);
         free(entry);
     }
 }
@@ -93,5 +92,6 @@ ACU_Entry* cup_load(const char* cu_name) {
 
 void cup_unload(ACU_Entry* entry) {
     acu_pluginUnload(entry->plugin);
+    free(entry->plugin);
     acu_entryDestroy(entry);
 }
