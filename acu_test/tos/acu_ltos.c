@@ -43,7 +43,6 @@ void initFunc(ACU_Plugin* plugin, void* initContext) {
         return;
     }
     pluginContext->entry = init();
-    pluginContext->entry->setWriteHandler = acu_setWriteHandler;
     pluginContext->entry->setFrameStack = acu_setFrameStack;
     pluginContext->entry->setExit = setExit;
 

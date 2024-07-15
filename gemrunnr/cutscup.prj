@@ -7,7 +7,7 @@ cutscup.cup
 
 =
 
-..\cutest.lib\plgstart.s
+..\acu_test\plgstart.s
 
 ..\acu_util\acu_util.prj
 ..\acu_test\acu_test.prj

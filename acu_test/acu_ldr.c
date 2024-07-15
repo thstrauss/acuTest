@@ -42,10 +42,6 @@ static int checkVersion(ACU_Entry* entry) {
     return 1;
 }
 
-#ifdef __TOS__
-
-#endif
-
 ACU_Entry* acu_entryMalloc(void) {
     return acu_emalloc(sizeof(ACU_Entry));
 }
@@ -53,6 +49,7 @@ ACU_Entry* acu_entryMalloc(void) {
 void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
     entry->suite = suite;
     entry->getAcuTestVersion = acu_getVersion;
+    entry->setWriteHandler = acu_setWriteHandler;
 }
 
 void acu_entryDestroy(ACU_Entry* entry) {
@@ -65,9 +62,7 @@ void acu_entryDestroy(ACU_Entry* entry) {
 void acu_entryExecute(const ACU_Entry* entry, ACU_Progress* progress)
 {
     if (entry) {
-#ifdef __TOS__
         entry->setWriteHandler(acu_getWriteHandler());
-#endif
         acu_suiteExecute(entry->suite, progress);
     }
 }
