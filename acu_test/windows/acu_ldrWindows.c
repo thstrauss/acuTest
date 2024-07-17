@@ -22,6 +22,8 @@
 #include <acu_plgn.h>
 
 #include "..\acu_ldr.h"
+#include "..\acu_tryc.h"
+
 
 #include <string.h>
 #include <stdlib.h>
@@ -32,5 +34,6 @@ void initFunc(ACU_Plugin* plugin, void* initContext) {
     ACU_PluginContext* pluginContext = initContext;
     ACU_init* init = (ACU_init*)GetProcAddress(plugin->pluginCode, "acu_init");
     pluginContext->entry = init();
+    pluginContext->entry->setFrameStack(acu_getFrameStack());
     pluginContext->entry->plugin = plugin;
 }

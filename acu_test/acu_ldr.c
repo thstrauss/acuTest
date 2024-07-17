@@ -50,6 +50,7 @@ void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
     entry->suite = suite;
     entry->getAcuTestVersion = acu_getVersion;
     entry->setWriteHandler = acu_setWriteHandler;
+    entry->setFrameStack = acu_setFrameStack;
 }
 
 void acu_entryDestroy(ACU_Entry* entry) {

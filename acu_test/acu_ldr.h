@@ -26,26 +26,15 @@
 #include "acu_vers.h"
 #include <acu_plgn.h>
 #include <acu_util.h>
-
-typedef void ACU_setWriteHandlerFunc(ACU_WriteHandlerFunc* writeHandler);
-
-#ifdef __TOS__
-
 #include "acu_tryc.h"
 
-typedef void ACU_exitFunc(int exitCode);
-typedef void ACU_setExitFunc(ACU_exitFunc* exitFunc);
-
-#endif
+typedef void ACU_setWriteHandlerFunc(ACU_WriteHandlerFunc* writeHandler);
 
 typedef struct ACU_Entry_ {
     ACU_Suite* suite;
     ACU_getVersionFunc* getAcuTestVersion;
     ACU_setWriteHandlerFunc* setWriteHandler;
-#ifdef __TOS__
     ACU_setFrameStackFunc* setFrameStack;
-    ACU_setExitFunc* setExit;
-#endif
     ACU_Plugin* plugin;
 } ACU_Entry;
 
