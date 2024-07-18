@@ -115,7 +115,7 @@ void gem_collectTestCases(const WinData* wd){
    	ACU_TestCases testCases;
    	
     wd->testList = acu_listMalloc();
-    acu_listInit(wd->testList, (ACU_ListDestroyFunc*) NULL);
+    acu_listInit(wd->testList, (ACU_ListDestroyFunc*) free);
         	
     testCases.testCases = wd->testList;
     collect.context = (void*) &testCases;
@@ -137,11 +137,6 @@ void gem_selectFile(const WinData* wd) {
 
         if (wd->testList) {
            	if (wd->content) {
-           		int i;
-				int numberOfLines = wd->linesShown;
-				for (i=0; i < numberOfLines; i++) {
-					free(wd->content[i+1].ob_spec.free_string);
-				}
 				free(wd->content);
 			}
 	      	acu_listDestroy(wd->testList);

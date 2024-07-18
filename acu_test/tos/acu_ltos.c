@@ -39,7 +39,7 @@ static void setExit(ACU_exitFunc* exit) {
 
 void initFunc(ACU_Plugin* plugin, void* initContext) {
     ACU_PluginContext* pluginContext = initContext;
-    ACU_init* init = (ACU_init*)plugin->pluginCode;
+    ACU_init* init = (ACU_init*) plugin->pluginCode;
 
     if (!init) {
         return;
