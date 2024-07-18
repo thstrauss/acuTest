@@ -48,6 +48,17 @@ void gem_initWinData(WinData* wd) {
     gem_content(wd);
 }
 
+static void gem_contentLine(const WinData* wd, const ACU_TestCase* testCase, int lineIndex) {
+    static OBJECT line = { -1, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 0, 0 };
+    memcpy(&wd->content[lineIndex + 1], &line, sizeof(OBJECT));
+
+    wd->content[lineIndex + 1].ob_next = lineIndex + 2;
+    wd->content[lineIndex + 1].ob_y = lineIndex * wd->cellHeight;
+    wd->content[lineIndex + 1].ob_spec.free_string = acu_estrdup(testCase->name);
+    wd->content[lineIndex + 1].ob_width = (int)strlen(testCase->name) * wd->cellWidth;
+    wd->content[lineIndex + 1].ob_height = wd->cellHeight;
+}
+
 void gem_content(const WinData* wd) {
 	int i;
 	int numberOfLines;
@@ -65,14 +76,7 @@ void gem_content(const WinData* wd) {
 		testElement = acu_listHead(wd->testList);
 	}
 	for (i=0; i<numberOfLines; i++) {
-		static OBJECT line = {-1, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 0, 0 };
-		memcpy(&wd->content[i+1], &line, sizeof(OBJECT));
-
-		wd->content[i+1].ob_next = i+2;
-		wd->content[i+1].ob_y = i * wd->cellHeight;
-		wd->content[i+1].ob_spec.free_string = ((ACU_TestCase*) testElement->data)->name;
-		wd->content[i+1].ob_width = (int) strlen(wd->content[i+1].ob_spec.free_string) * wd->cellWidth;
-		wd->content[i+1].ob_height = wd->cellHeight;
+        gem_contentLine(wd, (ACU_TestCase*)testElement->data, i);
 		testElement = acu_listNext(testElement);
 	}
 	if (numberOfLines > 0) {
@@ -123,6 +127,17 @@ void gem_collectTestCases(const WinData* wd){
    	acu_suiteAccept(wd->entry->suite, &collect); 
 }
 
+static void gem_freeContent(const WinData* wd) {
+    if (wd->content) {
+        int i;
+        int numberOfLines = (wd->testList) ? wd->testList->size : 0;
+        for (i = 0; i < numberOfLines; i++) {
+            free(wd->content[i + 1].ob_spec.free_string);
+        }
+        free(wd->content);
+    }
+}
+
 void gem_selectFile(const WinData* wd) {
     char buf[256];
     int button;
@@ -135,10 +150,8 @@ void gem_selectFile(const WinData* wd) {
     fsel_exinput(wd->testFilePath, buf, &button, "Select test");
     if (button == 1) {
 
+        gem_freeContent(wd);
         if (wd->testList) {
-           	if (wd->content) {
-				free(wd->content);
-			}
 	      	acu_listDestroy(wd->testList);
 	       	free(wd->testList);
 	       	wd->testList = NULL;
@@ -155,9 +168,9 @@ void gem_selectFile(const WinData* wd) {
         	gem_setInfoLine(wd);
         	gem_setWindowTitle(wd);
         	gem_collectTestCases(wd);
-        	gem_content(wd);
-        	gem_triggerRedraw(wd);
         }
+        gem_content(wd);
+        gem_triggerRedraw(wd);
     }
 }
 
