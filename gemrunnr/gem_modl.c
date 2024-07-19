@@ -48,13 +48,28 @@ void gem_initWinData(WinData* wd) {
     gem_content(wd);
 }
 
+static char* gem_getTestContent(const ACU_TestCase* testCase) {
+    size_t bufferSize; 
+    char* buffer;
+    char resultBuffer[20] = "";
+    
+    if (testCase->result) {
+        strcpy(resultBuffer, (testCase->result->status == ACU_TEST_PASSED) ? "passed" : "failed");
+    }
+
+    bufferSize = strlen(testCase->name) + 20;
+    buffer = acu_emalloc(bufferSize);
+    acu_sprintf_s(buffer, bufferSize, "%010s : %s", resultBuffer, testCase->name);
+    return buffer;
+}
+
 static void gem_contentLine(const WinData* wd, const ACU_TestCase* testCase, int lineIndex) {
     static OBJECT line = { -1, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 0, 0 };
     memcpy(&wd->content[lineIndex + 1], &line, sizeof(OBJECT));
 
     wd->content[lineIndex + 1].ob_next = lineIndex + 2;
     wd->content[lineIndex + 1].ob_y = lineIndex * wd->cellHeight;
-    wd->content[lineIndex + 1].ob_spec.free_string = acu_estrdup(testCase->name);
+    wd->content[lineIndex + 1].ob_spec.free_string = gem_getTestContent(testCase);
     wd->content[lineIndex + 1].ob_width = (int)strlen(testCase->name) * wd->cellWidth;
     wd->content[lineIndex + 1].ob_height = wd->cellHeight;
 }
@@ -119,7 +134,7 @@ void gem_collectTestCases(const WinData* wd){
    	ACU_TestCases testCases;
    	
     wd->testList = acu_listMalloc();
-    acu_listInit(wd->testList, (ACU_ListDestroyFunc*) free);
+    acu_listInit(wd->testList, (ACU_ListDestroyFunc*) NULL);
         	
     testCases.testCases = wd->testList;
     collect.context = (void*) &testCases;
@@ -182,7 +197,10 @@ void gem_execute(const WinData* wd) {
 	acu_setWriteHandler(nullHandler);
 	if (wd->entry) {
 		acu_entryExecute(wd->entry, NULL);
-	} else {
+        gem_freeContent(wd);
+        gem_content(wd);
+        gem_triggerRedraw(wd);
+    } else {
 		form_alert(1, "[1][Please load test first!][ OK ]");
 	}
 }
