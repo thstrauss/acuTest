@@ -164,6 +164,7 @@ void gem_selectFile(const WinData* wd) {
     buf[0] = '\0';
     fsel_exinput(wd->testFilePath, buf, &button, "Select test");
     if (button == 1) {
+        graf_mouse(BUSYBEE, 0L);
 
         gem_freeContent(wd);
         if (wd->testList) {
@@ -186,6 +187,7 @@ void gem_selectFile(const WinData* wd) {
         }
         gem_content(wd);
         gem_triggerRedraw(wd);
+        graf_mouse(ARROW, 0L);
     }
 }
 
@@ -196,10 +198,12 @@ static size_t nullHandler(const char* buffer) {
 void gem_execute(const WinData* wd) {
 	acu_setWriteHandler(nullHandler);
 	if (wd->entry) {
+        graf_mouse(BUSYBEE, 0L);
 		acu_entryExecute(wd->entry, NULL);
         gem_freeContent(wd);
         gem_content(wd);
         gem_triggerRedraw(wd);
+        graf_mouse(ARROW, 0L);
     } else {
 		form_alert(1, "[1][Please load test first!][ OK ]");
 	}
