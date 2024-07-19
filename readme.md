@@ -3,6 +3,42 @@
 acu_Test (Atari C Unit Test) is a C89 compliant c unit test framework. The library and unit tests are compiling 
 on Atari ST with PureC and on Windows with VC. 
 
+## Plug-ins
+
+The framework allows to implement test plug-ins which are the executed by a generic runner.
+
+### Windows
+
+### Plug-in Implementation
+
+Please implement a function like this:
+
+```C
+ACU_Entry* acu_init() {
+    ACU_Suite* suite = acu_suiteMalloc();
+    ACU_Entry* entry = acu_entryMalloc();
+    acu_entryInit(entry, suite);
+
+...
+    /* Please add test fixtures to suites. */
+...
+
+    return entry;
+}
+```
+
+Build a dll like `example.dll`
+
+## Start Generic Runner
+
+```cmd
+curunner example.dll
+```
+
+The runner starts and execute the given dll. Output is going to the console. The `curunner` return `0` on success and `2` when any test fails.
+
+### Atari TOS
+
 ## Demo
 
 ### Test Cases
