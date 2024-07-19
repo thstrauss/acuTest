@@ -33,8 +33,10 @@ typedef enum ACU_Level_
     acu_warning = 2,
 } ACU_Level;
 
+/* Defines the error handler call back. */
 typedef void ACU_ErrorHandlerFunc(enum ACU_Level errorLevel, const char* errorMessage);
 typedef size_t ACU_WriteHandlerFunc(const char* buffer);
+typedef void ACU_setWriteHandlerFunc(ACU_WriteHandlerFunc* writeHandler);
 
 /*
 * Returns the program name.

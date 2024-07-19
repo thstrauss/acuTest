@@ -28,8 +28,9 @@
 #include <acu_util.h>
 #include "acu_tryc.h"
 
-typedef void ACU_setWriteHandlerFunc(ACU_WriteHandlerFunc* writeHandler);
-
+/*
+The ACU_Entry describes the acuTest plug-in.
+*/
 typedef struct ACU_Entry_ {
     ACU_Suite* suite;
     ACU_getVersionFunc* getAcuTestVersion;
@@ -42,10 +43,16 @@ typedef struct ACU_PluginContext_ {
     ACU_Entry* entry;
 } ACU_PluginContext;
 
-typedef __EXPORT  ACU_Entry* (ACU_initFunc)(void);
+typedef ACU_Entry* (ACU_initFunc)(void);
 
+/*
+Defines the entry point function for the plug-in.
+*/
 typedef ACU_Entry* ACU_init(void);
 
+/*
+Declares the entry point for the plug-in.
+*/
 __EXPORT ACU_Entry* acu_init(void);
 
 __EXPORT ACU_Entry* cup_load(const char* cu_name);
@@ -55,6 +62,9 @@ __EXPORT ACU_Entry* acu_entryMalloc(void);
 __EXPORT void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite);
 __EXPORT void acu_entryDestroy(ACU_Entry* entry);
 
+/*
+Executes the tests in the plug-in.
+*/
 __EXPORT void acu_entryExecute(const ACU_Entry* entry, ACU_Progress* progress);
  
 #endif
