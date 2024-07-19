@@ -59,7 +59,7 @@ static char* gem_getTestContent(const ACU_TestCase* testCase) {
 
     bufferSize = strlen(testCase->name) + 20;
     buffer = acu_emalloc(bufferSize);
-    acu_sprintf_s(buffer, bufferSize, "%010s : %s", resultBuffer, testCase->name);
+    acu_sprintf_s(buffer, bufferSize, "%6s : %s", resultBuffer, testCase->name);
     return buffer;
 }
 
