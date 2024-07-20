@@ -11,7 +11,7 @@ The framework allows to implement test plug-ins which are the executed by a gene
 
 ### Plug-in Implementation
 
-Please implement a function like this:
+Please implement a function like this with name `acu_entr.c`:
 
 ```C
 ACU_Entry* acu_init() {
@@ -38,6 +38,43 @@ curunner example.dll
 The runner starts and execute the given dll. Output is going to the console. The `curunner` return `0` on success and `2` when any test fails.
 
 ### Atari TOS
+
+For plain TOS we don't have a concept of shared libraries. Something similar is done with CPX modules. 
+I reimplemented the loading of CPX-modules.
+
+#### TOS Plug-in Implementation
+
+```
+cutscup.cup
+
+.C [ -I..\acu_test ]
+.C [ -I..\acu_util ]
+.C [ -P ]
+.L [ -Y ]
+
+=
+
+..\acu_test\plgstart.s
+
+acu_entr.c (..\acu_test\acu_ldr.h)
+char_tst.c (char_tst.h, tst_bed.h)
+
+..\acu_util\acu_util.prj
+..\acu_test\acu_test.prj
+
+PCFLTLIB.LIB
+PCSTDLIB.LIB
+PCTOSLIB.LIB
+PCEXTLIB.LIB
+```
+
+#### Start Generic Runner
+
+```cmd
+curunner cutscup.cup
+```
+
+The runner starts and execute the given plug-in. Output is going to the console. The `curunner` return `0` on success and `2` when any test fails.
 
 ## Demo
 
