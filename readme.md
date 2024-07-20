@@ -44,6 +44,8 @@ I reimplemented the loading of CPX-modules.
 
 #### TOS Plug-in Implementation
 
+The PureC project file shall look like this:
+
 ```
 cutscup.cup
 
@@ -67,6 +69,11 @@ PCSTDLIB.LIB
 PCTOSLIB.LIB
 PCEXTLIB.LIB
 ```
+
+The of `acu_entr.c` is the same as for the windows plug-in.
+
+The linker creates an executable with the start code `plgstart.s`. The start code is executed when 
+the plug-in is loaded by `curunner.ttp`.
 
 #### Start Generic Runner
 
