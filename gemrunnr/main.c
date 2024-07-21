@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <screen.h>
 
 #include "gemrunnr.h"
 
@@ -69,7 +70,7 @@ void drawContent(const WinData* wd, const GRECT* clippingRect, const GRECT* work
 	wd->content[0].ob_x = workingRect->g_x;
 	wd->content[0].ob_y = workingRect->g_y - wd->verticalPositionN * wd->cellHeight;
 	
-	objc_draw(wd->content, 0, 1, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
+	objc_draw(wd->content, 0, 7, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
 }
 
 void drawInterior(const WinData* wd, const GRECT* clippingRect) {
@@ -349,7 +350,10 @@ void handleKeyboard(const WinData* wd, int mkReturn) {
 void eventLoop(const WinData* wd, OBJECT* menuAddr) {
 	EVENT event;
 	
-	event.ev_mflags = MU_MESAG | MU_KEYBD;
+	event.ev_mflags = MU_MESAG | MU_KEYBD | MU_BUTTON;
+	event.ev_mbclicks = 1;
+	event.ev_mbmask = 1;
+	event.ev_mbstate = 1;
 	
 	do {
 		int eventType = EvntMulti(&event);
@@ -369,6 +373,14 @@ void eventLoop(const WinData* wd, OBJECT* menuAddr) {
 				break;
 			}
 			handleKeyboard(wd, event.ev_mkreturn);
+		}
+		if ((eventType & MU_BUTTON)) {
+			if (wind_find(event.ev_mmox, event.ev_mmoy) == wd->windowHandle) {
+				int nextObject = objc_find(wd->content, 0, 7, event.ev_mmox, event.ev_mmoy);
+				if (nextObject != -1) {
+					objc_change(wd->content, nextObject, 0, 0, 0, 0, 0, SELECTED, 0);
+				}
+			}
 		}
 	} while(
 		!(event.ev_mmgpbuf[0] == MN_SELECTED && event.ev_mmgpbuf[4] == FILE_QUIT)

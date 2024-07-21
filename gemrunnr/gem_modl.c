@@ -65,22 +65,23 @@ static char* gem_getTestContent(const ACU_TestCase* testCase) {
 
 static void gem_contentLine(const WinData* wd, const ACU_TestCase* testCase, int lineIndex) {
     static OBJECT line = { -1, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 0, 0 };
+	char* lineContent = gem_getTestContent(testCase);
+	
     memcpy(&wd->content[lineIndex + 1], &line, sizeof(OBJECT));
-
     wd->content[lineIndex + 1].ob_next = lineIndex + 2;
     wd->content[lineIndex + 1].ob_y = lineIndex * wd->cellHeight;
-    wd->content[lineIndex + 1].ob_spec.free_string = gem_getTestContent(testCase);
-    wd->content[lineIndex + 1].ob_width = (int)strlen(testCase->name) * wd->cellWidth;
+    wd->content[lineIndex + 1].ob_spec.free_string = lineContent;
+    wd->content[lineIndex + 1].ob_width = (int)strlen(lineContent) * wd->cellWidth;
     wd->content[lineIndex + 1].ob_height = wd->cellHeight;
 }
 
 void gem_content(const WinData* wd) {
+	static OBJECT box = {-1, -1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 0, 0 };
+	
 	int i;
 	int numberOfLines;
 	ACU_ListElement* testElement;
-	
-	static OBJECT box = {-1, -1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 0, 0 };
-	
+		
 	numberOfLines = (wd->testList) ? wd->testList->size : 0;
 	wd->content = (OBJECT*) acu_emalloc(sizeof(OBJECT)*(numberOfLines+1));
 	
@@ -96,9 +97,10 @@ void gem_content(const WinData* wd) {
 	}
 	if (numberOfLines > 0) {
 		wd->content[0].ob_head = 1;
+		wd->content[0].ob_tail = numberOfLines;
 	}
 	wd->content[numberOfLines].ob_next = -1;
-	wd->content[numberOfLines].ob_flags = NONE | LASTOB;
+	wd->content[numberOfLines].ob_flags |= LASTOB;
 		
 	wd->linesShown = numberOfLines;
 
