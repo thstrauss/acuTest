@@ -75,13 +75,17 @@ The of `acu_entr.c` is the same as for the windows plug-in.
 The linker creates an executable with the start code `plgstart.s`. The start code is executed when 
 the plug-in is loaded by `curunner.ttp`.
 
-#### Start Generic Runner
+#### Start Generic TOS Runner
 
 ```cmd
 curunner cutscup.cup
 ```
 
 The runner starts and execute the given plug-in. Output is going to the console. The `curunner` return `0` on success and `2` when any test fails.
+
+#### Start Generic GEM-Runner
+
+There is a GEM-Runner `gemrunnr.prg` implemented. In the moment it just have a load and execute item. More to come.
 
 ## Demo
 

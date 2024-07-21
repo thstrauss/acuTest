@@ -28,6 +28,7 @@
 #include "acu_fxtr.h"
 #include "acu_list.h"
 
+ /* The ACU_Suite allows to group ACU_TestFixtures. */
 typedef struct ACU_Suite_ {
     ACU_List* testFixtures;
     char* name;

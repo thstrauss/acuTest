@@ -30,6 +30,7 @@ struct ACU_Result_;
 
 typedef void ACU_TestFunc(ACU_ExecuteEnv* environment, const void* context);
 
+/* Defines the individual test cases.*/
 typedef struct ACU_TestCase_ {
     ACU_TestFunc* testFunc;
     char* name;

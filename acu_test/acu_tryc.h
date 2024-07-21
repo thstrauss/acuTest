@@ -47,12 +47,19 @@
 #include <setjmp.h>
 #include "acu_stck.h"
 
+/*
+This abstraction allows nested exceptions.
+*/
+
+/* Defines the values for the exception handling. */
 typedef enum ACU_Exception_ {
+    /* No exception thrown. */
     ACU_EXCEPTION_NONE = 0,
     ACU_EXCEPTION_ABORTED = 0xFFFE,
     ACU_EXCEPTION_DEFAULT = 0xFFFF,
 } ACU_Exception;
 
+/* Defines the frame stack. */
 typedef struct ACU_Frame_ {
     jmp_buf exceptionBuf;
     int exception;

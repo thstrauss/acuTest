@@ -33,6 +33,7 @@
 struct ACU_List_;
 struct ACU_Suite_;
 
+/* The ACU_Fixture allows to group ACU_TestCase's. */
 typedef struct ACU_Fixture_ {
     const char* name;
     const void* context;
