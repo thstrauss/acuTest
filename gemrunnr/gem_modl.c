@@ -193,17 +193,81 @@ void gem_selectFile(const WinData* wd) {
     }
 }
 
+
 static size_t nullHandler(const char* buffer) {
 	return strlen(buffer);
 }
 
+static OBJECT progressBarTemplate[] = {
+	{ -1, 1, 3, G_BOX, 0x0400, OUTLINED, 0x21100L, 0,0, 29,5 },
+	{ 3, 2, 2, G_BOX, NONE, NORMAL, 0xFF1101L, 2,3, 25,1 }, /* PROGRESSBAR */
+	{ 1, -1, -1, G_BOX, NONE, NORMAL, 0xFF1121L, 0,0, 7,1 },
+	{ 0, -1, -1, G_STRING, LASTOB, NORMAL, 0, 2,1, 25,1 } /* TESTNAME */
+};
+
+static OBJECT* progressBar = NULL;
+static int x, y, w, h;
+
+static void gem_showProgress(const WinData* wd) {
+
+	int i;
+	progressBar = acu_emalloc(sizeof(progressBarTemplate));
+	memcpy(progressBar, progressBarTemplate, sizeof(progressBarTemplate));
+	
+	for (i=0; i < 4; i++) {
+		progressBar[i].ob_x *= wd->cellWidth;
+		progressBar[i].ob_y *= wd->cellHeight;
+		progressBar[i].ob_width *= wd->cellWidth;
+		progressBar[i].ob_height *= wd->cellHeight;
+	}
+	progressBar[3].ob_spec.free_string = acu_estrdup("");
+	progressBar[2].ob_width = 0;
+	
+	form_center(progressBar, &x, &y, &w, &h);
+	form_dial(FMD_START, x,y,w,h,x,y,w,h);
+	objc_draw(progressBar, 0, 8, x, y, w, h);
+}
+
+static void gem_hideProgress(const WinData* wd) {
+	form_dial(FMD_FINISH, x,y,w,h,x,y,w,h);
+}
+
+typedef struct GemProgress_ {
+	const WinData* wd;
+	int testNumber;
+} GemProgress;
+
+static void progressFunc(const ACU_TestCase* testCase, void* progressContext) {
+	char* buffer = acu_emalloc(256);
+	GemProgress* progress = (GemProgress*) progressContext;
+	long pos=0;
+	
+	progress->testNumber++;
+	free(progressBar[3].ob_spec.free_string);
+	acu_sprintf_s(buffer, 256, "%s" , testCase->name);
+	progressBar[3].ob_spec.free_string = buffer;
+	pos = (progress->testNumber * progressBar[1].ob_width) / progress->wd->linesShown;
+	progressBar[2].ob_width = (int) pos;
+	objc_draw(progressBar, 0, 8, x, y, w, h); 	
+}
+
 void gem_execute(const WinData* wd) {
+	ACU_Progress progress = {progressFunc, NULL};
+	GemProgress gemProgress;
+		
+	gemProgress.wd = wd;
+	gemProgress.testNumber = 0;
+	
+	progress.context = &gemProgress;
+
 	acu_setWriteHandler(nullHandler);
 	if (wd->entry) {
         graf_mouse(BUSYBEE, 0L);
-		acu_entryExecute(wd->entry, NULL);
+        gem_showProgress(wd);
+		acu_entryExecute(wd->entry, &progress);
         gem_freeContent(wd);
         gem_content(wd);
+        gem_hideProgress(wd);
         gem_triggerRedraw(wd);
         graf_mouse(ARROW, 0L);
     } else {

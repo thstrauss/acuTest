@@ -30,6 +30,8 @@
 
 void gem_getWorkingRect(const WinData* wd, GRECT* rect);
 
+void gem_triggerRedrawDesktop(const WinData* wd);
+
 void gem_triggerRedraw(const WinData* wd);
 void gem_triggerRedrawRect(const WinData* wd, GRECT* rect);
 

@@ -24,6 +24,26 @@
 #include "gem_util.h"
 #include "gem_modl.h"
 
+#include <stdio.h>
+
+void gem_triggerRedrawDesktop(const WinData* wd) {
+	GRECT rect;
+ 	unsigned int message[8];
+	int ap_id = appl_find("SCRENMGR");
+
+	wind_get(0, WF_WORKXYWH, &rect.g_x, &rect.g_y, &rect.g_w, &rect.g_h);
+
+ 	message[0] = WM_REDRAW;
+ 	message[1] = wd->applId;
+ 	message[2] = 0;
+ 	message[3] = 0;
+ 	message[4] = rect.g_x;
+ 	message[5] = rect.g_y;
+ 	message[6] = rect.g_w;
+ 	message[7] = rect.g_h;
+ 	appl_write(ap_id, (int) sizeof(message), &message);
+}
+
 void gem_getWorkingRect(const WinData* wd, GRECT* rect) {
 	wind_get(wd->windowHandle, WF_WORKXYWH, &rect->g_x, &rect->g_y, &rect->g_w, &rect->g_h);
 }
