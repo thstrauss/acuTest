@@ -176,7 +176,7 @@ __IMPORT extern ACU_Funcs acu_containsStrFuncs;
 __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
 #endif
 
-#define ACU_PtrPrepareParameter(type, actualValue, expectedValue, messageValue, __assertFunc) \
+#define ACU_PtrPrepareParameter(actualValue, expectedValue, messageValue, __assertFunc) \
     ACU_AssertParameter parameter; \
     parameter.funcs = &##__assertFunc##Funcs; \
     parameter.actual = (actualValue); \
@@ -192,7 +192,7 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
 * messageValue: Describes the assert.
 */
 #define ACU_assert_ptrEqual(environment, actualValue, expectedValue, messageValue) {\
-    ACU_PtrPrepareParameter(type, actualValue, expectedValue, messageValue, acu_equalPtr) \
+    ACU_PtrPrepareParameter(actualValue, expectedValue, messageValue, acu_equalPtr) \
     acu_assert(environment, &parameter); \
 }
 
@@ -203,7 +203,7 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
 * messageValue: Describes the assert.
 */
 #define ACU_assert_ptrIsNull(environment, actualValue, messageValue) {\
-    ACU_PtrPrepareParameter(type, actualValue, NULL, messageValue, acu_equalPtr) \
+    ACU_PtrPrepareParameter(actualValue, NULL, messageValue, acu_equalPtr) \
     acu_assert(environment, &parameter); \
 }
 
@@ -214,7 +214,7 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
 * messageValue: Describes the assert.
 */
 #define ACU_assert_ptrNotEqual(environment, actualValue, expectedValue, messageValue) {\
-    ACU_PtrPrepareParameter(type, actualValue, expectedValue, messageValue, acu_notEqualPtr) \
+    ACU_PtrPrepareParameter(actualValue, expectedValue, messageValue, acu_notEqualPtr) \
     acu_assert(environment, &parameter); \
 }
 
@@ -225,18 +225,12 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
 * messageValue: Describes the assert.
 */
 #define ACU_assert_ptrIsNotNull(environment, actualValue, messageValue) {\
-    ACU_PtrPrepareParameter(type, actualValue, NULL, messageValue, acu_notEqualPtr) \
+    ACU_PtrPrepareParameter(actualValue, NULL, messageValue, acu_notEqualPtr) \
     acu_assert(environment, &parameter); \
 }
 
 #define __ACU_assert_str(environment, actualValue, expectedValue, messageValue, assertFunc) { \
-    ACU_AssertParameter parameter; \
-    parameter.funcs = &##assertFunc##Funcs; \
-    parameter.actual = (actualValue); \
-    parameter.expected = (expectedValue); \
-    parameter.message = (messageValue); \
-    parameter.sourceFileName = __FILE__; \
-    parameter.sourceLine = __LINE__; \
+    ACU_PtrPrepareParameter(actualValue, expectedValue, messageValue, assertFunc) \
     acu_assert(environment, &parameter); \
 }
 

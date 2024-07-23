@@ -48,7 +48,5 @@ void acuTest_resultInit(ACU_Result* result) {
     result->status = ACU_TEST_PASSED;
     result->message = NULL;
     result->sourceFileName = NULL;
-    result->sourceLine = -1;
     result->start = clock();
-    result->end = (clock_t)(-1);
 }
