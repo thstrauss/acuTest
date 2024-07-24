@@ -33,8 +33,9 @@ pcstart.o
 
 main.c (gem_modl.h, gemrunnr.h)
 rsc.c (gemrunnr.h, gemrunnr.rsh) [-A-]
-gem_modl.c (gem_modl.h)
+gem_modl.c (gem_modl.h, g_progrs.h)
 gem_util.c (gem_util.h)
+g_progrs.c (g_progrs.h)
 
 ..\acu_util\acu_util.prj
 ..\acu_test\acu_test.prj
