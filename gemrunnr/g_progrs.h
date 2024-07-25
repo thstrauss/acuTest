@@ -19,13 +19,22 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
- #ifndef __gem_progress__
- #define __gem_progress__
+#ifndef __gem_progress__
+#define __gem_progress__
+
+#include <aes.h>
 
 typedef struct Gem_ProgressBar_ {
-    OBJECT* progressBar;
+    OBJECT* barObject;
     int x, y, w, h;
-
 } Gem_ProgressBar;
+
+Gem_ProgressBar* gem_mallocProgressBar(void);
+
+void gem_freeProgressBar(const Gem_ProgressBar* progressBar);
+void gem_initProgressBar(const Gem_ProgressBar* progressBar, int cellWidth, int cellHeight);
+void gem_showProgressBar(const Gem_ProgressBar* progressBar);
+void gem_hideProgressBar(const Gem_ProgressBar* progressBar);
+void gem_updateProgressBar(const Gem_ProgressBar* progressBar, double percent, const char* info);
 
  #endif
