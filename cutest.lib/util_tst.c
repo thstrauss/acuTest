@@ -21,6 +21,7 @@
 
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <acu_fxtr.h>
 #include <acu_asrt.h>
@@ -89,6 +90,22 @@ static void programNameTest(ACU_ExecuteEnv* environment, const void* context) {
         UNUSED(context);
 }
 
+static void ellipsisTest(ACU_ExecuteEnv* environment, const void* context) {
+
+    char* ellipsisString1 = acu_ellipsisString("abcdefghijklmnopqrstuvwxyz", 11);
+    char* ellipsisString2 = acu_ellipsisString("abcdefghijklmnopqrstuvwxyz", 12);
+    char* ellipsisString3 = acu_ellipsisString("abcdefghijklmnopqrstuvwxyz", 2);
+
+    printf("abcdefghijklmnopqrstuvwxyz = %s\n\r", ellipsisString1);
+    printf("abcdefghijklmnopqrstuvwxyz = %s\n\r", ellipsisString2);
+    printf("abcdefghijklmnopqrstuvwxyz = %s\n\r", ellipsisString3);
+
+    free(ellipsisString1);
+    free(ellipsisString2);
+    free(ellipsisString3);
+    UNUSED(context);
+}
+
 
 ACU_Fixture* utilFixture(void)
 {
@@ -98,6 +115,7 @@ ACU_Fixture* utilFixture(void)
     acu_fixtureAddTestCase(fixture, "error Handler", errorHandlerTest);
     acu_fixtureAddTestCase(fixture, "warning Handler", warningErrorHandlerTest);
     acu_fixtureAddTestCase(fixture, "program Name", programNameTest);
+    acu_fixtureAddTestCase(fixture, "ellipsis", ellipsisTest);
 
     return fixture;
 }
