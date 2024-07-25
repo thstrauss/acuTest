@@ -122,28 +122,3 @@ void* acu_emalloc(size_t size) {
     return p;
 }
 
-__EXPORT char* acu_ellipsisString(const char* s, int width)
-{
-    size_t length = strlen(s);
-    if (length <= width) {
-        return acu_estrdup(s);
-    } else if (width < 3) {
-        char* buffer = acu_emalloc(width+1);
-        strncpy_s(buffer, width+1, "...", width);
-        buffer[width] = '\0';
-        return buffer;
-    } else {
-        char* buffer = acu_emalloc(width + 1);
-        int remainderEnd = (width - 3) / 2;
-        int remainderStart = width - remainderEnd - 3;
-        char* bufferPtr = buffer;
-
-        strncpy_s(bufferPtr, remainderStart +1, s, remainderStart);
-        bufferPtr += remainderStart;
-        strncpy_s(bufferPtr, 3+1, "...", 3);
-        bufferPtr += 3;
-        strncpy_s(bufferPtr, remainderEnd +1, s+(length- remainderEnd), remainderEnd);
-
-        return buffer;
-    }
-}

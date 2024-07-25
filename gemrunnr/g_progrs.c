@@ -92,7 +92,7 @@ void gem_updateProgressBar(const Gem_ProgressBar* progressBar, int percent, cons
         yOffset + progressBar->barObject[1].ob_y,
         barObject->ob_width,
         barObject->ob_height);
-    progressBar->barObject[4].ob_spec.free_string = acu_estrdup(info);
+    progressBar->barObject[4].ob_spec.free_string = acu_ellipsisString(info, 25);
     objc_draw(progressBar->barObject, 3, 2,
         xOffset + infoBoxObject->ob_x,
         yOffset + infoBoxObject->ob_y,

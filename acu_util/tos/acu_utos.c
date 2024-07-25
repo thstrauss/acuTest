@@ -68,3 +68,32 @@ char* acu_estrdup(const char* s) {
     }
     return temp;
 }
+
+char* acu_ellipsisString(const char* s, int width)
+{
+    size_t length = strlen(s);
+    if (length <= width) {
+        return acu_estrdup(s);
+    }
+    else if (width < 3) {
+        char* buffer = acu_emalloc(width + 1);
+        strncpy(buffer, "...", width);
+        buffer[width] = '\0';
+        return buffer;
+    }
+    else {
+        char* buffer = acu_emalloc(width + 1);
+        int remainderEnd = (width - 3) / 2;
+        int remainderStart = width - remainderEnd - 3;
+        char* bufferPtr = buffer;
+
+        strncpy(bufferPtr, s, remainderStart);
+        bufferPtr += remainderStart;
+        strncpy(bufferPtr, "...", 3);
+        bufferPtr += 3;
+        strncpy(bufferPtr, s + (length - remainderEnd), remainderEnd);
+		buffer[width]='\0';
+
+        return buffer;
+    }
+}
