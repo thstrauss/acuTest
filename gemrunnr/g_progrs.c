@@ -40,7 +40,7 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, int cellWidth, int 
         { -1, 1, 3, G_BOX, 0x0400, OUTLINED, 0x21100L, 0,0, 29,5 },
         { 3, 2, 2, G_BOX, NONE, NORMAL, 0xFF1101L, 2,3, 25,1 }, /* PROGRESSBAR */
         { 1, -1, -1, G_BOX, NONE, NORMAL, 0xFF1121L, 0,0, 7,1 },
-        { 0, 4, 4, G_BOX, NONE, NORMAL, 0xFF1101L, 2,1, 25,1 }, /* TESTNAME */
+        { 0, 4, 4, G_BOX, NONE, NORMAL, 0x1101L, 2,1, 25,1 },
         { 3, -1, -1, G_STRING, LASTOB, NORMAL, 0, 0,0, 25,1 } /* TESTNAME */
     };
 
