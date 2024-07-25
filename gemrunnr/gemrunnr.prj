@@ -42,7 +42,7 @@ g_progrs.c (g_progrs.h)
 ..\cutest.lib\cutest.prj
 cutscup.prj
 
-PCFLTLIB.LIB
+;PCFLTLIB.LIB
 PCSTDLIB.LIB
 PCEXTLIB.LIB
 PCGEMLIB.LIB
