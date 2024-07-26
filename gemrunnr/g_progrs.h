@@ -31,7 +31,7 @@ typedef struct Gem_ProgressBar_ {
     int clipX, clipY, clipWidth, clipHeight;
     int barX, barY;
     int infoX, infoY;
-    int progressBarWidth;
+    long progressBarWidth;
     char buffer[25];
 } Gem_ProgressBar;
 
@@ -42,6 +42,6 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, int cellWidth, int 
 void gem_showProgressBar(const Gem_ProgressBar* progressBar);
 void gem_hideProgressBar(const Gem_ProgressBar* progressBar);
 void gem_updateProgressBar(const Gem_ProgressBar* progressBar, int position, const char* info);
-int gem_calcProgressBarPosition(const Gem_ProgressBar* progressBar, int value, int maxValue);
+int gem_calcProgressBarPosition(const Gem_ProgressBar* progressBar, long value, long maxValue);
 
  #endif

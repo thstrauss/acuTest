@@ -98,9 +98,9 @@ void gem_updateSliders(const WinData* wd) {
 	linesAvailable = rect.g_h / wd->cellHeight;
 	
 	wind_set(wd->windowHandle, WF_VSLSIZE, 
-		gem_sliderSize(linesAvailable, wd->linesShown), 0, 0, 0);
+		gem_sliderSize(linesAvailable, wd->testModel.linesShown), 0, 0, 0);
 	wind_set(wd->windowHandle, WF_VSLIDE, 
-		gem_sliderPositionN(linesAvailable, wd->linesShown, wd->verticalPositionN), 0, 0, 0);
+		gem_sliderPositionN(linesAvailable, wd->testModel.linesShown, wd->testModel.verticalPositionN), 0, 0, 0);
 }
 
 int gem_rectIntersect(const GRECT* r1, GRECT* r2) {

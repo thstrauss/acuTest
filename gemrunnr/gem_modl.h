@@ -27,14 +27,7 @@
 #include <acu_ldr.h>
 #include <aes.h>
 
-typedef struct WinData_ {
-	int windowHandle;
-	int applId;
-	int grafHandle;
-	
-	int cellWidth;
-	int cellHeight;
-	
+typedef struct TestModel_ {
 	int linesShown;
 	int verticalPositionN;	
 	
@@ -42,10 +35,22 @@ typedef struct WinData_ {
 	ACU_List* testList;
 	char* testFileName;
 	char* testFilePath;
+	
+	OBJECT* content; 
+} TestModel;
+
+typedef struct WinData_ {
+	int windowHandle;
+	int applId;
+	int grafHandle;
+	
+	int cellWidth;
+	int cellHeight;
+
 	char* windowTitle;
 	char* infoLine;
 	
-	OBJECT* content; 
+	TestModel testModel;
 } WinData;
 
 void gem_initWinData(WinData* winData);

@@ -109,6 +109,6 @@ void gem_updateProgressBar(const Gem_ProgressBar* progressBar, int position, con
         progressBar->info->ob_height);
 }
 
-int gem_calcProgressBarPosition(const Gem_ProgressBar* progressBar, int value, int maxValue) {
-	return (int) (((long) value * progressBar->progressBarWidth) / maxValue);
+int gem_calcProgressBarPosition(const Gem_ProgressBar* progressBar, long value, long maxValue) {
+	return (int) ((value * progressBar->progressBarWidth) / maxValue);
 }
