@@ -93,17 +93,15 @@ static void programNameTest(ACU_ExecuteEnv* environment, const void* context) {
 static void ellipsisTest(ACU_ExecuteEnv* environment, const void* context) {
     static char alphabet[] = "abcdefghijklmnopqrstuvwxyz";
 
-    char* ellipsisString1 = acu_ellipsisString(alphabet, 11);
-    char* ellipsisString2 = acu_ellipsisString(alphabet, 12);
-    char* ellipsisString3 = acu_ellipsisString(alphabet, 2);
+    char buffer[60];
 
-    ACU_assert_strEqual(environment, ellipsisString1, "abcd...wxyz", "");
-    ACU_assert_strEqual(environment, ellipsisString2, "abcde...wxyz", "");
-    ACU_assert_strEqual(environment, ellipsisString3, "..", "");
+    acu_ellipsisString(buffer, 60, alphabet, 11);
+    ACU_assert_strEqual(environment, buffer, "abcd...wxyz", "");
+    acu_ellipsisString(buffer, 60, alphabet, 12);
+    ACU_assert_strEqual(environment, buffer, "abcde...wxyz", "");
+    acu_ellipsisString(buffer, 60, alphabet, 2);
+    ACU_assert_strEqual(environment, buffer, "..", "");
 
-    free(ellipsisString1);
-    free(ellipsisString2);
-    free(ellipsisString3);
     UNUSED(context);
 }
 
