@@ -96,7 +96,7 @@ void gem_updateSliders(const WinData* wd) {
 	
 	gem_getWorkingRect(wd, &rect);
 	
-	linesAvailable = rect.g_h / wd->cellHeight;
+	linesAvailable = rect.g_h / wd->cellSize.height;
 	
 	wind_set(wd->windowHandle, WF_VSLSIZE, 
 		gem_sliderSize(linesAvailable, testModel->linesShown), 0, 0, 0);

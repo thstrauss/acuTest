@@ -27,6 +27,8 @@
 #include <acu_ldr.h>
 #include <aes.h>
 
+#include "g_window.h"
+
 typedef struct TestModel_ {
 	int linesShown;
 	int verticalPositionN;	
@@ -39,21 +41,6 @@ typedef struct TestModel_ {
 	OBJECT* content; 
 } TestModel;
 
-typedef struct WinData_ {
-	int windowHandle;
-	int applId;
-	int grafHandle;
-	
-	int cellWidth;
-	int cellHeight;
-
-	char* windowTitle;
-	char* infoLine;
-	
-	void* viewModel;
-} WinData;
-
-void gem_initWinData(WinData* winData);
 
 void gem_selectFile(const WinData* wd);
 
@@ -62,5 +49,9 @@ void gem_execute(const WinData* wd);
 void gem_setViewModel(const WinData* wd, const void* viewModel);
 
 TestModel* gem_getTestModel(const WinData* wd);
+
+void gem_initTestModel(TestModel* testModel);
+
+void gem_content(const CellSize* cellSize, const TestModel* testModel);
 
 #endif

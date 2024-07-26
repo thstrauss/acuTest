@@ -63,19 +63,19 @@ static char* gem_getTestContent(const ACU_TestCase* testCase) {
     return buffer;
 }
 
-static void gem_contentLine(const WinData* wd, TestModel* testModel, const ACU_TestCase* testCase, int lineIndex) {
+static void gem_contentLine(const CellSize* cellSize, const TestModel* testModel, const ACU_TestCase* testCase, int lineIndex) {
     static OBJECT line = { -1, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 0, 0 };
     char* lineContent = gem_getTestContent(testCase);
     
     memcpy(&testModel->content[lineIndex + 1], &line, sizeof(OBJECT));
     testModel->content[lineIndex + 1].ob_next = lineIndex + 2;
-    testModel->content[lineIndex + 1].ob_y = lineIndex * wd->cellHeight;
+    testModel->content[lineIndex + 1].ob_y = lineIndex * cellSize->height;
     testModel->content[lineIndex + 1].ob_spec.free_string = lineContent;
-    testModel->content[lineIndex + 1].ob_width = (int)strlen(lineContent) * wd->cellWidth;
-    testModel->content[lineIndex + 1].ob_height = wd->cellHeight;
+    testModel->content[lineIndex + 1].ob_width = (int)strlen(lineContent) * cellSize->width;
+    testModel->content[lineIndex + 1].ob_height = cellSize->height;
 }
 
-static void gem_content(const WinData* wd,  TestModel* testModel) {
+void gem_content(const CellSize* cellSize, const TestModel* testModel) {
     static OBJECT box = {-1, -1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 0, 0 };
     
     int i;
@@ -86,13 +86,13 @@ static void gem_content(const WinData* wd,  TestModel* testModel) {
     testModel->content = (OBJECT*) acu_emalloc(sizeof(OBJECT)*(numberOfLines+1));
     
     memcpy(&testModel->content[0], &box, sizeof(OBJECT));
-    testModel->content[0].ob_width = 80 * wd->cellWidth;
-    testModel->content[0].ob_height = numberOfLines * wd->cellHeight;
+    testModel->content[0].ob_width = 80 * cellSize->width;
+    testModel->content[0].ob_height = numberOfLines * cellSize->height;
     if (testModel->testList) {
         testElement = acu_listHead(testModel->testList);
     }
     for (i=0; i<numberOfLines; i++) {
-        gem_contentLine(wd, testModel, (ACU_TestCase*)testElement->data, i);
+        gem_contentLine(cellSize, testModel, (ACU_TestCase*)testElement->data, i);
         testElement = acu_listNext(testElement);
     }
     if (numberOfLines > 0) {
@@ -103,18 +103,6 @@ static void gem_content(const WinData* wd,  TestModel* testModel) {
     testModel->content[numberOfLines].ob_flags |= LASTOB;
         
     testModel->linesShown = numberOfLines;
-}
-
-
-void gem_initWinData(WinData* wd) {
-    wd->infoLine = NULL;
-    wd->windowTitle = NULL;
-    
-    gem_setViewModel(wd, acu_emalloc(sizeof(TestModel)));
-    
-    gem_initTestModel(gem_getTestModel(wd));
-    
-    gem_content(wd, gem_getTestModel(wd));
 }
 
 static void gem_setInfoLine(const WinData* wd) {
@@ -201,7 +189,7 @@ void gem_selectFile(const WinData* wd) {
             gem_setWindowTitle(wd);
             gem_collectTestCases(testModel);
         }
-        gem_content(wd, testModel);
+        gem_content(&wd->cellSize, testModel);
         gem_triggerRedraw(wd);
         graf_mouse(ARROW, 0L);
     }
@@ -230,7 +218,7 @@ void gem_execute(const WinData* wd) {
     Gem_ProgressBar* bar = gem_mallocProgressBar();
     TestModel* testModel = gem_getTestModel(wd);
 
-    gem_initProgressBar(bar, wd->cellWidth, wd->cellHeight);
+    gem_initProgressBar(bar, wd->cellSize.width, wd->cellSize.height);
 
     gemProgress.bar = bar;
     gemProgress.testNumber = 0;
@@ -244,7 +232,7 @@ void gem_execute(const WinData* wd) {
         gem_showProgressBar(bar);
         acu_entryExecute(testModel->entry, &progress);
         gem_freeContent(testModel);
-        gem_content(wd, testModel);
+        gem_content(&wd->cellSize, testModel);
         gem_hideProgressBar(bar);
         gem_triggerRedraw(wd);
         graf_mouse(ARROW, 0L);

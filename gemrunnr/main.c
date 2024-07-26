@@ -45,7 +45,7 @@ void open_vwork(const WinData* wd) {
     int dummy;
     int i;
 
-    wd->grafHandle = graf_handle(&wd->cellWidth, &wd->cellHeight, &dummy, &dummy);
+    wd->grafHandle = graf_handle(&wd->cellSize.width, &wd->cellSize.height, &dummy, &dummy);
     
     work_in[0] = 2 + Getrez();
     for (i = 1; i < 10; i++) {
@@ -70,7 +70,7 @@ void drawContent(const WinData* wd, const GRECT* clippingRect, const GRECT* work
 	TestModel* testModel = gem_getTestModel(wd);
 
     testModel->content[0].ob_x = workingRect->g_x;
-    testModel->content[0].ob_y = workingRect->g_y - testModel->verticalPositionN * wd->cellHeight;
+    testModel->content[0].ob_y = workingRect->g_y - testModel->verticalPositionN * wd->cellSize.height;
     
     objc_draw(testModel->content, 0, 7, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
 }
@@ -148,7 +148,7 @@ void doVerticalSlide(const WinData* wd, int verticalPositionN) {
     TestModel* testModel = gem_getTestModel(wd);
 
     gem_getWorkingRect(wd, &rect);
-    linesAvailable = rect.g_h / wd->cellHeight;
+    linesAvailable = rect.g_h / wd->cellSize.height;
     testModel->verticalPositionN = (int) ((verticalPositionN * (long) (testModel->linesShown - linesAvailable)) / 1000);
     if (testModel->verticalPositionN < 0) {
         testModel->verticalPositionN = 0;
@@ -165,7 +165,7 @@ void doPageUpDown(const WinData* wd, int arrow) {
     TestModel* testModel = gem_getTestModel(wd);
 
     gem_getWorkingRect(wd, &rect);
-    linesAvailable = rect.g_h / wd->cellHeight;
+    linesAvailable = rect.g_h / wd->cellSize.height;
     if (arrow == WA_UPPAGE) {
         if (testModel->verticalPositionN == 0) {
             return;
@@ -197,7 +197,7 @@ void doDownLine(const WinData* wd) {
     TestModel* testModel = gem_getTestModel(wd);
     
     gem_getWorkingRect(wd, &rect);
-    linesAvailable = rect.g_h / wd->cellHeight;
+    linesAvailable = rect.g_h / wd->cellSize.height;
     
     if (testModel->verticalPositionN >= testModel->linesShown - linesAvailable) {
         return;
@@ -217,21 +217,21 @@ void doDownLine(const WinData* wd) {
     destination.fd_addr = 0L;
     
     pxy[0] = rect.g_x;
-    pxy[1] = rect.g_y + wd->cellHeight + 1;
+    pxy[1] = rect.g_y + wd->cellSize.height + 1;
     pxy[2] = rect.g_x + rect.g_w;
     pxy[3] = rect.g_y + rect.g_h - 1;
     pxy[4] = rect.g_x;
     pxy[5] = rect.g_y + 1;
     pxy[6] = rect.g_x + rect.g_w;
-    pxy[7] = rect.g_y + rect.g_h - wd->cellHeight - 1;
+    pxy[7] = rect.g_y + rect.g_h - wd->cellSize.height - 1;
     
     vro_cpyfm(wd->applId, S_ONLY, pxy, &source, &destination);
     
     graf_mouse(M_ON, 0L);
     setClip(wd, &rect, 0);
     
-    rect.g_y = rect.g_y + rect.g_h - 2 * wd->cellHeight;
-    rect.g_h = 2 * wd->cellHeight;
+    rect.g_y = rect.g_y + rect.g_h - 2 * wd->cellSize.height;
+    rect.g_h = 2 * wd->cellSize.height;
     gem_triggerRedrawRect(wd, &rect);
 }
 
@@ -259,9 +259,9 @@ void doUpLine(const WinData* wd) {
     pxy[0] = rect.g_x;
     pxy[1] = rect.g_y + 1;
     pxy[2] = rect.g_x + rect.g_w;
-    pxy[3] = rect.g_y + rect.g_h - wd->cellHeight - 1;
+    pxy[3] = rect.g_y + rect.g_h - wd->cellSize.height - 1;
     pxy[4] = rect.g_x;
-    pxy[5] = rect.g_y + wd->cellHeight + 1;
+    pxy[5] = rect.g_y + wd->cellSize.height + 1;
     pxy[6] = rect.g_x + rect.g_w;
     pxy[7] = rect.g_y + rect.g_h - 1;
     
@@ -270,7 +270,7 @@ void doUpLine(const WinData* wd) {
     graf_mouse(M_ON, 0L);
     setClip(wd, &rect, 0);
     
-    rect.g_h = 2 * wd->cellHeight;
+    rect.g_h = 2 * wd->cellSize.height;
     gem_triggerRedrawRect(wd, &rect);
 }
 
@@ -406,8 +406,15 @@ int startProgram(WinData* wd) {
     int fullx, fully, fullw, fullh;
     
     gem_initWinData(wd);
+
+    gem_setViewModel(wd, acu_emalloc(sizeof(TestModel)));
+
+    gem_initTestModel(gem_getTestModel(wd));
+
+    gem_content(&wd->cellSize, gem_getTestModel(wd));
+
     
-    if (gemrunnr_rsc_load(wd->cellWidth, wd->cellHeight) == 0) {
+    if (gemrunnr_rsc_load(wd->cellSize.width, wd->cellSize.height) == 0) {
         form_alert(1, "[3][Could not load rsc][ Exit ]");
         return 2;
     } else {

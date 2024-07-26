@@ -18,3 +18,11 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+#include <stddef.h>
+#include "g_window.h"
+
+void gem_initWinData(WinData* wd) {
+    wd->infoLine = NULL;
+    wd->windowTitle = NULL;
+}
