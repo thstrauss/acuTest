@@ -50,15 +50,17 @@ typedef struct WinData_ {
 	char* windowTitle;
 	char* infoLine;
 	
-	TestModel testModel;
+	void* viewModel;
 } WinData;
 
 void gem_initWinData(WinData* winData);
 
-void gem_content(const WinData* wd);
-
 void gem_selectFile(const WinData* wd);
 
 void gem_execute(const WinData* wd);
+
+void gem_setViewModel(const WinData* wd, const void* viewModel);
+
+TestModel* gem_getTestModel(const WinData* wd);
 
 #endif

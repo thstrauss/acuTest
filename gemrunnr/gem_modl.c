@@ -35,19 +35,18 @@
 #include "gem_util.h"
 #include "g_progrs.h"
 
-void gem_initWinData(WinData* wd) {
-    wd->testModel.testFileName = NULL;
-    wd->testModel.testFilePath = acu_emalloc(256);
-    wd->infoLine = NULL;
-    wd->windowTitle = NULL;
-    wd->testModel.entry = NULL;
-    wd->testModel.linesShown = 0;
+void gem_initTestModel(TestModel* testModel) {
+    testModel->entry = NULL;
+    testModel->linesShown = 0;
     
-    wd->testModel.content = NULL;
-    
-    strcpy(wd->testModel.testFilePath, "*.cup");
-    gem_content(wd);
+    testModel->content = NULL;
+    testModel->testFileName = NULL;
+    testModel->testFilePath = acu_emalloc(256);
+    testModel->testList = NULL;
+
+    strcpy(testModel->testFilePath, "*.cup");
 }
+
 
 static char* gem_getTestContent(const ACU_TestCase* testCase) {
     size_t bufferSize; 
@@ -64,47 +63,58 @@ static char* gem_getTestContent(const ACU_TestCase* testCase) {
     return buffer;
 }
 
-static void gem_contentLine(const WinData* wd, const ACU_TestCase* testCase, int lineIndex) {
+static void gem_contentLine(const WinData* wd, TestModel* testModel, const ACU_TestCase* testCase, int lineIndex) {
     static OBJECT line = { -1, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 0, 0 };
     char* lineContent = gem_getTestContent(testCase);
     
-    memcpy(&wd->testModel.content[lineIndex + 1], &line, sizeof(OBJECT));
-    wd->testModel.content[lineIndex + 1].ob_next = lineIndex + 2;
-    wd->testModel.content[lineIndex + 1].ob_y = lineIndex * wd->cellHeight;
-    wd->testModel.content[lineIndex + 1].ob_spec.free_string = lineContent;
-    wd->testModel.content[lineIndex + 1].ob_width = (int)strlen(lineContent) * wd->cellWidth;
-    wd->testModel.content[lineIndex + 1].ob_height = wd->cellHeight;
+    memcpy(&testModel->content[lineIndex + 1], &line, sizeof(OBJECT));
+    testModel->content[lineIndex + 1].ob_next = lineIndex + 2;
+    testModel->content[lineIndex + 1].ob_y = lineIndex * wd->cellHeight;
+    testModel->content[lineIndex + 1].ob_spec.free_string = lineContent;
+    testModel->content[lineIndex + 1].ob_width = (int)strlen(lineContent) * wd->cellWidth;
+    testModel->content[lineIndex + 1].ob_height = wd->cellHeight;
 }
 
-void gem_content(const WinData* wd) {
+static void gem_content(const WinData* wd,  TestModel* testModel) {
     static OBJECT box = {-1, -1, -1, G_BOX, NONE, NORMAL, 0, 0, 0, 0, 0 };
     
     int i;
     int numberOfLines;
     ACU_ListElement* testElement;
         
-    numberOfLines = (wd->testModel.testList) ? wd->testModel.testList->size : 0;
-    wd->testModel.content = (OBJECT*) acu_emalloc(sizeof(OBJECT)*(numberOfLines+1));
+    numberOfLines = (testModel->testList) ? testModel->testList->size : 0;
+    testModel->content = (OBJECT*) acu_emalloc(sizeof(OBJECT)*(numberOfLines+1));
     
-    memcpy(&wd->testModel.content[0], &box, sizeof(OBJECT));
-    wd->testModel.content[0].ob_width = 80 * wd->cellWidth;
-    wd->testModel.content[0].ob_height = numberOfLines * wd->cellHeight;
-    if (wd->testModel.testList) {
-        testElement = acu_listHead(wd->testModel.testList);
+    memcpy(&testModel->content[0], &box, sizeof(OBJECT));
+    testModel->content[0].ob_width = 80 * wd->cellWidth;
+    testModel->content[0].ob_height = numberOfLines * wd->cellHeight;
+    if (testModel->testList) {
+        testElement = acu_listHead(testModel->testList);
     }
     for (i=0; i<numberOfLines; i++) {
-        gem_contentLine(wd, (ACU_TestCase*)testElement->data, i);
+        gem_contentLine(wd, testModel, (ACU_TestCase*)testElement->data, i);
         testElement = acu_listNext(testElement);
     }
     if (numberOfLines > 0) {
-        wd->testModel.content[0].ob_head = 1;
-        wd->testModel.content[0].ob_tail = numberOfLines;
+        testModel->content[0].ob_head = 1;
+        testModel->content[0].ob_tail = numberOfLines;
     }
-    wd->testModel.content[numberOfLines].ob_next = -1;
-    wd->testModel.content[numberOfLines].ob_flags |= LASTOB;
+    testModel->content[numberOfLines].ob_next = -1;
+    testModel->content[numberOfLines].ob_flags |= LASTOB;
         
-    wd->testModel.linesShown = numberOfLines;
+    testModel->linesShown = numberOfLines;
+}
 
+
+void gem_initWinData(WinData* wd) {
+    wd->infoLine = NULL;
+    wd->windowTitle = NULL;
+    
+    gem_setViewModel(wd, acu_emalloc(sizeof(TestModel)));
+    
+    gem_initTestModel(gem_getTestModel(wd));
+    
+    gem_content(wd, gem_getTestModel(wd));
 }
 
 static void gem_setInfoLine(const WinData* wd) {
@@ -112,7 +122,7 @@ static void gem_setInfoLine(const WinData* wd) {
     ACU_Count count = {0,0, {NULL, NULL}};
     counter.context = (void*)&count;
 
-    acu_suiteAccept(wd->testModel.entry->suite, &counter);
+    acu_suiteAccept(gem_getTestModel(wd)->entry->suite, &counter);
 
     if (wd->infoLine) {
         free(wd->infoLine);
@@ -124,71 +134,74 @@ static void gem_setInfoLine(const WinData* wd) {
 }
 
 static void gem_setWindowTitle(const WinData* wd) {
+	TestModel* testModel;
     if (wd->windowTitle) {
         free(wd->windowTitle);
     }
     wd->windowTitle = acu_emalloc(270);
-    sprintf(wd->windowTitle, "GEM Runner: %s\\%s", acu_getPath(wd->testModel.testFilePath), wd->testModel.testFileName);
+    testModel = gem_getTestModel(wd);
+    sprintf(wd->windowTitle, "GEM Runner: %s\\%s", acu_getPath(testModel->testFilePath), testModel->testFileName);
     wind_set(wd->windowHandle, WF_NAME, wd->windowTitle, 0, 0);
 }
 
-void gem_collectTestCases(const WinData* wd){
+static void gem_collectTestCases(const TestModel* testModel){
     ACU_Visitor collect = {acu_collectTestCases, NULL};
     ACU_TestCases testCases;
     
-    wd->testModel.testList = acu_listMalloc();
-    acu_listInit(wd->testModel.testList, (ACU_ListDestroyFunc*) NULL);
+    testModel->testList = acu_listMalloc();
+    acu_listInit(testModel->testList, (ACU_ListDestroyFunc*) NULL);
             
-    testCases.testCases = wd->testModel.testList;
+    testCases.testCases = testModel->testList;
     collect.context = (void*) &testCases;
     
-    acu_suiteAccept(wd->testModel.entry->suite, &collect); 
+    acu_suiteAccept(testModel->entry->suite, &collect); 
 }
 
-static void gem_freeContent(const WinData* wd) {
-    if (wd->testModel.content) {
+static void gem_freeContent(const TestModel* testModel) {
+    if (testModel->content) {
         int i;
-        int numberOfLines = (wd->testModel.testList) ? wd->testModel.testList->size : 0;
+        int numberOfLines = (testModel->testList) ? testModel->testList->size : 0;
         for (i = 0; i < numberOfLines; i++) {
-            free(wd->testModel.content[i + 1].ob_spec.free_string);
+            free(testModel->content[i + 1].ob_spec.free_string);
         }
-        free(wd->testModel.content);
+        free(testModel->content);
     }
 }
 
 void gem_selectFile(const WinData* wd) {
     char buf[256];
     int button;
+    TestModel* testModel = gem_getTestModel(wd);
 
-    if (wd->testModel.testFileName) {
-        free(wd->testModel.testFileName);
-        wd->testModel.testFileName = NULL;
+    if (testModel->testFileName) {
+        free(testModel->testFileName);
+        testModel->testFileName = NULL;
     }
     buf[0] = '\0';
-    fsel_exinput(wd->testModel.testFilePath, buf, &button, "Select test");
+    fsel_exinput(testModel->testFilePath, buf, &button, "Select test");
     if (button == 1) {
         graf_mouse(BUSYBEE, 0L);
 
-        gem_freeContent(wd);
-        if (wd->testModel.testList) {
-            acu_listDestroy(wd->testModel.testList);
-            free(wd->testModel.testList);
-            wd->testModel.testList = NULL;
+        gem_freeContent(testModel);
+        if (testModel->testList) {
+            acu_listDestroy(testModel->testList);
+            free(testModel->testList);
+            testModel->testList = NULL;
         }
 
-        if (wd->testModel.entry) {
-            cup_unload(wd->testModel.entry);
-            wd->testModel.entry = NULL;
+        if (testModel->entry) {
+            cup_unload(testModel->entry);
+            testModel->entry = NULL;
         }
         
-        wd->testModel.entry = cup_load(buf);
-        if (wd->testModel.entry) {
-            wd->testModel.testFileName = acu_estrdup(buf);
+        testModel->entry = cup_load(buf);
+        if (testModel->entry) {
+            testModel->testFileName = acu_estrdup(buf);
             gem_setInfoLine(wd);
             gem_setWindowTitle(wd);
-            gem_collectTestCases(wd);
+            gem_collectTestCases(testModel);
         }
-        gem_content(wd);
+        gem_content(wd, testModel);
         gem_triggerRedraw(wd);
         graf_mouse(ARROW, 0L);
     }
@@ -215,22 +228,23 @@ void gem_execute(const WinData* wd) {
     ACU_Progress progress = {progressFunc, NULL};
     GemProgress gemProgress;
     Gem_ProgressBar* bar = gem_mallocProgressBar();
+    TestModel* testModel = gem_getTestModel(wd);
 
     gem_initProgressBar(bar, wd->cellWidth, wd->cellHeight);
 
     gemProgress.bar = bar;
     gemProgress.testNumber = 0;
-    gemProgress.totalTestNumber = wd->testModel.linesShown;
+    gemProgress.totalTestNumber = testModel->linesShown;
     
     progress.context = &gemProgress;
 
     acu_setWriteHandler(nullHandler);
-    if (wd->testModel.entry) {
+    if (testModel->entry) {
         graf_mouse(BUSYBEE, 0L);
         gem_showProgressBar(bar);
-        acu_entryExecute(wd->testModel.entry, &progress);
-        gem_freeContent(wd);
-        gem_content(wd);
+        acu_entryExecute(testModel->entry, &progress);
+        gem_freeContent(testModel);
+        gem_content(wd, testModel);
         gem_hideProgressBar(bar);
         gem_triggerRedraw(wd);
         graf_mouse(ARROW, 0L);
@@ -238,4 +252,12 @@ void gem_execute(const WinData* wd) {
         form_alert(1, "[1][Please load test first!][ OK ]");
     }
     gem_freeProgressBar(bar);
+}
+
+void gem_setViewModel(const WinData* wd, const void* viewModel) {
+	wd->viewModel = viewModel;
+}
+
+TestModel* gem_getTestModel(const WinData* wd) {
+	return (TestModel*) wd->viewModel;
 }

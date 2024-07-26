@@ -67,10 +67,12 @@ void setClip(const WinData* wd, const GRECT* rect, int flag) {
 }
 
 void drawContent(const WinData* wd, const GRECT* clippingRect, const GRECT* workingRect) {
-    wd->testModel.content[0].ob_x = workingRect->g_x;
-    wd->testModel.content[0].ob_y = workingRect->g_y - wd->testModel.verticalPositionN * wd->cellHeight;
+	TestModel* testModel = gem_getTestModel(wd);
+
+    testModel->content[0].ob_x = workingRect->g_x;
+    testModel->content[0].ob_y = workingRect->g_y - testModel->verticalPositionN * wd->cellHeight;
     
-    objc_draw(wd->testModel.content, 0, 7, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
+    objc_draw(testModel->content, 0, 7, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
 }
 
 void drawInterior(const WinData* wd, const GRECT* clippingRect) {
@@ -143,12 +145,13 @@ void performFullScreen(const WinData* wd) {
 void doVerticalSlide(const WinData* wd, int verticalPositionN) {
     GRECT rect;
     int linesAvailable;
-    
+    TestModel* testModel = gem_getTestModel(wd);
+
     gem_getWorkingRect(wd, &rect);
     linesAvailable = rect.g_h / wd->cellHeight;
-    wd->testModel.verticalPositionN = (int) ((verticalPositionN * (long) (wd->testModel.linesShown - linesAvailable)) / 1000);
-    if (wd->testModel.verticalPositionN < 0) {
-        wd->testModel.verticalPositionN = 0;
+    testModel->verticalPositionN = (int) ((verticalPositionN * (long) (testModel->linesShown - linesAvailable)) / 1000);
+    if (testModel->verticalPositionN < 0) {
+        testModel->verticalPositionN = 0;
     }
     wind_set(wd->windowHandle, WF_VSLIDE, verticalPositionN, 0, 0, 0);
     
@@ -159,26 +162,27 @@ void doVerticalSlide(const WinData* wd, int verticalPositionN) {
 void doPageUpDown(const WinData* wd, int arrow) {
     int linesAvailable;
     GRECT rect;
-    
+    TestModel* testModel = gem_getTestModel(wd);
+
     gem_getWorkingRect(wd, &rect);
     linesAvailable = rect.g_h / wd->cellHeight;
     if (arrow == WA_UPPAGE) {
-        if (wd->testModel.verticalPositionN == 0) {
+        if (testModel->verticalPositionN == 0) {
             return;
         }
-        wd->testModel.verticalPositionN -= linesAvailable;
+        testModel->verticalPositionN -= linesAvailable;
     } 
     if (arrow == WA_DNPAGE) {
-        if ((linesAvailable > wd->testModel.linesShown && wd->testModel.verticalPositionN == 0) || wd->testModel.verticalPositionN == wd->testModel.linesShown - linesAvailable) {
+        if ((linesAvailable > testModel->linesShown && testModel->verticalPositionN == 0) || testModel->verticalPositionN == testModel->linesShown - linesAvailable) {
             return;
         }
-        wd->testModel.verticalPositionN += linesAvailable;
+        testModel->verticalPositionN += linesAvailable;
     }
-    if (wd->testModel.verticalPositionN < 0 || linesAvailable > wd->testModel.linesShown) {
-        wd->testModel.verticalPositionN = 0;
+    if (testModel->verticalPositionN < 0 || linesAvailable > testModel->linesShown) {
+        testModel->verticalPositionN = 0;
     }
-    if (linesAvailable <= wd->testModel.linesShown && wd->testModel.verticalPositionN > wd->testModel.linesShown - linesAvailable) {
-        wd->testModel.verticalPositionN = wd->testModel.linesShown - linesAvailable;
+    if (linesAvailable <= testModel->linesShown && testModel->verticalPositionN > testModel->linesShown - linesAvailable) {
+        testModel->verticalPositionN = testModel->linesShown - linesAvailable;
     } 
 
     gem_triggerRedraw(wd);
@@ -190,19 +194,20 @@ void doDownLine(const WinData* wd) {
     GRECT rect;
     int pxy[8];
     int linesAvailable;
+    TestModel* testModel = gem_getTestModel(wd);
     
     gem_getWorkingRect(wd, &rect);
     linesAvailable = rect.g_h / wd->cellHeight;
     
-    if (wd->testModel.verticalPositionN >= wd->testModel.linesShown - linesAvailable) {
+    if (testModel->verticalPositionN >= testModel->linesShown - linesAvailable) {
         return;
     }
     
-    wd->testModel.verticalPositionN++;
-    if (wd->testModel.verticalPositionN > linesAvailable && wd->testModel.verticalPositionN > wd->testModel.linesShown - linesAvailable) {
-        wd->testModel.verticalPositionN = wd->testModel.linesShown - linesAvailable;
-    } else if (linesAvailable >= wd->testModel.linesShown) {
-        wd->testModel.verticalPositionN = 0;
+    testModel->verticalPositionN++;
+    if (testModel->verticalPositionN > linesAvailable && testModel->verticalPositionN > testModel->linesShown - linesAvailable) {
+        testModel->verticalPositionN = testModel->linesShown - linesAvailable;
+    } else if (linesAvailable >= testModel->linesShown) {
+        testModel->verticalPositionN = 0;
     }
     
     setClip(wd, &rect, 1);
@@ -235,14 +240,15 @@ void doUpLine(const WinData* wd) {
     MFDB destination;
     GRECT rect;
     int pxy[8];
+    TestModel* testModel = gem_getTestModel(wd);
     
-    if (wd->testModel.verticalPositionN == 0) {
+    if (testModel->verticalPositionN == 0) {
         return;
     }
     gem_getWorkingRect(wd, &rect);
-    wd->testModel.verticalPositionN--;
-    if (wd->testModel.verticalPositionN < 0) {
-        wd->testModel.verticalPositionN = 0;
+    testModel->verticalPositionN--;
+    if (testModel->verticalPositionN < 0) {
+        testModel->verticalPositionN = 0;
     }
     setClip(wd, &rect, 1);
     graf_mouse(M_OFF, 0L);
@@ -379,12 +385,13 @@ void eventLoop(const WinData* wd, OBJECT* menuAddr) {
         }
         if ((eventType & MU_BUTTON)) {
             if (wind_find(event.ev_mmox, event.ev_mmoy) == wd->windowHandle) {
-                int nextObject = objc_find(wd->testModel.content, 0, 7, event.ev_mmox, event.ev_mmoy);
+                TestModel* testModel = gem_getTestModel(wd);
+                int nextObject = objc_find(testModel->content, 0, 7, event.ev_mmox, event.ev_mmoy);
                 if (nextObject != -1) {
                     if (previousObject != -1) {
-                        objc_change(wd->testModel.content, previousObject, 0, 0, 0, 0, 0, NORMAL, 0);					
+                        objc_change(testModel->content, previousObject, 0, 0, 0, 0, 0, NORMAL, 0);					
                     }
-                    objc_change(wd->testModel.content, nextObject, 0, 0, 0, 0, 0, OUTLINED, 0);
+                    objc_change(testModel->content, nextObject, 0, 0, 0, 0, 0, OUTLINED, 0);
                     previousObject = nextObject;
                     gem_triggerRedraw(wd);
                 }
