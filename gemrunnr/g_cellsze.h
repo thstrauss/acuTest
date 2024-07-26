@@ -19,24 +19,12 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __G_WINDOW__
-#define __G_WINDOW__
+#ifndef __G_CELLSIZE__
+#define __G_CELLSIZE__
 
-#include "g_cellsze.h"
+typedef struct CellSize_ {
+    int width;
+    int height;
+} CellSize;
 
-typedef struct WinData_ {
-    int windowHandle;
-    int applId;
-    int grafHandle;
-
-    CellSize cellSize;
-
-    char* windowTitle;
-    char* infoLine;
-
-    void* viewModel;
-} WinData;
-
-void gem_initWinData(WinData* winData);
-
- #endif
+#endif
