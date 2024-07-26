@@ -44,9 +44,13 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, int cellWidth, int 
         { 3, -1, -1, G_STRING, LASTOB, NORMAL, 0, 0,0, 25,1 } /* TESTNAME */
     };
 
+	int xOffset;
+	int yOffset;
     int i;
     progressBar->barObject = acu_emalloc(sizeof(barObjectTemplate));
     memcpy(progressBar->barObject, barObjectTemplate, sizeof(barObjectTemplate));
+    
+    progressBar->buffer[0] = '\0';
     
     for (i=0; i < 5; i++) {
         progressBar->barObject[i].ob_x *= cellWidth;
@@ -55,14 +59,25 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, int cellWidth, int 
         progressBar->barObject[i].ob_height *= cellHeight;
     }
     progressBar->barObject[2].ob_width = 0;
-    progressBar->barObject[4].ob_spec.free_string = acu_estrdup("");
+    progressBar->barObject[4].ob_spec.free_string = progressBar->buffer;
     form_center(progressBar->barObject, 
     	&progressBar->clipX, 
     	&progressBar->clipY, 
     	&progressBar->clipWidth, 
     	&progressBar->clipHeight);
-    progressBar->xOffset = progressBar->barObject[0].ob_x;
-    progressBar->yOffset = progressBar->barObject[0].ob_y;
+    xOffset = progressBar->barObject[0].ob_x;
+    yOffset = progressBar->barObject[0].ob_y;
+    
+    progressBar->bar = &progressBar->barObject[2];
+    progressBar->info = &progressBar->barObject[3];
+    
+    progressBar->barX = xOffset + progressBar->barObject[1].ob_x;
+    progressBar->barY = yOffset + progressBar->barObject[1].ob_y;
+    progressBar->infoX = xOffset + progressBar->info->ob_x;
+    progressBar->infoY = yOffset + progressBar->info->ob_y;
+    
+    progressBar->progressBarWidth = progressBar->barObject[1].ob_width;
+
 }
 
 void gem_showProgressBar(const Gem_ProgressBar* progressBar) {
@@ -78,26 +93,22 @@ void gem_hideProgressBar(const Gem_ProgressBar* progressBar) {
         progressBar->clipX, progressBar->clipY, progressBar->clipWidth, progressBar->clipHeight);
 }
 
-void gem_updateProgressBar(const Gem_ProgressBar* progressBar, double percent, const char* info) {
-    double pos;
-    const int xOffset = progressBar->xOffset;
-    const int yOffset = progressBar->yOffset;
+void gem_updateProgressBar(const Gem_ProgressBar* progressBar, int position, const char* info) {
+    progressBar->bar->ob_width = position;
+    acu_ellipsisString(progressBar->buffer, 25, info, 25);
 
-    OBJECT* barObject = &progressBar->barObject[2];
-    OBJECT* infoBoxObject = &progressBar->barObject[3];
-
-    free(progressBar->barObject[4].ob_spec.free_string);
-    pos = (percent * progressBar->barObject[1].ob_width) / 100.0;
-    barObject->ob_width = (int) pos;
     objc_draw(progressBar->barObject, 2, 1,
-        xOffset + progressBar->barObject[1].ob_x,
-        yOffset + progressBar->barObject[1].ob_y,
-        barObject->ob_width,
-        barObject->ob_height);
-    progressBar->barObject[4].ob_spec.free_string = acu_ellipsisString(info, 25);
+        progressBar->barX,
+		progressBar->barY,
+        progressBar->bar->ob_width,
+        progressBar->bar->ob_height);
     objc_draw(progressBar->barObject, 3, 2,
-        xOffset + infoBoxObject->ob_x,
-        yOffset + infoBoxObject->ob_y,
-        infoBoxObject->ob_width,
-        infoBoxObject->ob_height);
+        progressBar->infoX,
+		progressBar->infoY,
+        progressBar->info->ob_width,
+        progressBar->info->ob_height);
+}
+
+int gem_calcProgressBarPosition(const Gem_ProgressBar* progressBar, int value, int maxValue) {
+	return (int) (((long) value * progressBar->progressBarWidth) / maxValue);
 }
