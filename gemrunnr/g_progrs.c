@@ -61,6 +61,8 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, int cellWidth, int 
     	&progressBar->clipY, 
     	&progressBar->clipWidth, 
     	&progressBar->clipHeight);
+    progressBar->xOffset = progressBar->barObject[0].ob_x;
+    progressBar->yOffset = progressBar->barObject[0].ob_y;
 }
 
 void gem_showProgressBar(const Gem_ProgressBar* progressBar) {
@@ -76,16 +78,16 @@ void gem_hideProgressBar(const Gem_ProgressBar* progressBar) {
         progressBar->clipX, progressBar->clipY, progressBar->clipWidth, progressBar->clipHeight);
 }
 
-void gem_updateProgressBar(const Gem_ProgressBar* progressBar, int percent, const char* info) {
-    long pos;
-    int xOffset = progressBar->barObject[0].ob_x;
-    int yOffset = progressBar->barObject[0].ob_y;
+void gem_updateProgressBar(const Gem_ProgressBar* progressBar, double percent, const char* info) {
+    double pos;
+    const int xOffset = progressBar->xOffset;
+    const int yOffset = progressBar->yOffset;
 
     OBJECT* barObject = &progressBar->barObject[2];
     OBJECT* infoBoxObject = &progressBar->barObject[3];
 
     free(progressBar->barObject[4].ob_spec.free_string);
-    pos = (percent * progressBar->barObject[1].ob_width) / 1000;
+    pos = (percent * progressBar->barObject[1].ob_width) / 100.0;
     barObject->ob_width = (int) pos;
     objc_draw(progressBar->barObject, 2, 1,
         xOffset + progressBar->barObject[1].ob_x,

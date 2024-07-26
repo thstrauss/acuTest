@@ -207,10 +207,10 @@ typedef struct GemProgress_ {
 
 static void progressFunc(const ACU_TestCase* testCase, void* progressContext) {
     GemProgress* progress = (GemProgress*) progressContext;
-    int precent;
+    double precent;
     
     progress->testNumber++;
-    precent = (int) ((progress->testNumber * 1000L) / progress->totalTestNumber);
+    precent = ((progress->testNumber * 100.0) / progress->totalTestNumber);
     gem_updateProgressBar(progress->bar, precent, testCase->name);
 }
 

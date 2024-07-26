@@ -27,6 +27,7 @@
 typedef struct Gem_ProgressBar_ {
     OBJECT* barObject;
     int clipX, clipY, clipWidth, clipHeight;
+    int xOffset, yOffset;
 } Gem_ProgressBar;
 
 Gem_ProgressBar* gem_mallocProgressBar(void);
@@ -35,6 +36,6 @@ void gem_freeProgressBar(const Gem_ProgressBar* progressBar);
 void gem_initProgressBar(const Gem_ProgressBar* progressBar, int cellWidth, int cellHeight);
 void gem_showProgressBar(const Gem_ProgressBar* progressBar);
 void gem_hideProgressBar(const Gem_ProgressBar* progressBar);
-void gem_updateProgressBar(const Gem_ProgressBar* progressBar, int percent, const char* info);
+void gem_updateProgressBar(const Gem_ProgressBar* progressBar, double percent, const char* info);
 
  #endif
