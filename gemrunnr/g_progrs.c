@@ -81,6 +81,7 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, int cellWidth, int 
 }
 
 void gem_showProgressBar(const Gem_ProgressBar* progressBar) {
+	wind_update(BEG_UPDATE);
     form_dial(FMD_START, 
         progressBar->clipX, progressBar->clipY, progressBar->clipWidth, progressBar->clipHeight, 
         progressBar->clipX, progressBar->clipY, progressBar->clipWidth, progressBar->clipHeight);
@@ -91,6 +92,7 @@ void gem_hideProgressBar(const Gem_ProgressBar* progressBar) {
     form_dial(FMD_FINISH,
         progressBar->clipX, progressBar->clipY, progressBar->clipWidth, progressBar->clipHeight, 
         progressBar->clipX, progressBar->clipY, progressBar->clipWidth, progressBar->clipHeight);
+	wind_update(END_UPDATE);
 }
 
 void gem_updateProgressBar(const Gem_ProgressBar* progressBar, int position, const char* info) {
