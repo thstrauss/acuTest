@@ -44,7 +44,7 @@ typedef struct TestModel_ {
 
 void gem_selectFile(const WinData* wd);
 
-void gem_execute(const WinData* wd);
+void gem_execute(const TestModel* testModel, const CellSize* cellSize);
 
 void gem_setViewModel(const WinData* wd, const void* viewModel);
 

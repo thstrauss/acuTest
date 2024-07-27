@@ -326,7 +326,9 @@ void handleMenueMessage(const WinData* wd, int menuItem) {
             gem_selectFile(wd);
         } break;
         case TEST_EXECUTE: {
-            gem_execute(wd);
+            TestModel* testModel = gem_getTestModel(wd);
+            gem_execute(testModel, &wd->cellSize);
+            gem_triggerRedraw(wd);
         } break;	
     }
 }

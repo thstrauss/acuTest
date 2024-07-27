@@ -213,13 +213,12 @@ static void progressFunc(const ACU_TestCase* testCase, void* progressContext) {
     	gem_calcProgressBarPosition(progress->bar, progress->testNumber++, progress->totalTestNumber), testCase->name);
 }
 
-void gem_execute(const WinData* wd) {
+void gem_execute(const TestModel* testModel, const CellSize* cellSize) {
     ACU_Progress progress = {progressFunc, NULL};
     GemProgress gemProgress;
     Gem_ProgressBar* bar = gem_mallocProgressBar();
-    TestModel* testModel = gem_getTestModel(wd);
 
-    gem_initProgressBar(bar, &wd->cellSize);
+    gem_initProgressBar(bar, cellSize);
 
     gemProgress.bar = bar;
     gemProgress.testNumber = 0;
@@ -233,9 +232,8 @@ void gem_execute(const WinData* wd) {
         gem_showProgressBar(bar);
         acu_entryExecute(testModel->entry, &progress);
         gem_freeContent(testModel);
-        gem_content(&wd->cellSize, testModel);
+        gem_content(cellSize, testModel);
         gem_hideProgressBar(bar);
-        gem_triggerRedraw(wd);
         graf_mouse(ARROW, 0L);
     } else {
         form_alert(1, "[1][Please load test first!][ OK ]");
