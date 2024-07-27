@@ -38,6 +38,7 @@
 void gem_initTestModel(TestModel* testModel) {
     testModel->entry = NULL;
     testModel->linesShown = 0;
+    testModel->verticalPositionN = 0;
     
     testModel->content = NULL;
     testModel->testFileName = NULL;
@@ -145,7 +146,7 @@ static void gem_collectTestCases(const TestModel* testModel){
     acu_suiteAccept(testModel->entry->suite, &collect); 
 }
 
-static void gem_freeContent(const TestModel* testModel) {
+void gem_freeContent(const TestModel* testModel) {
     if (testModel->content) {
         int i;
         int numberOfLines = (testModel->testList) ? testModel->testList->size : 0;
@@ -218,7 +219,7 @@ void gem_execute(const WinData* wd) {
     Gem_ProgressBar* bar = gem_mallocProgressBar();
     TestModel* testModel = gem_getTestModel(wd);
 
-    gem_initProgressBar(bar, wd->cellSize.width, wd->cellSize.height);
+    gem_initProgressBar(bar, &wd->cellSize);
 
     gemProgress.bar = bar;
     gemProgress.testNumber = 0;

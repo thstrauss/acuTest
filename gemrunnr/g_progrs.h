@@ -23,6 +23,7 @@
 #define __gem_progress__
 
 #include <aes.h>
+#include "g_cellsze.h"
 
 typedef struct Gem_ProgressBar_ {
     OBJECT* barObject;
@@ -38,7 +39,7 @@ typedef struct Gem_ProgressBar_ {
 Gem_ProgressBar* gem_mallocProgressBar(void);
 
 void gem_freeProgressBar(const Gem_ProgressBar* progressBar);
-void gem_initProgressBar(const Gem_ProgressBar* progressBar, int cellWidth, int cellHeight);
+void gem_initProgressBar(const Gem_ProgressBar* progressBar, const CellSize* cellSize);
 void gem_showProgressBar(const Gem_ProgressBar* progressBar);
 void gem_hideProgressBar(const Gem_ProgressBar* progressBar);
 void gem_updateProgressBar(const Gem_ProgressBar* progressBar, int position, const char* info);

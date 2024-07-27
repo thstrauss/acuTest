@@ -35,7 +35,7 @@ void gem_freeProgressBar(const Gem_ProgressBar* progressBar) {
     free(progressBar);
 }
 
-void gem_initProgressBar(const Gem_ProgressBar* progressBar, int cellWidth, int cellHeight) {
+void gem_initProgressBar(const Gem_ProgressBar* progressBar, const CellSize* cellSize) {
     static OBJECT barObjectTemplate[] = {
         { -1, 1, 3, G_BOX, 0x0400, OUTLINED, 0x21100L, 0,0, 29,5 },
         { 3, 2, 2, G_BOX, NONE, NORMAL, 0xFF1101L, 2,3, 25,1 }, /* PROGRESSBAR */
@@ -53,10 +53,10 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, int cellWidth, int 
     progressBar->buffer[0] = '\0';
     
     for (i=0; i < 5; i++) {
-        progressBar->barObject[i].ob_x *= cellWidth;
-        progressBar->barObject[i].ob_y *= cellHeight;
-        progressBar->barObject[i].ob_width *= cellWidth;
-        progressBar->barObject[i].ob_height *= cellHeight;
+        progressBar->barObject[i].ob_x *= cellSize->width;
+        progressBar->barObject[i].ob_y *= cellSize->height;
+        progressBar->barObject[i].ob_width *= cellSize->width;
+        progressBar->barObject[i].ob_height *= cellSize->height;
     }
     progressBar->barObject[2].ob_width = 0;
     progressBar->barObject[4].ob_spec.free_string = progressBar->buffer;
