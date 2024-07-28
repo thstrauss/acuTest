@@ -49,31 +49,28 @@ void gem_initTestModel(TestModel* testModel) {
 }
 
 
-static char* gem_getTestContent(const ACU_TestCase* testCase) {
-    size_t bufferSize; 
-    char* buffer;
-    char resultBuffer[20] = "";
-    
-    if (testCase->result) {
-        strcpy(resultBuffer, (testCase->result->status == ACU_TEST_PASSED) ? "passed" : "failed");
-    }
-
-    bufferSize = strlen(testCase->name) + 20;
-    buffer = acu_emalloc(bufferSize);
-    acu_sprintf_s(buffer, bufferSize, "%6s : %s", resultBuffer, testCase->name);
-    return buffer;
+static size_t gem_getTestContent(char *buffer, size_t bufferSize, const ACU_TestCase* testCase) {
+    return acu_sprintf_s(buffer, bufferSize, "%s : %s", testCase->result != NULL ? ((testCase->result->status == ACU_TEST_PASSED) ? "passed" : "failed") : "      ", testCase->name);
 }
 
 static void gem_contentLine(const CellSize* cellSize, const TestModel* testModel, const ACU_TestCase* testCase, int lineIndex) {
-    static OBJECT line = { -1, -1, -1, G_STRING, NONE, NORMAL, 0, 0, 0, 0, 0 };
-    char* lineContent = gem_getTestContent(testCase);
+    OBJECT* line = &testModel->content[lineIndex + 1];
+
+    size_t bufferSize = strlen(testCase->name) + 20;
+    char* buffer = acu_emalloc(bufferSize);
+    size_t lineLength = gem_getTestContent(buffer, bufferSize, testCase);
     
-    memcpy(&testModel->content[lineIndex + 1], &line, sizeof(OBJECT));
-    testModel->content[lineIndex + 1].ob_next = lineIndex + 2;
-    testModel->content[lineIndex + 1].ob_y = lineIndex * cellSize->height;
-    testModel->content[lineIndex + 1].ob_spec.free_string = lineContent;
-    testModel->content[lineIndex + 1].ob_width = (int)strlen(lineContent) * cellSize->width;
-    testModel->content[lineIndex + 1].ob_height = cellSize->height;
+    line->ob_next = lineIndex + 2;
+    line->ob_head = -1;
+    line->ob_tail = -1;
+    line->ob_type = G_STRING;
+    line->ob_flags = NONE;
+    line->ob_state = NORMAL;
+    line->ob_spec.free_string = buffer;
+    line->ob_x = 0;
+    line->ob_y = lineIndex * cellSize->height;
+    line->ob_width =    lineLength * cellSize->width);
+    line->ob_height = cellSize->height;
 }
 
 void gem_content(const CellSize* cellSize, const TestModel* testModel) {
@@ -198,7 +195,8 @@ void gem_selectFile(const WinData* wd) {
 
 
 static size_t nullHandler(const char* buffer) {
-    return strlen(buffer);
+    UNUSED(buffer);
+    return 0;
 }
 
 typedef struct GemProgress_ {
