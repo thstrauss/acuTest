@@ -31,7 +31,6 @@ Gem_ProgressBar* gem_mallocProgressBar() {
 }
 
 void gem_freeProgressBar(const Gem_ProgressBar* progressBar) {
-    free(progressBar->barObject[4].ob_spec.free_string);
     free(progressBar);
 }
 
