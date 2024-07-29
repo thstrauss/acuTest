@@ -26,3 +26,11 @@ void gem_initWinData(WinData* wd) {
     wd->infoLine = NULL;
     wd->windowTitle = NULL;
 }
+
+void gem_setViewModel(const WinData* wd, const void* viewModel) {
+    wd->viewModel = viewModel;
+}
+
+void* gem_getViewModel(const WinData* wd) {
+    return wd->viewModel;
+}

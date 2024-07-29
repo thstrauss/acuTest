@@ -67,7 +67,7 @@ void setClip(const WinData* wd, const GRECT* rect, int flag) {
 }
 
 void drawContent(const WinData* wd, const GRECT* clippingRect, const GRECT* workingRect) {
-	TestModel* testModel = gem_getTestModel(wd);
+	TestModel* testModel = gem_getViewModel(wd);
 
     testModel->content[0].ob_x = workingRect->g_x;
     testModel->content[0].ob_y = workingRect->g_y - testModel->verticalPositionN * wd->cellSize.height;
@@ -145,7 +145,7 @@ void performFullScreen(const WinData* wd) {
 void doVerticalSlide(const WinData* wd, int verticalPositionN) {
     GRECT rect;
     int linesAvailable;
-    TestModel* testModel = gem_getTestModel(wd);
+    TestModel* testModel = gem_getViewModel(wd);
 
     gem_getWorkingRect(wd, &rect);
     linesAvailable = rect.g_h / wd->cellSize.height;
@@ -162,7 +162,7 @@ void doVerticalSlide(const WinData* wd, int verticalPositionN) {
 void doPageUpDown(const WinData* wd, int arrow) {
     int linesAvailable;
     GRECT rect;
-    TestModel* testModel = gem_getTestModel(wd);
+    TestModel* testModel = gem_getViewModel(wd);
 
     gem_getWorkingRect(wd, &rect);
     linesAvailable = rect.g_h / wd->cellSize.height;
@@ -194,7 +194,7 @@ void doDownLine(const WinData* wd) {
     GRECT rect;
     int pxy[8];
     int linesAvailable;
-    TestModel* testModel = gem_getTestModel(wd);
+    TestModel* testModel = gem_getViewModel(wd);
     
     gem_getWorkingRect(wd, &rect);
     linesAvailable = rect.g_h / wd->cellSize.height;
@@ -240,7 +240,7 @@ void doUpLine(const WinData* wd) {
     MFDB destination;
     GRECT rect;
     int pxy[8];
-    TestModel* testModel = gem_getTestModel(wd);
+    TestModel* testModel = gem_getViewModel(wd);
     
     if (testModel->verticalPositionN == 0) {
         return;
@@ -326,7 +326,7 @@ void handleMenueMessage(const WinData* wd, int menuItem) {
             gem_selectFile(wd);
         } break;
         case TEST_EXECUTE: {
-            TestModel* testModel = gem_getTestModel(wd);
+            TestModel* testModel = gem_getViewModel(wd);
             gem_execute(testModel, &wd->cellSize);
             gem_triggerRedraw(wd);
         } break;	
@@ -387,7 +387,7 @@ void eventLoop(const WinData* wd, OBJECT* menuAddr) {
         }
         if ((eventType & MU_BUTTON)) {
             if (wind_find(event.ev_mmox, event.ev_mmoy) == wd->windowHandle) {
-                TestModel* testModel = gem_getTestModel(wd);
+                TestModel* testModel = gem_getViewModel(wd);
                 int nextObject = objc_find(testModel->content, 0, 7, event.ev_mmox, event.ev_mmoy);
                 if (nextObject != -1) {
                     if (previousObject != -1) {
@@ -411,9 +411,9 @@ int startProgram(WinData* wd) {
 
     gem_setViewModel(wd, acu_emalloc(sizeof(TestModel)));
 
-    gem_initTestModel(gem_getTestModel(wd));
+    gem_initTestModel(gem_getViewModel(wd));
 
-    gem_content(&wd->cellSize, gem_getTestModel(wd));
+    gem_content(&wd->cellSize, gem_getViewModel(wd));
 
     
     if (gemrunnr_rsc_load(wd->cellSize.width, wd->cellSize.height) == 0) {

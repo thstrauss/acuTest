@@ -107,7 +107,7 @@ static void gem_setInfoLine(const WinData* wd) {
     ACU_Count count = {0,0, {NULL, NULL}};
     counter.context = (void*)&count;
 
-    acu_suiteAccept(gem_getTestModel(wd)->entry->suite, &counter);
+    acu_suiteAccept(((TestModel*) gem_getViewModel(wd))->entry->suite, &counter);
 
     if (wd->infoLine) {
         free(wd->infoLine);
@@ -124,7 +124,7 @@ static void gem_setWindowTitle(const WinData* wd) {
         free(wd->windowTitle);
     }
     wd->windowTitle = acu_emalloc(270);
-    testModel = gem_getTestModel(wd);
+    testModel = gem_getViewModel(wd);
     sprintf(wd->windowTitle, "GEM Runner: %s\\%s", acu_getPath(testModel->testFilePath), testModel->testFileName);
     wind_set(wd->windowHandle, WF_NAME, wd->windowTitle, 0, 0);
 }
@@ -155,7 +155,7 @@ void gem_freeContent(const TestModel* testModel) {
 
 void gem_selectFile(const WinData* wd) {
     int button;
-    TestModel* testModel = gem_getTestModel(wd);
+    TestModel* testModel = gem_getViewModel(wd);
 
     fsel_exinput(testModel->testFilePath, testModel->testFileName, &button, "Select test");
     if (button == 1) {
@@ -229,12 +229,4 @@ void gem_execute(const TestModel* testModel, const CellSize* cellSize) {
         form_alert(1, "[1][Please load test first!][ OK ]");
     }
     gem_freeProgressBar(bar);
-}
-
-void gem_setViewModel(const WinData* wd, const void* viewModel) {
-	wd->viewModel = viewModel;
-}
-
-TestModel* gem_getTestModel(const WinData* wd) {
-	return (TestModel*) wd->viewModel;
 }

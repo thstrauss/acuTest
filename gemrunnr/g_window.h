@@ -39,4 +39,8 @@ typedef struct WinData_ {
 
 void gem_initWinData(WinData* winData);
 
+void gem_setViewModel(const WinData* wd, const void* viewModel);
+
+void* gem_getViewModel(const WinData* wd);
+
  #endif

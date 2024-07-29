@@ -92,7 +92,7 @@ int gem_sliderPositionN(int numAvailable, int numShown, int offset) {
 void gem_updateSliders(const WinData* wd) {
 	int linesAvailable;
 	GRECT rect;
-	TestModel* testModel = gem_getTestModel(wd);
+	TestModel* testModel = gem_getViewModel(wd);
 	
 	gem_getWorkingRect(wd, &rect);
 	
