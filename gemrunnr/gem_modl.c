@@ -41,10 +41,9 @@ void gem_initTestModel(TestModel* testModel) {
     testModel->verticalPositionN = 0;
     
     testModel->content = NULL;
-    testModel->testFileName = NULL;
-    testModel->testFilePath = acu_emalloc(256);
     testModel->testList = NULL;
 
+    strcpy(testModel->testFileName, "");
     strcpy(testModel->testFilePath, "*.cup");
 }
 
@@ -69,7 +68,7 @@ static void gem_contentLine(const CellSize* cellSize, const TestModel* testModel
     line->ob_spec.free_string = buffer;
     line->ob_x = 0;
     line->ob_y = lineIndex * cellSize->height;
-    line->ob_width =    lineLength * cellSize->width);
+    line->ob_width = (int) lineLength * cellSize->width;
     line->ob_height = cellSize->height;
 }
 
@@ -155,16 +154,10 @@ void gem_freeContent(const TestModel* testModel) {
 }
 
 void gem_selectFile(const WinData* wd) {
-    char buf[256];
     int button;
     TestModel* testModel = gem_getTestModel(wd);
 
-    if (testModel->testFileName) {
-        free(testModel->testFileName);
-        testModel->testFileName = NULL;
-    }
-    buf[0] = '\0';
-    fsel_exinput(testModel->testFilePath, buf, &button, "Select test");
+    fsel_exinput(testModel->testFilePath, testModel->testFileName, &button, "Select test");
     if (button == 1) {
         graf_mouse(BUSYBEE, 0L);
 
@@ -180,9 +173,8 @@ void gem_selectFile(const WinData* wd) {
             testModel->entry = NULL;
         }
         
-        testModel->entry = cup_load(buf);
+        testModel->entry = cup_load(testModel->testFileName);
         if (testModel->entry) {
-            testModel->testFileName = acu_estrdup(buf);
             gem_setInfoLine(wd);
             gem_setWindowTitle(wd);
             gem_collectTestCases(testModel);

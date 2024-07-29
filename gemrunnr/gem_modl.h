@@ -35,8 +35,8 @@ typedef struct TestModel_ {
 	
 	ACU_Entry* entry;
 	ACU_List* testList;
-	char* testFileName;
-	char* testFilePath;
+	char testFileName[13];
+	char testFilePath[260];
 	
 	OBJECT* content; 
 } TestModel;
