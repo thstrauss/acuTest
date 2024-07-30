@@ -45,8 +45,9 @@ void gem_initTestModel(TestModel* testModel) {
 
     strcpy(testModel->testFileName, "");
     strcpy(testModel->testFilePath, "*.cup");
+    strcpy(testModel->windowTitle, "GEM Runner");
+    strcpy(testModel->infoLine, "");
 }
-
 
 static size_t gem_getTestContent(char *buffer, size_t bufferSize, const ACU_TestCase* testCase) {
     return acu_sprintf_s(buffer, bufferSize, "%s : %s", testCase->result != NULL ? ((testCase->result->status == ACU_TEST_PASSED) ? "passed" : "failed") : "      ", testCase->name);
@@ -102,31 +103,18 @@ void gem_content(const CellSize* cellSize, const TestModel* testModel) {
     testModel->linesShown = numberOfLines;
 }
 
-static void gem_setInfoLine(const WinData* wd) {
+static void gem_setInfoLine(const TestModel* testModel) {
     ACU_Visitor counter = { acu_count, NULL };
     ACU_Count count = {0,0, {NULL, NULL}};
     counter.context = (void*)&count;
 
-    acu_suiteAccept(((TestModel*) gem_getViewModel(wd))->entry->suite, &counter);
+    acu_suiteAccept(testModel->entry->suite, &counter);
 
-    if (wd->infoLine) {
-        free(wd->infoLine);
-    }
-    wd->infoLine = acu_emalloc(256);
-
-    acu_sprintf_s(wd->infoLine, 256, "%d tests in %d fixtures", count.testCaseCount, count.testFixtureCount);
-    wind_set(wd->windowHandle, WF_INFO, wd->infoLine);
+    acu_sprintf_s(testModel->infoLine, sizeof(testModel->infoLine), "%d tests in %d fixtures", count.testCaseCount, count.testFixtureCount);
 }
 
-static void gem_setWindowTitle(const WinData* wd) {
-	TestModel* testModel;
-    if (wd->windowTitle) {
-        free(wd->windowTitle);
-    }
-    wd->windowTitle = acu_emalloc(270);
-    testModel = gem_getViewModel(wd);
-    acu_sprintf_s(wd->windowTitle, 270, "GEM Runner: %s\\%s", acu_getPath(testModel->testFilePath), testModel->testFileName);
-    wind_set(wd->windowHandle, WF_NAME, wd->windowTitle, 0, 0);
+static void gem_setWindowTitle(const TestModel* testModel) {
+    acu_sprintf_s(testModel->windowTitle, sizeof(testModel->windowTitle), "GEM Runner: %s\\%s", acu_getPath(testModel->testFilePath), testModel->testFileName);
 }
 
 static void gem_collectTestCases(const TestModel* testModel){
@@ -175,16 +163,17 @@ void gem_selectFile(const WinData* wd) {
         
         testModel->entry = cup_load(testModel->testFileName);
         if (testModel->entry) {
-            gem_setInfoLine(wd);
-            gem_setWindowTitle(wd);
+            gem_setInfoLine(testModel);
+            gem_setWindowTitle(testModel);
             gem_collectTestCases(testModel);
         }
         gem_content(&wd->cellSize, testModel);
+        wind_set(wd->windowHandle, WF_NAME, testModel->windowTitle);
+        wind_set(wd->windowHandle, WF_INFO, testModel->infoLine);
         gem_triggerRedraw(wd);
         graf_mouse(ARROW, 0L);
     }
 }
-
 
 static size_t nullHandler(const char* buffer) {
     UNUSED(buffer);

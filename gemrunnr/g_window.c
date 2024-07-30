@@ -21,10 +21,10 @@
 
 #include <stddef.h>
 #include "g_window.h"
+#include "acu_cmmn.h"
 
 void gem_initWinData(WinData* wd) {
-    wd->infoLine = NULL;
-    wd->windowTitle = NULL;
+	UNUSED(wd);
 }
 
 void gem_setViewModel(const WinData* wd, const void* viewModel) {

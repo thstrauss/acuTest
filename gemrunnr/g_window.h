@@ -31,9 +31,6 @@ typedef struct WinData_ {
 
     CellSize cellSize;
 
-    char* windowTitle;
-    char* infoLine;
-
     void* viewModel;
 } WinData;
 
