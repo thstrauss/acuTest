@@ -114,7 +114,7 @@ static void gem_setInfoLine(const WinData* wd) {
     }
     wd->infoLine = acu_emalloc(256);
 
-    sprintf(wd->infoLine, "%d tests in %d fixtures", count.testCaseCount, count.testFixtureCount);
+    acu_sprintf_s(wd->infoLine, 256, "%d tests in %d fixtures", count.testCaseCount, count.testFixtureCount);
     wind_set(wd->windowHandle, WF_INFO, wd->infoLine);
 }
 
@@ -125,7 +125,7 @@ static void gem_setWindowTitle(const WinData* wd) {
     }
     wd->windowTitle = acu_emalloc(270);
     testModel = gem_getViewModel(wd);
-    sprintf(wd->windowTitle, "GEM Runner: %s\\%s", acu_getPath(testModel->testFilePath), testModel->testFileName);
+    acu_sprintf_s(wd->windowTitle, 270, "GEM Runner: %s\\%s", acu_getPath(testModel->testFilePath), testModel->testFileName);
     wind_set(wd->windowHandle, WF_NAME, wd->windowTitle, 0, 0);
 }
 
