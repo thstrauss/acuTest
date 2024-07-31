@@ -32,6 +32,7 @@
 #include <acu_util.h>
 #include "gem_modl.h"
 #include "gem_util.h"
+#include "g_slider.h"
 
 int work_in[11];
 int work_out[57];
@@ -69,6 +70,9 @@ void setClip(const WinData* wd, const GRECT* rect, int flag) {
 void drawInterior(const WinData* wd, const GRECT* clippingRect) {
     GRECT workingRect;
     int pxy[4];
+    VerticalSlider slider;
+    
+    gem_initVerticalSlider(&slider, wd);
     
     graf_mouse(M_OFF, NULL);
     setClip(wd, clippingRect, 1);
@@ -85,7 +89,7 @@ void drawInterior(const WinData* wd, const GRECT* clippingRect) {
     wd->drawViewModel(wd, gem_getViewModel(wd), clippingRect, &workingRect);
 
     setClip(wd, clippingRect, 0);
-    gem_updateSliders(wd);
+    gem_updateSliders(&slider);
     graf_mouse(M_ON, NULL);
 }
 

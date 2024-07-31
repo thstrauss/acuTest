@@ -22,4 +22,18 @@
 #ifndef __G_SLIDER__
 #define __G_SLIDER__
 
+#include "g_window.h"
+
+typedef struct VerticalSlider_ {
+    const WinData* winData;
+} VerticalSlider;
+
+void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const WinData* winData);
+
+int gem_sliderSize(int numAvailable, int numShown);
+
+int gem_sliderPositionN(int numAvailable, int numShown, int offset);
+
+void gem_updateSliders(const VerticalSlider* verticalSlider);
+
 #endif

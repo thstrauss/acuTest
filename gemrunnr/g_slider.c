@@ -20,3 +20,46 @@
  */
 
 #include "g_slider.h"
+#include "gem_modl.h"
+#include "gem_util.h"
+#include <aes.h>
+
+int gem_sliderSize(int numAvailable, int numShown) {
+    if (numAvailable >= numShown) {
+        return 1000;
+    }
+    return (int)((1000L * numAvailable) / numShown);
+}
+
+int gem_sliderPositionN(int numAvailable, int numShown, int offset) {
+    if (numAvailable >= numShown) {
+        return 0;
+    }
+    else {
+        int scrollableRegion = numShown - numAvailable;
+        int temp1 = offset / scrollableRegion;
+        int temp2 = offset % scrollableRegion;
+
+        return (int)((1000L * temp1) + ((1000L * temp2) / scrollableRegion));
+    }
+}
+
+void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const WinData* winData)
+{
+    verticalSlider->winData = winData;
+}
+
+void gem_updateSliders(const VerticalSlider* verticalSlider) {
+    int linesAvailable;
+    GRECT rect;
+    TestModel* testModel = gem_getViewModel(verticalSlider->winData);
+
+    gem_getWorkingRect(verticalSlider->winData, &rect);
+
+    linesAvailable = rect.g_h / verticalSlider->winData->cellSize.height;
+
+    wind_set(verticalSlider->winData->windowHandle, WF_VSLSIZE,
+        gem_sliderSize(linesAvailable, testModel->totalTestNumber), 0, 0, 0);
+    wind_set(verticalSlider->winData->windowHandle, WF_VSLIDE,
+        gem_sliderPositionN(linesAvailable, testModel->totalTestNumber, testModel->verticalPositionN), 0, 0, 0);
+}

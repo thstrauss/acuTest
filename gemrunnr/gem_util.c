@@ -70,40 +70,6 @@ void gem_triggerRedraw(const WinData* wd) {
     gem_triggerRedrawRect(wd, &rect);
 }
 
-int gem_sliderSize(int numAvailable, int numShown) {
-    if (numAvailable >= numShown) {
-        return 1000;
-    }
-    return (int) ((1000L * numAvailable) / numShown);
-} 
-
-int gem_sliderPositionN(int numAvailable, int numShown, int offset) {
-    if (numAvailable >= numShown) {
-        return 0;
-    } else {
-        int scrollableRegion = numShown - numAvailable;
-        int temp1 = offset / scrollableRegion;
-        int temp2 = offset % scrollableRegion;
-    
-        return (int) ((1000L * temp1) + ((1000L * temp2) / scrollableRegion));
-    }
-}
-
-void gem_updateSliders(const WinData* wd) {
-    int linesAvailable;
-    GRECT rect;
-    TestModel* testModel = gem_getViewModel(wd);
-    
-    gem_getWorkingRect(wd, &rect);
-    
-    linesAvailable = rect.g_h / wd->cellSize.height;
-    
-    wind_set(wd->windowHandle, WF_VSLSIZE, 
-        gem_sliderSize(linesAvailable, testModel->totalTestNumber), 0, 0, 0);
-    wind_set(wd->windowHandle, WF_VSLIDE, 
-        gem_sliderPositionN(linesAvailable, testModel->totalTestNumber, testModel->verticalPositionN), 0, 0, 0);
-}
-
 int gem_rectIntersect(const GRECT* r1, GRECT* r2) {
     int ret;
     int tx, tw;	

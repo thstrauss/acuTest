@@ -35,11 +35,7 @@ void gem_triggerRedrawDesktop(const WinData* wd);
 void gem_triggerRedraw(const WinData* wd);
 void gem_triggerRedrawRect(const WinData* wd, GRECT* rect);
 
-int gem_sliderSize(int numAvailable, int numShown);
 
-int gem_sliderPositionN(int numAvailable, int numShown, int offset);
-
-void gem_updateSliders(const WinData* wd);
 
 int gem_rectIntersect(const GRECT* r1, GRECT* r2);
 
