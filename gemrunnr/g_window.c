@@ -31,6 +31,11 @@ void gem_setViewModel(const WinData* wd, const void* viewModel) {
     wd->viewModel = viewModel;
 }
 
+void gem_setDrawViewModelFunc(const WinData* wd, GEM_DrawViewModelFunc* drawViewModel)
+{
+    wd->drawViewModel = drawViewModel;
+}
+
 void* gem_getViewModel(const WinData* wd) {
     return wd->viewModel;
 }

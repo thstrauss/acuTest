@@ -30,7 +30,7 @@
 #include "g_window.h"
 
 typedef struct TestModel_ {
-	int linesShown;
+	int totalTestNumber;
 	int verticalPositionN;	
 	
 	ACU_Entry* entry;
@@ -49,10 +49,10 @@ void gem_selectFile(const WinData* wd);
 
 void gem_execute(const TestModel* testModel, const CellSize* cellSize);
 
-
-
 void gem_initTestModel(TestModel* testModel);
 
 void gem_content(const CellSize* cellSize, const TestModel* testModel);
+
+void gem_drawContent(const void* wd, const void* testModel, const GRECT* clippingRect, const GRECT* workingRect);
 
 #endif

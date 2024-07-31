@@ -66,20 +66,11 @@ void setClip(const WinData* wd, const GRECT* rect, int flag) {
     vs_clip(wd->grafHandle, flag, pxy);
 }
 
-void drawContent(const WinData* wd, const GRECT* clippingRect, const GRECT* workingRect) {
-	TestModel* testModel = gem_getViewModel(wd);
-
-    testModel->content[0].ob_x = workingRect->g_x;
-    testModel->content[0].ob_y = workingRect->g_y - testModel->verticalPositionN * wd->cellSize.height;
-    
-    objc_draw(testModel->content, 0, 7, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
-}
-
 void drawInterior(const WinData* wd, const GRECT* clippingRect) {
     GRECT workingRect;
     int pxy[4];
     
-    graf_mouse(M_OFF, 0L);
+    graf_mouse(M_OFF, NULL);
     setClip(wd, clippingRect, 1);
     
     gem_getWorkingRect(wd, &workingRect);
@@ -91,11 +82,11 @@ void drawInterior(const WinData* wd, const GRECT* clippingRect) {
     pxy[3] = workingRect.g_y + workingRect.g_h - 1;
     vr_recfl(wd->grafHandle, pxy);
 
-    drawContent(wd, clippingRect, &workingRect);
+    wd->drawViewModel(wd, gem_getViewModel(wd), clippingRect, &workingRect);
 
     setClip(wd, clippingRect, 0);
     gem_updateSliders(wd);
-    graf_mouse(M_ON, 0L);
+    graf_mouse(M_ON, NULL);
 }
 
 void performRedraw(const WinData* wd, const GRECT* rect) {
@@ -149,7 +140,7 @@ void doVerticalSlide(const WinData* wd, int verticalPositionN) {
 
     gem_getWorkingRect(wd, &rect);
     linesAvailable = rect.g_h / wd->cellSize.height;
-    testModel->verticalPositionN = (int) ((verticalPositionN * (long) (testModel->linesShown - linesAvailable)) / 1000);
+    testModel->verticalPositionN = (int) ((verticalPositionN * (long) (testModel->totalTestNumber - linesAvailable)) / 1000);
     if (testModel->verticalPositionN < 0) {
         testModel->verticalPositionN = 0;
     }
@@ -173,16 +164,16 @@ void doPageUpDown(const WinData* wd, int arrow) {
         testModel->verticalPositionN -= linesAvailable;
     } 
     if (arrow == WA_DNPAGE) {
-        if ((linesAvailable > testModel->linesShown && testModel->verticalPositionN == 0) || testModel->verticalPositionN == testModel->linesShown - linesAvailable) {
+        if ((linesAvailable > testModel->totalTestNumber && testModel->verticalPositionN == 0) || testModel->verticalPositionN == testModel->totalTestNumber - linesAvailable) {
             return;
         }
         testModel->verticalPositionN += linesAvailable;
     }
-    if (testModel->verticalPositionN < 0 || linesAvailable > testModel->linesShown) {
+    if (testModel->verticalPositionN < 0 || linesAvailable > testModel->totalTestNumber) {
         testModel->verticalPositionN = 0;
     }
-    if (linesAvailable <= testModel->linesShown && testModel->verticalPositionN > testModel->linesShown - linesAvailable) {
-        testModel->verticalPositionN = testModel->linesShown - linesAvailable;
+    if (linesAvailable <= testModel->totalTestNumber && testModel->verticalPositionN > testModel->totalTestNumber - linesAvailable) {
+        testModel->verticalPositionN = testModel->totalTestNumber - linesAvailable;
     } 
 
     gem_triggerRedraw(wd);
@@ -199,22 +190,22 @@ void doDownLine(const WinData* wd) {
     gem_getWorkingRect(wd, &rect);
     linesAvailable = rect.g_h / wd->cellSize.height;
     
-    if (testModel->verticalPositionN >= testModel->linesShown - linesAvailable) {
+    if (testModel->verticalPositionN >= testModel->totalTestNumber - linesAvailable) {
         return;
     }
     
     testModel->verticalPositionN++;
-    if (testModel->verticalPositionN > linesAvailable && testModel->verticalPositionN > testModel->linesShown - linesAvailable) {
-        testModel->verticalPositionN = testModel->linesShown - linesAvailable;
-    } else if (linesAvailable >= testModel->linesShown) {
+    if (testModel->verticalPositionN > linesAvailable && testModel->verticalPositionN > testModel->totalTestNumber - linesAvailable) {
+        testModel->verticalPositionN = testModel->totalTestNumber - linesAvailable;
+    } else if (linesAvailable >= testModel->totalTestNumber) {
         testModel->verticalPositionN = 0;
     }
     
     setClip(wd, &rect, 1);
-    graf_mouse(M_OFF, 0L);
+    graf_mouse(M_OFF, NULL);
     
-    source.fd_addr = 0L;
-    destination.fd_addr = 0L;
+    source.fd_addr = NULL;
+    destination.fd_addr = NULL;
     
     pxy[0] = rect.g_x;
     pxy[1] = rect.g_y + wd->cellSize.height + 1;
@@ -227,7 +218,7 @@ void doDownLine(const WinData* wd) {
     
     vro_cpyfm(wd->applId, S_ONLY, pxy, &source, &destination);
     
-    graf_mouse(M_ON, 0L);
+    graf_mouse(M_ON, NULL);
     setClip(wd, &rect, 0);
     
     rect.g_y = rect.g_y + rect.g_h - 2 * wd->cellSize.height;
@@ -251,10 +242,10 @@ void doUpLine(const WinData* wd) {
         testModel->verticalPositionN = 0;
     }
     setClip(wd, &rect, 1);
-    graf_mouse(M_OFF, 0L);
+    graf_mouse(M_OFF, NULL);
     
-    source.fd_addr = 0L;
-    destination.fd_addr = 0L;
+    source.fd_addr = NULL;
+    destination.fd_addr = NULL;
     
     pxy[0] = rect.g_x;
     pxy[1] = rect.g_y + 1;
@@ -267,7 +258,7 @@ void doUpLine(const WinData* wd) {
     
     vro_cpyfm(wd->applId, S_ONLY, pxy, &source, &destination);
     
-    graf_mouse(M_ON, 0L);
+    graf_mouse(M_ON, NULL);
     setClip(wd, &rect, 0);
     
     rect.g_h = 2 * wd->cellSize.height;
@@ -414,6 +405,8 @@ int startProgram(WinData* wd) {
     gem_initTestModel(gem_getViewModel(wd));
 
     gem_content(&wd->cellSize, gem_getViewModel(wd));
+
+    gem_setDrawViewModelFunc(wd, gem_drawContent);
 
     
     if (gemrunnr_rsc_load(wd->cellSize.width, wd->cellSize.height) == 0) {
