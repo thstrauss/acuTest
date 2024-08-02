@@ -24,14 +24,14 @@
 #include "gem_util.h"
 #include <aes.h>
 
-int gem_sliderSize(int numAvailable, int numShown) {
+static int gem_sliderSize(int numAvailable, int numShown) {
     if (numAvailable >= numShown) {
         return 1000;
     }
     return (int)((1000L * numAvailable) / numShown);
 }
 
-int gem_sliderPositionN(int numAvailable, int numShown, int offset) {
+static int gem_sliderPositionN(int numAvailable, int numShown, int offset) {
     if (numAvailable >= numShown) {
         return 0;
     }

@@ -30,10 +30,6 @@ typedef struct VerticalSlider_ {
 
 void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const WinData* winData);
 
-int gem_sliderSize(int numAvailable, int numShown);
-
-int gem_sliderPositionN(int numAvailable, int numShown, int offset);
-
 void gem_updateSliders(const VerticalSlider* verticalSlider);
 
 #endif
