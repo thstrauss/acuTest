@@ -35,9 +35,8 @@
 #include "gem_util.h"
 #include "g_progrs.h"
 
-void gem_drawContent(const void* w, const void* viewModel, const GRECT* clippingRect, const GRECT* workingRect) {
+void gem_drawContent(const WinData* wd, const void* viewModel, const GRECT* clippingRect, const GRECT* workingRect) {
     TestModel* testModel = viewModel;
-    WinData* wd = w;
 
     testModel->content[0].ob_x = workingRect->g_x;
     testModel->content[0].ob_y = workingRect->g_y - testModel->verticalPositionN * wd->cellSize.height;

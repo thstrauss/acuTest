@@ -25,10 +25,6 @@
 #include "g_cellsze.h"
 #include <aes.h>
 
-struct WinData_;
-
-typedef void GEM_DrawViewModelFunc(const void* winData, const void* testModel, const GRECT* clippingRect, const GRECT* workingRect);
-
 typedef struct WinData_ {
     int windowHandle;
     int applId;
@@ -37,8 +33,10 @@ typedef struct WinData_ {
     CellSize cellSize;
 
     void* viewModel;
-    GEM_DrawViewModelFunc* drawViewModel;
+    void (*drawViewModel)(const struct WinData_* winData, const void* testModel, const GRECT* clippingRect, const GRECT* workingRect);
 } WinData;
+
+typedef void GEM_DrawViewModelFunc(const WinData* winData, const void* testModel, const GRECT* clippingRect, const GRECT* workingRect);
 
 void gem_initWinData(WinData* winData);
 

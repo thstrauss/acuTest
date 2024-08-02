@@ -412,7 +412,6 @@ int startProgram(WinData* wd) {
 
     gem_setDrawViewModelFunc(wd, gem_drawContent);
 
-    
     if (gemrunnr_rsc_load(wd->cellSize.width, wd->cellSize.height) == 0) {
         form_alert(1, "[3][Could not load rsc][ Exit ]");
         return 2;

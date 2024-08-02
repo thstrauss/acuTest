@@ -53,6 +53,6 @@ void gem_initTestModel(TestModel* testModel);
 
 void gem_content(const CellSize* cellSize, const TestModel* testModel);
 
-void gem_drawContent(const void* wd, const void* testModel, const GRECT* clippingRect, const GRECT* workingRect);
+void gem_drawContent(const WinData* wd, const void* testModel, const GRECT* clippingRect, const GRECT* workingRect);
 
 #endif
