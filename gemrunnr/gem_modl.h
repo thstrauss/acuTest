@@ -31,7 +31,7 @@
 
 typedef struct TestModel_ {
 	int totalTestNumber;
-	int verticalPositionN;	
+	int verticalPositionN;
 	
 	ACU_Entry* entry;
 	ACU_List* testList;

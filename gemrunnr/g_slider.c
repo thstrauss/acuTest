@@ -44,22 +44,23 @@ static int gem_sliderPositionN(int numAvailable, int numShown, int offset) {
     }
 }
 
-void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const WinData* winData)
+void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const WinData* winData, GEM_UpdateModelFunc updateModel)
 {
     verticalSlider->winData = winData;
+    verticalSlider->updateModel = updateModel;
 }
 
 void gem_updateSliders(const VerticalSlider* verticalSlider) {
-    int linesAvailable;
+    int linesShown;
     GRECT rect;
-    TestModel* testModel = gem_getViewModel(verticalSlider->winData);
-
+    void* model = gem_getViewModel(verticalSlider->winData);
+    
     gem_getWorkingRect(verticalSlider->winData, &rect);
-
-    linesAvailable = rect.g_h / verticalSlider->winData->cellSize.height;
+    linesShown = rect.g_h / verticalSlider->winData->cellSize.height;
+    verticalSlider->updateModel(verticalSlider, model);
 
     wind_set(verticalSlider->winData->windowHandle, WF_VSLSIZE,
-        gem_sliderSize(linesAvailable, testModel->totalTestNumber), 0, 0, 0);
+        gem_sliderSize(linesShown, verticalSlider->totalLines), 0, 0, 0);
     wind_set(verticalSlider->winData->windowHandle, WF_VSLIDE,
-        gem_sliderPositionN(linesAvailable, testModel->totalTestNumber, testModel->verticalPositionN), 0, 0, 0);
+        gem_sliderPositionN(linesShown, verticalSlider->totalLines, verticalSlider->linesPosition), 0, 0, 0);
 }

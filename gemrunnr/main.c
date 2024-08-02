@@ -67,12 +67,18 @@ void setClip(const WinData* wd, const GRECT* rect, int flag) {
     vs_clip(wd->grafHandle, flag, pxy);
 }
 
+static void updateSlider(const VerticalSlider* slider, const void* model) {
+	TestModel* testModel = model;
+    slider->totalLines = testModel->totalTestNumber;
+    slider->linesPosition = testModel->verticalPositionN;
+}
+
 void drawInterior(const WinData* wd, const GRECT* clippingRect) {
     GRECT workingRect;
     int pxy[4];
     VerticalSlider slider;
     
-    gem_initVerticalSlider(&slider, wd);
+    gem_initVerticalSlider(&slider, wd, updateSlider);
     
     graf_mouse(M_OFF, NULL);
     setClip(wd, clippingRect, 1);

@@ -26,9 +26,14 @@
 
 typedef struct VerticalSlider_ {
     const WinData* winData;
+    void (*updateModel)(const struct VerticalSlider_* slider, const void* model);
+    int totalLines;
+    int linesPosition;
 } VerticalSlider;
 
-void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const WinData* winData);
+typedef void GEM_UpdateModelFunc(const VerticalSlider* slider, const void* model);
+
+void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const WinData* winData, GEM_UpdateModelFunc updateModel);
 
 void gem_updateSliders(const VerticalSlider* verticalSlider);
 
