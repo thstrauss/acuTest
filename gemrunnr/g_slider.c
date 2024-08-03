@@ -44,7 +44,7 @@ static int gem_sliderPositionN(int numAvailable, int numShown, int offset) {
     }
 }
 
-void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const WinData* winData, GEM_UpdateModelFunc updateModel)
+void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const struct WinData_* winData, GEM_UpdateSliderModelFunc updateModel)
 {
     verticalSlider->winData = winData;
     verticalSlider->updateModel = updateModel;

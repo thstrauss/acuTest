@@ -22,18 +22,18 @@
 #ifndef __G_SLIDER__
 #define __G_SLIDER__
 
-#include "g_window.h"
+struct WinData_;
 
 typedef struct VerticalSlider_ {
-    const WinData* winData;
+    const struct WinData_* winData;
     void (*updateModel)(const struct VerticalSlider_* slider, const void* model);
     int totalLines;
     int linesPosition;
 } VerticalSlider;
 
-typedef void GEM_UpdateModelFunc(const VerticalSlider* slider, const void* model);
+typedef void GEM_UpdateSliderModelFunc(const VerticalSlider* slider, const void* model);
 
-void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const WinData* winData, GEM_UpdateModelFunc updateModel);
+void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const struct WinData_* winData, GEM_UpdateSliderModelFunc updateModel);
 
 void gem_updateSliders(const VerticalSlider* verticalSlider);
 

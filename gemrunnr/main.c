@@ -76,9 +76,6 @@ static void updateSlider(const VerticalSlider* slider, const void* model) {
 void drawInterior(const WinData* wd, const GRECT* clippingRect) {
     GRECT workingRect;
     int pxy[4];
-    VerticalSlider slider;
-    
-    gem_initVerticalSlider(&slider, wd, updateSlider);
     
     graf_mouse(M_OFF, NULL);
     setClip(wd, clippingRect, 1);
@@ -95,7 +92,7 @@ void drawInterior(const WinData* wd, const GRECT* clippingRect) {
     wd->drawViewModel(wd, gem_getViewModel(wd), clippingRect, &workingRect);
 
     setClip(wd, clippingRect, 0);
-    gem_updateSliders(&slider);
+    gem_updateSliders(&wd->verticalSlider);
     graf_mouse(M_ON, NULL);
 }
 
@@ -416,7 +413,7 @@ int startProgram(WinData* wd) {
 
     gem_content(&wd->cellSize, gem_getViewModel(wd));
 
-    gem_setDrawViewModelFunc(wd, gem_drawContent);
+    gem_setDrawViewModelFunc(wd, gem_drawContent, updateSlider);
 
     if (gemrunnr_rsc_load(wd->cellSize.width, wd->cellSize.height) == 0) {
         form_alert(1, "[3][Could not load rsc][ Exit ]");

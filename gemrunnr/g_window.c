@@ -21,6 +21,7 @@
 
 #include <stddef.h>
 #include "g_window.h"
+#include "g_slider.h"
 #include "acu_cmmn.h"
 
 void gem_initWinData(WinData* wd) {
@@ -31,9 +32,10 @@ void gem_setViewModel(const WinData* wd, const void* viewModel) {
     wd->viewModel = viewModel;
 }
 
-void gem_setDrawViewModelFunc(const WinData* wd, GEM_DrawViewModelFunc* drawViewModel)
+void gem_setDrawViewModelFunc(const WinData* wd, GEM_DrawViewModelFunc* drawViewModel, GEM_UpdateSliderModelFunc* updateSlider)
 {
     wd->drawViewModel = drawViewModel;
+    gem_initVerticalSlider(&wd->verticalSlider, wd, updateSlider);
 }
 
 void* gem_getViewModel(const WinData* wd) {
