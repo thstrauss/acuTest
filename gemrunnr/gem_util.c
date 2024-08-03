@@ -22,7 +22,7 @@
 #include <aes.h>
 
 #include "gem_util.h"
-#include "gem_modl.h"
+#include "g_window.h"
 
 #include <stdio.h>
 

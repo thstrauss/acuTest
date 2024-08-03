@@ -23,7 +23,7 @@
 #define __GEM_UTILS__
 
 #include <aes.h>
-#include "gem_modl.h"
+#include <g_window.h>
 
 #define max(t, x, y) (##t##1 = (x), ##t##2 =(y), ##t##1 > ##t##2 ? ##t##1 : ##t##2)
 #define min(t, x, y) (##t##1 = (x), ##t##2 =(y), ##t##1 < ##t##2 ? ##t##1 : ##t##2)
@@ -34,8 +34,6 @@ void gem_triggerRedrawDesktop(const WinData* wd);
 
 void gem_triggerRedraw(const WinData* wd);
 void gem_triggerRedrawRect(const WinData* wd, GRECT* rect);
-
-
 
 int gem_rectIntersect(const GRECT* r1, GRECT* r2);
 

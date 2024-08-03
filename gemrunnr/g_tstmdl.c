@@ -31,7 +31,7 @@
 #include <acu_rprt.h>
 #include <acu_suit.h>
 
-#include "gem_modl.h"
+#include "g_tstmdl.h"
 #include "gem_util.h"
 #include "g_progrs.h"
 

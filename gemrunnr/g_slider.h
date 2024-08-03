@@ -27,8 +27,8 @@ struct WinData_;
 typedef struct VerticalSlider_ {
     const struct WinData_* winData;
     void (*updateModel)(const struct VerticalSlider_* slider, const void* model);
-    int totalLines;
-    int linesPosition;
+    int available;
+    int offset;
 } VerticalSlider;
 
 typedef void GEM_UpdateSliderModelFunc(const VerticalSlider* slider, const void* model);

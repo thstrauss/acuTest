@@ -28,6 +28,7 @@
 #include <aes.h>
 
 #include "g_window.h"
+#include "g_slider.h"
 
 typedef struct TestModel_ {
 	int totalTestNumber;
@@ -44,6 +45,7 @@ typedef struct TestModel_ {
 	OBJECT* content; 
 } TestModel;
 
+void updateSlider(const VerticalSlider* slider, const void* model);
 
 void gem_selectFile(const WinData* wd);
 

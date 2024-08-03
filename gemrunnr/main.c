@@ -30,7 +30,7 @@
 #include "gemrunnr.h"
 
 #include <acu_util.h>
-#include "gem_modl.h"
+#include "g_tstmdl.h"
 #include "gem_util.h"
 #include "g_slider.h"
 
@@ -69,8 +69,8 @@ void setClip(const WinData* wd, const GRECT* rect, int flag) {
 
 static void updateSlider(const VerticalSlider* slider, const void* model) {
 	TestModel* testModel = model;
-    slider->totalLines = testModel->totalTestNumber;
-    slider->linesPosition = testModel->verticalPositionN;
+    slider->available = testModel->totalTestNumber;
+    slider->offset = testModel->verticalPositionN;
 }
 
 void drawInterior(const WinData* wd, const GRECT* clippingRect) {

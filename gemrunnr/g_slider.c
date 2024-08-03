@@ -20,7 +20,6 @@
  */
 
 #include "g_slider.h"
-#include "gem_modl.h"
 #include "gem_util.h"
 #include <aes.h>
 
@@ -34,13 +33,9 @@ static int gem_sliderSize(int numAvailable, int numShown) {
 static int gem_sliderPositionN(int numAvailable, int numShown, int offset) {
     if (numAvailable >= numShown) {
         return 0;
-    }
-    else {
+    } else {
         int scrollableRegion = numShown - numAvailable;
-        int temp1 = offset / scrollableRegion;
-        int temp2 = offset % scrollableRegion;
-
-        return (int)((1000L * temp1) + ((1000L * temp2) / scrollableRegion));
+        return (int)(offset * 1000L / scrollableRegion);
     }
 }
 
@@ -60,7 +55,7 @@ void gem_updateSliders(const VerticalSlider* verticalSlider) {
     verticalSlider->updateModel(verticalSlider, model);
 
     wind_set(verticalSlider->winData->windowHandle, WF_VSLSIZE,
-        gem_sliderSize(linesShown, verticalSlider->totalLines), 0, 0, 0);
+        gem_sliderSize(linesShown, verticalSlider->available), 0, 0, 0);
     wind_set(verticalSlider->winData->windowHandle, WF_VSLIDE,
-        gem_sliderPositionN(linesShown, verticalSlider->totalLines, verticalSlider->linesPosition), 0, 0, 0);
+        gem_sliderPositionN(linesShown, verticalSlider->available, verticalSlider->offset), 0, 0, 0);
 }
