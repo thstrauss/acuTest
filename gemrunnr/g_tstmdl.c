@@ -32,7 +32,7 @@
 #include <acu_suit.h>
 
 #include "g_tstmdl.h"
-#include "gem_util.h"
+#include "g_util.h"
 #include "g_progrs.h"
 
 void gem_drawContent(const WinData* wd, const void* viewModel, const GRECT* clippingRect, const GRECT* workingRect) {

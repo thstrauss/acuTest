@@ -33,10 +33,10 @@ pcstart.o
 
 main.c (gemrunnr.h, g_tstmdl.h, g_window.h)
 rsc.c (gemrunnr.h, gemrunnr.rsh) [-A-]
-gem_util.c (gem_util.h)
 g_tstmdl.c (g_tstmdl.h, g_progrs.h, g_window.h)
 g_progrs.c (g_progrs.h)
 g_slider.c (g_slider.h)
+g_util.c (g_util.h)
 g_window.c (g_window.h, g_slider.h)
 
 ..\acu_util\acu_util.prj

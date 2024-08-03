@@ -21,7 +21,7 @@
  
 #include <aes.h>
 
-#include "gem_util.h"
+#include "g_util.h"
 #include "g_window.h"
 
 #include <stdio.h>

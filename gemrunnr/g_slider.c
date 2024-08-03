@@ -20,7 +20,7 @@
  */
 
 #include "g_slider.h"
-#include "gem_util.h"
+#include "g_util.h"
 #include <aes.h>
 
 static int gem_sliderSize(int numAvailable, int numShown) {
