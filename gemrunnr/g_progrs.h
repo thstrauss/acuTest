@@ -23,7 +23,7 @@
 #define __gem_progress__
 
 #include <aes.h>
-#include "g_cellsze.h"
+#include "g_cellsz.h"
 
 typedef struct Gem_ProgressBar_ {
     OBJECT* barObject;

@@ -20,6 +20,7 @@
  */
 
 #include "g_progrs.h"
+#include "g_util.h"
 
 #include <aes.h>
 #include <string.h>
@@ -45,18 +46,14 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, const CellSize* cel
 
 	int xOffset;
 	int yOffset;
-    int i;
+	
     progressBar->barObject = acu_emalloc(sizeof(barObjectTemplate));
     memcpy(progressBar->barObject, barObjectTemplate, sizeof(barObjectTemplate));
     
     progressBar->buffer[0] = '\0';
     
-    for (i=0; i < 5; i++) {
-        progressBar->barObject[i].ob_x *= cellSize->width;
-        progressBar->barObject[i].ob_y *= cellSize->height;
-        progressBar->barObject[i].ob_width *= cellSize->width;
-        progressBar->barObject[i].ob_height *= cellSize->height;
-    }
+    gem_scaleObjectTree(progressBar->barObject, 5, cellSize);
+
     progressBar->barObject[2].ob_width = 0;
     progressBar->barObject[4].ob_spec.free_string = progressBar->buffer;
     form_center(progressBar->barObject, 
@@ -76,7 +73,6 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, const CellSize* cel
     progressBar->infoY = yOffset + progressBar->info->ob_y;
     
     progressBar->progressBarWidth = progressBar->barObject[1].ob_width;
-
 }
 
 void gem_showProgressBar(const Gem_ProgressBar* progressBar) {

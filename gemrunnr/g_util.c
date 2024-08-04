@@ -94,3 +94,13 @@ int gem_rectIntersect(const GRECT* r1, GRECT* r2) {
     
     return ret;
 }
+
+void gem_scaleObjectTree(const OBJECT* objectTree, int numObjects, const CellSize* cellSize) {
+    int i;
+    for (i = 0; i < numObjects; i++) {
+        objectTree[i].ob_x *= cellSize->width;
+        objectTree[i].ob_y *= cellSize->height;
+        objectTree[i].ob_width *= cellSize->width;
+        objectTree[i].ob_height *= cellSize->height;
+    }
+}

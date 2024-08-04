@@ -24,6 +24,7 @@
 
 #include <aes.h>
 #include <g_window.h>
+#include <g_cellsze.h>
 
 #define max(t, x, y) (##t##1 = (x), ##t##2 =(y), ##t##1 > ##t##2 ? ##t##1 : ##t##2)
 #define min(t, x, y) (##t##1 = (x), ##t##2 =(y), ##t##1 < ##t##2 ? ##t##1 : ##t##2)
@@ -36,5 +37,7 @@ void gem_triggerRedraw(const WinData* wd);
 void gem_triggerRedrawRect(const WinData* wd, GRECT* rect);
 
 int gem_rectIntersect(const GRECT* r1, GRECT* r2);
+
+void gem_scaleObjectTree(const OBJECT* objectTree, int numObjects, const CellSize* cellSize);
 
 #endif
