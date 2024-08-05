@@ -87,7 +87,7 @@ size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t
 
         strncpy_s(bufferPtr, remainderStart + 1, s, remainderStart);
         bufferPtr += remainderStart;
-        strncpy_s(bufferPtr, ellipsesLength + 1, ellipses, ellipsesLength);
+        strncpy_s(bufferPtr, ellipsesLength + 1, ellipses, ellipsesLength-1);
         bufferPtr += ellipsesLength;
         strncpy_s(bufferPtr, remainderEnd + 1, s + (length - remainderEnd), remainderEnd);
         length = width;
