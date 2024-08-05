@@ -62,7 +62,7 @@ static size_t gem_getTestContent(char *buffer, size_t bufferSize, const ACU_Test
     return acu_sprintf_s(buffer, bufferSize, "%s : %s", testCase->result != NULL ? ((testCase->result->status == ACU_TEST_PASSED) ? "passed" : "failed") : "      ", testCase->name);
 }
 
-static void gem_contentLine(const CellSize* cellSize, const TestModel* testModel, const ACU_TestCase* testCase, int lineIndex) {
+static void gem_contentLine(const TestModel* testModel, const ACU_TestCase* testCase, int lineIndex) {
     OBJECT* line = &testModel->content[lineIndex + 1];
 
     size_t bufferSize = strlen(testCase->name) + 20;
@@ -77,9 +77,9 @@ static void gem_contentLine(const CellSize* cellSize, const TestModel* testModel
     line->ob_state = NORMAL;
     line->ob_spec.free_string = buffer;
     line->ob_x = 0;
-    line->ob_y = lineIndex * cellSize->height;
-    line->ob_width = (int) lineLength * cellSize->width;
-    line->ob_height = cellSize->height;
+    line->ob_y = lineIndex;
+    line->ob_width = (int) lineLength;
+    line->ob_height = 1;
 }
 
 void gem_content(const CellSize* cellSize, const TestModel* testModel) {
@@ -93,15 +93,18 @@ void gem_content(const CellSize* cellSize, const TestModel* testModel) {
     testModel->content = (OBJECT*) acu_emalloc(sizeof(OBJECT)*(numberOfLines+1));
     
     memcpy(&testModel->content[0], &box, sizeof(OBJECT));
-    testModel->content[0].ob_width = 80 * cellSize->width;
-    testModel->content[0].ob_height = numberOfLines * cellSize->height;
+    testModel->content[0].ob_width = 80;
+    testModel->content[0].ob_height = numberOfLines;
     if (testModel->testList) {
         testElement = acu_listHead(testModel->testList);
     }
     for (i=0; i<numberOfLines; i++) {
-        gem_contentLine(cellSize, testModel, (ACU_TestCase*)testElement->data, i);
+        gem_contentLine(testModel, (ACU_TestCase*)testElement->data, i);
         testElement = acu_listNext(testElement);
     }
+
+    gem_scaleObjectTree(testModel->content, numberOfLines+1, cellSize);
+
     if (numberOfLines > 0) {
         testModel->content[0].ob_head = 1;
         testModel->content[0].ob_tail = numberOfLines;
