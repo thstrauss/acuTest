@@ -44,9 +44,9 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, const CellSize* cel
         { 3, -1, -1, G_STRING, LASTOB, NORMAL, 0, 0,0, 25,1 } /* TESTNAME */
     };
 
-	int xOffset;
-	int yOffset;
-	
+    int xOffset;
+    int yOffset;
+    
     progressBar->barObject = acu_emalloc(sizeof(barObjectTemplate));
     memcpy(progressBar->barObject, barObjectTemplate, sizeof(barObjectTemplate));
     
@@ -57,10 +57,10 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, const CellSize* cel
     progressBar->barObject[2].ob_width = 0;
     progressBar->barObject[4].ob_spec.free_string = progressBar->buffer;
     form_center(progressBar->barObject, 
-    	&progressBar->clipX, 
-    	&progressBar->clipY, 
-    	&progressBar->clipWidth, 
-    	&progressBar->clipHeight);
+        &progressBar->clipX, 
+        &progressBar->clipY, 
+        &progressBar->clipWidth, 
+        &progressBar->clipHeight);
     xOffset = progressBar->barObject[0].ob_x;
     yOffset = progressBar->barObject[0].ob_y;
     
@@ -76,7 +76,7 @@ void gem_initProgressBar(const Gem_ProgressBar* progressBar, const CellSize* cel
 }
 
 void gem_showProgressBar(const Gem_ProgressBar* progressBar) {
-	wind_update(BEG_UPDATE);
+    wind_update(BEG_UPDATE);
     form_dial(FMD_START, 
         progressBar->clipX, progressBar->clipY, progressBar->clipWidth, progressBar->clipHeight, 
         progressBar->clipX, progressBar->clipY, progressBar->clipWidth, progressBar->clipHeight);
@@ -87,7 +87,7 @@ void gem_hideProgressBar(const Gem_ProgressBar* progressBar) {
     form_dial(FMD_FINISH,
         progressBar->clipX, progressBar->clipY, progressBar->clipWidth, progressBar->clipHeight, 
         progressBar->clipX, progressBar->clipY, progressBar->clipWidth, progressBar->clipHeight);
-	wind_update(END_UPDATE);
+    wind_update(END_UPDATE);
 }
 
 void gem_updateProgressBar(const Gem_ProgressBar* progressBar, int position, const char* info) {
@@ -96,16 +96,16 @@ void gem_updateProgressBar(const Gem_ProgressBar* progressBar, int position, con
 
     objc_draw(progressBar->barObject, 2, 1,
         progressBar->barX,
-		progressBar->barY,
+        progressBar->barY,
         progressBar->bar->ob_width,
         progressBar->bar->ob_height);
     objc_draw(progressBar->barObject, 3, 2,
         progressBar->infoX,
-		progressBar->infoY,
+        progressBar->infoY,
         progressBar->info->ob_width,
         progressBar->info->ob_height);
 }
 
 int gem_calcProgressBarPosition(const Gem_ProgressBar* progressBar, long value, long maxValue) {
-	return (int) ((value * progressBar->progressBarWidth) / maxValue);
+    return (int) ((value * progressBar->progressBarWidth) / maxValue);
 }

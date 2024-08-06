@@ -25,7 +25,7 @@
 #include "acu_cmmn.h"
 
 void gem_initWinData(WinData* wd) {
-	UNUSED(wd);
+    UNUSED(wd);
 }
 
 void gem_setViewModel(const WinData* wd, const void* viewModel) {
