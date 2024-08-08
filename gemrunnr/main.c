@@ -68,7 +68,7 @@ void setClip(const WinData* wd, const GRECT* rect, int flag) {
 }
 
 static void updateSlider(const VerticalSlider* slider, const void* model) {
-	TestModel* testModel = model;
+    TestModel* testModel = model;
     slider->available = testModel->totalTestNumber;
     slider->offset = testModel->verticalPositionN;
 }

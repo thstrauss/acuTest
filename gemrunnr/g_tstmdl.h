@@ -31,18 +31,18 @@
 #include "g_slider.h"
 
 typedef struct TestModel_ {
-	int totalTestNumber;
-	int verticalPositionN;
-	
-	ACU_Entry* entry;
-	ACU_List* testList;
-	char testFileName[13];
-	char testFilePath[260];
+    int totalTestNumber;
+    int verticalPositionN;
+    
+    ACU_Entry* entry;
+    ACU_List* testList;
+    char testFileName[13];
+    char testFilePath[260];
 
     char windowTitle[270];
     char infoLine[256];
-	
-	OBJECT* content; 
+    
+    OBJECT* content; 
 } TestModel;
 
 void updateSlider(const VerticalSlider* slider, const void* model);
