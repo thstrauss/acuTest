@@ -70,25 +70,30 @@ char* acu_estrdup(const char* s) {
 
 size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width)
 {
-    static char ellipses[] = "...";
-    static int ellipsesLength = sizeof(ellipses)-1;
+    static char ellipsesChar = '.';
+    const int ellipsesLength = 3;
 
     size_t length = strlen(s);
     if (length <= width) {
         strncpy_s(buffer, bufferSize, s, width);
         width = length;
     } else if (width < ellipsesLength) {
-        strncpy_s(buffer, width + 1, ellipses, width);
+        char* bufferPtr = buffer;
+        int i;
+        for (i = 0; i < width; i++) {
+            *(bufferPtr++) = ellipsesChar;
+        }
         length = width;
-    }    else {
+    } else {
         size_t remainderEnd = (width - ellipsesLength) / 2;
         size_t remainderStart = width - remainderEnd - ellipsesLength;
         char* bufferPtr = buffer;
 
         strncpy_s(bufferPtr, remainderStart + 1, s, remainderStart);
         bufferPtr += remainderStart;
-        strncpy_s(bufferPtr, ellipsesLength + 1, ellipses, ellipsesLength);
-        bufferPtr += ellipsesLength;
+        *(bufferPtr++) = ellipsesChar;
+        *(bufferPtr++) = ellipsesChar;
+        *(bufferPtr++) = ellipsesChar;
         strncpy_s(bufferPtr, remainderEnd + 1, s + (length - remainderEnd), remainderEnd);
         length = width;
     }
