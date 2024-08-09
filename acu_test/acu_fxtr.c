@@ -33,11 +33,15 @@
 #include "acu_tryc.h"
 
 static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_Progress* progress) {
+    static ACU_Stack* frameStack = NULL;
     ACU_ExecuteEnv environment;
     ACU_Result* result = acuTest_resultMalloc();
-    ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     frame.exception = 0;
+
+    if (!frameStack) {
+        frameStack = acu_getFrameStack();
+    }
 
     environment.result = result;
     environment.exceptionFrame = &frame;
