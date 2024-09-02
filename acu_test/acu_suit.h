@@ -28,7 +28,7 @@
 #include "acu_fxtr.h"
 #include "acu_list.h"
 
- /* The ACU_Suite allows to group ACU_TestFixtures. */
+ /* The ACU_Suite struct allows to group ACU_TestFixtures. */
 typedef struct ACU_Suite_ {
     ACU_List* testFixtures;
     char* name;
@@ -36,16 +36,22 @@ typedef struct ACU_Suite_ {
     clock_t end;
 } ACU_Suite;
 
-__EXPORT void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture);
-
-__EXPORT void acu_suiteInit(ACU_Suite* suite, const char* name);
-
-__EXPORT enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_Progress* progress);
-
-__EXPORT void acu_suiteAccept(const ACU_Suite* suite, ACU_Visitor* visitor);
-
+/* Allocates an ACU_Suite. */
 __EXPORT ACU_Suite* acu_suiteMalloc(void);
 
+/* Initializes an ACU_Suite struct and sets the suite name. */
+__EXPORT void acu_suiteInit(ACU_Suite* suite, const char* name);
+
+/* Adds an ACU_Fixture to an ACU_Suite. */
+__EXPORT void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture);
+
+/* Executes an ACU_Suite and reports progress. */
+__EXPORT enum ACU_TestResult acu_suiteExecute(ACU_Suite* suite, ACU_Progress* progress);
+
+/* Traverses an ACU_Suite with its added ACU_Fixture's. For each node (ACU_TestCase) the visitor is handled. */
+__EXPORT void acu_suiteAccept(const ACU_Suite* suite, ACU_Visitor* visitor);
+
+/* Releases all memory allocated by the ACU_Suite. */
 __EXPORT void acu_suiteDestroy(ACU_Suite* suite);
 
 #endif
