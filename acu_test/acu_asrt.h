@@ -64,6 +64,7 @@ __IMPORT extern ACU_Funcs acu_##type##op##Funcs;
 
 typedef signed char signedChar;
 
+/* Equal assert for signed char */
 CREATE_ASSERT_FUNC(signedChar, Equal, == , %c)
 CREATE_ASSERT_FUNC(signedChar, NotEqual, != , %c)
 CREATE_ASSERT_FUNC(signedChar, Less, < , %c)
@@ -73,6 +74,7 @@ CREATE_ASSERT_FUNC(signedChar, GreaterEqual, >= , %c)
 
 typedef unsigned char unsignedChar;
 
+/* Equal assert for unsigned signed char */
 CREATE_ASSERT_FUNC(unsignedChar, Equal, == , %c)
 CREATE_ASSERT_FUNC(unsignedChar, NotEqual, != , %c)
 CREATE_ASSERT_FUNC(unsignedChar, Less, < , %c)
@@ -155,12 +157,12 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
             parameter.sourceLine = __LINE__;
 
 /* Macro which performs the assert call.
-* environment: filled from framework.
-* type: the c type name
-* op: one out of Equal, NotEqual, Less, Greater, LessEqual, GreaterEqual
-* actualValue: r-value with value of type
-* expectedValue: r-value with value of type
-* messageValue: Describes the assert.
+environment: filled from framework.
+type: the c type name
+op: one out of Equal, NotEqual, Less, Greater, LessEqual, GreaterEqual
+actualValue: r-value with value of type
+expectedValue: r-value with value of type
+messageValue: Describes the assert.
 */
 #define ACU_assert(environment, type, op, actualValue, expectedValue, messageValue) { \
     ACU_PrepareParameter(type, op, actualValue, expectedValue, messageValue) \
@@ -176,6 +178,7 @@ __IMPORT extern ACU_Funcs acu_containsStrFuncs;
 __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
 #endif
 
+/* Fills the ACU_AssertParameter struct. */
 #define ACU_PtrPrepareParameter(actualValue, expectedValue, messageValue, __assertFunc) \
     ACU_AssertParameter parameter; \
     parameter.funcs = &##__assertFunc##Funcs; \
@@ -186,10 +189,10 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
     parameter.sourceLine = __LINE__;
 
 /* Macro which performs the assert call.for ptr equal
-* environment: filled from framework.
-* actualValue: r-value with value of type
-* expectedValue: r-value with value of type
-* messageValue: Describes the assert.
+environment: filled from framework.
+actualValue: r-value with value of type
+expectedValue: r-value with value of type
+messageValue: Describes the assert.
 */
 #define ACU_assert_ptrEqual(environment, actualValue, expectedValue, messageValue) {\
     ACU_PtrPrepareParameter(actualValue, expectedValue, messageValue, acu_equalPtr) \
@@ -197,10 +200,10 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
 }
 
 /* Macro which performs the assert call.for ptr is NULL
-* environment: filled from framework.
-* actualValue: r-value with value of type
-* expectedValue: r-value with value of type
-* messageValue: Describes the assert.
+environment: filled from framework.
+actualValue: r-value with value of type
+expectedValue: r-value with value of type
+messageValue: Describes the assert.
 */
 #define ACU_assert_ptrIsNull(environment, actualValue, messageValue) {\
     ACU_PtrPrepareParameter(actualValue, NULL, messageValue, acu_equalPtr) \
@@ -208,10 +211,10 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
 }
 
 /* Macro which performs the assert call.for ptr not equal
-* environment: filled from framework.
-* actualValue: r-value with value of type
-* expectedValue: r-value with value of type
-* messageValue: Describes the assert.
+environment: filled from framework.
+actualValue: r-value with value of type
+expectedValue: r-value with value of type
+messageValue: Describes the assert.
 */
 #define ACU_assert_ptrNotEqual(environment, actualValue, expectedValue, messageValue) {\
     ACU_PtrPrepareParameter(actualValue, expectedValue, messageValue, acu_notEqualPtr) \
@@ -219,10 +222,10 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
 }
 
 /* Macro which performs the assert call.for ptr is not NULL
-* environment: filled from framework.
-* actualValue: r-value with value of type
-* expectedValue: r-value with value of type
-* messageValue: Describes the assert.
+environment: filled from framework.
+actualValue: r-value with value of type
+expectedValue: r-value with value of type
+messageValue: Describes the assert.
 */
 #define ACU_assert_ptrIsNotNull(environment, actualValue, messageValue) {\
     ACU_PtrPrepareParameter(actualValue, NULL, messageValue, acu_notEqualPtr) \
@@ -235,56 +238,56 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
 }
 
 /* Macro which performs the assert call.for string actual value is equal to expected value.
-* environment: filled from framework.
-* actualValue: r-value with value of type
-* expectedValue: r-value with value of type
-* messageValue: Describes the assert.
+environment: filled from framework.
+actualValue: r-value with value of type
+expectedValue: r-value with value of type
+messageValue: Describes the assert.
 */
 #define ACU_assert_strEqual(environment, actualValue, expectedValue, messageValue) \
    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_equalStr)
 
 /* Macro which performs the assert call.for string is empty
-* environment: filled from framework.
-* actualValue: r-value with value of type
-* expectedValue: r-value with value of type
-* messageValue: Describes the assert.
+environment: filled from framework.
+actualValue: r-value with value of type
+expectedValue: r-value with value of type
+messageValue: Describes the assert.
 */
 #define ACU_assert_strIsEmpty(environment, actualValue, messageValue) \
    __ACU_assert_str(environment, actualValue, "", messageValue, acu_equalStr)
 
 /* Macro which performs the assert call.for string is not empty
-* environment: filled from framework.
-* actualValue: r-value with value of type
-* expectedValue: r-value with value of type
-* messageValue: Describes the assert.
+environment: filled from framework.
+actualValue: r-value with value of type
+expectedValue: r-value with value of type
+messageValue: Describes the assert.
 */
 #define ACU_assert_strIsNotEmpty(environment, actualValue, messageValue) \
    __ACU_assert_str(environment, actualValue, "", messageValue, acu_notEqualStr)
 
 /* Macro which performs the assert call.for string actual value is not equal to expected value
-* environment: filled from framework.
-* actualValue: rvalue with value of type
-* expectedValue: rvalue with value of type
-* messageValue: Describes the assert.
+environment: filled from framework.
+actualValue: r-value with value of type
+expectedValue: r-value with value of type
+messageValue: Describes the assert.
 */
 #define ACU_assert_strNotEqual(environment, actualValue, expectedValue, messageValue) \
   \
    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notEqualStr)
 
 /* Macro which performs the assert call.for string actual value contains expected value 
-* environment: filled from framework.
-* actualValue: r-value with value of type
-* expectedValue: r-value with value of type
-* messageValue: Describes the assert.
+environment: filled from framework.
+actualValue: r-value with value of type
+expectedValue: r-value with value of type
+messageValue: Describes the assert.
 */
 #define ACU_assert_strContains(environment, actualValue, expectedValue, messageValue) \
    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_containsStr)
 
 /* Macro which performs the assert call.for string actual value does not contain expected value 
-* environment: filled from framework.
-* actualValue: r-value with value of type
-* expectedValue: r-value with value of type
-* messageValue: Describes the assert.
+environment: filled from framework.
+actualValue: r-value with value of type
+expectedValue: r-value with value of type
+messageValue: Describes the assert.
 */
 #define ACU_assert_strNotContains(environment, actualValue, expectedValue, messageValue) \
    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notContainsStr)
