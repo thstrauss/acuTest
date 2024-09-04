@@ -32,8 +32,7 @@ ACU_Files* acu_filesMalloc(void)
     return acu_emalloc(sizeof(ACU_Files));
 }
 
-static void acu_fileEntryDestroy(void* data) {
-    ACU_FileEntry* entry = (ACU_FileEntry*) data;
+static void acu_fileEntryDestroy(ACU_FileEntry* entry) {
     if (entry->fileName) {
         free(entry->fileName);
     }
@@ -43,7 +42,7 @@ static void acu_fileEntryDestroy(void* data) {
 void acu_filesInit(ACU_Files* files)
 {
     files->fileList = acu_listMalloc();
-    acu_listInit(files->fileList, acu_fileEntryDestroy);
+    acu_listInit(files->fileList, (ACU_ListDestroyFunc*) acu_fileEntryDestroy);
 }
 
 void acu_filesDestroy(ACU_Files* files)

@@ -37,7 +37,7 @@ void acu_suiteAddFixture(ACU_Suite* suite, ACU_Fixture* fixture)
 void acu_suiteInit(ACU_Suite* suite, const char* name)
 {
     ACU_List* testFixtures = acu_listMalloc();
-    acu_listInit(testFixtures, acu_fixtureDestroy);
+    acu_listInit(testFixtures, (ACU_ListDestroyFunc*) acu_fixtureDestroy);
     suite->testFixtures = testFixtures;
     suite->name = acu_estrdup(name);
     suite->start = (clock_t)-1;

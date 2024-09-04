@@ -43,18 +43,20 @@ typedef struct ACU_Fixture_ {
     clock_t end;
 } ACU_Fixture;
 
+
+__EXPORT void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
+
+__EXPORT ACU_Fixture* acu_fixtureMalloc(void);
+
+__EXPORT void acu_fixtureDestroy(ACU_Fixture* fixture);
+
 __EXPORT void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char *name, ACU_TestFunc testFunc);
 
 __EXPORT void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context);
-
-__EXPORT void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
 
 __EXPORT enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progress);
 
 __EXPORT void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_Visitor* visitor);
 
-__EXPORT ACU_Fixture* acu_fixtureMalloc(void);
-
-__EXPORT void acu_fixtureDestroy(void* fixture);
 
 #endif
