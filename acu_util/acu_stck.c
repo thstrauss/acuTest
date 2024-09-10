@@ -107,8 +107,11 @@ __EXPORT int acu_stackDrop(ACU_Stack* stack)
     }
 
     oldElement = stack->head;
-
     stack->head = stack->head->next;
+
+    if (stack->destroy && oldElement->data) {
+        stack->destroy(oldElement->data);
+    }
     free(oldElement);
     stack->size--;
 
