@@ -32,16 +32,13 @@
 #include "acu_suit.h"
 #include "acu_tryc.h"
 
+static ACU_Stack* frameStack = NULL;
+
 static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_Progress* progress) {
-    static ACU_Stack* frameStack = NULL;
     ACU_ExecuteEnv environment;
     ACU_Result* result = acuTest_resultMalloc();
     ACU_Frame frame;
     frame.exception = 0;
-
-    if (!frameStack) {
-        frameStack = acu_getFrameStack();
-    }
 
     environment.result = result;
     environment.exceptionFrame = &frame;
@@ -109,6 +106,9 @@ void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
 enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progress) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
     enum ACU_TestResult result = ACU_TEST_PASSED;
+    if (!frameStack) {
+        frameStack = acu_getFrameStack();
+    }
     fixture->start = clock();
     while (testElement != NULL) {
         result = acuTest_calcResult(result, acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress));
