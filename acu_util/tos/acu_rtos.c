@@ -18,27 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+ 
+#include "..\acu_rand.h"
 
-#pragma once
-#ifndef _ACU_RAND_H_
-#define _ACU_RAND_H_
-
-#include "acu_cmmn.h"
-
-#ifdef __TOS__
-typedef unsigned long uint32_t;
-#else
-#include <stdint.h>
-#endif
-
-uint32_t rotl(const uint32_t x, int k);
-
-typedef struct ACU_RandState_ {
-    uint32_t s[4];
-} ACU_RandState;
-
-__EXPORT void acu_srand(ACU_RandState* state, uint32_t seed);
-
-__EXPORT uint32_t acu_rand(ACU_RandState* state);
-
-#endif
+uint32_t rotl(const uint32_t x, int k) 0xE3B8;

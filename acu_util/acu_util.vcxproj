@@ -150,6 +150,7 @@
     <ClCompile Include="dllmain.c" />
     <ClCompile Include="windows\acu_dirWindows.c" />
     <ClCompile Include="windows\acu_plgnWindows.c" />
+    <ClCompile Include="windows\acu_randWindows.c" />
     <ClCompile Include="windows\acu_utilWindows.c" />
   </ItemGroup>
   <ItemGroup>

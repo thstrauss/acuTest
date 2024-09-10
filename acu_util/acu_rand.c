@@ -42,14 +42,6 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 
 #include "acu_rand.h"
 
-#ifdef __TOS__
-static uint32_t rotl(const uint32_t x, int k) 0xE3B8;
-#else
-static inline uint32_t rotl(const uint32_t x, int k) {
-    return (x << k) | (x >> (32 - k));
-}
-#endif
-
 void acu_srand(ACU_RandState* state, uint32_t seed)
 {
     state->s[0] = 0UL;

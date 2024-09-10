@@ -73,35 +73,35 @@ static const char nibbles[] = "0123456789ABCDEF";
 
 __EXPORT void acu_formatUuid(char* buffer, const ACU_UUID* uuid)
 {
-#define format(ii) \
+#define __format(ii) \
     *buffer++ = nibbles[uuid->bytes[(ii)] >> 4]; \
     *buffer++ = nibbles[uuid->bytes[(ii++)] & 0x0f];
 
     int i=0;
 
-    format(i);
-    format(i);
-    format(i);
-    format(i);
+    __format(i);
+    __format(i);
+    __format(i);
+    __format(i);
     *buffer++ = '-';
-    format(i);
-    format(i);
+    __format(i);
+    __format(i);
     *buffer++ = '-';
-    format(i);
-    format(i);
+    __format(i);
+    __format(i);
     *buffer++ = '-';
-    format(i);
-    format(i);
+    __format(i);
+    __format(i);
     *buffer++ = '-';
-    format(i);
-    format(i);
-    format(i);
-    format(i);
-    format(i);
-    format(i);
+    __format(i);
+    __format(i);
+    __format(i);
+    __format(i);
+    __format(i);
+    __format(i);
 
     *buffer = 0;
-#undef format
+#undef __format
 }
 
 static unsigned char acu_hexChar(unsigned char c)
@@ -150,37 +150,37 @@ static int acu_isValidUuid(const char* buffer) {
 
 __EXPORT void acu_parseUuid(const char* buffer, ACU_UUID* uuid)
 {
-#define parse(ii) \
+#define __parse(ii) \
     uuid->bytes[ii] = acu_hexChar(*buffer++); \
     uuid->bytes[ii] = (uuid->bytes[ii++] << 4) | acu_hexChar(*buffer++);
 
     if (acu_isValidUuid(buffer)) {
         int i = 0;
-        parse(i);
-        parse(i);
-        parse(i);
-        parse(i);
+        __parse(i);
+        __parse(i);
+        __parse(i);
+        __parse(i);
         buffer++;
-        parse(i);
-        parse(i);
+        __parse(i);
+        __parse(i);
         buffer++;
-        parse(i);
-        parse(i);
+        __parse(i);
+        __parse(i);
         buffer++;
-        parse(i);
-        parse(i);
+        __parse(i);
+        __parse(i);
         buffer++;
-        parse(i);
-        parse(i);
-        parse(i);
-        parse(i);
-        parse(i);
-        parse(i);
+        __parse(i);
+        __parse(i);
+        __parse(i);
+        __parse(i);
+        __parse(i);
+        __parse(i);
     } else {
         int i;
         for (i = 0; i < 4; i++) {
             uuid->longs[i] = _NIL.longs[i];
         }
     }
-#undef parse
+#undef __parse
 }
