@@ -21,4 +21,4 @@
  
 #include "..\acu_rand.h"
 
-uint32_t rotl(const uint32_t x, int k) 0xE3B8;
+

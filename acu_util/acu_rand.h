@@ -26,12 +26,16 @@
 #include "acu_cmmn.h"
 
 #ifdef __TOS__
-typedef unsigned long uint32_t;
-#else
-#include <stdint.h>
-#endif
 
+typedef unsigned long uint32_t;
+uint32_t rotl(const uint32_t x, int k) 0xE3B8;
+
+#else
+
+#include <stdint.h>
 uint32_t rotl(const uint32_t x, int k);
+
+#endif
 
 typedef struct ACU_RandState_ {
     uint32_t s[4];
