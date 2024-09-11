@@ -29,19 +29,7 @@
 
 #include <acu_cmmn.h>
 
-/* Function prototype for assert functions */
-typedef enum ACU_TestResult (ACU_assertFunc)(const struct ACU_AssertParameter_* parameter);
-/* Function prototype for functions to format messages for specific asserts */
-typedef char* (ACU_formatMessageFunc)(const struct ACU_AssertParameter_* parameter);
-
-/* Struct holds needed function pointers. */
-typedef struct ACU_Funcs_ {
-    ACU_assertFunc* assert;
-    ACU_formatMessageFunc* formatFailedMessage;
-    ACU_formatMessageFunc* formatErrorMessage;
-} ACU_Funcs;
-
-typedef void* voidPtr; 
+typedef void* voidPtr;
 typedef signed char signedChar;
 typedef unsigned char unsignedChar;
 typedef unsigned int unsignedInt;
@@ -66,6 +54,19 @@ typedef struct ACU_Values_ {
     ACU_Types actual;
     ACU_Types expected;
 } ACU_Values;
+
+/* Function prototype for assert functions */
+typedef enum ACU_TestResult (ACU_assertFunc)(ACU_Types* actual, ACU_Types* expected);
+/* Function prototype for functions to format messages for specific asserts */
+typedef char* (ACU_formatMessageFunc)(const struct ACU_AssertParameter_* parameter);
+
+/* Struct holds needed function pointers. */
+typedef struct ACU_Funcs_ {
+    ACU_assertFunc* assert;
+    ACU_formatMessageFunc* formatFailedMessage;
+    ACU_formatMessageFunc* formatErrorMessage;
+} ACU_Funcs;
+
 
 /* All parameters to an actual assert. */
 typedef struct ACU_AssertParameter_ {
