@@ -41,11 +41,36 @@ typedef struct ACU_Funcs_ {
     ACU_formatMessageFunc* formatErrorMessage;
 } ACU_Funcs;
 
+typedef void* voidPtr; 
+typedef signed char signedChar;
+typedef unsigned char unsignedChar;
+typedef unsigned int unsignedInt;
+typedef unsigned long unsignedLong;
+typedef unsigned short unsignedShort;
+
+typedef union ACU_Types_ {
+    voidPtr voidPtrType;
+    signedChar signedCharType;
+    unsignedChar unsignedCharType;
+    short shortType;
+    unsignedShort unsignedShortType;
+    int intType;
+    unsignedInt unsignedIntType;
+    long longType;
+    unsignedLong unsignedLongType;
+    float floatType;
+    double doubleType;
+} ACU_Types;
+
+typedef struct ACU_Values_ {
+    ACU_Types actual;
+    ACU_Types expected;
+} ACU_Values;
+
 /* All parameters to an actual assert. */
 typedef struct ACU_AssertParameter_ {
     ACU_Funcs* funcs;
-    const void* actual;
-    const void* expected;
+    ACU_Values values;
     const char* message;
     const char* sourceFileName;
     int sourceLine;
@@ -62,17 +87,13 @@ __EXPORT void acu_assert(
 __IMPORT extern ACU_Funcs acu_##type##op##Funcs;
 #endif
 
-typedef signed char signedChar;
-
 /* Equal assert for signed char */
-CREATE_ASSERT_FUNC(signedChar, Equal, == , %c)
+CREATE_ASSERT_FUNC(signedChar, Equal, == , % c)
 CREATE_ASSERT_FUNC(signedChar, NotEqual, != , %c)
 CREATE_ASSERT_FUNC(signedChar, Less, < , %c)
 CREATE_ASSERT_FUNC(signedChar, Greater, > , %c)
 CREATE_ASSERT_FUNC(signedChar, LessEqual, <= , %c)
 CREATE_ASSERT_FUNC(signedChar, GreaterEqual, >= , %c)
-
-typedef unsigned char unsignedChar;
 
 /* Equal assert for unsigned signed char */
 CREATE_ASSERT_FUNC(unsignedChar, Equal, == , %c)
@@ -89,8 +110,6 @@ CREATE_ASSERT_FUNC(int, Greater, >, %d)
 CREATE_ASSERT_FUNC(int, LessEqual, <=, %d)
 CREATE_ASSERT_FUNC(int, GreaterEqual, >= , %d)
 
-typedef unsigned int unsignedInt;
-
 CREATE_ASSERT_FUNC(unsignedInt, Equal, == , %u)
 CREATE_ASSERT_FUNC(unsignedInt, NotEqual, != , %u)
 CREATE_ASSERT_FUNC(unsignedInt, Less, < , %u)
@@ -105,8 +124,6 @@ CREATE_ASSERT_FUNC(short, Greater, > , %hd)
 CREATE_ASSERT_FUNC(short, LessEqual, <= , %hd)
 CREATE_ASSERT_FUNC(short, GreaterEqual, >= , %hd)
 
-typedef unsigned short unsignedShort;
-
 CREATE_ASSERT_FUNC(unsignedShort, Equal, == , %hu)
 CREATE_ASSERT_FUNC(unsignedShort, NotEqual, != , %hu)
 CREATE_ASSERT_FUNC(unsignedShort, Less, < , %hu)
@@ -120,8 +137,6 @@ CREATE_ASSERT_FUNC(long, Less, < , %ld)
 CREATE_ASSERT_FUNC(long, Greater, > , %ld)
 CREATE_ASSERT_FUNC(long, LessEqual, <= , %ld)
 CREATE_ASSERT_FUNC(long, GreaterEqual, >= , %ld)
-
-typedef unsigned long unsignedLong;
 
 CREATE_ASSERT_FUNC(unsignedLong, Equal, ==, %lu)
 CREATE_ASSERT_FUNC(unsignedLong, NotEqual, != , %lu)
@@ -146,12 +161,10 @@ CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
 
 /* ACU_PrepareParameter macro defines and fills parameter for the assert call. Filled at runtime. */
 #define ACU_PrepareParameter(type, op, actualValue, expectedValue, messageValue) \
-            const type __actual = (actualValue); \
-            const type __expected = (expectedValue); \
             ACU_AssertParameter parameter; \
             parameter.funcs = &acu_##type##op##Funcs; \
-            parameter.actual = &__actual; \
-            parameter.expected = &__expected; \
+            parameter.values.actual.type##Type = (actualValue); \
+            parameter.values.expected.type##Type = (expectedValue); \
             parameter.message = (messageValue); \
             parameter.sourceFileName = __FILE__;\
             parameter.sourceLine = __LINE__;
@@ -182,8 +195,8 @@ __IMPORT extern ACU_Funcs acu_notContainsStrFuncs;
 #define ACU_PtrPrepareParameter(actualValue, expectedValue, messageValue, __assertFunc) \
     ACU_AssertParameter parameter; \
     parameter.funcs = &##__assertFunc##Funcs; \
-    parameter.actual = (actualValue); \
-    parameter.expected = (expectedValue); \
+    parameter.values.actual.voidPtrType = (actualValue); \
+    parameter.values.expected.voidPtrType = (expectedValue); \
     parameter.message = (messageValue); \
     parameter.sourceFileName = __FILE__;\
     parameter.sourceLine = __LINE__;

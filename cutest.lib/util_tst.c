@@ -33,12 +33,12 @@
 #include "util_tst.h"
 
 static int visited = 0;
-static const char* actualErrorMessage;
+static char* actualErrorMessage;
 static enum ACU_Level actualErrorLevel;
 
 static void error(enum ACU_Level errorLevel, const char* errorMessage) {
     visited++;
-    actualErrorMessage = errorMessage;
+    actualErrorMessage = (char*) errorMessage;
     actualErrorLevel = errorLevel;
 }
 
