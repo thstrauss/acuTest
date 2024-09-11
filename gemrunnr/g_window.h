@@ -22,7 +22,7 @@
 #ifndef __G_WINDOW__
 #define __G_WINDOW__
 
-#include "g_cellsze.h"
+#include "g_cellsz.h"
 #include "g_slider.h"
 #include <aes.h>
 
