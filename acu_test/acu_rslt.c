@@ -34,9 +34,6 @@ void acuTest_resultDestroy(ACU_Result* result) {
     if (result->message) {
         free(result->message);
     }
-    if (result->sourceFileName) {
-        free(result->sourceFileName);
-    }
     free(result);
 }
 
