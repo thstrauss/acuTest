@@ -44,6 +44,7 @@ typedef struct ACU_Result_ {
 
 __EXPORT ACU_Result* acuTest_resultMalloc(void);
 __EXPORT void acuTest_resultInit(ACU_Result* result);
+__EXPORT void acuTest_resultPrepare(ACU_Result* result);
 __EXPORT void acuTest_resultDestroy(ACU_Result* result);
 __EXPORT enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedresult, enum ACU_TestResult result);
 

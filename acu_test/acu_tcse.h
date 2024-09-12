@@ -24,9 +24,9 @@
 #define _ACU_TEST_CASE_H_
 
 #include "acu_eenv.h"
+#include "acu_rslt.h"
 
 struct ACU_Fixture_;
-struct ACU_Result_;
 
 typedef void ACU_TestFunc(ACU_ExecuteEnv* environment, const void* context);
 
@@ -34,7 +34,7 @@ typedef void ACU_TestFunc(ACU_ExecuteEnv* environment, const void* context);
 typedef struct ACU_TestCase_ {
     ACU_TestFunc* testFunc;
     char* name;
-    struct ACU_Result_* result;
+    ACU_Result result;
     struct ACU_Fixture_* fixture;
 } ACU_TestCase;
 

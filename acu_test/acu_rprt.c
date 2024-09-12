@@ -34,7 +34,7 @@
 
 void acu_progress(const ACU_TestCase* testCase, void* progressContext) {
     char buffer[2];
-    acu_printf_s(buffer, sizeof(buffer), "%s", testCase->result->status == ACU_TEST_FAILED ? "F" : testCase->result->status == ACU_TEST_ERROR ? "E" : ".");
+    acu_printf_s(buffer, sizeof(buffer), "%s", testCase->result.status == ACU_TEST_FAILED ? "F" : testCase->result.status == ACU_TEST_ERROR ? "E" : ".");
     UNUSED(progressContext);
 }
 
@@ -48,8 +48,8 @@ void acu_report(const ACU_TestCase* testCase, void* context) {
         reportHelper->fixtureName = testCase->fixture->name;
         fprintf(stdout, "  %s took %ld ms\n\r", reportHelper->fixtureName, ((testCase->fixture->end - testCase->fixture->start) * 1000) / CLK_TCK);
     }
-    if (testCase->result && testCase->result->status != ACU_TEST_PASSED) {
-        fprintf(stdout, "    %s: %s\n\r      %s:%d:\n\r      %s\n\r", testCase->name, testCase->result->status == ACU_TEST_PASSED ? "passed" : "failed", SAFE_REF(testCase->result->sourceFileName), testCase->result->sourceLine, SAFE_REF(testCase->result->message));
+    if (testCase->result.status != ACU_TEST_PASSED) {
+        fprintf(stdout, "    %s: %s\n\r      %s:%d:\n\r      %s\n\r", testCase->name, testCase->result.status == ACU_TEST_PASSED ? "passed" : "failed", SAFE_REF(testCase->result.sourceFileName), testCase->result.sourceLine, SAFE_REF(testCase->result.message));
     }
 }
 
@@ -80,7 +80,7 @@ void acu_reportSummary(const ACU_TestCase* testCase, void* context)
 {
     ACU_Summary* summary = (ACU_Summary*) context;
     summary->totalTestCases++;
-    if (testCase->result && testCase->result->status == ACU_TEST_FAILED) {
+    if (testCase->result.status == ACU_TEST_FAILED) {
         summary->failedTestCases++;
     }
 }

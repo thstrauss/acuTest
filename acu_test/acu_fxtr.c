@@ -36,16 +36,16 @@ static ACU_Stack* frameStack = NULL;
 
 static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_Progress* progress) {
     ACU_ExecuteEnv environment;
-    ACU_Result* result = acuTest_resultMalloc();
     ACU_Frame frame;
     frame.exception = 0;
 
-    environment.result = result;
+    environment.result = &testCase->result;
     environment.exceptionFrame = &frame;
 
     acu_stackPush(frameStack, &frame);
 
-    acuTest_resultInit(result);
+    acuTest_resultPrepare(environment.result);
+    environment.result->end = clock();
     do {
         switch (setjmp(frame.exceptionBuf)) {
             case 0: {
@@ -60,20 +60,17 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
             }
         }
     } while (0);
-    result->end = clock();
+    environment.result->end = clock();
     acu_stackDrop(frameStack);
-    testCase->result = result;
     if (progress && progress->progress) {
         progress->progress(testCase, progress->context);
     }
-    return result->status;
+    return environment.result->status;
 }
 
 static void acuTest_testCaseDestroy(ACU_TestCase* data) {
     free(data->name);
-    if (data->result) {
-        acuTest_resultDestroy(data->result);
-    }
+    acuTest_resultDestroy(&data->result);
 }
 
 static ACU_TestCase* acuTest_testCaseMalloc(void) {
@@ -93,8 +90,8 @@ void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char* name, ACU_TestFunc
     ACU_TestCase* testCase = acuTest_testCaseMalloc();
     testCase->name = acu_estrdup(name);
     testCase->testFunc = testFunc;
-    testCase->result = NULL;
     testCase->fixture = fixture;
+    acuTest_resultInit(&testCase->result);
     acu_listAppend(fixture->testCases, (void*)testCase);
 }
 

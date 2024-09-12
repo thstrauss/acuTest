@@ -58,7 +58,7 @@ typedef struct ACU_Values_ {
 } ACU_Values;
 
 /* Function prototype for assert functions */
-typedef enum ACU_TestResult (ACU_assertFunc)(ACU_Types* actual, ACU_Types* expected);
+typedef enum ACU_TestResult (ACU_assertFunc)(const ACU_Types* actual, const ACU_Types* expected);
 /* Function prototype for functions to format messages for specific asserts */
 typedef char* (ACU_formatMessageFunc)(const struct ACU_AssertParameter_* parameter);
 
@@ -72,7 +72,7 @@ typedef struct ACU_Funcs_ {
 
 /* All parameters to an actual assert. */
 typedef struct ACU_AssertParameter_ {
-    ACU_Funcs* funcs;
+    const ACU_Funcs* funcs;
     ACU_Values values;
     const char* message;
     const char* sourceFileName;

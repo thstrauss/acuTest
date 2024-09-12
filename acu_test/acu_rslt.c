@@ -33,8 +33,16 @@ enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedResult, enu
 void acuTest_resultDestroy(ACU_Result* result) {
     if (result->message) {
         free(result->message);
+        result->message = NULL;
     }
-    free(result);
+}
+
+void acuTest_resultPrepare(ACU_Result* result) {
+    result->status = ACU_TEST_PASSED;
+    if (result->message) {
+        free(result->message);
+        result->message = NULL;
+    }
 }
 
 ACU_Result* acuTest_resultMalloc(void) {
@@ -44,6 +52,4 @@ ACU_Result* acuTest_resultMalloc(void) {
 void acuTest_resultInit(ACU_Result* result) {
     result->status = ACU_TEST_PASSED;
     result->message = NULL;
-    result->sourceFileName = NULL;
-    result->start = clock();
 }
