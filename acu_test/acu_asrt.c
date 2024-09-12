@@ -35,7 +35,7 @@
 
 static const maxPtrLength = 16;
 
-static size_t acu_bufferLength(const char* format, va_list args) {
+static size_t acu_estimateBufferLength(const char* format, va_list args) {
     size_t formatLength = strlen(format);
     size_t bufferSize = formatLength;
     int i;
@@ -46,10 +46,9 @@ static size_t acu_bufferLength(const char* format, va_list args) {
                 char* arg = (char*)va_arg(args, char*);
                 bufferSize += strlen(arg);
                 i++;
-            } if (format[i + 1] == '%' && i < formatLength) {
+            } else if (format[i + 1] == '%' && i < formatLength) {
                 i++;
-            }
-            else {
+            } else {
                 void* temp = va_arg(args, void*);
                 bufferSize += 32;
                 i++;
@@ -68,7 +67,7 @@ static char* acu_sFormatMessage(const char* format, ...)
 
     va_start(args, format);
 
-    bufferSize = acu_bufferLength(format, args);
+    bufferSize = acu_estimateBufferLength(format, args);
 
     va_end(args);
 
