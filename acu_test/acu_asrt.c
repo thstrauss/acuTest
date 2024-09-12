@@ -24,8 +24,6 @@
 #include <stddef.h>
 #include <stdarg.h>
 
-#include <stdio.h>
-
 #include "acu_cmmn.h"
 #include "acu_eenv.h"
 #include "acu_util.h"
@@ -38,20 +36,17 @@ static const maxPtrLength = 16;
 static size_t acu_estimateBufferLength(const char* format, va_list args) {
     size_t formatLength = strlen(format);
     size_t bufferSize = formatLength;
-    int i;
+    char* formatPtr = (char*) format;
 
-    for (i = 0; i < formatLength; i++) {
-        if (format[i] == '%') {
-            if (format[i + 1] == 's' && i < formatLength) {
+    for (; *formatPtr != '\0'; formatPtr++) {
+        if (*formatPtr == '%') {
+            formatPtr++;
+            if (*formatPtr == 's' && *formatPtr != '\0') {
                 char* arg = (char*)va_arg(args, char*);
                 bufferSize += strlen(arg);
-                i++;
-            } else if (format[i + 1] == '%' && i < formatLength) {
-                i++;
-            } else {
+            } else if (*formatPtr != '%' && *formatPtr != '\0') {
                 void* temp = va_arg(args, void*);
                 bufferSize += 32;
-                i++;
                 UNUSED(temp);
             }
         }
