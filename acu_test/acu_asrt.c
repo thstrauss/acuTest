@@ -22,6 +22,9 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stddef.h>
+#include <stdarg.h>
+
+#include <stdio.h>
 
 #include "acu_cmmn.h"
 #include "acu_eenv.h"
@@ -32,14 +35,48 @@
 
 static const maxPtrLength = 16;
 
+static size_t acu_bufferLength(const char* format, va_list args) {
+    size_t formatLength = strlen(format);
+    size_t bufferSize = formatLength;
+    int i;
+
+    for (i = 0; i < formatLength; i++) {
+        if (format[i] == '%') {
+            if (format[i + 1] == 's' && i < formatLength) {
+                char* arg = (char*)va_arg(args, char*);
+                bufferSize += strlen(arg);
+                i++;
+            } if (format[i + 1] == '%' && i < formatLength) {
+                i++;
+            }
+            else {
+                void* temp = va_arg(args, void*);
+                bufferSize += 32;
+                i++;
+                UNUSED(temp);
+            }
+        }
+    }
+    return bufferSize;
+}
+
 static char* acu_sFormatMessage(const char* format, ...)
 {
-    char* buffer = acu_emalloc(256);
+    char* buffer;
+    size_t bufferSize;
     va_list args;
+
+    va_start(args, format);
+
+    bufferSize = acu_bufferLength(format, args);
+
+    va_end(args);
+
+    buffer = acu_emalloc(bufferSize);
 
     if (buffer) {
         va_start(args, format);
-        acu_vsprintf_s(buffer, 256, format, args);
+        acu_vsprintf_s(buffer, bufferSize, format, args);
         va_end(args);
     }
     return buffer;
