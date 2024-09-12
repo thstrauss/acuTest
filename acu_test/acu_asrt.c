@@ -45,6 +45,17 @@ static char* acu_sFormatMessage(const char* format, ...)
     return buffer;
 }
 
+static char* acu_formatErrorMessage(const char* message, const char* parameterMessage) {
+    static char* messageFormat = "Error in: %s: %s";
+    size_t bufferSize = strlen(messageFormat) + strlen(message) + strlen(parameterMessage);
+    char* buffer = acu_emalloc(bufferSize);
+
+    if (buffer) {
+        acu_sprintf_s(buffer, bufferSize, messageFormat, message, parameterMessage);
+    }
+    return buffer;
+}
+
 #define STR(str) #str
 #define CREATE_ASSERT_FUNC(type, op, opcode, format) \
 static enum ACU_TestResult acu_##type##op(ACU_Types* actual, ACU_Types* expected) { \
@@ -115,15 +126,9 @@ static char* acu_containsStrFailedFormatMessage(const ACU_AssertParameter* param
 }
 
 static char* acu_containsStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    static char* messageFormat = "Error in: %s: %s";
     static char* message = "acu_containsStr";
-    size_t bufferSize = strlen(messageFormat) + strlen(message) + strlen(parameter->message);
-    char* buffer = acu_emalloc(bufferSize);
+    return acu_formatErrorMessage(message, parameter->message);
 
-    if (buffer) {
-        acu_sprintf_s(buffer, bufferSize, messageFormat, message, parameter->message);
-    }
-    return buffer;
 }
 
 __EXPORT const ACU_Funcs acu_containsStrFuncs = { acu_containsStr, acu_containsStrFailedFormatMessage, acu_containsStrErrorFormatMessage };
@@ -148,16 +153,10 @@ static char* acu_notContainsStrFailedFormatMessage(const ACU_AssertParameter* pa
     return buffer;
 }
 
-static char* acu_notContainsStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    static char* messageFormat = "Error in: %s: %s";
-    static char* message = "acu_notContainsStr";
-    size_t bufferSize = strlen(messageFormat) + strlen(message) + strlen(parameter->message);
-    char* buffer = acu_emalloc(bufferSize);
 
-    if (buffer) {
-        acu_sprintf_s(buffer, bufferSize, messageFormat, message, parameter->message);
-    }
-    return buffer;
+static char* acu_notContainsStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
+    static char* message = "acu_notContainsStr";
+    return acu_formatErrorMessage(message, parameter->message);
 }
 
 __EXPORT const ACU_Funcs acu_notContainsStrFuncs = { acu_notContainsStr, acu_notContainsStrFailedFormatMessage, acu_notContainsStrFailedFormatMessage };
@@ -183,15 +182,8 @@ static char* acu_equalStrFailedFormatMessage(const ACU_AssertParameter* paramete
 }
 
 static char* acu_equalStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    static char* messageFormat = "Error in: %s: %s";
     static char* message = "acu_equalStr";
-    size_t bufferSize = strlen(messageFormat) + strlen(message) + strlen(parameter->message);
-    char* buffer = acu_emalloc(bufferSize);
-
-    if (buffer) {
-        acu_sprintf_s(buffer, bufferSize, messageFormat, message, parameter->message);
-    }
-    return buffer;
+    return acu_formatErrorMessage(message, parameter->message);
 }
 
 __EXPORT const ACU_Funcs acu_equalStrFuncs = { acu_equalStr, acu_equalStrFailedFormatMessage, acu_equalStrErrorFormatMessage };
@@ -217,15 +209,8 @@ static char* acu_notEqualStrFailedFormatMessage(const ACU_AssertParameter* param
 }
 
 static char* acu_notEqualStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    static char* messageFormat = "Error in: %s: %s";
     static char* message = "acu_notEqualStr";
-    size_t bufferSize = strlen(messageFormat) + strlen(message) + strlen(parameter->message);
-    char* buffer = acu_emalloc(bufferSize);
-
-    if (buffer) {
-        acu_sprintf_s(buffer, bufferSize, messageFormat, message, parameter->message);
-    }
-    return buffer;
+    return acu_formatErrorMessage(message, parameter->message);
 }
 
 __EXPORT const ACU_Funcs acu_notEqualStrFuncs = { acu_notEqualStr, acu_notEqualStrFailedFormatMessage, acu_notEqualStrErrorFormatMessage };
