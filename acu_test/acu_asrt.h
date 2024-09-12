@@ -30,6 +30,7 @@
 #include <acu_cmmn.h>
 
 typedef void* voidPtr;
+typedef char* charPtr;
 typedef signed char signedChar;
 typedef unsigned char unsignedChar;
 typedef unsigned int unsignedInt;
@@ -38,6 +39,7 @@ typedef unsigned short unsignedShort;
 
 typedef union ACU_Types_ {
     voidPtr voidPtrType;
+    charPtr charPtrType;
     signedChar signedCharType;
     unsignedChar unsignedCharType;
     short shortType;

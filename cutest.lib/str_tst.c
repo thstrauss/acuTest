@@ -43,12 +43,12 @@ static void strEqualBothNull(ACU_ExecuteEnv* environment, const void* context) {
     resultBuf.sourceFileName = NULL; 
     
     if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
-        ACU_assert_strEqual(&testEnvironment, NULL, NULL, "strEqualBothNull"); \
+        ACU_assert_strEqual(&testEnvironment, NULL, NULL, "some message"); \
     }
     acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment.result->status, ACU_TEST_ERROR, "strEqualBothNull"); \
-        ACU_assert_strEqual(environment, testEnvironment.result->message, "Error in: acu_equalStr", "strEqualBothNull"); \
+        ACU_assert_strEqual(environment, testEnvironment.result->message, "Error in: acu_equalStr: some message", "strEqualBothNull"); \
     ACU_FINALLY
         if (resultBuf.message) {
             free(resultBuf.message);
@@ -71,12 +71,12 @@ static void strEqualActualNull(ACU_ExecuteEnv* environment, const void* context)
     resultBuf.sourceFileName = NULL;
 
     if (!setjmp(testEnvironment.exceptionFrame->exceptionBuf)) {
-        ACU_assert_strEqual(&testEnvironment, NULL, "abc", "strEqualActualNull"); \
+        ACU_assert_strEqual(&testEnvironment, NULL, "abc", "some message"); \
     }
     acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, resultBuf.status, ACU_TEST_ERROR, "strEqualActualNull"); \
-        ACU_assert_strEqual(environment, resultBuf.message, "Error in: acu_equalStr", "strEqualActualNull"); \
+        ACU_assert_strEqual(environment, resultBuf.message, "Error in: acu_equalStr: some message", "strEqualActualNull"); \
     ACU_FINALLY
         if (resultBuf.message) {
             free(resultBuf.message);
@@ -298,12 +298,12 @@ static void strNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
     resultBuf->sourceFileName = NULL; 
     
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
-        ACU_assert_strNotEqual(testEnvironment, NULL, NULL, "ptrNotEqualNull");
+        ACU_assert_strNotEqual(testEnvironment, NULL, NULL, "some message");
     }
     acu_stackDrop(frameStack);
     ACU_TRY
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_ERROR, "strNotEqualNull"); \
-        ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_notEqualStr", "strNotEqualNull"); \
+        ACU_assert_strEqual(environment, testEnvironment->result->message, "Error in: acu_notEqualStr: some message", "strNotEqualNull"); \
     ACU_FINALLY
         if (resultBuf->message) {
             free(resultBuf->message);

@@ -30,6 +30,8 @@
 #include "acu_tryc.h"
 #include "acu_stck.h"
 
+static const maxPtrLength = 16;
+
 static char* acu_sFormatMessage(const char* format, ...)
 {
     char* buffer = acu_emalloc(256);
@@ -62,9 +64,13 @@ static enum ACU_TestResult acu_equalPtr(ACU_Types* actual, ACU_Types* expected) 
 }
 
 static char* acu_equalPtrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(128);
+
+    static char* messageFormat = "actual value 0X%p equal to 0X%p: %s";
+    size_t bufferSize = strlen(messageFormat) + 2 * maxPtrLength + strlen(parameter->message);
+    char* buffer = acu_emalloc(bufferSize);
+
     if (buffer) {
-        acu_sprintf_s(buffer, 128, "actual value %p not equal to %p: %s", parameter->values.actual.voidPtrType, parameter->values.expected.voidPtrType, parameter->message);
+        acu_sprintf_s(buffer, bufferSize, messageFormat, parameter->values.actual.voidPtrType, parameter->values.expected.voidPtrType, parameter->message);
     }
     return buffer;
 }
@@ -76,9 +82,12 @@ static enum ACU_TestResult acu_notEqualPtr(ACU_Types* actual, ACU_Types* expecte
 }
 
 static char* acu_notEqualPtrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(128);
+    static char* messageFormat = "actual value 0X%p equal to 0X%p: %s";
+    size_t bufferSize = strlen(messageFormat) + 2 * maxPtrLength + strlen(parameter->message);
+    char* buffer = acu_emalloc(bufferSize);
+
     if (buffer) {
-        acu_sprintf_s(buffer, 128, "actual value %p equal to %p: %s", parameter->values.actual.voidPtrType, parameter->values.expected.voidPtrType, parameter->message);
+        acu_sprintf_s(buffer, bufferSize, messageFormat, parameter->values.actual.voidPtrType, parameter->values.expected.voidPtrType, parameter->message);
     }
     return buffer;
 }
@@ -89,33 +98,31 @@ static enum ACU_TestResult acu_containsStr(ACU_Types* actual, ACU_Types* expecte
     if (!actual->voidPtrType || !expected->voidPtrType) {
         return ACU_TEST_ERROR;
     }
-    return (strstr((const char*)(actual->voidPtrType), (const char*)(expected->voidPtrType)) != NULL);
-}
-
-static size_t acu_assertAllocBuffer(char** buffer, const ACU_AssertParameter* parameter) {
-    size_t bufSize = 50 + strlen((const char*)parameter->values.actual.voidPtrType) + strlen((const char*)parameter->values.expected.voidPtrType) + strlen(parameter->message);
-    *buffer = acu_emalloc(bufSize);
-    if (!*buffer) {
-        bufSize = 0;
-    }
-    return bufSize;
+    return (strstr(actual->charPtrType, expected->charPtrType) != NULL);
 }
 
 static char* acu_containsStrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer;
-    size_t bufSize = acu_assertAllocBuffer(&buffer, parameter);
-    if (bufSize) {
-        acu_sprintf_s(buffer, bufSize, "actual value \"%s\" does not contain \"%s\": %s", (const char*)parameter->values.actual.voidPtrType, (const char*)parameter->values.expected.voidPtrType, parameter->message);
+    static char* messageFormat = "actual value \"%s\" does not contain \"%s\": %s";
+    const char* actual = parameter->values.actual.charPtrType;
+    const char* expected = parameter->values.expected.charPtrType;
+    size_t bufferSize = strlen(messageFormat) + strlen(actual) + strlen(expected) + strlen(parameter->message);
+    char* buffer = acu_emalloc(bufferSize);
+
+    if (buffer) {
+        acu_sprintf_s(buffer, bufferSize, messageFormat, actual, expected, parameter->message);
     }
     return buffer;
 }
 
 static char* acu_containsStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(50);
+    static char* messageFormat = "Error in: %s: %s";
+    static char* message = "acu_containsStr";
+    size_t bufferSize = strlen(messageFormat) + strlen(message) + strlen(parameter->message);
+    char* buffer = acu_emalloc(bufferSize);
+
     if (buffer) {
-        acu_sprintf_s(buffer, 50, "Error in: %s", "acu_containsStr");
+        acu_sprintf_s(buffer, bufferSize, messageFormat, message, parameter->message);
     }
-    UNUSED(parameter);
     return buffer;
 }
 
@@ -129,20 +136,27 @@ static enum ACU_TestResult acu_notContainsStr(ACU_Types* actual, ACU_Types* expe
 }
 
 static char* acu_notContainsStrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer;
-    size_t bufSize = acu_assertAllocBuffer(&buffer, parameter);
-    if (bufSize) {
-        acu_sprintf_s(buffer, bufSize, "actual value \"%s\" does contain \"%s\": %s", (const char*)parameter->values.actual.voidPtrType, (const char*)parameter->values.expected.voidPtrType, parameter->message);
+    static char* messageFormat = "actual value \"%s\" does contain \"%s\": %s";
+    const char* actual = parameter->values.actual.charPtrType;
+    const char* expected = parameter->values.expected.charPtrType;
+    size_t bufferSize = strlen(messageFormat) + strlen(actual) + strlen(expected) + strlen(parameter->message);
+    char* buffer = acu_emalloc(bufferSize);
+
+    if (buffer) {
+        acu_sprintf_s(buffer, bufferSize, messageFormat, actual, expected, parameter->message);
     }
     return buffer;
 }
 
 static char* acu_notContainsStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(50);
+    static char* messageFormat = "Error in: %s: %s";
+    static char* message = "acu_notContainsStr";
+    size_t bufferSize = strlen(messageFormat) + strlen(message) + strlen(parameter->message);
+    char* buffer = acu_emalloc(bufferSize);
+
     if (buffer) {
-        acu_sprintf_s(buffer, 50, "Error in: %s", "acu_notContainsStr");
+        acu_sprintf_s(buffer, bufferSize, messageFormat, message, parameter->message);
     }
-    UNUSED(parameter);
     return buffer;
 }
 
@@ -156,20 +170,27 @@ static enum ACU_TestResult acu_equalStr(ACU_Types* actual, ACU_Types* expected) 
 }
 
 static char* acu_equalStrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer;
-    size_t bufSize = acu_assertAllocBuffer(&buffer, parameter);
-    if (bufSize) {
-        acu_sprintf_s(buffer, bufSize, "actual value \"%s\" not equal to \"%s\": %s", (const char*)parameter->values.actual.voidPtrType, (const char*)parameter->values.expected.voidPtrType, parameter->message);
+    static char* messageFormat = "actual value \"%s\" not equal to \"%s\": %s";
+    const char* actual = parameter->values.actual.charPtrType;
+    const char* expected = parameter->values.expected.charPtrType;
+    size_t bufferSize = strlen(messageFormat) + strlen(actual) + strlen(expected) + strlen(parameter->message);
+    char* buffer = acu_emalloc(bufferSize);
+
+    if (buffer) {
+        acu_sprintf_s(buffer, bufferSize, messageFormat, actual, expected, parameter->message);
     }
     return buffer;
 }
 
 static char* acu_equalStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(50);
+    static char* messageFormat = "Error in: %s: %s";
+    static char* message = "acu_equalStr";
+    size_t bufferSize = strlen(messageFormat) + strlen(message) + strlen(parameter->message);
+    char* buffer = acu_emalloc(bufferSize);
+
     if (buffer) {
-        acu_sprintf_s(buffer, 50, "Error in: %s", "acu_equalStr");
+        acu_sprintf_s(buffer, bufferSize, messageFormat, message, parameter->message);
     }
-    UNUSED(parameter);
     return buffer;
 }
 
@@ -183,20 +204,27 @@ static enum ACU_TestResult acu_notEqualStr(ACU_Types* actual, ACU_Types* expecte
 }
 
 static char* acu_notEqualStrFailedFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer;
-    size_t bufSize = acu_assertAllocBuffer(&buffer, parameter);
-    if (bufSize) {
-        acu_sprintf_s(buffer, bufSize, "actual value \"%s\" equal to \"%s\": %s", (const char*)parameter->values.actual.voidPtrType, (const char*)parameter->values.expected.voidPtrType, parameter->message);
+    static char* messageFormat = "actual value \"%s\" equal to \"%s\": %s";
+    const char* actual = parameter->values.actual.charPtrType;
+    const char* expected = parameter->values.expected.charPtrType;
+    size_t bufferSize = strlen(messageFormat) + strlen(actual) + strlen(expected) + strlen(parameter->message);
+    char* buffer = acu_emalloc(bufferSize);
+
+    if (buffer) {
+        acu_sprintf_s(buffer, bufferSize, messageFormat, (const char*)parameter->values.actual.voidPtrType, (const char*)parameter->values.expected.voidPtrType, parameter->message);
     }
     return buffer;
 }
 
 static char* acu_notEqualStrErrorFormatMessage(const ACU_AssertParameter* parameter) {
-    char* buffer = acu_emalloc(50); 
+    static char* messageFormat = "Error in: %s: %s";
+    static char* message = "acu_notEqualStr";
+    size_t bufferSize = strlen(messageFormat) + strlen(message) + strlen(parameter->message);
+    char* buffer = acu_emalloc(bufferSize);
+
     if (buffer) {
-        acu_sprintf_s(buffer, 50, "Error in: %s", "acu_notEqualStr");
+        acu_sprintf_s(buffer, bufferSize, messageFormat, message, parameter->message);
     }
-    UNUSED(parameter);
     return buffer;
 }
 
@@ -208,7 +236,7 @@ static char* acu_formatMessage(enum ACU_TestResult assertResult, const ACU_Asser
     } else if (assertResult == ACU_TEST_ERROR && parameter->funcs->formatErrorMessage) {
         return parameter->funcs->formatErrorMessage(parameter);
     } else {
-       return acu_estrdup("");
+       return NULL;
     }
 }
 
