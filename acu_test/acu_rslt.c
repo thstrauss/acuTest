@@ -50,6 +50,6 @@ ACU_Result* acuTest_resultMalloc(void) {
 }
 
 void acuTest_resultInit(ACU_Result* result) {
-    result->status = ACU_TEST_PASSED;
+    result->status = ACU_TEST_UNDEFINED;
     result->message = NULL;
 }

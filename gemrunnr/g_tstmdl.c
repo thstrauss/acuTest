@@ -59,7 +59,7 @@ void gem_initTestModel(TestModel* testModel) {
 }
 
 static size_t gem_getTestContent(char *buffer, size_t bufferSize, const ACU_TestCase* testCase) {
-    return acu_sprintf_s(buffer, bufferSize, "%s : %s", testCase->result != NULL ? ((testCase->result->status == ACU_TEST_PASSED) ? "passed" : "failed") : "      ", testCase->name);
+    return acu_sprintf_s(buffer, bufferSize, "%s : %s", testCase->result.status != ACU_TEST_UNDEFINED ? ((testCase->result.status == ACU_TEST_PASSED) ? "passed" : "failed") : "      ", testCase->name);
 }
 
 static void gem_contentLine(const TestModel* testModel, const ACU_TestCase* testCase, int lineIndex) {

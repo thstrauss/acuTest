@@ -116,9 +116,10 @@ int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...)
 
 void* acu_emalloc(size_t size) {
     void* p = malloc(size);
-    if (!p) {
-        acu_eprintf("acu_emalloc of %u bytes failed:", size);
+    if (p) {
+        return p;
     }
-    return p;
+    acu_eprintf("acu_emalloc of %u bytes failed:", size);
+    return NULL;
 }
 
