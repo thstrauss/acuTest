@@ -256,25 +256,25 @@ static char* acu_formatMessage(enum ACU_TestResult assertResult, const ACU_Asser
     }
 }
 
-static void acu_finalizeFailed(enum ACU_TestResult resultValue, ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
-    ACU_Frame* frame = acu_stackPeek(acu_getFrameStack());
-    ACU_Result* result = environment->result;
-    result->status = resultValue;
+static void acu_finalizeFailed(enum ACU_TestResult resultValue, ACU_Result* result, const ACU_AssertParameter* parameter) {
     result->message = acu_formatMessage(resultValue, parameter);
     result->sourceFileName = parameter->sourceFileName; 
     result->sourceLine = parameter->sourceLine;
-    environment->exceptionFrame->exception = ACU_EXCEPTION_ABORTED;
-    longjmp(frame->exceptionBuf, frame->exception != 0 ? frame->exception: 0xffff);
 }
 
 void acu_assert(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
     register const ACU_Values* values;
     register enum ACU_TestResult assertResult;
-    
-    values = &(parameter->values);
-    assertResult = parameter->funcs->assert(&values->actual, &values->expected);
+    ACU_Result* result = environment->result;
 
+    values = &(parameter->values);
+
+    assertResult = parameter->funcs->assert(&values->actual, &values->expected);
+    result->status = assertResult;
     if (assertResult != ACU_TEST_PASSED) {
-        acu_finalizeFailed(assertResult, environment, parameter);
+        ACU_Frame* frame = acu_stackPeek(acu_getFrameStack());
+        acu_finalizeFailed(assertResult, result, parameter);
+        environment->exceptionFrame->exception = ACU_EXCEPTION_ABORTED;
+        longjmp(frame->exceptionBuf, frame->exception != 0 ? frame->exception : 0xffff);
     }
 }
