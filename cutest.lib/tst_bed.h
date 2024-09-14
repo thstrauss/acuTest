@@ -32,18 +32,38 @@
 #include <acu_util.h>
 #include <acu_tryc.h>
 
-#define TESTBED(postfix, type, operation, actual, expetced) static void test##type##operation##postfix(ACU_ExecuteEnv* environment, const void* context) { \
+#define STR(x) #x
+#define TESTBED(postfix, type, operation, actual, expected) static void test##type##operation##postfix(ACU_ExecuteEnv* environment, const void* context) { \
     ACU_ExecuteEnv testEnvironment; \
     ACU_Result resultBuf; \
     ACU_Frame frame; \
     testEnvironment.result = &resultBuf; \
     testEnvironment.exceptionFrame = &frame; \
     acuTest_resultInit(&resultBuf); \
+    acu_stackPush(acu_getFrameStack(), &frame); \
     if (!setjmp(frame.exceptionBuf)) { \
-        ACU_assert(&testEnvironment, type, operation, actual, expetced, #type#operation#postfix); \
+        ACU_assert(&testEnvironment, type, operation, actual, expected, #type#operation#postfix); \
     } \
-    ACU_assert(environment, int, Equal, resultBuf.status, ACU_TEST_PASSED, #type#operation#postfix); \
-    ACU_assert_ptrEqual(environment, resultBuf.message, NULL, #type#operation#postfix); \
+    acu_stackDrop(acu_getFrameStack()); \
+    ACU_assert(environment, int, Equal, resultBuf.status, ACU_TEST_PASSED, STR(notPassed_)#type#operation#postfix); \
+    ACU_assert_ptrIsNull(environment, resultBuf.message, STR(messageIsNotNull_)#type#operation#postfix); \
+    UNUSED(context); \
+}
+
+#define TESTBED_FAILED(postfix, type, operation, actual, expected) static void testFailed##type##operation##postfix(ACU_ExecuteEnv* environment, const void* context) { \
+    ACU_ExecuteEnv testEnvironment; \
+    ACU_Result resultBuf; \
+    ACU_Frame frame; \
+    testEnvironment.result = &resultBuf; \
+    testEnvironment.exceptionFrame = &frame; \
+    acuTest_resultInit(&resultBuf); \
+    acu_stackPush(acu_getFrameStack(), &frame); \
+    if (!setjmp(frame.exceptionBuf)) { \
+        ACU_assert(&testEnvironment, type, operation, actual, expected, #type#operation#postfix); \
+    } \
+    acu_stackDrop(acu_getFrameStack()); \
+    ACU_assert(environment, int, Equal, resultBuf.status, ACU_TEST_FAILED, STR(passed_)#type#operation#postfix); \
+    ACU_assert_ptrIsNotNull(environment, resultBuf.message, STR(messageIsNotNull_)#type#operation#postfix); \
     UNUSED(context); \
 }
 
