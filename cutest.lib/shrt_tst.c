@@ -35,6 +35,13 @@ TESTBED(, short, Greater, 1, 0)
 TESTBED(, short, GreaterEqual, 1, 0)
 TESTBED(Eq, short, GreaterEqual, 1, 1)
 
+TESTBED_FAILED(, short, Equal, 0, 1)
+TESTBED_FAILED(, short, NotEqual, 1, 1)
+TESTBED_FAILED(, short, Less, 1, 1)
+TESTBED_FAILED(, short, LessEqual, 2, 1)
+TESTBED_FAILED(, short, Greater, 1, 1)
+TESTBED_FAILED(, short, GreaterEqual, 1, 2)
+
 ACU_Fixture* shortFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
@@ -49,6 +56,13 @@ ACU_Fixture* shortFixture(void)
     acu_fixtureAddTestCase(fixture, "short Greater", testshortGreater);
     acu_fixtureAddTestCase(fixture, "short GreaterEqualEq", testshortGreaterEqualEq);
     acu_fixtureAddTestCase(fixture, "short GreaterEqual", testshortGreaterEqual);
+
+    acu_fixtureAddTestCase(fixture, "short Equal failed", testFailedshortEqual);
+    acu_fixtureAddTestCase(fixture, "short NotEqual failed", testFailedshortNotEqual);
+    acu_fixtureAddTestCase(fixture, "short Less failed", testFailedshortLess);
+    acu_fixtureAddTestCase(fixture, "short LessEqual failed", testFailedshortLessEqual);
+    acu_fixtureAddTestCase(fixture, "short Greater failed", testFailedshortGreater);
+    acu_fixtureAddTestCase(fixture, "short GreaterEqual failed", testFailedshortGreaterEqual);
 
     return fixture;
 }
