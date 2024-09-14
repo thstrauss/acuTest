@@ -35,6 +35,14 @@ TESTBED(, unsignedChar, Greater, 'b', 'a')
 TESTBED(, unsignedChar, GreaterEqual, 'b', 'a')
 TESTBED(Eq, unsignedChar, GreaterEqual, 'b', 'b')
 
+TESTBED_FAILED(, unsignedChar, Equal, 'a', 'b')
+TESTBED_FAILED(, unsignedChar, NotEqual, 'a', 'a')
+TESTBED_FAILED(, unsignedChar, Less, 'a', 'a')
+TESTBED_FAILED(, unsignedChar, LessEqual, 'c', 'b')
+TESTBED_FAILED(, unsignedChar, Greater, 'b', 'c')
+TESTBED_FAILED(, unsignedChar, GreaterEqual, 'b', 'c')
+
+
 ACU_Fixture* unsignedCharFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
@@ -49,6 +57,13 @@ ACU_Fixture* unsignedCharFixture(void)
     acu_fixtureAddTestCase(fixture, "unsigned char Greater", testunsignedCharGreater);
     acu_fixtureAddTestCase(fixture, "unsigned char GreaterEqualEq", testunsignedCharGreaterEqualEq);
     acu_fixtureAddTestCase(fixture, "unsigned char GreaterEqual", testunsignedCharGreaterEqual);
+
+    acu_fixtureAddTestCase(fixture, "unsigned char Equal failed", testFailedunsignedCharEqual);
+    acu_fixtureAddTestCase(fixture, "unsigned char NotEqual failed", testFailedunsignedCharNotEqual);
+    acu_fixtureAddTestCase(fixture, "unsigned char Less failed", testFailedunsignedCharLess);
+    acu_fixtureAddTestCase(fixture, "unsigned char LessEqual failed", testFailedunsignedCharLessEqual);
+    acu_fixtureAddTestCase(fixture, "unsigned char Greater failed", testFailedunsignedCharGreater);
+    acu_fixtureAddTestCase(fixture, "unsigned char GreaterEqual failed", testFailedunsignedCharGreaterEqual);
 
     return fixture;
 }

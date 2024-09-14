@@ -35,9 +35,9 @@ struct ACU_Suite_;
 
 /* The ACU_Fixture allows to group ACU_TestCase's. */
 typedef struct ACU_Fixture_ {
+    struct ACU_List_* testCases;
     const char* name;
     const void* context;
-    struct ACU_List_* testCases;
     struct ACU_Suite_* suite;
     clock_t start;
     clock_t end;

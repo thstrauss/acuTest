@@ -58,11 +58,11 @@ ACU_Fixture* signedCharFixture(void)
     acu_fixtureAddTestCase(fixture, "signed char GreaterEqual", testsignedCharGreaterEqual);
 
     acu_fixtureAddTestCase(fixture, "signed char Equal failed", testFailedsignedCharEqual);
-    acu_fixtureAddTestCase(fixture, "signed char NotEqual", testFailedsignedCharNotEqual);
-    acu_fixtureAddTestCase(fixture, "signed char Less", testFailedsignedCharLess);
-    acu_fixtureAddTestCase(fixture, "signed char LessEqual", testFailedsignedCharLessEqual);
-    acu_fixtureAddTestCase(fixture, "signed char Greater", testFailedsignedCharGreater);
-    acu_fixtureAddTestCase(fixture, "signed char GreaterEqual", testFailedsignedCharGreaterEqual);
+    acu_fixtureAddTestCase(fixture, "signed char NotEqual failed", testFailedsignedCharNotEqual);
+    acu_fixtureAddTestCase(fixture, "signed char Less failed", testFailedsignedCharLess);
+    acu_fixtureAddTestCase(fixture, "signed char LessEqual failed", testFailedsignedCharLessEqual);
+    acu_fixtureAddTestCase(fixture, "signed char Greater failed", testFailedsignedCharGreater);
+    acu_fixtureAddTestCase(fixture, "signed char GreaterEqual failed", testFailedsignedCharGreaterEqual);
 
     return fixture;
 }
