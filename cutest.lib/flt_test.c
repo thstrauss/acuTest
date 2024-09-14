@@ -43,6 +43,13 @@ TESTBED(,float, Greater, 1.0f, 0.0f)
 TESTBED(,float, GreaterEqual, 1.0f, 0.0f)
 TESTBED(Eq, float, GreaterEqual, 1.0f, 1.0f)
 
+TESTBED_FAILED(, float, Equal, 0.0f, 1.0f)
+TESTBED_FAILED(, float, NotEqual, 1.0f, 1.0f)
+TESTBED_FAILED(, float, Less, 1.0f, 1.0f)
+TESTBED_FAILED(, float, LessEqual, 2.0f, 1.0f)
+TESTBED_FAILED(, float, Greater, 1.0f, 1.0f)
+TESTBED_FAILED(, float, GreaterEqual, 1.0f, 2.0f)
+
 TESTBED(, double, Equal, 0.0, 0.0)
 TESTBED(, double, NotEqual, 0.0, 1.0)
 TESTBED(Nan, double, NotEqual, 0.0f, NAN)
@@ -53,16 +60,18 @@ TESTBED(, double, Greater, 1.0, 0.0)
 TESTBED(, double, GreaterEqual, 1.0, 0.0)
 TESTBED(Eq, double, GreaterEqual, 1.0, 1.0)
 
-static void doubleNotEqual(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_assert(environment, double, NotEqual, 0.0, 1.0, "");
-    UNUSED(context);
-}
+TESTBED_FAILED(, double, Equal, 0.0, 1.0)
+TESTBED_FAILED(, double, NotEqual, 1.0, 1.0)
+TESTBED_FAILED(, double, Less, 1.0, 1.0)
+TESTBED_FAILED(, double, LessEqual, 2.0, 1.0)
+TESTBED_FAILED(, double, Greater, 1.0, 1.0)
+TESTBED_FAILED(, double, GreaterEqual, 1.0, 2.0)
 
 ACU_Fixture* floatFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
-    acu_fixtureInit(fixture, "float tests");
+    acu_fixtureInit(fixture, "float/double tests");
 
     acu_fixtureAddTestCase(fixture, "float Equal", testfloatEqual);
     acu_fixtureAddTestCase(fixture, "float NotEqual NAN", testfloatNotEqualNan);
@@ -74,6 +83,13 @@ ACU_Fixture* floatFixture(void)
     acu_fixtureAddTestCase(fixture, "float GreaterEqualEq", testfloatGreaterEqualEq);
     acu_fixtureAddTestCase(fixture, "float GreaterEqual", testfloatGreaterEqual);
 
+    acu_fixtureAddTestCase(fixture, "float Equal failed", testFailedfloatEqual);
+    acu_fixtureAddTestCase(fixture, "float NotEqual failed", testFailedfloatNotEqual);
+    acu_fixtureAddTestCase(fixture, "float Less failed", testFailedfloatLess);
+    acu_fixtureAddTestCase(fixture, "float LessEqual failed", testFailedfloatLessEqual);
+    acu_fixtureAddTestCase(fixture, "float Greater failed", testFailedfloatGreater);
+    acu_fixtureAddTestCase(fixture, "float GreaterEqual failed", testFailedfloatGreaterEqual);
+
     acu_fixtureAddTestCase(fixture, "double Equal", testdoubleEqual);
     acu_fixtureAddTestCase(fixture, "double NotEqual NAN", testdoubleNotEqualNan);
     acu_fixtureAddTestCase(fixture, "double NotEqual", testdoubleNotEqual);
@@ -83,6 +99,13 @@ ACU_Fixture* floatFixture(void)
     acu_fixtureAddTestCase(fixture, "double Greater", testdoubleGreater);
     acu_fixtureAddTestCase(fixture, "double GreaterEqualEq", testdoubleGreaterEqualEq);
     acu_fixtureAddTestCase(fixture, "double GreaterEqual", testdoubleGreaterEqual);
+
+    acu_fixtureAddTestCase(fixture, "double Equal failed", testFaileddoubleEqual);
+    acu_fixtureAddTestCase(fixture, "double NotEqual failed", testFaileddoubleNotEqual);
+    acu_fixtureAddTestCase(fixture, "double Less failed", testFaileddoubleLess);
+    acu_fixtureAddTestCase(fixture, "double LessEqual failed", testFaileddoubleLessEqual);
+    acu_fixtureAddTestCase(fixture, "double Greater failed", testFaileddoubleGreater);
+    acu_fixtureAddTestCase(fixture, "double GreaterEqual failed", testFaileddoubleGreaterEqual);
 
     return fixture;
 }
