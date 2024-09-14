@@ -103,13 +103,14 @@ void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
 
 enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progress) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
+    const void* context = fixture->context;
     enum ACU_TestResult result = ACU_TEST_PASSED;
     if (!frameStack) {
         frameStack = acu_getFrameStack();
     }
     fixture->start = clock();
     while (testElement != NULL) {
-        result = acuTest_calcResult(result, acuTest_run((ACU_TestCase*) testElement->data, fixture->context, progress));
+        result = acuTest_calcResult(result, acuTest_run((ACU_TestCase*) testElement->data, context, progress));
         testElement = acu_listNext(testElement);
     }
     fixture->end = clock();
