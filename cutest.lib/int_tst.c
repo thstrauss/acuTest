@@ -20,7 +20,6 @@
  */
 
 #include <acu_fxtr.h>
-#include <acu_suit.h>
 
 #include "int_tst.h"
 

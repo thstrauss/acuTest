@@ -23,7 +23,7 @@
 #include <acu_asrt.h>
 #include <acu_fxtr.h>
 #include <acu_tryc.h>
-#include <acu_suit.h>
+#include <acu_fxtr.h>
 
 static void simpleTestCase(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, 0, 42, "number not equal to 42");
@@ -40,7 +40,7 @@ ACU_Fixture* sampleFixture(void)
 
 int main(void)
 {
-    ACU_Suite* suite = acu_suiteMalloc();
+    ACU_Fixture* fixture = acu_fixtureMalloc();
     ACU_ReportHelper reporthelper = { NULL, NULL };
     ACU_Visitor report = { acu_report, NULL };
     ACU_Progress progress = { acu_progress , NULL };
@@ -48,13 +48,13 @@ int main(void)
 
     report.context = &reporthelper;
 
-    acu_suiteInit(suite, "Sample test suite");
-    acu_suiteAddFixture(suite, sampleFixture());
+    acu_fixtureInit(fixture, "Sample test suite");
+    acu_fixtureAddChildFixture(fixture, sampleFixture());
 
-    result = acu_suiteExecute(suite, &progress);
+    result = acu_fixtureExecute(fixture, &progress);
 
-    acu_suiteAccept(suite, &report);
+    acu_fixtureAccept(fixture, &report);
 
-    acu_suiteDestroy(suite);
+    acu_fixtureDestroy(fixture);
     return result != ACU_TEST_PASSED ? 2 : 0;
 }

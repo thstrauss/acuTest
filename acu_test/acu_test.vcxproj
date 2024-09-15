@@ -153,7 +153,6 @@
     <ClCompile Include="acu_ldr.c" />
     <ClCompile Include="acu_rprt.c" />
     <ClCompile Include="acu_rslt.c" />
-    <ClCompile Include="acu_suit.c" />
     <ClCompile Include="acu_tryc.c" />
     <ClCompile Include="acu_vers.c" />
     <ClCompile Include="dllmain.c" />
@@ -169,7 +168,6 @@
     <ClInclude Include="acu_ldr.h" />
     <ClInclude Include="acu_rprt.h" />
     <ClInclude Include="acu_rslt.h" />
-    <ClInclude Include="acu_suit.h" />
     <ClInclude Include="acu_tcse.h" />
     <ClInclude Include="acu_tryc.h" />
     <ClInclude Include="acu_vers.h" />

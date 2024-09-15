@@ -22,7 +22,7 @@
 #ifndef __ACU_LOADER__
 #define __ACU_LOADER__
 
-#include "acu_suit.h"
+#include "acu_fxtr.h"
 #include "acu_vers.h"
 #include <acu_plgn.h>
 #include <acu_util.h>
@@ -32,7 +32,7 @@
 The ACU_Entry describes the acuTest plug-in.
 */
 typedef struct ACU_Entry_ {
-    ACU_Suite* suite;
+    ACU_Fixture* fixture;
     ACU_getVersionFunc* getAcuTestVersion;
     ACU_setWriteHandlerFunc* setWriteHandler;
     ACU_setFrameStackFunc* setFrameStack;
@@ -59,7 +59,7 @@ __EXPORT ACU_Entry* cup_load(const char* cu_name);
 __EXPORT void cup_unload(ACU_Entry* entry);
 
 __EXPORT ACU_Entry* acu_entryMalloc(void);
-__EXPORT void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite);
+__EXPORT void acu_entryInit(ACU_Entry* entry, ACU_Fixture* fixture);
 __EXPORT void acu_entryDestroy(ACU_Entry* entry);
 
 /*

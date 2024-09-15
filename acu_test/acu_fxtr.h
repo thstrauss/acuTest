@@ -31,14 +31,14 @@
 #include "acu_rprt.h"
 
 struct ACU_List_;
-struct ACU_Suite_;
 
 /* The ACU_Fixture allows to group ACU_TestCase's. */
 typedef struct ACU_Fixture_ {
     struct ACU_List_* testCases;
+    struct ACU_List_* childFixtures;
     const char* name;
     const void* context;
-    struct ACU_Suite_* suite;
+    struct ACU_Fixture_* parentFixture;
     clock_t start;
     clock_t end;
 } ACU_Fixture;
@@ -51,6 +51,8 @@ __EXPORT ACU_Fixture* acu_fixtureMalloc(void);
 __EXPORT void acu_fixtureDestroy(ACU_Fixture* fixture);
 
 __EXPORT void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char *name, ACU_TestFunc testFunc);
+
+__EXPORT void acu_fixtureAddChildFixture(ACU_Fixture* fixture, ACU_Fixture* childFixture);
 
 __EXPORT void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context);
 

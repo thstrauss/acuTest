@@ -46,8 +46,8 @@ ACU_Entry* acu_entryMalloc(void) {
     return acu_emalloc(sizeof(ACU_Entry));
 }
 
-void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
-    entry->suite = suite;
+void acu_entryInit(ACU_Entry* entry, ACU_Fixture* fixture) {
+    entry->fixture = fixture;
     entry->getAcuTestVersion = acu_getVersion;
     entry->setWriteHandler = acu_setWriteHandler;
     entry->setFrameStack = acu_setFrameStack;
@@ -55,7 +55,7 @@ void acu_entryInit(ACU_Entry* entry, ACU_Suite* suite) {
 
 void acu_entryDestroy(ACU_Entry* entry) {
     if (entry) {
-        acu_suiteDestroy((ACU_Suite*)entry->suite);
+        acu_fixtureDestroy((ACU_Fixture*)entry->fixture);
         free(entry);
     }
 }
@@ -64,7 +64,7 @@ void acu_entryExecute(const ACU_Entry* entry, ACU_Progress* progress)
 {
     if (entry) {
         entry->setWriteHandler(acu_getWriteHandler());
-        acu_suiteExecute(entry->suite, progress);
+        acu_fixtureExecute(entry->fixture, progress);
     }
 }
 

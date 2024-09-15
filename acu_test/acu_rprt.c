@@ -27,7 +27,6 @@
 #include "acu_cmmn.h"
 #include "acu_tcse.h"
 #include "acu_fxtr.h"
-#include "acu_suit.h"
 #include "acu_list.h"
 #include "acu_util.h"
 #include "acu_tryc.h"
@@ -40,9 +39,9 @@ void acu_progress(const ACU_TestCase* testCase, void* progressContext) {
 
 void acu_report(const ACU_TestCase* testCase, void* context) {
     ACU_ReportHelper* reportHelper = context;
-    if (!reportHelper->suiteName || strcmp(reportHelper->suiteName, testCase->fixture->suite->name) != 0) {
-        reportHelper->suiteName = testCase->fixture->suite->name;
-        fprintf(stdout, "%s took %ld ms\n\r", reportHelper->suiteName, ((testCase->fixture->suite->end - testCase->fixture->suite->start)*1000)/CLK_TCK);
+    if (!reportHelper->suiteName || strcmp(reportHelper->suiteName, testCase->fixture->parentFixture->name) != 0) {
+        reportHelper->suiteName = testCase->fixture->parentFixture->name;
+        fprintf(stdout, "%s took %ld ms\n\r", reportHelper->suiteName, ((testCase->fixture->parentFixture->end - testCase->fixture->parentFixture->start)*1000)/CLK_TCK);
     }
     if (!reportHelper->fixtureName || strcmp(reportHelper->fixtureName, testCase->fixture->name) != 0) {
         reportHelper->fixtureName = testCase->fixture->name;

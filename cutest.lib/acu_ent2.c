@@ -21,17 +21,16 @@
 
 #include <acu_ldr.h>
 #include <acu_fxtr.h>
-#include <acu_suit.h>
 #include <acu_util.h>
 #include <acu_tryc.h>
 
 ACU_Entry* acu_init() {
-	ACU_Suite* suite = acu_suiteMalloc();
+	ACU_Fixture* suite = acu_fixtureMalloc();
     ACU_Entry* entry = acu_entryMalloc();
     
-    acu_entryInit(entry, suite);
+    acu_fixtureInit(entry, suite);
     
-    acu_suiteInit(suite, "empty");
+    acu_fixtureInit(suite, "empty");
         
 	return entry;
 }
