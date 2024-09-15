@@ -29,7 +29,7 @@
 #include <acu_ldr.h>
 #include <acu_tryc.h>
 #include <acu_rprt.h>
-#include <acu_suit.h>
+#include <acu_fxtr.h>
 
 #include "g_tstmdl.h"
 #include "g_util.h"
@@ -120,7 +120,7 @@ static void gem_setInfoLine(const TestModel* testModel) {
     ACU_Count count = {0,0, {NULL, NULL}};
     counter.context = (void*)&count;
 
-    acu_suiteAccept(testModel->entry->suite, &counter);
+    acu_fixtureAccept(testModel->entry->fixture, &counter);
 
     acu_sprintf_s(testModel->infoLine, sizeof(testModel->infoLine), "%d tests in %d fixtures", count.testCaseCount, count.testFixtureCount);
 }
@@ -139,7 +139,7 @@ static void gem_collectTestCases(const TestModel* testModel){
     testCases.testCases = testModel->testList;
     collect.context = (void*) &testCases;
     
-    acu_suiteAccept(testModel->entry->suite, &collect); 
+    acu_fixtureAccept(testModel->entry->fixture, &collect); 
 }
 
 void gem_freeContent(const TestModel* testModel) {
