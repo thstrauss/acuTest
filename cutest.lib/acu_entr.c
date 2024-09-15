@@ -21,7 +21,6 @@
 
 #include <acu_ldr.h>
 #include <acu_fxtr.h>
-#include <acu_suit.h>
 #include <acu_util.h>
 #include <acu_list.h>
 #include <acu_tryc.h>
@@ -50,34 +49,34 @@
 #include "uuid_tst.h"
 
 ACU_Entry* acu_init() {
-    ACU_Suite* suite = acu_suiteMalloc();
+    ACU_Fixture* suite = acu_fixtureMalloc();
     ACU_Entry* entry = acu_entryMalloc();
 
     acu_entryInit(entry, suite);
 
-    acu_suiteInit(suite, "acu test suite");
+    acu_fixtureInit(suite, "acu test suite");
 
-    acu_suiteAddFixture(suite, dirFixture());
-    acu_suiteAddFixture(suite, fixtureFixture());
-    acu_suiteAddFixture(suite, floatFixture());
-    acu_suiteAddFixture(suite, intFixture());
-    acu_suiteAddFixture(suite, sampleFixture());
-    acu_suiteAddFixture(suite, longFixture());
-    acu_suiteAddFixture(suite, matchFixture());
-    acu_suiteAddFixture(suite, ptrFixture());
-    acu_suiteAddFixture(suite, randomFixture());
-    acu_suiteAddFixture(suite, resultFixture());
-    acu_suiteAddFixture(suite, reportFixture());
-    acu_suiteAddFixture(suite, shortFixture());
-    acu_suiteAddFixture(suite, signedCharFixture());
-    acu_suiteAddFixture(suite, strFixture());
-    acu_suiteAddFixture(suite, tryCatchFixture());
-    acu_suiteAddFixture(suite, unsignedCharFixture());
-    acu_suiteAddFixture(suite, unsignedIntFixture());
-    acu_suiteAddFixture(suite, unsignedLongFixture());
-    acu_suiteAddFixture(suite, unsignedShortFixture());
-    acu_suiteAddFixture(suite, utilFixture());
-    acu_suiteAddFixture(suite, uuidFixture());
+    acu_fixtureAddChildFixture(suite, dirFixture());
+    acu_fixtureAddChildFixture(suite, fixtureFixture());
+    acu_fixtureAddChildFixture(suite, floatFixture());
+    acu_fixtureAddChildFixture(suite, intFixture());
+    acu_fixtureAddChildFixture(suite, sampleFixture());
+    acu_fixtureAddChildFixture(suite, longFixture());
+    acu_fixtureAddChildFixture(suite, matchFixture());
+    acu_fixtureAddChildFixture(suite, ptrFixture());
+    acu_fixtureAddChildFixture(suite, randomFixture());
+    acu_fixtureAddChildFixture(suite, resultFixture());
+    acu_fixtureAddChildFixture(suite, reportFixture());
+    acu_fixtureAddChildFixture(suite, shortFixture());
+    acu_fixtureAddChildFixture(suite, signedCharFixture());
+    acu_fixtureAddChildFixture(suite, strFixture());
+    acu_fixtureAddChildFixture(suite, tryCatchFixture());
+    acu_fixtureAddChildFixture(suite, unsignedCharFixture());
+    acu_fixtureAddChildFixture(suite, unsignedIntFixture());
+    acu_fixtureAddChildFixture(suite, unsignedLongFixture());
+    acu_fixtureAddChildFixture(suite, unsignedShortFixture());
+    acu_fixtureAddChildFixture(suite, utilFixture());
+    acu_fixtureAddChildFixture(suite, uuidFixture());
 
 
     return entry;

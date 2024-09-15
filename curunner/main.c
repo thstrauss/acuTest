@@ -57,10 +57,10 @@ static void executeEntry(const char* cupName, Summary* summary) {
         return;
     }
 
-    summary->returnValue = acu_suiteExecute(entry->suite, &progress);
+    summary->returnValue = acu_fixtureExecute(entry->fixture, &progress);
     acu_printf_s(buffer, sizeof(buffer), "\n\r");
-    acu_suiteAccept(entry->suite, &report);
-    acu_suiteAccept(entry->suite, &reportSummary);
+    acu_fixtureAccept(entry->fixture, &report);
+    acu_fixtureAccept(entry->fixture, &reportSummary);
 
     cup_unload(entry);
 }

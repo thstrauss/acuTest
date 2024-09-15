@@ -9,9 +9,8 @@
 acu_asrt (acu_asrt.h, acu_eenv.h, acu_rslt.h)
 acu_fxtr (acu_fxtr.h)
 acu_ldr (acu_ldr.h)
-acu_rprt (acu_rprt.h, acu_tcse.h, acu_fxtr.h, acu_suit.h, acu_tryc.h)
+acu_rprt (acu_rprt.h, acu_tcse.h, acu_fxtr.h, acu_tryc.h)
 acu_rslt (acu_rslt.h)
-acu_suit
 acu_tryc (acu_tryc.h)
 acu_vers (acu_vers.h)
 tos\acu_ltos (acu_ldr.h)

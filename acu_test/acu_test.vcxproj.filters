@@ -30,9 +30,6 @@
     <ClCompile Include="acu_rprt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="acu_suit.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="acu_rslt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -66,9 +63,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_rslt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_suit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_tcse.h">

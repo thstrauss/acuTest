@@ -23,7 +23,7 @@
 #include <stdio.h>
 
 #include <acu_ldr.h>
-#include <acu_suit.h>
+#include <acu_fxtr.h>
 #include <acu_rprt.h>
 #include <acu_tryc.h>
 
@@ -44,12 +44,12 @@ int main(void) {
 	report.context = &reportHelper;
 	reportSummary.context = &summary;
 	
-	acu_suiteAccept(entry->suite, &counter);
+	acu_fixtureAccept(entry->fixture, &counter);
 	fprintf(stdout, "count = %d \n\r", count);
-	acu_suiteExecute(entry->suite, (ACU_Progress*) NULL);
+	acu_fixtureExecute(entry->fixture, (ACU_Progress*) NULL);
 	fprintf(stdout, "\n\r");
-	acu_suiteAccept(entry->suite, &report);
-	acu_suiteAccept(entry->suite, &reportSummary);
+	acu_fixtureAccept(entry->fixture, &report);
+	acu_fixtureAccept(entry->fixture, &reportSummary);
 	acu_entryDestroy(entry);
 	fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
 	return 0;
