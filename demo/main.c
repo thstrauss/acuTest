@@ -41,12 +41,12 @@ ACU_Fixture* sampleFixture(void)
 int main(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
-    ACU_ReportHelper reporthelper = { NULL, NULL };
+    ACU_ReportHelper reportHelper = { NULL, NULL };
     ACU_Visitor report = { acu_report, NULL };
     ACU_Progress progress = { acu_progress , NULL };
     enum ACU_TestResult result;
 
-    report.context = &reporthelper;
+    report.context = &reportHelper;
 
     acu_fixtureInit(fixture, "Sample test suite");
     acu_fixtureAddChildFixture(fixture, sampleFixture());

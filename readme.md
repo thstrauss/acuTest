@@ -15,9 +15,9 @@ Please implement a function like this with name `acu_entr.c`:
 
 ```C
 ACU_Entry* acu_init() {
-    ACU_Suite* suite = acu_suiteMalloc();
+    ACU_Fixture* fixture = acu_fixtureMalloc();
     ACU_Entry* entry = acu_entryMalloc();
-    acu_entryInit(entry, suite);
+    acu_entryInit(entry, fixture);
 
 ...
     /* Please add test fixtures to suites. */
@@ -115,7 +115,6 @@ cases with `result = acu_suiteExecute(suite, acu_progress, NULL)`.
 #include <acu_asrt.h>
 #include <acu_fxtr.h>
 #include <acu_tryc.h>
-#include <acu_suit.h>
 
 static void simpleTestCase(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, 0, 42, "number not equal to 42");
@@ -132,21 +131,21 @@ ACU_Fixture* sampleFixture(void)
 
 int main()
 {
-    ACU_Suite* suite = acu_suiteMalloc();
+    ACU_Suite* fixture = acu_fixtureMalloc();
     ACU_ReportHelper reportHelper = {NULL, NULL};
     ACU_Visitor report = { acu_report, NULL };
     ACU_Progress progress = { acu_progress , NULL };
     enum ACU_TestResult result;
     report.context = &reportHelper;
 
-    acu_suiteInit(suite, "Sample test suite");
-    acu_suiteAddFixture(suite, sampleFixture());
+    acu_fixtureInit(fixture, "Sample test suite");
+    acu_fixtureAddChildFixture(fixture, sampleFixture());
 
-    result = acu_suiteExecute(suite, &progress);
+    result = acu_fixtureExecute(fixture, &progress);
 
-    acu_suiteAccept(suite, &report);
+    acu_fixtureAccept(fixture, &report);
 
-    acu_suiteDestroy(suite);
+    acu_fixtureDestroy(fixture);
     return result != ACU_TEST_PASSED ? 2 : 0;
 }
 ``` 
