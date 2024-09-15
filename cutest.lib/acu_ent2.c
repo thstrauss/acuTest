@@ -28,7 +28,7 @@ ACU_Entry* acu_init() {
 	ACU_Fixture* suite = acu_fixtureMalloc();
     ACU_Entry* entry = acu_entryMalloc();
     
-    acu_fixtureInit(entry, suite);
+    acu_entryInit(entry, suite);
     
     acu_fixtureInit(suite, "empty");
         
