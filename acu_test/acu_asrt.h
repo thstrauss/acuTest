@@ -308,4 +308,13 @@ messageValue: Describes the assert.
 #define ACU_assert_strNotContains(environment, actualValue, expectedValue, messageValue) \
    __ACU_assert_str(environment, actualValue, expectedValue, messageValue, acu_notContainsStr)
 
+__EXPORT void acu_assertFail(ACU_ExecuteEnv* environment, ACU_AssertParameter* parameter);
+
+#define ACU_assertFail(environment, messageValue) { \
+    ACU_AssertParameter parameter; \
+    parameter.message = (messageValue); \
+    parameter.sourceFileName = __FILE__;\
+    parameter.sourceLine = __LINE__; \
+    acu_assertFail(environment, &parameter); }
+
 #endif

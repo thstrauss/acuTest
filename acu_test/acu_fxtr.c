@@ -121,7 +121,7 @@ enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progr
         result = acuTest_calcResult(result, acu_fixtureExecute((ACU_Fixture*)childFixture->data, progress));
         childFixture = acu_listNext(childFixture);
     }
-    while (testElement != NULL) {
+    while (testElement) {
         result = acuTest_calcResult(result, acuTest_run((ACU_TestCase*) testElement->data, context, progress));
         testElement = acu_listNext(testElement);
     }
@@ -136,7 +136,7 @@ void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_Visitor* visitor) {
         acu_fixtureAccept((ACU_Fixture*)childFixture->data, visitor);
         childFixture = acu_listNext(childFixture);
     }
-    while (testElement != NULL) {
+    while (testElement) {
         ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
         visitor->visitor(testCase, visitor->context);
         testElement = acu_listNext(testElement);

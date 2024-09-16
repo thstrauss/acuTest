@@ -59,8 +59,8 @@ void acu_stackDestroy(ACU_Stack* stack)
 int acu_stackPush(ACU_Stack* stack, void* data)
 {
     ACU_StackElement* newElement;
-
-    if ((newElement = acu_emalloc(sizeof(ACU_StackElement))) == 0) {
+    newElement = acu_emalloc(sizeof(ACU_StackElement));
+    if (!newElement) {
         return -1;
     }
 

@@ -53,7 +53,7 @@ void acu_filesDestroy(ACU_Files* files)
 
 void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor) {
     ACU_ListElement* fileElement = acu_listHead(files->fileList);
-    while (fileElement != NULL) {
+    while (fileElement) {
         visitor->visitor((ACU_FileEntry*) fileElement->data, visitor->context);
         fileElement = acu_listNext(fileElement);
     }
@@ -67,7 +67,7 @@ char* acu_getPath(const char* file) {
     }
     buffer = (char*) acu_estrdup(file);
     token = strrchr(buffer, '\\');
-    if (token != NULL) {
+    if (token) {
         *token = '\0';
     } else {
         *buffer = '\0'; 

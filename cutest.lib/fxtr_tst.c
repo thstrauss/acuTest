@@ -57,6 +57,11 @@ static void noAssertTest(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
+static void failedTest(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_assertFail(environment, "someMessage");
+    UNUSED(context);
+}
+
 static ACU_Fixture* failingFixture(void) {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
@@ -66,6 +71,7 @@ static ACU_Fixture* failingFixture(void) {
     acu_fixtureAddTestCase(fixture, "test1", test1);
     acu_fixtureAddTestCase(fixture, "test2", test2);
     acu_fixtureAddTestCase(fixture, "test3", test3);
+    acu_fixtureAddTestCase(fixture, "failedTest", failedTest);
     return fixture;
 }
 
@@ -118,7 +124,7 @@ static void failingFixtureInSuiteTest(ACU_ExecuteEnv* environment, const void* c
     suiteResult = acu_fixtureExecute(localSuite, &progress);
     acu_fixtureDestroy(localSuite);
 
-    ACU_assert(environment, int, Equal, result, 2, "Number of failing tests");
+    ACU_assert(environment, int, Equal, result, 3, "Number of failing tests");
     ACU_assert(environment, int, Equal, suiteResult, ACU_TEST_FAILED, "suite does not return ACU_TEST_FAILED");
 
     UNUSED(context);
@@ -139,7 +145,7 @@ static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 
     acu_fixtureDestroy(fixture);
     
-    ACU_assert(environment, int, Equal, result, 2, "Number of failing tests");
+    ACU_assert(environment, int, Equal, result, 3, "Number of failing tests");
     ACU_assert(environment, int, Equal, fixtureResult, ACU_TEST_FAILED, "fixture does not return ACU_TEST_FAILED");
 
     UNUSED(context);
