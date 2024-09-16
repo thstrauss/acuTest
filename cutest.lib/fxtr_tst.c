@@ -45,8 +45,8 @@ static void test2(ACU_ExecuteEnv* environment, const void* context) {
 }
 
 static void failingStrNotEqualTest(ACU_ExecuteEnv* environment, const void* context) {
-    char str[] = "abc";
     ACU_assert_strNotEqual(environment, "str", "str", "assert2");
+    UNUSED(context);
 }
 
 static void noAssertTest(ACU_ExecuteEnv* environment, const void* context) {
