@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Thomas Strauß
+ * Copyright (c) 2024 Thomas Strauss
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
@@ -31,7 +31,7 @@
 #include "fxtr_tst.h"
 
 static void test1(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_PrepareParameter(int, Equal, 1, 2, "assert");
+    ACU_PrepareParameter(int, Equal, 1, 2, "int not equal Assert");
     environment->result->sourceLine = __LINE__ + 1;
     acu_assert(environment, &parameter);
     UNUSED(context);
@@ -40,15 +40,12 @@ static void test1(ACU_ExecuteEnv* environment, const void* context) {
 static void test2(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, 1, 1, "assert2");
     ACU_assert(environment, int, NotEqual, 1, 2, "xxx");
-    ACU_assert(environment, float, NotEqual, 1.0, 2.0, "yyy");
+    ACU_assert(environment, float, NotEqual, 1.0f, 2.0f, "yyy");
     UNUSED(context);
 }
 
-static void test3(ACU_ExecuteEnv* environment, const void* context) {
+static void failingStrNotEqualTest(ACU_ExecuteEnv* environment, const void* context) {
     char str[] = "abc";
-    ACU_assert_strEqual(environment, str, str, "assert2");
-    ACU_assert_strEqual(environment, "abc", "abc", "assert2");
-    ACU_assert_strEqual(environment, (char*)context, "context", "assert context");
     ACU_assert_strNotEqual(environment, "str", "str", "assert2");
 }
 
@@ -70,7 +67,7 @@ static ACU_Fixture* failingFixture(void) {
 
     acu_fixtureAddTestCase(fixture, "test1", test1);
     acu_fixtureAddTestCase(fixture, "test2", test2);
-    acu_fixtureAddTestCase(fixture, "test3", test3);
+    acu_fixtureAddTestCase(fixture, "failingStrNotEqualTest", failingStrNotEqualTest);
     acu_fixtureAddTestCase(fixture, "failedTest", failedTest);
     return fixture;
 }
