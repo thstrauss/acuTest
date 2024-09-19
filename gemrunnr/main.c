@@ -284,6 +284,13 @@ void doArrowed(const WinData* wd, int arrow) {
         case WA_DNLINE: {
             doDownLine(wd);
         } break;
+        case WA_LFPAGE:
+        case WA_RTPAGE: {
+        } break;
+        case WA_LFLINE: {
+        } break;
+        case WA_RTLINE: {
+        } break;
     }
 }
 
@@ -428,7 +435,7 @@ int startProgram(WinData* wd) {
         wind_get(0, WF_WORKXYWH, &fullx, &fully, &fullw, &fullh);
     
         wd->windowHandle = wind_create(
-            NAME | MOVER | SIZER | FULLER | INFO | VSLIDE | UPARROW | DNARROW, 
+            NAME | MOVER | SIZER | FULLER | INFO | VSLIDE | HSLIDE | LFARROW | RTARROW | UPARROW | DNARROW, 
             fullx, fully, fullw, fullh);
             
         wind_set(wd->windowHandle, WF_NAME, "GEM Runner", 0, 0);
