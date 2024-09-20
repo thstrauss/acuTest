@@ -34,17 +34,14 @@
 #include <time.h>
 
 static void uuidTest(ACU_ExecuteEnv* environment, const void* context) {
-    char buffer[128];
     ACU_UUID uuid;
     ACU_UUID parsed = {0,0,0,0};
     char guidBuffer[] = "00000000-0000-0000-0000-000000000000";
     acu_initUuid(&uuid);
     acu_initUuid(&uuid);
     acu_formatUuid(guidBuffer, &uuid);
-    acu_printf_s(buffer, sizeof(buffer), "\n\r%08lx %08lx %08lx %08lx, %s\n\r", uuid.longs[0], uuid.longs[1], uuid.longs[2], uuid.longs[3], guidBuffer);
 
     acu_parseUuid(guidBuffer, &parsed);
-    acu_printf_s(buffer, sizeof(buffer), "\n\r%08lx %08lx %08lx %08lx", parsed.longs[0], parsed.longs[1], parsed.longs[2], parsed.longs[3]);
 
     ACU_assert(environment, int, Equal, acu_compareUuid(&uuid, &parsed), 1, "not equal");
 
