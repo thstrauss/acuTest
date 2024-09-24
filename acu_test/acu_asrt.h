@@ -37,6 +37,8 @@ typedef unsigned int unsignedInt;
 typedef unsigned long unsignedLong;
 typedef unsigned short unsignedShort;
 
+
+/* The union is used to store parameters to assert functions. */
 typedef union ACU_Types_ {
     voidPtr voidPtrType;
     charPtr charPtrType;
@@ -52,6 +54,7 @@ typedef union ACU_Types_ {
     double doubleType;
 } ACU_Types;
 
+/* The ACU_Values aggregates the actual and expected parameter for asserts. */
 typedef struct ACU_Values_ {
     ACU_Types actual;
     ACU_Types expected;
@@ -62,7 +65,7 @@ typedef enum ACU_TestResult (ACU_assertFunc)(const ACU_Types* actual, const ACU_
 /* Function prototype for functions to format messages for specific asserts */
 typedef char* (ACU_formatMessageFunc)(const struct ACU_AssertParameter_* parameter);
 
-/* Struct holds needed function pointers. */
+/* Struct holds needed function pointers for asserts. */
 typedef struct ACU_Funcs_ {
     ACU_assertFunc* assert;
     ACU_formatMessageFunc* formatFailedMessage;
@@ -70,7 +73,7 @@ typedef struct ACU_Funcs_ {
 } ACU_Funcs;
 
 
-/* All parameters to an actual assert. */
+/* All parameters to an assert invocation. */
 typedef struct ACU_AssertParameter_ {
     const ACU_Funcs* funcs;
     ACU_Values values;
@@ -310,6 +313,7 @@ messageValue: Describes the assert.
 
 __EXPORT void acu_assertFail(ACU_ExecuteEnv* environment, ACU_AssertParameter* parameter);
 
+/* Macro for an always failing assert. Can be used to make a test case fail. */
 #define ACU_assertFail(environment, messageValue) { \
     ACU_AssertParameter parameter; \
     parameter.message = (messageValue); \
