@@ -105,8 +105,8 @@ A Fixture's is aggregating test cases. The test cases are just added by providin
 
 ### Suites
 
-A Suite's is aggregating fixtures on the next level. On suite level you typically execute the test 
-cases with `result = acu_suiteExecute(suite, acu_progress, NULL)`.
+A Fixture's can aggregate fixtures on the next level. On higher level you typically execute the test 
+cases with `result = acu_fixtureExecute(suite, acu_progress, NULL)`.
 
 ```C
 #include <stdlib.h>
@@ -131,7 +131,7 @@ ACU_Fixture* sampleFixture(void)
 
 int main()
 {
-    ACU_Suite* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_fixtureMalloc();
     ACU_ReportHelper reportHelper = {NULL, NULL};
     ACU_Visitor report = { acu_report, NULL };
     ACU_Progress progress = { acu_progress , NULL };
