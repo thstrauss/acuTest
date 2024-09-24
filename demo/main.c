@@ -25,6 +25,8 @@
 #include <acu_tryc.h>
 #include <acu_fxtr.h>
 
+#include <stddef.h>
+
 static void simpleTestCase(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, 0, 42, "number not equal to 42");
     UNUSED(context);
