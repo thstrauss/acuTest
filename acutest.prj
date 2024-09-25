@@ -21,6 +21,10 @@
 
 stub.tos
 
+.L [ -G ]
+.L [ -L ]
+.L [ -Y ]
+
 =
 
 pcstart.o
@@ -34,5 +38,6 @@ cutest.lib\cuempty.prj
 cutest.lib\cutstrun.prj
 cutest.lib\cutscup.prj
 gemrunnr\gemrunnr.prj
+demo\demo.prj
 
 PCSTDLIB.LIB
