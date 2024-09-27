@@ -52,5 +52,6 @@ int main(void) {
 	acu_fixtureAccept(entry->fixture, &reportSummary);
 	acu_entryDestroy(entry);
 	fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
+	fprintf(stdout, "allocs = %d", acu_getAllocCount());
 	return 0;
 }
