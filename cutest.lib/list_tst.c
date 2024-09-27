@@ -36,7 +36,7 @@ static void emptyList(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert_ptrIsNull(environment, acu_listHead(list), "head is not null.")
     ACU_FINALLY
         acu_listDestroy(list);
-        free(list);
+        acu_free(list);
     ACU_ETRY
     UNUSED(context);
 }

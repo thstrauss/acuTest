@@ -29,6 +29,7 @@
 static char errorBuffer[1024];
 
 extern ACU_ErrorHandlerFunc* acu_errorHandler;
+extern int __acu_allocCount;
 
 void va_acu_printf(ACU_Level level, const char* format, va_list args) {
     int bufPos = 0;
@@ -64,6 +65,7 @@ int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_lis
 char* acu_estrdup(const char* s) {
     char* temp = strdup(s);
     if (temp) {
+        __acu_allocCount++;
         return temp;
     }
     acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);

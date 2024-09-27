@@ -89,7 +89,7 @@ static int acu_listRemoveHead(ACU_List* list, const void** data) {
         list->tail = NULL;
     }
 
-    free(oldElement);
+    acu_free(oldElement);
     list->size--;
     
     return 0;

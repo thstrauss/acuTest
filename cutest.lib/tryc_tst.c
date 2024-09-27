@@ -89,7 +89,7 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     int visited = 0;
     int finally = 0;
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
-    ACU_Result* resultBuf = (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
+    ACU_Result* resultBuf = acuTest_resultMalloc();
 
     ACU_Frame frame;
     frame.exception = 0;

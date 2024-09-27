@@ -34,9 +34,9 @@ ACU_Files* acu_filesMalloc(void)
 
 static void acu_fileEntryDestroy(ACU_FileEntry* entry) {
     if (entry->fileName) {
-        free(entry->fileName);
+        acu_free(entry->fileName);
     }
-    free(entry);
+    acu_free(entry);
 }
 
 void acu_filesInit(ACU_Files* files)
@@ -49,6 +49,7 @@ void acu_filesDestroy(ACU_Files* files)
 {
     acu_listDestroy(files->fileList);
     files->fileList = NULL;
+    acu_free(files);
 }
 
 void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor) {

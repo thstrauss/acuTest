@@ -68,9 +68,10 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
     return result->status;
 }
 
-static void acuTest_testCaseDestroy(ACU_TestCase* data) {
-    free(data->name);
-    acuTest_resultDestroy(&data->result);
+static void acuTest_testCaseDestroy(ACU_TestCase* testCase) {
+    acu_free(testCase->name);
+    acuTest_resultDestroy(&testCase->result);
+    acu_free(testCase);
 }
 
 static ACU_TestCase* acuTest_testCaseMalloc(void) {
@@ -81,7 +82,7 @@ void acu_fixtureInit(ACU_Fixture* fixture, const char* name) {
     ACU_List* testCases = acu_listMalloc();
     ACU_List* fixtures = acu_listMalloc();
     acu_listInit(testCases, (ACU_ListDestroyFunc*) acuTest_testCaseDestroy);
-    acu_listInit(fixtures, (ACU_ListDestroyFunc*)acu_fixtureDestroy);
+    acu_listInit(fixtures, (ACU_ListDestroyFunc*) acu_fixtureDestroy);
     fixture->testCases = testCases;
     fixture->childFixtures = fixtures;
     fixture->name = acu_estrdup(name);
@@ -151,5 +152,6 @@ ACU_Fixture* acu_fixtureMalloc(void)
 void acu_fixtureDestroy(ACU_Fixture* fixture) {
     acu_listDestroy(fixture->testCases);
     acu_listDestroy(fixture->childFixtures);
-    free(fixture);
+    acu_free(fixture->name);
+    acu_free(fixture);
 }

@@ -37,7 +37,7 @@ static void dirTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_TRY
         ACU_assert_strEqual(environment, path, "c:\\test", "path not expected");
     ACU_FINALLY
-        free(path);
+        acu_free(path);
     ACU_ETRY
     UNUSED(context);
 }
@@ -47,7 +47,7 @@ static void dirTestEmpty(ACU_ExecuteEnv* environment, const void* context) {
     ACU_TRY
         ACU_assert_strIsEmpty(environment, path, "path not empty");
     ACU_FINALLY
-        free(path);
+        acu_free(path);
     ACU_ETRY
         UNUSED(context);
 }
@@ -57,7 +57,7 @@ static void dirTestNoSeparator(ACU_ExecuteEnv* environment, const void* context)
     ACU_TRY
         ACU_assert_strIsEmpty(environment, path, "path not empty");
     ACU_FINALLY
-        free(path);
+        acu_free(path);
     ACU_ETRY
         UNUSED(context);
 }

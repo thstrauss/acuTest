@@ -78,7 +78,6 @@ ACU_Entry* acu_init() {
     acu_fixtureAddChildFixture(suite, utilFixture());
     acu_fixtureAddChildFixture(suite, uuidFixture());
 
-
     return entry;
 }
 

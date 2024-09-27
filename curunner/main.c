@@ -73,6 +73,7 @@ int main(int argc, const char* argv[]) {
     Summary result = { {0,0}, 0 };
     static char buffer[256];
     ACU_Files* files;
+    int allocs;
 
     ACU_FilesVisitor testExecuteVisitor = { execute , NULL };
     testExecuteVisitor.context = (void*) &result;
@@ -92,5 +93,7 @@ int main(int argc, const char* argv[]) {
 
     acu_printf_s(buffer, sizeof(buffer), "%d of %d failed.\n\r", result.summary.failedTestCases, result.summary.totalTestCases);
 
+    allocs = acu_getAllocCount();
+    printf("allocs = %d", allocs);
     return result.returnValue == ACU_TEST_PASSED ? 0 : 2;
 }

@@ -50,7 +50,7 @@ static void ptrEqualNull(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert_ptrEqual(environment, resultBuf.message, NULL, "ptrEqualNull"); \
     ACU_FINALLY
         if (resultBuf.message) {
-            free(resultBuf.message);
+            acu_free(resultBuf.message);
         }
     ACU_ETRY;
     UNUSED(context);
@@ -84,7 +84,7 @@ static void ptrEqual(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert_ptrEqual(environment, resultBuf.message, NULL, "ptrEqual"); \
     ACU_FINALLY
         if (resultBuf.message) {
-            free(resultBuf.message);
+            acu_free(resultBuf.message);
         }
     ACU_ETRY;
     UNUSED(context);
@@ -116,7 +116,7 @@ static void ptrNotEqual(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert_ptrEqual(environment, resultBuf.message, NULL, "ptrNotEqual"); \
     ACU_FINALLY
         if (resultBuf.message) {
-            free(resultBuf.message);
+            acu_free(resultBuf.message);
         }
     ACU_ETRY;
     UNUSED(context);
@@ -148,7 +148,7 @@ static void ptrNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert_ptrEqual(environment, resultBuf.message, NULL, "ptrNotEqualNull"); \
     ACU_FINALLY
         if (resultBuf.message) {
-            free(resultBuf.message);
+            acu_free(resultBuf.message);
         }
     ACU_ETRY;
     UNUSED(context);

@@ -147,7 +147,7 @@ void gem_freeContent(const TestModel* testModel) {
         int i;
         int numberOfLines = (testModel->testList) ? testModel->testList->size : 0;
         for (i = 0; i < numberOfLines; i++) {
-            free(testModel->content[i + 1].ob_spec.free_string);
+            acu_free(testModel->content[i + 1].ob_spec.free_string);
         }
         free(testModel->content);
     }
@@ -164,7 +164,7 @@ void gem_selectFile(const WinData* wd) {
         gem_freeContent(testModel);
         if (testModel->testList) {
             acu_listDestroy(testModel->testList);
-            free(testModel->testList);
+            acu_free(testModel->testList);
             testModel->testList = NULL;
         }
 

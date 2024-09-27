@@ -74,7 +74,7 @@ static unsigned char* readRelocationData(long handle, long fsize, const PH* prog
         relo_mem = malloc(relo_len);
         if (relo_mem) {
             if (!Fread((int)handle, relo_len, relo_mem) == relo_len) {
-                free(relo_mem);
+                acu_free(relo_mem);
             }
         }
     }
@@ -110,13 +110,13 @@ static void* load_and_reloc(long handle, long fsize, const PH* programHeader)
             relocationData = readRelocationData(handle, fsize, programHeader);
             if (relocationData != NULL) {
                 relocatedTextAndData = relocate(textAndData, relocationData);
-                free(relocationData);
+                acu_free(relocationData);
             }
         }
     }
 
     if (!relocatedTextAndData) {
-        free(textAndData);
+        acu_free(textAndData);
     }
 
     return relocatedTextAndData;
@@ -155,5 +155,5 @@ void acu_pluginLoad(ACU_Plugin* plugin, const char* cu_name)
 }
 
 void acu_pluginUnload(ACU_Plugin* plugin) {
-    free(plugin->pluginCode);
+    acu_free(plugin->pluginCode);
 }

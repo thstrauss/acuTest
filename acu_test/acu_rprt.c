@@ -47,7 +47,7 @@ void acu_report(const ACU_TestCase* testCase, void* context) {
         reportHelper->fixtureName = testCase->fixture->name;
         fprintf(stdout, "  %s took %ld ms\n\r", reportHelper->fixtureName, ((testCase->fixture->end - testCase->fixture->start) * 1000) / CLK_TCK);
     }
-    if (testCase->result.status != ACU_TEST_PASSED) {
+    if (testCase->result.status == ACU_TEST_FAILED) {
         fprintf(stdout, "    %s: %s\n\r      %s:%d:\n\r      %s\n\r", testCase->name, testCase->result.status == ACU_TEST_PASSED ? "passed" : "failed", SAFE_REF(testCase->result.sourceFileName), testCase->result.sourceLine, SAFE_REF(testCase->result.message));
     }
 }

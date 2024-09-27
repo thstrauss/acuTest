@@ -32,7 +32,7 @@ enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedResult, enu
 
 void acuTest_resultDestroy(ACU_Result* result) {
     if (result->message) {
-        free(result->message);
+        acu_free(result->message);
         result->message = NULL;
     }
 }
@@ -40,7 +40,7 @@ void acuTest_resultDestroy(ACU_Result* result) {
 void acuTest_resultPrepare(ACU_Result* result) {
     result->status = ACU_TEST_PASSED;
     if (result->message) {
-        free(result->message);
+        acu_free(result->message);
         result->message = NULL;
     }
 }
