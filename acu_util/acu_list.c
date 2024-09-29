@@ -76,6 +76,32 @@ int acu_listAppend(ACU_List* list, const void* data) {
     return -1;
 }
 
+__EXPORT int acu_listInsertNext(ACU_List* list, ACU_ListElement* element, const void* data)
+{
+    ACU_ListElement *newListElement = acu_listElementMalloc();
+    if (!newListElement) {
+        return -1;
+    }
+    newListElement->data = (void*) data;
+
+    if (!element) {
+        if (list->size == 0) {
+            list->tail = newListElement;
+        }
+        newListElement->next = list->head;
+        list->head = newListElement;
+    }
+    else {
+        if (!element) {
+            list->tail = newListElement;
+        }
+        newListElement->next = element->next;
+        element->next = newListElement;
+    }
+    list->size++;
+    return 0;
+}
+
 static int acu_listRemoveHead(ACU_List* list, const void** data) {
     ACU_ListElement* oldElement;
     if (list->size <= 0) {

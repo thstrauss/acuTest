@@ -51,4 +51,6 @@ __EXPORT void acu_listDestroy(ACU_List* list);
 
 __EXPORT int acu_listAppend(ACU_List* list, const void* data);
 
+__EXPORT int acu_listInsertNext(ACU_List* list, ACU_ListElement* element, const void* data);
+
 #endif 
