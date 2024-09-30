@@ -130,7 +130,7 @@ enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progr
     return result;
 }
 
-void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_Visitor* visitor) {
+void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
     ACU_ListElement* childFixture = acu_listHead(fixture->childFixtures);
     while (childFixture) {

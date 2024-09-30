@@ -59,6 +59,6 @@ __EXPORT void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context);
 
 __EXPORT enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progress);
 
-__EXPORT void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_Visitor* visitor);
+__EXPORT void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor);
 
 #endif

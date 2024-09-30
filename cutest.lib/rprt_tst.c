@@ -52,7 +52,7 @@ static void test3(ACU_ExecuteEnv* environment, const void* context) {
 }
 
 static void collectTest(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_Visitor collect = {acu_collectTestCases, NULL};
+    ACU_ReportVisitor collect = {acu_collectTestCases, NULL};
     ACU_TestCases tests;
 
     ACU_List list;

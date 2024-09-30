@@ -66,7 +66,7 @@ int ACU_insertHashTable(ACU_HashTable* hashTable, const void* data)
         hashTable->size++;
     }
 
-    return 0;
+    return retval;
 }
 
 int ACU_removeHashTable(ACU_HashTable* hashTable, void** data)

@@ -53,11 +53,8 @@ void acu_filesDestroy(ACU_Files* files)
 }
 
 void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor) {
-    ACU_ListElement* fileElement = acu_listHead(files->fileList);
-    while (fileElement) {
-        visitor->visitor((ACU_FileEntry*) fileElement->data, visitor->context);
-        fileElement = acu_listNext(fileElement);
-    }
+    ACU_ListVisitor listVisitor = {visitor->visitor, visitor->context};
+    acu_listAccept(files->fileList, &listVisitor);
 }
 
 char* acu_getPath(const char* file) {
