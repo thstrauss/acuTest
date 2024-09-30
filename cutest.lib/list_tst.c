@@ -59,6 +59,49 @@ static void listInsert(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
+static void listRemoveNull(ACU_ExecuteEnv* environment, const void* context) {
+    int data1 = 1;
+    int data2 = 2;
+    int *data = 0;
+    ACU_List* list = acu_listMalloc();
+    acu_listInit(list, (ACU_ListDestroyFunc*)NULL);
+    acu_listInsertNext(list, NULL, &data1);
+    acu_listInsertNext(list, acu_listHead(list), &data2);
+
+    acu_listRemoveNext(list, NULL, &data);
+
+    ACU_TRY
+        ACU_assert(environment, int, Equal, *data, data1, "");
+        ACU_assert(environment, int, Equal, *(int*)(acu_listHead(list)->data), data2, "");
+    ACU_FINALLY
+        acu_listDestroy(list);
+        acu_free(list);
+    ACU_ETRY
+        UNUSED(context);
+}
+
+static void listRemoveElement(ACU_ExecuteEnv* environment, const void* context) {
+    int data1 = 1;
+    int data2 = 2;
+    int* data = 0;
+    ACU_List* list = acu_listMalloc();
+    acu_listInit(list, (ACU_ListDestroyFunc*)NULL);
+    acu_listInsertNext(list, NULL, &data1);
+    acu_listInsertNext(list, acu_listHead(list), &data2);
+
+    acu_listRemoveNext(list, acu_listHead(list), &data);
+
+    ACU_TRY
+        ACU_assert(environment, int, Equal, *data, data2, "");
+        ACU_assert(environment, int, Equal, *(int*)(acu_listHead(list)->data), data1, "");
+    ACU_FINALLY
+        acu_listDestroy(list);
+        acu_free(list);
+    ACU_ETRY
+        UNUSED(context);
+}
+
+
 ACU_Fixture* sampleFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
@@ -67,6 +110,8 @@ ACU_Fixture* sampleFixture(void)
 
     acu_fixtureAddTestCase(fixture, "emptyList", emptyList);
     acu_fixtureAddTestCase(fixture, "listInsert", listInsert);
+    acu_fixtureAddTestCase(fixture, "listRemoveNull", listRemoveNull);
+    acu_fixtureAddTestCase(fixture, "listRemoveElement", listRemoveElement);
 
     return fixture;
 }
