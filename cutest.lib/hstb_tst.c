@@ -29,11 +29,57 @@
 #include <acu_tryc.h>
 #include <acu_hstb.h>
 
+static int hash(const void* data) {
+    return *(int*) data;
+}
+
+static int match(const void* key1, const void* key2) {
+    return *(int*)key1 == *(int*)key2;
+}
+
+static void emptyHashTable(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_HashTable hashtable;
+
+    ACU_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*) NULL);
+
+    ACU_assert(environment, int, Equal, hashtable.size, 0, "Not empty")
+
+    ACU_destroyHashTable(&hashtable);
+}
+
+static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_HashTable hashtable;
+    int i;
+    int values[40];
+    int* lookupValue;
+
+    ACU_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*) NULL);
+
+    for (i = 0; i < 40; i++) {
+        values[i] = i;
+        ACU_insertHashTable(&hashtable, &values[i]);
+    }
+
+    i = 15;
+    lookupValue = &i;
+
+    ACU_lookupHashTable(&hashtable, (void**) &lookupValue);
+
+    ACU_assert(environment, int, Equal, hashtable.size, 40, "Not empty");
+
+    ACU_assert_ptrEqual(environment, lookupValue, &values[15], "");
+
+    ACU_destroyHashTable(&hashtable);
+}
+
 ACU_Fixture* hashTableFixture(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
     acu_fixtureInit(fixture, "hash table tests");
+    
+    acu_fixtureAddTestCase(fixture, "empty Hashtable", emptyHashTable);
+    acu_fixtureAddTestCase(fixture, "fill Hashtable", fillHashTable);
 
     return fixture;
 }

@@ -74,7 +74,7 @@ int ACU_removeHashTable(ACU_HashTable* hashTable, void** data)
     ACU_ListElement* element, *prev;
     int bucket;
 
-    bucket = hashTable->hash(data) % hashTable->buckets;
+    bucket = hashTable->hash(*data) % hashTable->buckets;
     prev = NULL;
     for (element = acu_listHead(&hashTable->table[bucket]); element != NULL; element = element->next) {
         if (hashTable->match(*data, element->data)) {
@@ -93,7 +93,7 @@ int ACU_lookupHashTable(ACU_HashTable* hashTable, void** data)
     ACU_ListElement* element;
     int bucket;
 
-    bucket = hashTable->hash(data) % hashTable->buckets;
+    bucket = hashTable->hash(*data) % hashTable->buckets;
 
     for (element = acu_listHead(&hashTable->table[bucket]); element != NULL; element = element->next) {
         if (hashTable->match(*data, element->data)) {
