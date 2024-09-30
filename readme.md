@@ -133,7 +133,7 @@ int main()
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
     ACU_ReportHelper reportHelper = {NULL, NULL};
-    ACU_Visitor report = { acu_report, NULL };
+    ACU_ReportVisitor report = { acu_report, NULL };
     ACU_Progress progress = { acu_progress , NULL };
     enum ACU_TestResult result;
     report.context = &reportHelper;
