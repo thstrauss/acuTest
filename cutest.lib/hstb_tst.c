@@ -45,6 +45,7 @@ static void emptyHashTable(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, hashtable.size, 0, "Not empty")
 
     ACU_destroyHashTable(&hashtable);
+    UNUSED(context);
 }
 
 static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
@@ -70,6 +71,7 @@ static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert_ptrEqual(environment, lookupValue, &values[15], "wrong value looked up.");
 
     ACU_destroyHashTable(&hashtable);
+    UNUSED(context);
 }
 
 ACU_Fixture* hashTableFixture(void)
