@@ -151,7 +151,9 @@ ACU_Fixture* acu_fixtureMalloc(void)
 
 void acu_fixtureDestroy(ACU_Fixture* fixture) {
     acu_listDestroy(fixture->testCases);
+    acu_free(fixture->testCases);
     acu_listDestroy(fixture->childFixtures);
+    acu_free(fixture->childFixtures);
     acu_free(fixture->name);
     acu_free(fixture);
 }
