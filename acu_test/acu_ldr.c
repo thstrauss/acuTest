@@ -56,7 +56,6 @@ void acu_entryInit(ACU_Entry* entry, ACU_Fixture* fixture) {
 void acu_entryDestroy(ACU_Entry* entry) {
     if (entry) {
         acu_fixtureDestroy((ACU_Fixture*)entry->fixture);
-        acu_free(entry);
     }
 }
 
@@ -90,4 +89,5 @@ void cup_unload(ACU_Entry* entry) {
     acu_pluginUnload(entry->plugin);
     acu_free(entry->plugin);
     acu_entryDestroy(entry);
+    acu_free(entry);
 }
