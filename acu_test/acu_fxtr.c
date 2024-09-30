@@ -131,17 +131,17 @@ enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progr
 }
 
 void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor) {
-    ACU_ListElement* testElement = acu_listHead(fixture->testCases);
-    ACU_ListElement* childFixture = acu_listHead(fixture->childFixtures);
-    while (childFixture) {
-        acu_fixtureAccept((ACU_Fixture*)childFixture->data, visitor);
-        childFixture = acu_listNext(childFixture);
-    }
-    while (testElement) {
-        ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
-        visitor->visitor(testCase, visitor->context);
-        testElement = acu_listNext(testElement);
-    }
+    ACU_ListVisitor listVisitor;
+
+    listVisitor.visitor = (ACU_ListVisitorFunc*) acu_fixtureAccept;
+    listVisitor.context = visitor;
+
+    acu_listAccept(fixture->childFixtures, &listVisitor);
+
+    listVisitor.visitor = (ACU_ListVisitorFunc*) visitor->visitor;
+    listVisitor.context = visitor->context;
+
+    acu_listAccept(fixture->testCases, &listVisitor);
 }
 
 ACU_Fixture* acu_fixtureMalloc(void)

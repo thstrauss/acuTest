@@ -62,7 +62,7 @@ int ACU_insertHashTable(ACU_HashTable* hashTable, const void* data)
 
     bucket = hashTable->hash(data) % hashTable->buckets;
 
-    if (!(retval = acu_listInsertNext(&hashTable->table[bucket], NULL, data))) {
+    if ((retval = acu_listInsertNext(&hashTable->table[bucket], NULL, data)) == 0) {
         hashTable->size++;
     }
 

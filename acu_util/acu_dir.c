@@ -54,7 +54,7 @@ void acu_filesDestroy(ACU_Files* files)
 
 void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor) {
     ACU_ListVisitor listVisitor;
-    listVisitor.visitor = visitor->visitor;
+    listVisitor.visitor = (ACU_ListVisitorFunc*) visitor->visitor;
     listVisitor.context = visitor->context;
     acu_listAccept(files->fileList, &listVisitor);
 }

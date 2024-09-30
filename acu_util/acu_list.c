@@ -134,7 +134,7 @@ int acu_listRemoveNext(ACU_List* list, ACU_ListElement* element, void** data)
 
 __EXPORT void acu_listAccept(const ACU_List* list, ACU_ListVisitor* visitor)
 {
-    ACU_ListElement* listElement = acu_listHead(list);
+    ACU_ListElement* listElement = list->head;
     while (listElement) {
         visitor->visitor(listElement->data, visitor->context);
         listElement = listElement->next;
