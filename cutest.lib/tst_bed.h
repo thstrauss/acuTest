@@ -64,6 +64,7 @@
     acu_stackDrop(acu_getFrameStack()); \
     ACU_assert(environment, int, Equal, resultBuf.status, ACU_TEST_FAILED, STR(passed_)#type#operation#postfix); \
     ACU_assert_ptrIsNotNull(environment, resultBuf.message, STR(messageIsNotNull_)#type#operation#postfix); \
+    acu_free(resultBuf.message); \
     UNUSED(context); \
 }
 
