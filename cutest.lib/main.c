@@ -31,12 +31,12 @@ int main(void) {
 	ACU_Entry* entry = acu_init();
 	ACU_Summary summary = {0,0};
 	
-	ACU_Visitor report = {acu_report, NULL};
+	ACU_ReportVisitor report = {acu_report, NULL};
 	ACU_ReportHelper reportHelper = {NULL, NULL};
 
-	ACU_Visitor counter = {acu_countTestCases, NULL};
+	ACU_ReportVisitor counter = {acu_countTestCases, NULL};
 	
-	ACU_Visitor reportSummary = {acu_reportSummary, NULL};
+	ACU_ReportVisitor reportSummary = {acu_reportSummary, NULL};
 	
 	int count=0;
 	

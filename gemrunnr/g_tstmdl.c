@@ -116,7 +116,7 @@ void gem_content(const CellSize* cellSize, const TestModel* testModel) {
 }
 
 static void gem_setInfoLine(const TestModel* testModel) {
-    ACU_Visitor counter = { acu_count, NULL };
+    ACU_ReportVisitor counter = { acu_count, NULL };
     ACU_Count count = {0,0, {NULL, NULL}};
     counter.context = (void*)&count;
 
@@ -130,7 +130,7 @@ static void gem_setWindowTitle(const TestModel* testModel) {
 }
 
 static void gem_collectTestCases(const TestModel* testModel){
-    ACU_Visitor collect = {acu_collectTestCases, NULL};
+    ACU_ReportVisitor collect = {acu_collectTestCases, NULL};
     ACU_TestCases testCases;
     
     testModel->testList = acu_listMalloc();
