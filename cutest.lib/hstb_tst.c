@@ -7,25 +7,33 @@
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
  * and/or sell copies of the Software, and to permit persons to whom the Software
  * is furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall 
+ *
+ * The above copyright notice and this permission notice shall
  * be included in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-#ifndef __LIST_TEST__
-#define __LIST_TEST__
+#include <stdlib.h>
+#include <stddef.h>
+#include "hstb_tst.h"
 
-#include <acu_cmmn.h>
 #include <acu_fxtr.h>
+#include <acu_asrt.h>
+#include <acu_util.h>
+#include <acu_tryc.h>
+#include <acu_hstb.h>
 
-__EXPORT ACU_Fixture* listFixture(void);
+ACU_Fixture* hashTableFixture(void)
+{
+    ACU_Fixture* fixture = acu_fixtureMalloc();
 
-#endif
+    acu_fixtureInit(fixture, "hash table tests");
+
+    return fixture;
+}

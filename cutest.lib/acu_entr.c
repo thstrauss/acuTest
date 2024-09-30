@@ -47,6 +47,7 @@
 #include "rslt_tst.h"
 #include "util_tst.h"
 #include "uuid_tst.h"
+#include "hstb_tst.h"
 
 ACU_Entry* acu_init() {
     ACU_Fixture* suite = acu_fixtureMalloc();
@@ -59,8 +60,9 @@ ACU_Entry* acu_init() {
     acu_fixtureAddChildFixture(suite, dirFixture());
     acu_fixtureAddChildFixture(suite, fixtureFixture());
     acu_fixtureAddChildFixture(suite, floatFixture());
+    acu_fixtureAddChildFixture(suite, hashTableFixture());
     acu_fixtureAddChildFixture(suite, intFixture());
-    acu_fixtureAddChildFixture(suite, sampleFixture());
+    acu_fixtureAddChildFixture(suite, listFixture());
     acu_fixtureAddChildFixture(suite, longFixture());
     acu_fixtureAddChildFixture(suite, matchFixture());
     acu_fixtureAddChildFixture(suite, ptrFixture());
