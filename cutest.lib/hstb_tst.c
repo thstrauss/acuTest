@@ -29,12 +29,12 @@
 #include <acu_tryc.h>
 #include <acu_hstb.h>
 
-static int hash(const void* data) {
-    return *(int*) data;
+static unsigned int hash(const void* data) {
+    return *(unsigned*) data;
 }
 
 static int match(const void* key1, const void* key2) {
-    return *(int*)key1 == *(int*)key2;
+    return *(unsigned*)key1 == *(unsigned*)key2;
 }
 
 static void emptyHashTable(ACU_ExecuteEnv* environment, const void* context) {
@@ -42,7 +42,7 @@ static void emptyHashTable(ACU_ExecuteEnv* environment, const void* context) {
 
     ACU_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*) NULL);
 
-    ACU_assert(environment, int, Equal, hashtable.size, 0, "Not empty")
+    ACU_assert(environment, size_t, Equal, hashtable.size, 0, "Not empty")
 
     ACU_destroyHashTable(&hashtable);
     UNUSED(context);
@@ -50,9 +50,9 @@ static void emptyHashTable(ACU_ExecuteEnv* environment, const void* context) {
 
 static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
     ACU_HashTable hashtable;
-    int i;
-    int values[40];
-    int* lookupValue;
+    unsigned int i;
+    unsigned int values[40];
+    unsigned int* lookupValue;
 
     ACU_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*) NULL);
 
@@ -66,7 +66,7 @@ static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
 
     ACU_lookupHashTable(&hashtable, (void**) &lookupValue);
 
-    ACU_assert(environment, int, Equal, hashtable.size, 40, "Not empty");
+    ACU_assert(environment, size_t, Equal, hashtable.size, 40, "Not empty");
 
     ACU_assert_ptrEqual(environment, lookupValue, &values[15], "wrong value looked up.");
 

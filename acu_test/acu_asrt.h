@@ -28,6 +28,7 @@
 #define _ACU_ASSERT_H_
 
 #include <acu_cmmn.h>
+#include <stddef.h>
 
 typedef void* voidPtr;
 typedef char* charPtr;
@@ -50,6 +51,7 @@ typedef union ACU_Types_ {
     unsignedInt unsignedIntType;
     long longType;
     unsignedLong unsignedLongType;
+    size_t size_tType;
     float floatType;
     double doubleType;
 } ACU_Types;
@@ -143,6 +145,14 @@ CREATE_ASSERT_FUNC(long, Less, < , %ld)
 CREATE_ASSERT_FUNC(long, Greater, > , %ld)
 CREATE_ASSERT_FUNC(long, LessEqual, <= , %ld)
 CREATE_ASSERT_FUNC(long, GreaterEqual, >= , %ld)
+
+CREATE_ASSERT_FUNC(size_t, Equal, == , % ld)
+CREATE_ASSERT_FUNC(size_t, NotEqual, != , % ld)
+CREATE_ASSERT_FUNC(size_t, Less, < , % ld)
+CREATE_ASSERT_FUNC(size_t, Greater, > , % ld)
+CREATE_ASSERT_FUNC(size_t, LessEqual, <= , % ld)
+CREATE_ASSERT_FUNC(size_t, GreaterEqual, >= , % ld)
+
 
 CREATE_ASSERT_FUNC(unsignedLong, Equal, ==, %lu)
 CREATE_ASSERT_FUNC(unsignedLong, NotEqual, != , %lu)

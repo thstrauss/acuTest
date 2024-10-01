@@ -26,20 +26,22 @@
 #include "acu_cmmn.h"
 #include "acu_list.h"
 
+#include <stddef.h>
+
 typedef void ACU_HashTableDestroyFunc(void* data);
-typedef int ACU_HashTableHashFunc(const void* key);
+typedef unsigned int ACU_HashTableHashFunc(const void* key);
 typedef int ACU_HashTableMatchFunc(const void* key1, const void* key2);
 
 typedef struct ACU_HashTable_ {
-    int buckets;
+    size_t buckets;
     ACU_HashTableHashFunc* hash;
     ACU_HashTableMatchFunc* match;
 
-    int size;
+    size_t size;
     ACU_List* table;
 } ACU_HashTable;
 
-__EXPORT int ACU_initHashTable(ACU_HashTable* hashTable, int buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match, ACU_HashTableDestroyFunc* destroy);
+__EXPORT int ACU_initHashTable(ACU_HashTable* hashTable, size_t buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match, ACU_HashTableDestroyFunc* destroy);
 
 __EXPORT void ACU_destroyHashTable(ACU_HashTable* hashTable);
 

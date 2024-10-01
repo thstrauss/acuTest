@@ -22,9 +22,9 @@
  #include "acu_hstb.h"
  #include "acu_util.h"
 
-int ACU_initHashTable(ACU_HashTable* hashTable, int buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match, ACU_HashTableDestroyFunc* destroy)
+int ACU_initHashTable(ACU_HashTable* hashTable, size_t buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match, ACU_HashTableDestroyFunc* destroy)
 {
-    int i;
+    size_t i;
     hashTable->table = (ACU_List*) acu_emalloc(buckets * sizeof(ACU_List));
     if (!hashTable->table) {
         return -1;
@@ -41,7 +41,7 @@ int ACU_initHashTable(ACU_HashTable* hashTable, int buckets, ACU_HashTableHashFu
 
 void ACU_destroyHashTable(ACU_HashTable* hashTable)
 {
-    int i;
+    size_t i;
 
     for (i = 0; i < hashTable->buckets; i++) {
         acu_listDestroy(&hashTable->table[i]);
@@ -52,7 +52,7 @@ void ACU_destroyHashTable(ACU_HashTable* hashTable)
 int ACU_insertHashTable(ACU_HashTable* hashTable, const void* data)
 {
     void* temp;
-    int bucket;
+    size_t bucket;
     int retval;
 
     temp = (void*) data;
@@ -72,7 +72,7 @@ int ACU_insertHashTable(ACU_HashTable* hashTable, const void* data)
 int ACU_removeHashTable(ACU_HashTable* hashTable, void** data)
 {
     ACU_ListElement* element, *prev;
-    int bucket;
+    size_t bucket;
 
     bucket = hashTable->hash(*data) % hashTable->buckets;
     prev = NULL;
@@ -91,7 +91,7 @@ int ACU_removeHashTable(ACU_HashTable* hashTable, void** data)
 int ACU_lookupHashTable(ACU_HashTable* hashTable, void** data)
 {
     ACU_ListElement* element;
-    int bucket;
+    size_t bucket;
 
     bucket = hashTable->hash(*data) % hashTable->buckets;
 
