@@ -47,6 +47,7 @@ void ACU_destroyHashTable(ACU_HashTable* hashTable)
         acu_listDestroy(&hashTable->table[i]);
     }
     acu_free(hashTable->table);
+    hashTable->size = 0;
 }
 
 int ACU_insertHashTable(ACU_HashTable* hashTable, const void* data)
@@ -76,7 +77,7 @@ int ACU_removeHashTable(ACU_HashTable* hashTable, void** data)
 
     bucket = hashTable->hash(*data) % hashTable->buckets;
     prev = NULL;
-    for (element = acu_listHead(&hashTable->table[bucket]); element != NULL; element = element->next) {
+    for (element = (&hashTable->table[bucket])->head; element; element = element->next) {
         if (hashTable->match(*data, element->data)) {
             if (!acu_listRemoveNext(&hashTable->table[bucket], prev, data)) {
                 hashTable->size--;
@@ -95,7 +96,7 @@ int ACU_lookupHashTable(ACU_HashTable* hashTable, void** data)
 
     bucket = hashTable->hash(*data) % hashTable->buckets;
 
-    for (element = acu_listHead(&hashTable->table[bucket]); element != NULL; element = element->next) {
+    for (element = (&hashTable->table[bucket])->head; element; element = element->next) {
         if (hashTable->match(*data, element->data)) {
             *data = (void*) element->data;
             return 0;
