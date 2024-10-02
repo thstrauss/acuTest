@@ -153,6 +153,7 @@
     <ClCompile Include="hstb_tst.c" />
     <ClCompile Include="rnd_tst.c" />
     <ClCompile Include="rprt_tst.c" />
+    <ClCompile Include="sizt_tst.c" />
     <ClCompile Include="uchr_tst.c" />
     <ClCompile Include="dllmain.c" />
     <ClCompile Include="flt_test.c" />
@@ -200,6 +201,7 @@
     <ClInclude Include="rslt_tst.h" />
     <ClInclude Include="shrt_tst.h" />
     <ClInclude Include="hstb_tst.h" />
+    <ClInclude Include="sizt_tst.h" />
     <ClInclude Include="str_tst.h" />
     <ClInclude Include="tryc_tst.h" />
     <ClInclude Include="tst_bed.h" />

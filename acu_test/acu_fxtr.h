@@ -38,7 +38,7 @@ typedef struct ACU_Fixture_ {
     struct ACU_List_* childFixtures;
     char* name;
     const void* context;
-    struct ACU_Fixture_* parentFixture;
+    const struct ACU_Fixture_* parentFixture;
     clock_t start;
     clock_t end;
 } ACU_Fixture;
