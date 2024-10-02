@@ -24,6 +24,7 @@
 #define _ACU_LIST_H_
 
 #include "acu_cmmn.h"
+#include <stddef.h>
 
 typedef struct ACU_ListElement_ {
     struct ACU_ListElement_* next;
@@ -42,7 +43,7 @@ typedef struct ACU_ListVisitor_ {
 typedef struct ACU_List_ {
     ACU_ListElement* head;
     ACU_ListElement* tail;
-    int size;
+    size_t size;
     ACU_ListDestroyFunc* destroy;
 } ACU_List;
 
