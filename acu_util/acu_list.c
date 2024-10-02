@@ -142,16 +142,15 @@ __EXPORT void acu_listAccept(const ACU_List* list, ACU_ListVisitor* visitor)
 }
 
 static int acu_listRemoveHead(ACU_List* list, const void** data) {
-    ACU_ListElement* oldElement;
-    if (list->size > 0) {    
-        *data = list->head->data;
-        oldElement = list->head;
-        list->head = list->head->next;
+    if (list->size) {    
+        ACU_ListElement* oldElement = list->head;
+        *data = oldElement->data;
+        list->head = oldElement->next;
+        acu_free(oldElement);
+
         if (list->size == 1) {
             list->tail = NULL;
         }
-
-        acu_free(oldElement);
         list->size--;
     
         return 0;
@@ -159,11 +158,28 @@ static int acu_listRemoveHead(ACU_List* list, const void** data) {
     return -1;
 }
 
-void acu_listDestroy(ACU_List* list) {
-    while (list->size > 0) {
-        void* data;
-        if (acu_listRemoveHead(list, (void**)&data) == 0 && list->destroy) {
+static int acu_listDropHead(ACU_List* list) {
+    if (list->size) {
+        ACU_ListElement* oldElement = list->head;
+        void* data = oldElement->data;
+        if (data && list->destroy) {
             list->destroy(data);
         }
+        list->head = oldElement->next;
+        acu_free(oldElement);
+
+        if (list->size == 1) {
+            list->tail = NULL;
+        }
+        list->size--;
+
+        return 0;
+    }
+    return -1;
+}
+
+void acu_listDestroy(ACU_List* list) {
+    while (list->size) {
+        acu_listDropHead(list);
     }
 }
