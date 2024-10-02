@@ -69,6 +69,7 @@ typedef void (ACU_setFrameStackFunc)(ACU_Stack* jmpBufFrames);
 
 __EXPORT ACU_Stack* acu_getFrameStack(void);
 void acu_setFrameStack(ACU_Stack* jmpBufFrames);
+__EXPORT void acu_freeFrameStack(void);
 
  /* For the full documentation and explanation of the code below, please refer to
   * http://www.di.unipi.it/~nids/docs/longjump_try_trow_catch.html

@@ -48,11 +48,8 @@ ACU_Stack* acu_stackMalloc(void)
 
 void acu_stackDestroy(ACU_Stack* stack)
 {
-    void* data;
     while (stack->size > 0) {
-        if (acu_stackPop(stack, (void**)&data) == 0 && stack->destroy) {
-            stack->destroy(data);
-        }
+        acu_stackDrop(stack);
     }
 }
 

@@ -92,6 +92,8 @@ int main(int argc, const char* argv[]) {
     acu_filesDestroy(files);
 
     acu_printf_s(buffer, sizeof(buffer), "%d of %d failed.\n\r", result.summary.failedTestCases, result.summary.totalTestCases);
+    
+    acu_freeFrameStack();
 
     allocs = acu_getAllocCount();
     printf("allocs = %d", allocs);

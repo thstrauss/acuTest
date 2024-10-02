@@ -24,20 +24,30 @@
 
 #include "acu_stck.h"
 #include "acu_tryc.h"
+#include "acu_util.h"
 
-ACU_Stack* acu_jmpBufFrames = NULL;
+static ACU_Stack* __acu_jmpBufFrames = NULL;
 
 ACU_Stack* acu_getFrameStack(void)
 {
-    if (!acu_jmpBufFrames) {
-        acu_jmpBufFrames = acu_stackMalloc();
-        acu_stackInit(acu_jmpBufFrames, (ACU_StackDataDestroy*) NULL);
+    if (!__acu_jmpBufFrames) {
+        __acu_jmpBufFrames = acu_stackMalloc();
+        acu_stackInit(__acu_jmpBufFrames, (ACU_StackDataDestroy*) NULL);
     }
-    return acu_jmpBufFrames;
+    return __acu_jmpBufFrames;
 }
 
 void acu_setFrameStack(ACU_Stack* jmpBufFrames)
 {
-    acu_jmpBufFrames = jmpBufFrames;
+    __acu_jmpBufFrames = jmpBufFrames;
+}
+
+void acu_freeFrameStack(void)
+{
+    if (__acu_jmpBufFrames) {
+        acu_stackDestroy(__acu_jmpBufFrames);
+        acu_free(__acu_jmpBufFrames);
+        __acu_jmpBufFrames = NULL;
+    }
 }
 

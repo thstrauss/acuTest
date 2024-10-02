@@ -26,6 +26,7 @@
 #include <acu_fxtr.h>
 #include <acu_rprt.h>
 #include <acu_tryc.h>
+#include <acu_stck.h>
 
 int main(void) {
 	ACU_Entry* entry = acu_init();
@@ -52,6 +53,7 @@ int main(void) {
 	acu_fixtureAccept(entry->fixture, &reportSummary);
 	acu_entryDestroy(entry);
 	fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
+    acu_freeFrameStack();
 	fprintf(stdout, "allocs = %d", acu_getAllocCount());
 	return 0;
 }
