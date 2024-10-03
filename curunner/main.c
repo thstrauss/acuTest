@@ -44,8 +44,8 @@ static void executeEntry(const char* cupName, Summary* summary) {
     ACU_Entry* entry = cup_load(cupName);
     ACU_Progress progress = { acu_progress , NULL };
     ACU_ReportHelper reportHelper = {NULL, NULL};
-    ACU_Visitor report = { acu_report , NULL};
-    ACU_Visitor reportSummary = { acu_reportSummary , NULL };
+    ACU_ReportVisitor report = { acu_report , NULL};
+    ACU_ReportVisitor reportSummary = { acu_reportSummary , NULL };
     
     report.context = (void*) &reportHelper;
     
@@ -73,6 +73,7 @@ int main(int argc, const char* argv[]) {
     Summary result = { {0,0}, 0 };
     static char buffer[256];
     ACU_Files* files;
+    int allocs;
 
     ACU_FilesVisitor testExecuteVisitor = { execute , NULL };
     testExecuteVisitor.context = (void*) &result;
@@ -91,6 +92,10 @@ int main(int argc, const char* argv[]) {
     acu_filesDestroy(files);
 
     acu_printf_s(buffer, sizeof(buffer), "%d of %d failed.\n\r", result.summary.failedTestCases, result.summary.totalTestCases);
+    
+    acu_freeFrameStack();
 
+    allocs = acu_getAllocCount();
+    printf("allocs = %d", allocs);
     return result.returnValue == ACU_TEST_PASSED ? 0 : 2;
 }

@@ -34,9 +34,9 @@ ACU_Files* acu_filesMalloc(void)
 
 static void acu_fileEntryDestroy(ACU_FileEntry* entry) {
     if (entry->fileName) {
-        free(entry->fileName);
+        acu_free(entry->fileName);
     }
-    free(entry);
+    acu_free(entry);
 }
 
 void acu_filesInit(ACU_Files* files)
@@ -49,14 +49,14 @@ void acu_filesDestroy(ACU_Files* files)
 {
     acu_listDestroy(files->fileList);
     files->fileList = NULL;
+    acu_free(files);
 }
 
 void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor) {
-    ACU_ListElement* fileElement = acu_listHead(files->fileList);
-    while (fileElement) {
-        visitor->visitor((ACU_FileEntry*) fileElement->data, visitor->context);
-        fileElement = acu_listNext(fileElement);
-    }
+    ACU_ListVisitor listVisitor;
+    listVisitor.visitor = (ACU_ListVisitorFunc*) visitor->visitor;
+    listVisitor.context = visitor->context;
+    acu_listAccept(files->fileList, &listVisitor);
 }
 
 char* acu_getPath(const char* file) {

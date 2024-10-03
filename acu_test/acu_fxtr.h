@@ -36,17 +36,18 @@ struct ACU_List_;
 typedef struct ACU_Fixture_ {
     struct ACU_List_* testCases;
     struct ACU_List_* childFixtures;
-    const char* name;
+    char* name;
     const void* context;
-    struct ACU_Fixture_* parentFixture;
+    const struct ACU_Fixture_* parentFixture;
     clock_t start;
     clock_t end;
 } ACU_Fixture;
 
-
-__EXPORT void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
-
+/* Allocates memory for an ACU_Fixture. */
 __EXPORT ACU_Fixture* acu_fixtureMalloc(void);
+
+/* Initializes an ACU_Fixture.*/
+__EXPORT void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
 
 __EXPORT void acu_fixtureDestroy(ACU_Fixture* fixture);
 
@@ -58,7 +59,6 @@ __EXPORT void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context);
 
 __EXPORT enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progress);
 
-__EXPORT void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_Visitor* visitor);
-
+__EXPORT void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor);
 
 #endif

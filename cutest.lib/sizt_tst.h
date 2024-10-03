@@ -19,37 +19,12 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <stddef.h>
-#include <stdlib.h>
+#pragma once
+#ifndef __size_t_test__
+#define __size_t_test__
 
-#include "acu_cmmn.h"
-#include "acu_rslt.h"
-#include "acu_util.h"
+#include <acu_fxtr.h>
 
-enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedResult, enum ACU_TestResult result) {
-    return result == ACU_TEST_PASSED ? aggregatedResult : result == ACU_TEST_FAILED ? ACU_TEST_FAILED : ACU_TEST_ERROR;
-}
+ACU_Fixture* size_tFixture(void);
 
-void acuTest_resultDestroy(ACU_Result* result) {
-    if (result->message) {
-        acu_free(result->message);
-        result->message = NULL;
-    }
-}
-
-void acuTest_resultPrepare(ACU_Result* result) {
-    result->status = ACU_TEST_PASSED;
-    if (result->message) {
-        acu_free(result->message);
-        result->message = NULL;
-    }
-}
-
-ACU_Result* acuTest_resultMalloc(void) {
-    return (ACU_Result*)acu_emalloc(sizeof(ACU_Result));
-}
-
-void acuTest_resultInit(ACU_Result* result) {
-    result->status = ACU_TEST_UNDEFINED;
-    result->message = NULL;
-}
+#endif

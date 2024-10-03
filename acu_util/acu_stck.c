@@ -25,7 +25,7 @@
 #include "acu_stck.h"
 #include "acu_util.h"
 
-int acu_stackSize(const ACU_Stack* stack)
+size_t acu_stackSize(const ACU_Stack* stack)
 {
     return stack->size;
 }
@@ -48,29 +48,24 @@ ACU_Stack* acu_stackMalloc(void)
 
 void acu_stackDestroy(ACU_Stack* stack)
 {
-    void* data;
     while (stack->size > 0) {
-        if (acu_stackPop(stack, (void**)&data) == 0 && stack->destroy) {
-            stack->destroy(data);
-        }
+        acu_stackDrop(stack);
     }
 }
 
 int acu_stackPush(ACU_Stack* stack, void* data)
 {
-    ACU_StackElement* newElement;
-    newElement = acu_emalloc(sizeof(ACU_StackElement));
-    if (!newElement) {
-        return -1;
+    ACU_StackElement* newElement = acu_emalloc(sizeof(ACU_StackElement));
+    if (newElement) {
+        newElement->data = (void*)data;
+
+        newElement->next = stack->head;
+        stack->head = newElement;
+
+        stack->size++;
+        return 0;
     }
-
-    newElement->data = (void*)data;
-
-    newElement->next = stack->head;
-    stack->head = newElement;
-
-    stack->size++;
-    return 0;
+    return -1;
 }
 
 int acu_stackPop(ACU_Stack* stack, void** data)
@@ -91,7 +86,7 @@ int acu_stackPop(ACU_Stack* stack, void** data)
 
     stack->head = stack->head->next;
 
-    free(oldElement);
+    acu_free(oldElement);
 
     stack->size--;
 
@@ -100,21 +95,18 @@ int acu_stackPop(ACU_Stack* stack, void** data)
 
 __EXPORT int acu_stackDrop(ACU_Stack* stack)
 {
-    ACU_StackElement* oldElement;
+    if (stack->size) {
+        ACU_StackElement* oldElement = stack->head;
+        stack->head = oldElement->next;
 
-    if (stack->size == 0) {
-        return -1;
+        if (stack->destroy && oldElement->data) {
+            stack->destroy(oldElement->data);
+        }
+        acu_free(oldElement);
+        stack->size--;
+
+        return 0;
     }
-
-    oldElement = stack->head;
-    stack->head = stack->head->next;
-
-    if (stack->destroy && oldElement->data) {
-        stack->destroy(oldElement->data);
-    }
-    free(oldElement);
-    stack->size--;
-
-    return 0;
+    return -1;
 }
 

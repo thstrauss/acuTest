@@ -25,6 +25,8 @@
 #include <acu_tryc.h>
 #include <acu_fxtr.h>
 
+#include <stddef.h>
+
 static void simpleTestCase(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, 0, 42, "number not equal to 42");
     UNUSED(context);
@@ -42,7 +44,7 @@ int main(void)
 {
     ACU_Fixture* fixture = acu_fixtureMalloc();
     ACU_ReportHelper reportHelper = { NULL, NULL };
-    ACU_Visitor report = { acu_report, NULL };
+    ACU_ReportVisitor report = { acu_report, NULL };
     ACU_Progress progress = { acu_progress , NULL };
     enum ACU_TestResult result;
 

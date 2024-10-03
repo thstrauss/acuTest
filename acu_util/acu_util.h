@@ -70,6 +70,10 @@ __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, .
 __EXPORT char* acu_estrdup(const char* s);
 __EXPORT void* acu_emalloc(size_t n);
 
+__EXPORT void acu_free(void* buf);
+
+__EXPORT int acu_getAllocCount(void);
+
 __EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
 __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
 

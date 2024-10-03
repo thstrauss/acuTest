@@ -54,6 +54,9 @@
     <ClCompile Include="windows\acu_randWindows.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="acu_hstb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="acu_dir.h">
@@ -81,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_plgn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="acu_hstb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

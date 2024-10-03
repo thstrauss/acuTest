@@ -68,9 +68,10 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
     return result->status;
 }
 
-static void acuTest_testCaseDestroy(ACU_TestCase* data) {
-    free(data->name);
-    acuTest_resultDestroy(&data->result);
+static void acuTest_testCaseDestroy(ACU_TestCase* testCase) {
+    acu_free(testCase->name);
+    acuTest_resultDestroy(&testCase->result);
+    acu_free(testCase);
 }
 
 static ACU_TestCase* acuTest_testCaseMalloc(void) {
@@ -81,7 +82,7 @@ void acu_fixtureInit(ACU_Fixture* fixture, const char* name) {
     ACU_List* testCases = acu_listMalloc();
     ACU_List* fixtures = acu_listMalloc();
     acu_listInit(testCases, (ACU_ListDestroyFunc*) acuTest_testCaseDestroy);
-    acu_listInit(fixtures, (ACU_ListDestroyFunc*)acu_fixtureDestroy);
+    acu_listInit(fixtures, (ACU_ListDestroyFunc*) acu_fixtureDestroy);
     fixture->testCases = testCases;
     fixture->childFixtures = fixtures;
     fixture->name = acu_estrdup(name);
@@ -129,18 +130,18 @@ enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progr
     return result;
 }
 
-void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_Visitor* visitor) {
-    ACU_ListElement* testElement = acu_listHead(fixture->testCases);
-    ACU_ListElement* childFixture = acu_listHead(fixture->childFixtures);
-    while (childFixture) {
-        acu_fixtureAccept((ACU_Fixture*)childFixture->data, visitor);
-        childFixture = acu_listNext(childFixture);
-    }
-    while (testElement) {
-        ACU_TestCase* testCase = (ACU_TestCase*) testElement->data;
-        visitor->visitor(testCase, visitor->context);
-        testElement = acu_listNext(testElement);
-    }
+void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor) {
+    ACU_ListVisitor listVisitor;
+
+    listVisitor.visitor = (ACU_ListVisitorFunc*) acu_fixtureAccept;
+    listVisitor.context = visitor;
+
+    acu_listAccept(fixture->childFixtures, &listVisitor);
+
+    listVisitor.visitor = (ACU_ListVisitorFunc*) visitor->visitor;
+    listVisitor.context = visitor->context;
+
+    acu_listAccept(fixture->testCases, &listVisitor);
 }
 
 ACU_Fixture* acu_fixtureMalloc(void)
@@ -150,6 +151,9 @@ ACU_Fixture* acu_fixtureMalloc(void)
 
 void acu_fixtureDestroy(ACU_Fixture* fixture) {
     acu_listDestroy(fixture->testCases);
+    acu_free(fixture->testCases);
     acu_listDestroy(fixture->childFixtures);
-    free(fixture);
+    acu_free(fixture->childFixtures);
+    acu_free(fixture->name);
+    acu_free(fixture);
 }

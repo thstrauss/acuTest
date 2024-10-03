@@ -19,41 +19,36 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#pragma once
+#ifndef _ACU_HASHTABLE_H_
+#define _ACU_HASHTABLE_H_
+
+#include "acu_cmmn.h"
+#include "acu_list.h"
+
 #include <stddef.h>
-#include <stdio.h>
 
-#include <acu_ldr.h>
-#include <acu_fxtr.h>
-#include <acu_rprt.h>
-#include <acu_tryc.h>
-#include <acu_stck.h>
+typedef void ACU_HashTableDestroyFunc(void* data);
+typedef unsigned int ACU_HashTableHashFunc(const void* key);
+typedef int ACU_HashTableMatchFunc(const void* key1, const void* key2);
 
-int main(void) {
-	ACU_Entry* entry = acu_init();
-	ACU_Summary summary = {0,0};
-	
-	ACU_ReportVisitor report = {acu_report, NULL};
-	ACU_ReportHelper reportHelper = {NULL, NULL};
+typedef struct ACU_HashTable_ {
+    size_t buckets;
+    ACU_HashTableHashFunc* hash;
+    ACU_HashTableMatchFunc* match;
 
-	ACU_ReportVisitor counter = {acu_countTestCases, NULL};
-	
-	ACU_ReportVisitor reportSummary = {acu_reportSummary, NULL};
-	
-	int count=0;
-	
-	counter.context = (void*) &count;
-	report.context = &reportHelper;
-	reportSummary.context = &summary;
-	
-	acu_fixtureAccept(entry->fixture, &counter);
-	fprintf(stdout, "count = %d \n\r", count);
-	acu_fixtureExecute(entry->fixture, (ACU_Progress*) NULL);
-	fprintf(stdout, "\n\r");
-	acu_fixtureAccept(entry->fixture, &report);
-	acu_fixtureAccept(entry->fixture, &reportSummary);
-	acu_entryDestroy(entry);
-	fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
-    acu_freeFrameStack();
-	fprintf(stdout, "allocs = %d", acu_getAllocCount());
-	return 0;
-}
+    size_t size;
+    ACU_List* table;
+} ACU_HashTable;
+
+__EXPORT int ACU_initHashTable(ACU_HashTable* hashTable, size_t buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match, ACU_HashTableDestroyFunc* destroy);
+
+__EXPORT void ACU_destroyHashTable(ACU_HashTable* hashTable);
+
+__EXPORT int ACU_insertHashTable(ACU_HashTable* hashTable, const void* data);
+
+__EXPORT int ACU_removeHashTable(ACU_HashTable* hashTable, void** data);
+
+__EXPORT int ACU_lookupHashTable(ACU_HashTable* hashTable, void** data);
+
+#endif 

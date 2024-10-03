@@ -26,6 +26,6 @@
 #include <acu_cmmn.h>
 #include <acu_fxtr.h>
 
-__EXPORT ACU_Fixture* sampleFixture(void);
+__EXPORT ACU_Fixture* listFixture(void);
 
 #endif

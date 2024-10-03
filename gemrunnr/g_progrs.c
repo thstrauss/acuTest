@@ -32,7 +32,7 @@ Gem_ProgressBar* gem_mallocProgressBar() {
 }
 
 void gem_freeProgressBar(const Gem_ProgressBar* progressBar) {
-    free(progressBar);
+    acu_free(progressBar);
 }
 
 void gem_initProgressBar(const Gem_ProgressBar* progressBar, const CellSize* cellSize) {

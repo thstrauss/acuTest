@@ -35,8 +35,8 @@ static int checkVersion(ACU_Entry* entry) {
         char* libversionStr = acu_formatVersion(libVersion);
         char* versionStr = acu_formatVersion(version);
         acu_eprintf("Version of acu library %s does not match to runner %s", libversionStr, versionStr);
-        free(versionStr);
-        free(libversionStr);
+        acu_free(versionStr);
+        acu_free(libversionStr);
         return 0;
     }
     return 1;
@@ -56,7 +56,6 @@ void acu_entryInit(ACU_Entry* entry, ACU_Fixture* fixture) {
 void acu_entryDestroy(ACU_Entry* entry) {
     if (entry) {
         acu_fixtureDestroy((ACU_Fixture*)entry->fixture);
-        free(entry);
     }
 }
 
@@ -75,7 +74,7 @@ ACU_Entry* cup_load(const char* cu_name) {
     ACU_Plugin* plugin = acu_pluginMalloc();
     acu_pluginLoad(plugin, cu_name);
     if (!plugin->pluginCode) {
-        free(plugin);
+        acu_free(plugin);
         return NULL;
     }
     acu_pluginInit(plugin, initFunc, &pluginContext);
@@ -88,6 +87,7 @@ ACU_Entry* cup_load(const char* cu_name) {
 
 void cup_unload(ACU_Entry* entry) {
     acu_pluginUnload(entry->plugin);
-    free(entry->plugin);
+    acu_free(entry->plugin);
     acu_entryDestroy(entry);
+    acu_free(entry);
 }

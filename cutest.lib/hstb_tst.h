@@ -19,41 +19,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <stddef.h>
-#include <stdio.h>
+#pragma once
+#ifndef __HASHTABLE_TEST__
+#define __HASHTABLE_TEST__
 
-#include <acu_ldr.h>
+#include <acu_cmmn.h>
 #include <acu_fxtr.h>
-#include <acu_rprt.h>
-#include <acu_tryc.h>
-#include <acu_stck.h>
 
-int main(void) {
-	ACU_Entry* entry = acu_init();
-	ACU_Summary summary = {0,0};
-	
-	ACU_ReportVisitor report = {acu_report, NULL};
-	ACU_ReportHelper reportHelper = {NULL, NULL};
+__EXPORT ACU_Fixture* hashTableFixture(void);
 
-	ACU_ReportVisitor counter = {acu_countTestCases, NULL};
-	
-	ACU_ReportVisitor reportSummary = {acu_reportSummary, NULL};
-	
-	int count=0;
-	
-	counter.context = (void*) &count;
-	report.context = &reportHelper;
-	reportSummary.context = &summary;
-	
-	acu_fixtureAccept(entry->fixture, &counter);
-	fprintf(stdout, "count = %d \n\r", count);
-	acu_fixtureExecute(entry->fixture, (ACU_Progress*) NULL);
-	fprintf(stdout, "\n\r");
-	acu_fixtureAccept(entry->fixture, &report);
-	acu_fixtureAccept(entry->fixture, &reportSummary);
-	acu_entryDestroy(entry);
-	fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
-    acu_freeFrameStack();
-	fprintf(stdout, "allocs = %d", acu_getAllocCount());
-	return 0;
-}
+#endif

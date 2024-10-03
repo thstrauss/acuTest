@@ -37,7 +37,7 @@ char* acu_progName(void) {
 
 void acu_setProgName(const char* progName) {
     if (programName) {
-        free(programName);
+        acu_free(programName);
     }
     if (progName) {
         programName = acu_estrdup(progName);
@@ -114,12 +114,26 @@ int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...)
     return result;
 }
 
+int __acu_allocCount = 0;
+
 void* acu_emalloc(size_t size) {
     void* p = malloc(size);
     if (p) {
+        __acu_allocCount++;
         return p;
     }
     acu_eprintf("acu_emalloc of %u bytes failed:", size);
     return NULL;
+}
+
+__EXPORT void acu_free(void* block)
+{
+    __acu_allocCount--;
+    free(block);
+}
+
+__EXPORT int acu_getAllocCount(void)
+{
+    return __acu_allocCount;
 }
 

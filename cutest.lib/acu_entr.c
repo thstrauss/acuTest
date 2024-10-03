@@ -47,6 +47,8 @@
 #include "rslt_tst.h"
 #include "util_tst.h"
 #include "uuid_tst.h"
+#include "hstb_tst.h"
+#include "sizt_tst.h"
 
 ACU_Entry* acu_init() {
     ACU_Fixture* suite = acu_fixtureMalloc();
@@ -59,8 +61,9 @@ ACU_Entry* acu_init() {
     acu_fixtureAddChildFixture(suite, dirFixture());
     acu_fixtureAddChildFixture(suite, fixtureFixture());
     acu_fixtureAddChildFixture(suite, floatFixture());
+    acu_fixtureAddChildFixture(suite, hashTableFixture());
     acu_fixtureAddChildFixture(suite, intFixture());
-    acu_fixtureAddChildFixture(suite, sampleFixture());
+    acu_fixtureAddChildFixture(suite, listFixture());
     acu_fixtureAddChildFixture(suite, longFixture());
     acu_fixtureAddChildFixture(suite, matchFixture());
     acu_fixtureAddChildFixture(suite, ptrFixture());
@@ -70,6 +73,7 @@ ACU_Entry* acu_init() {
     acu_fixtureAddChildFixture(suite, shortFixture());
     acu_fixtureAddChildFixture(suite, signedCharFixture());
     acu_fixtureAddChildFixture(suite, strFixture());
+    acu_fixtureAddChildFixture(suite, size_tFixture());
     acu_fixtureAddChildFixture(suite, tryCatchFixture());
     acu_fixtureAddChildFixture(suite, unsignedCharFixture());
     acu_fixtureAddChildFixture(suite, unsignedIntFixture());
@@ -77,7 +81,6 @@ ACU_Entry* acu_init() {
     acu_fixtureAddChildFixture(suite, unsignedShortFixture());
     acu_fixtureAddChildFixture(suite, utilFixture());
     acu_fixtureAddChildFixture(suite, uuidFixture());
-
 
     return entry;
 }

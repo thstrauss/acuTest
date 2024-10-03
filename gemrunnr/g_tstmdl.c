@@ -89,7 +89,7 @@ void gem_content(const CellSize* cellSize, const TestModel* testModel) {
     int numberOfLines;
     ACU_ListElement* testElement;
         
-    numberOfLines = (testModel->testList) ? testModel->testList->size : 0;
+    numberOfLines = (int) ((testModel->testList) ? testModel->testList->size : 0);
     testModel->content = (OBJECT*) acu_emalloc(sizeof(OBJECT)*(numberOfLines+1));
     
     memcpy(&testModel->content[0], &box, sizeof(OBJECT));
@@ -116,7 +116,7 @@ void gem_content(const CellSize* cellSize, const TestModel* testModel) {
 }
 
 static void gem_setInfoLine(const TestModel* testModel) {
-    ACU_Visitor counter = { acu_count, NULL };
+    ACU_ReportVisitor counter = { acu_count, NULL };
     ACU_Count count = {0,0, {NULL, NULL}};
     counter.context = (void*)&count;
 
@@ -130,7 +130,7 @@ static void gem_setWindowTitle(const TestModel* testModel) {
 }
 
 static void gem_collectTestCases(const TestModel* testModel){
-    ACU_Visitor collect = {acu_collectTestCases, NULL};
+    ACU_ReportVisitor collect = {acu_collectTestCases, NULL};
     ACU_TestCases testCases;
     
     testModel->testList = acu_listMalloc();
@@ -145,9 +145,9 @@ static void gem_collectTestCases(const TestModel* testModel){
 void gem_freeContent(const TestModel* testModel) {
     if (testModel->content) {
         int i;
-        int numberOfLines = (testModel->testList) ? testModel->testList->size : 0;
+        int numberOfLines = (int) ((testModel->testList) ? testModel->testList->size : 0);
         for (i = 0; i < numberOfLines; i++) {
-            free(testModel->content[i + 1].ob_spec.free_string);
+            acu_free(testModel->content[i + 1].ob_spec.free_string);
         }
         free(testModel->content);
     }
@@ -164,7 +164,7 @@ void gem_selectFile(const WinData* wd) {
         gem_freeContent(testModel);
         if (testModel->testList) {
             acu_listDestroy(testModel->testList);
-            free(testModel->testList);
+            acu_free(testModel->testList);
             testModel->testList = NULL;
         }
 
