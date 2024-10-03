@@ -19,9 +19,6 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <stddef.h>
-#include <stdlib.h>
-
 #include "acu_list.h"
 #include "acu_util.h"
 
@@ -57,17 +54,17 @@ int acu_listAppend(ACU_List* list, const void* data) {
     ACU_ListElement* newElement = acu_listElementMalloc();
     if (newElement) {
         ACU_ListElement* tailElement = list->tail;
-        newElement->next = NULL;
-        newElement->data = data;
-
-        if (list->size == 0) {
-            list->head = newElement;
-        }
-
         if (tailElement) {
             tailElement->next = newElement;
         }
         list->tail = newElement;
+
+        newElement->next = NULL;
+        newElement->data = data;
+
+        if (!list->head) {
+            list->head = newElement;
+        }
 
         list->size++;
 
@@ -148,34 +145,31 @@ static int acu_listRemoveHead(ACU_List* list, const void** data) {
         list->head = oldElement->next;
         acu_free(oldElement);
 
-        if (list->size == 1) {
+        list->size--;
+        if (!list->size) {
             list->tail = NULL;
         }
-        list->size--;
-    
-        return 0;
     }
-    return -1;
+    return !list->size;
 }
 
 static int acu_listDropHead(ACU_List* list) {
     if (list->size) {
         ACU_ListElement* oldElement = list->head;
         void* data = oldElement->data;
-        if (data && list->destroy) {
-            list->destroy(data);
+        ACU_ListDestroyFunc* destroy = list->destroy;
+        if (data && destroy) {
+            destroy(data);
         }
         list->head = oldElement->next;
         acu_free(oldElement);
 
-        if (list->size == 1) {
+        list->size--;
+        if (!list->size) {
             list->tail = NULL;
         }
-        list->size--;
-
-        return 0;
     }
-    return -1;
+    return !list->size;
 }
 
 void acu_listDestroy(ACU_List* list) {
