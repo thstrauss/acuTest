@@ -39,10 +39,16 @@ static int gem_sliderPositionN(int numAvailable, int numShown, int offset) {
     }
 }
 
-void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const struct WinData_* winData, GEM_UpdateSliderModelFunc updateModel)
+void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const struct WinData_* winData, GEM_VerticalUpdateSliderModelFunc* updateModel)
 {
     verticalSlider->winData = winData;
     verticalSlider->updateModel = updateModel;
+}
+
+void gem_initHorizontalSlider(const HorizontalSlider* horizontalSlider, const struct WinData_* winData, GEM_HorizontalUpdateSliderModelFunc* updateModel)
+{
+    horizontalSlider->winData = winData;
+    horizontalSlider->updateModel = updateModel;
 }
 
 void gem_updateSliders(const VerticalSlider* verticalSlider) {
