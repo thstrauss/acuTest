@@ -33,6 +33,7 @@ typedef struct WinData_ {
 
     CellSize cellSize;
     VerticalSlider verticalSlider;
+    HorizontalSlider horizontalSlider;
 
     void* viewModel;
     void (*drawViewModel)(const struct WinData_* winData, const void* testModel, const GRECT* clippingRect, const GRECT* workingRect);
@@ -43,7 +44,7 @@ typedef void GEM_DrawViewModelFunc(const WinData* winData, const void* testModel
 void gem_initWinData(WinData* winData);
 
 void gem_setViewModel(const WinData* wd, const void* viewModel);
-void gem_setDrawViewModelFunc(const WinData* wd, GEM_DrawViewModelFunc* drawViewModelFunc, GEM_UpdateSliderModelFunc* updateSlider);
+void gem_setDrawViewModelFunc(const WinData* wd, GEM_DrawViewModelFunc* drawViewModelFunc, GEM_VerticalUpdateSliderModelFunc* updateVerticalSlider, GEM_HorizontalUpdateSliderModelFunc* updateHorizontalSlider);
 
 void* gem_getViewModel(const WinData* wd);
 
