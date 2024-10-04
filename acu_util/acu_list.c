@@ -156,7 +156,7 @@ static int acu_listRemoveHead(ACU_List* list, const void** data) {
 static int acu_listDropHead(ACU_List* list) {
     if (list->size) {
         ACU_ListElement* oldElement = list->head;
-        void* data = oldElement->data;
+        void* data = (void*) oldElement->data;
         ACU_ListDestroyFunc* destroy = list->destroy;
         if (data && destroy) {
             destroy(data);
