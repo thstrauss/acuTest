@@ -35,8 +35,8 @@ void gem_setViewModel(const WinData* wd, const void* viewModel) {
 void gem_setDrawViewModelFunc(const WinData* wd, GEM_DrawViewModelFunc* drawViewModel, GEM_VerticalUpdateSliderModelFunc* updateVerticalSlider, GEM_HorizontalUpdateSliderModelFunc* updateHorizontalSlider)
 {
     wd->drawViewModel = drawViewModel;
-    gem_initVerticalSlider(&wd->verticalSlider, wd, updateVerticalSlider);
-    gem_initHorizontalSlider(&wd->horizontalSlider, wd, updateHorizontalSlider);
+    gem_initVerticalSlider(&wd->verticalSlider, updateVerticalSlider);
+    gem_initHorizontalSlider(&wd->horizontalSlider, updateHorizontalSlider);
 }
 
 void* gem_getViewModel(const WinData* wd) {
