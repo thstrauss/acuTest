@@ -96,7 +96,7 @@ void drawInterior(const WinData* wd, const GRECT* clippingRect) {
     wd->drawViewModel(wd, gem_getViewModel(wd), clippingRect, &workingRect);
 
     setClip(wd, clippingRect, 0);
-    gem_updateSliders(&wd->verticalSlider);
+    gem_updateSliders(wd);
     graf_mouse(M_ON, NULL);
 }
 

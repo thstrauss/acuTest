@@ -21,6 +21,7 @@
 
 #include "g_slider.h"
 #include "g_util.h"
+#include "g_window.h"
 #include <aes.h>
 
 static int gem_sliderSize(int numAvailable, int numShown) {
@@ -39,29 +40,28 @@ static int gem_sliderPositionN(int numAvailable, int numShown, int offset) {
     }
 }
 
-void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const struct WinData_* winData, GEM_VerticalUpdateSliderModelFunc* updateModel)
+void gem_initVerticalSlider(const VerticalSlider* verticalSlider, GEM_VerticalUpdateSliderModelFunc* updateModel)
 {
-    verticalSlider->winData = winData;
     verticalSlider->updateModel = updateModel;
 }
 
-void gem_initHorizontalSlider(const HorizontalSlider* horizontalSlider, const struct WinData_* winData, GEM_HorizontalUpdateSliderModelFunc* updateModel)
+void gem_initHorizontalSlider(const HorizontalSlider* horizontalSlider, GEM_HorizontalUpdateSliderModelFunc* updateModel)
 {
-    horizontalSlider->winData = winData;
     horizontalSlider->updateModel = updateModel;
 }
 
-void gem_updateSliders(const VerticalSlider* verticalSlider) {
+void gem_updateSliders(const WinData* winData) {
     int linesShown;
     GRECT rect;
-    void* model = gem_getViewModel(verticalSlider->winData);
+    void* model = gem_getViewModel(winData);
+    VerticalSlider* verticalSlider = &winData->verticalSlider;
     
-    gem_getWorkingRect(verticalSlider->winData, &rect);
-    linesShown = rect.g_h / verticalSlider->winData->cellSize.height;
+    gem_getWorkingRect(winData, &rect);
+    linesShown = rect.g_h / winData->cellSize.height;
     verticalSlider->updateModel(verticalSlider, model);
 
-    wind_set(verticalSlider->winData->windowHandle, WF_VSLSIZE,
+    wind_set(winData->windowHandle, WF_VSLSIZE,
         gem_sliderSize(linesShown, verticalSlider->available), 0, 0, 0);
-    wind_set(verticalSlider->winData->windowHandle, WF_VSLIDE,
+    wind_set(winData->windowHandle, WF_VSLIDE,
         gem_sliderPositionN(linesShown, verticalSlider->available, verticalSlider->offset), 0, 0, 0);
 }
