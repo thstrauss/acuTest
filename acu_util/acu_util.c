@@ -155,6 +155,22 @@ void acu_enabledTrackMemory(int enabled)
     __enabledTrackMemory = enabled;
 }
 
+static void report(const void* data, void* visitorContext) {
+    const Block* block = data;
+    char buffer[256];
+    buffer[0] = '\0';
+    acu_printf_s(buffer, sizeof buffer, "\n\r%s:%d size = %ld", block->fileName, block->line, block->size);
+}
+
+__EXPORT void acu_reportTrackMemory(void)
+{
+    ACU_HashTableVisitor visitor;
+    visitor.visitor = report;
+    visitor.context = NULL;
+    acu_acceptHashTable(&allocTable, &visitor);
+    
+}
+
 void __addTo(void* p, size_t size, const char* fileName, int line) {
     Block* block = (Block*) malloc(sizeof(Block));
     __enabledTrackMemory = !__enabledTrackMemory;

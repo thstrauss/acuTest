@@ -99,9 +99,11 @@ int main(int argc, const char* argv[]) {
     
     acu_freeFrameStack();
 
+    acu_reportTrackMemory();
+
     acu_enabledTrackMemory(0);
 
     allocs = acu_getAllocCount();
-    printf("allocs = %d", allocs);
+    printf("\n\rallocs = %d", allocs);
     return result.returnValue == ACU_TEST_PASSED ? 0 : 2;
 }

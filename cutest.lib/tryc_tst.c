@@ -102,6 +102,7 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     resultBuf->message = NULL;
     resultBuf->sourceFileName = NULL;
 
+
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_TRY
             visited = 1;
@@ -116,6 +117,10 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_FAILED, "failed");
     ACU_assert(environment, int, Equal, visited, 1, "block visited");
     ACU_assert(environment, int, Equal, finally, 1, "finally not visited"); 
+    acu_free(testEnvironment);
+    acu_free(resultBuf);
+
+
     UNUSED(context);
 }
 
