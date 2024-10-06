@@ -24,6 +24,7 @@
 #include <acu_fxtr.h>
 #include <acu_tryc.h>
 #include <acu_fxtr.h>
+#include <acu_util.h>
 
 #include <stddef.h>
 
