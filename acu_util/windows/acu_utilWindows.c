@@ -61,9 +61,14 @@ int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_lis
     return vsprintf_s(buffer, sizeOfBuffer, format, args);
 }
 
-char* acu_estrdup(const char* s) {
+extern int __enabledTrackMemory;
+
+char* __acu_estrdup(const char* s, const char* fileName, int line) {
     char* temp = _strdup(s);
     if (temp) {
+        if (__enabledTrackMemory) {
+            __addTo(temp, sizeof(s), fileName, line);
+        }
         __acu_allocCount++;
         return temp;
     }

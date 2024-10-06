@@ -67,8 +67,13 @@ __EXPORT void acu_wprintf(const char* format, ...);
 
 __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...);
 
-__EXPORT char* acu_estrdup(const char* s);
-__EXPORT void* acu_emalloc(size_t n);
+#define acu_estrdup(s) __acu_estrdup(s, __FILE__, __LINE__)
+__EXPORT char* __acu_estrdup(const char* s, const char* fileName, int line);
+
+__EXPORT void acu_enabledTrackMemory(int enabled);
+
+#define acu_emalloc(n) __acu_emalloc((n), __FILE__, __LINE__) 
+__EXPORT void* __acu_emalloc(size_t n, const char* fileName, int line);
 
 __EXPORT void acu_free(void* buf);
 
@@ -78,6 +83,8 @@ __EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format
 __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
 
 __EXPORT size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width);
+
+void __addTo(void* p, size_t size, const char* fileName, int line);
 
 /*
 	Converts a NULL reference to the "NULL" string.

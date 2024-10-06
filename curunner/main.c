@@ -41,11 +41,13 @@ typedef struct Summary_ {
 
 static void executeEntry(const char* cupName, Summary* summary) {
     static char buffer[] = "\n\r";
-    ACU_Entry* entry = cup_load(cupName);
     ACU_Progress progress = { acu_progress , NULL };
-    ACU_ReportHelper reportHelper = {NULL, NULL};
-    ACU_ReportVisitor report = { acu_report , NULL};
+    ACU_ReportHelper reportHelper = { NULL, NULL };
+    ACU_ReportVisitor report = { acu_report , NULL };
     ACU_ReportVisitor reportSummary = { acu_reportSummary , NULL };
+    ACU_Entry* entry;
+    
+    entry = cup_load(cupName);
     
     report.context = (void*) &reportHelper;
     
@@ -82,6 +84,8 @@ int main(int argc, const char* argv[]) {
         printHelp();
     }
 
+    acu_enabledTrackMemory(1);
+
     files = acu_filesMalloc();
     acu_filesInit(files);
 
@@ -94,6 +98,8 @@ int main(int argc, const char* argv[]) {
     acu_printf_s(buffer, sizeof(buffer), "%d of %d failed.\n\r", result.summary.failedTestCases, result.summary.totalTestCases);
     
     acu_freeFrameStack();
+
+    acu_enabledTrackMemory(0);
 
     allocs = acu_getAllocCount();
     printf("allocs = %d", allocs);

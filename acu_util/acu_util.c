@@ -26,6 +26,7 @@
 #include <errno.h>
 
 #include "acu_util.h"
+#include "acu_hstb.h"
 
 extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 
@@ -116,9 +117,61 @@ int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...)
 
 int __acu_allocCount = 0;
 
-void* acu_emalloc(size_t size) {
+int __enabledTrackMemory = 0;
+static ACU_HashTable allocTable;
+
+typedef struct Block_ {
+    void* p;
+    size_t size;
+    const char* fileName;
+    int line;
+} Block;
+
+static int shift = 3;
+
+static int hash(const void* key) {
+    const Block* block = key;
+    return (int) ((size_t) block->p) >> shift;
+}
+
+static int match(const void* key1, const void* key2) {
+    const Block* block1 = key1;
+    const Block* block2 = key2;
+    return block1->p == block2->p;
+}
+
+static void destroy(void* data) {
+    free(data);
+}
+
+void acu_enabledTrackMemory(int enabled)
+{
+    if (enabled) {
+        acu_initHashTable(&allocTable, 2003, hash, match, destroy);
+    }
+    else {
+        acu_destroyHashTable(&allocTable);
+    }
+    __enabledTrackMemory = enabled;
+}
+
+void __addTo(void* p, size_t size, const char* fileName, int line) {
+    Block* block = (Block*) malloc(sizeof(Block));
+    __enabledTrackMemory = !__enabledTrackMemory;
+    block->p = p;
+    block->size = size;
+    block->fileName = fileName;
+    block->line = line;
+    acu_insertHashTable(&allocTable, block);
+    __enabledTrackMemory = !__enabledTrackMemory;
+}
+
+void* __acu_emalloc(size_t size, const char* fileName, int line) {
     void* p = malloc(size);
     if (p) {
+        if (__enabledTrackMemory) {
+            __addTo(p, size, fileName, line);
+        }
         __acu_allocCount++;
         return p;
     }
@@ -128,6 +181,16 @@ void* acu_emalloc(size_t size) {
 
 __EXPORT void acu_free(void* block)
 {
+    if (__enabledTrackMemory) {
+        Block key;
+        Block* out = &key;
+        key.p = block;
+        __enabledTrackMemory = !__enabledTrackMemory;
+        if (acu_removeHashTable(&allocTable, &out) == 0) {
+            free(out);
+        }
+        __enabledTrackMemory = !__enabledTrackMemory;
+    }
     __acu_allocCount--;
     free(block);
 }
