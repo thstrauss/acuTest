@@ -77,6 +77,7 @@ static void collectTest(ACU_ExecuteEnv* environment, const void* context) {
 
     acu_listDestroy(&list);
     acu_fixtureDestroy(fixture);
+    acu_free(fixture);
     
     UNUSED(context);
 }

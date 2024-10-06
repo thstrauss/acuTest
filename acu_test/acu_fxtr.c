@@ -155,5 +155,4 @@ void acu_fixtureDestroy(ACU_Fixture* fixture) {
     acu_listDestroy(fixture->childFixtures);
     acu_free(fixture->childFixtures);
     acu_free(fixture->name);
-    acu_free(fixture);
 }

@@ -56,6 +56,7 @@ void acu_entryInit(ACU_Entry* entry, ACU_Fixture* fixture) {
 void acu_entryDestroy(ACU_Entry* entry) {
     if (entry) {
         acu_fixtureDestroy((ACU_Fixture*)entry->fixture);
+        acu_free(entry->fixture);
     }
 }
 
