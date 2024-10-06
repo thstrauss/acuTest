@@ -79,10 +79,10 @@ static ACU_TestCase* acuTest_testCaseMalloc(void) {
 }
 
 void acu_fixtureInit(ACU_Fixture* fixture, const char* name) {
-    ACU_List* testCases = acu_listMalloc();
-    ACU_List* fixtures = acu_listMalloc();
-    acu_listInit(testCases, (ACU_ListDestroyFunc*) acuTest_testCaseDestroy);
-    acu_listInit(fixtures, (ACU_ListDestroyFunc*) acu_fixtureDestroy);
+    ACU_List* testCases = acu_mallocList();
+    ACU_List* fixtures = acu_mallocList();
+    acu_initList(testCases, (ACU_ListDestroyFunc*) acuTest_testCaseDestroy);
+    acu_initList(fixtures, (ACU_ListDestroyFunc*) acu_fixtureDestroy);
     fixture->testCases = testCases;
     fixture->childFixtures = fixtures;
     fixture->name = acu_estrdup(name);
@@ -96,12 +96,12 @@ void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char* name, ACU_TestFunc
     testCase->testFunc = testFunc;
     testCase->fixture = fixture;
     acuTest_resultInit(&testCase->result);
-    acu_listAppend(fixture->testCases, (void*)testCase);
+    acu_appendList(fixture->testCases, (void*)testCase);
 }
 
 void acu_fixtureAddChildFixture(ACU_Fixture* fixture, ACU_Fixture* childFixture) {
     childFixture->parentFixture = fixture;
-    acu_listAppend(fixture->childFixtures, (void*) childFixture);
+    acu_appendList(fixture->childFixtures, (void*) childFixture);
 }
 
 void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
@@ -136,12 +136,12 @@ void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor) {
     listVisitor.visitor = (ACU_ListVisitorFunc*) acu_fixtureAccept;
     listVisitor.context = visitor;
 
-    acu_listAccept(fixture->childFixtures, &listVisitor);
+    acu_acceptList(fixture->childFixtures, &listVisitor);
 
     listVisitor.visitor = (ACU_ListVisitorFunc*) visitor->visitor;
     listVisitor.context = visitor->context;
 
-    acu_listAccept(fixture->testCases, &listVisitor);
+    acu_acceptList(fixture->testCases, &listVisitor);
 }
 
 ACU_Fixture* acu_fixtureMalloc(void)
@@ -150,10 +150,9 @@ ACU_Fixture* acu_fixtureMalloc(void)
 }
 
 void acu_fixtureDestroy(ACU_Fixture* fixture) {
-    acu_listDestroy(fixture->testCases);
+    acu_destroyList(fixture->testCases);
     acu_free(fixture->testCases);
-    acu_listDestroy(fixture->childFixtures);
+    acu_destroyList(fixture->childFixtures);
     acu_free(fixture->childFixtures);
     acu_free(fixture->name);
-    acu_free(fixture);
 }

@@ -30,12 +30,12 @@
 #include <acu_list.h>
 
 static void emptyList(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_List* list = acu_listMalloc();
-    acu_listInit(list, (ACU_ListDestroyFunc*) NULL);
+    ACU_List* list = acu_mallocList();
+    acu_initList(list, (ACU_ListDestroyFunc*) NULL);
     ACU_TRY
         ACU_assert_ptrIsNull(environment, acu_listHead(list), "head is not null.");
     ACU_FINALLY
-        acu_listDestroy(list);
+        acu_destroyList(list);
         acu_free(list);
     ACU_ETRY
     UNUSED(context);
@@ -44,16 +44,16 @@ static void emptyList(ACU_ExecuteEnv* environment, const void* context) {
 static void listInsert(ACU_ExecuteEnv* environment, const void* context) {
     int data1 = 1;
     int data2 = 2;
-    ACU_List* list = acu_listMalloc();
-    acu_listInit(list, (ACU_ListDestroyFunc*)NULL);
-    acu_listInsertNext(list, NULL, &data1);
-    acu_listInsertNext(list, acu_listHead(list), &data2);
+    ACU_List* list = acu_mallocList();
+    acu_initList(list, (ACU_ListDestroyFunc*)NULL);
+    acu_insertNextList(list, NULL, &data1);
+    acu_insertNextList(list, acu_listHead(list), &data2);
     ACU_TRY
         ACU_assert_ptrIsNotNull(environment, acu_listHead(list), "head is null.");
         ACU_assert(environment, int, Equal, *(int*)(acu_listHead(list)->data), data1, "");
         ACU_assert(environment, int, Equal, *(int*)(acu_listHead(list)->next->data), data2, "");
     ACU_FINALLY
-        acu_listDestroy(list);
+        acu_destroyList(list);
         acu_free(list);
     ACU_ETRY
     UNUSED(context);
@@ -63,18 +63,18 @@ static void listRemoveNull(ACU_ExecuteEnv* environment, const void* context) {
     int data1 = 1;
     int data2 = 2;
     int *data = 0;
-    ACU_List* list = acu_listMalloc();
-    acu_listInit(list, (ACU_ListDestroyFunc*)NULL);
-    acu_listInsertNext(list, NULL, &data1);
-    acu_listInsertNext(list, acu_listHead(list), &data2);
+    ACU_List* list = acu_mallocList();
+    acu_initList(list, (ACU_ListDestroyFunc*)NULL);
+    acu_insertNextList(list, NULL, &data1);
+    acu_insertNextList(list, acu_listHead(list), &data2);
 
-    acu_listRemoveNext(list, NULL, (void*) &data);
+    acu_removeNextList(list, NULL, (void*) &data);
 
     ACU_TRY
         ACU_assert(environment, int, Equal, *data, data1, "");
         ACU_assert(environment, int, Equal, *(int*)(acu_listHead(list)->data), data2, "");
     ACU_FINALLY
-        acu_listDestroy(list);
+        acu_destroyList(list);
         acu_free(list);
     ACU_ETRY
         UNUSED(context);
@@ -84,18 +84,18 @@ static void listRemoveElement(ACU_ExecuteEnv* environment, const void* context) 
     int data1 = 1;
     int data2 = 2;
     int* data = 0;
-    ACU_List* list = acu_listMalloc();
-    acu_listInit(list, (ACU_ListDestroyFunc*)NULL);
-    acu_listInsertNext(list, NULL, &data1);
-    acu_listInsertNext(list, acu_listHead(list), &data2);
+    ACU_List* list = acu_mallocList();
+    acu_initList(list, (ACU_ListDestroyFunc*)NULL);
+    acu_insertNextList(list, NULL, &data1);
+    acu_insertNextList(list, acu_listHead(list), &data2);
 
-    acu_listRemoveNext(list, acu_listHead(list), (void *)&data);
+    acu_removeNextList(list, acu_listHead(list), (void *)&data);
 
     ACU_TRY
         ACU_assert(environment, int, Equal, *data, data2, "");
         ACU_assert(environment, int, Equal, *(int*)(acu_listHead(list)->data), data1, "");
     ACU_FINALLY
-        acu_listDestroy(list);
+        acu_destroyList(list);
         acu_free(list);
     ACU_ETRY
         UNUSED(context);

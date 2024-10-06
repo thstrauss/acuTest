@@ -58,7 +58,7 @@ static void collectTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_List list;
     ACU_Fixture* fixture = acu_fixtureMalloc();
 
-    acu_listInit(&list, (ACU_ListDestroyFunc*) NULL);
+    acu_initList(&list, (ACU_ListDestroyFunc*) NULL);
 
     tests.testCases = &list;
     collect.context = &tests;
@@ -75,8 +75,9 @@ static void collectTest(ACU_ExecuteEnv* environment, const void* context) {
 
     ACU_assert(environment, size_t, Equal, list.size, 3, "Wrong number of tests");
 
-    acu_listDestroy(&list);
+    acu_destroyList(&list);
     acu_fixtureDestroy(fixture);
+    acu_free(fixture);
     
     UNUSED(context);
 }

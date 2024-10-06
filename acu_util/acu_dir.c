@@ -41,13 +41,13 @@ static void acu_fileEntryDestroy(ACU_FileEntry* entry) {
 
 void acu_filesInit(ACU_Files* files)
 {
-    files->fileList = acu_listMalloc();
-    acu_listInit(files->fileList, (ACU_ListDestroyFunc*) acu_fileEntryDestroy);
+    files->fileList = acu_mallocList();
+    acu_initList(files->fileList, (ACU_ListDestroyFunc*) acu_fileEntryDestroy);
 }
 
 void acu_filesDestroy(ACU_Files* files)
 {
-    acu_listDestroy(files->fileList);
+    acu_destroyList(files->fileList);
     files->fileList = NULL;
     acu_free(files);
 }
@@ -56,7 +56,7 @@ void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor) {
     ACU_ListVisitor listVisitor;
     listVisitor.visitor = (ACU_ListVisitorFunc*) visitor->visitor;
     listVisitor.context = visitor->context;
-    acu_listAccept(files->fileList, &listVisitor);
+    acu_acceptList(files->fileList, &listVisitor);
 }
 
 char* acu_getPath(const char* file) {

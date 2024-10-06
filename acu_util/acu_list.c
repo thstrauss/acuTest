@@ -22,7 +22,7 @@
 #include "acu_list.h"
 #include "acu_util.h"
 
-void acu_listInit(ACU_List* list, ACU_ListDestroyFunc destroy) {
+void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy) {
     list->size = 0;
     list->destroy = destroy;
     list->head = NULL;
@@ -37,7 +37,7 @@ ACU_ListElement* acu_listNext(ACU_ListElement* element) {
     return element->next;
 }
 
-ACU_List* acu_listMalloc(void)
+ACU_List* acu_mallocList(void)
 {
     return (ACU_List*) acu_emalloc(sizeof(ACU_List));
 }
@@ -50,7 +50,7 @@ static ACU_ListElement* acu_listElementMalloc(void) {
     return (ACU_ListElement*) acu_emalloc(sizeof(ACU_ListElement));
 }
 
-int acu_listAppend(ACU_List* list, const void* data) {
+int acu_appendList(ACU_List* list, const void* data) {
     ACU_ListElement* newElement = acu_listElementMalloc();
     if (newElement) {
         ACU_ListElement* tailElement = list->tail;
@@ -73,7 +73,7 @@ int acu_listAppend(ACU_List* list, const void* data) {
     return -1;
 }
 
-int acu_listInsertNext(ACU_List* list, ACU_ListElement* element, const void* data)
+int acu_insertNextList(ACU_List* list, ACU_ListElement* element, const void* data)
 {
     ACU_ListElement *newListElement = acu_listElementMalloc();
     if (!newListElement) {
@@ -98,7 +98,7 @@ int acu_listInsertNext(ACU_List* list, ACU_ListElement* element, const void* dat
     return 0;
 }
 
-int acu_listRemoveNext(ACU_List* list, ACU_ListElement* element, void** data)
+int acu_removeNextList(ACU_List* list, ACU_ListElement* element, void** data)
 {
     ACU_ListElement* oldListElement;
     if (list->size) {
@@ -127,7 +127,7 @@ int acu_listRemoveNext(ACU_List* list, ACU_ListElement* element, void** data)
     return -1;
 }
 
-__EXPORT void acu_listAccept(const ACU_List* list, ACU_ListVisitor* visitor)
+__EXPORT void acu_acceptList(const ACU_List* list, ACU_ListVisitor* visitor)
 {
     ACU_ListElement* listElement = list->head;
     ACU_ListVisitorFunc* visitorFunc = visitor->visitor;
@@ -156,7 +156,7 @@ static int acu_listRemoveHead(ACU_List* list, const void** data) {
 static int acu_listDropHead(ACU_List* list) {
     if (list->size) {
         ACU_ListElement* oldElement = list->head;
-        void* data = oldElement->data;
+        void* data = (void*) oldElement->data;
         ACU_ListDestroyFunc* destroy = list->destroy;
         if (data && destroy) {
             destroy(data);
@@ -172,7 +172,7 @@ static int acu_listDropHead(ACU_List* list) {
     return !list->size;
 }
 
-void acu_listDestroy(ACU_List* list) {
+void acu_destroyList(ACU_List* list) {
     while (list->size) {
         acu_listDropHead(list);
     }

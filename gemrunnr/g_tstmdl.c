@@ -133,8 +133,8 @@ static void gem_collectTestCases(const TestModel* testModel){
     ACU_ReportVisitor collect = {acu_collectTestCases, NULL};
     ACU_TestCases testCases;
     
-    testModel->testList = acu_listMalloc();
-    acu_listInit(testModel->testList, (ACU_ListDestroyFunc*) NULL);
+    testModel->testList = acu_mallocList();
+    acu_initList(testModel->testList, (ACU_ListDestroyFunc*) NULL);
             
     testCases.testCases = testModel->testList;
     collect.context = (void*) &testCases;
@@ -163,7 +163,7 @@ void gem_selectFile(const WinData* wd) {
 
         gem_freeContent(testModel);
         if (testModel->testList) {
-            acu_listDestroy(testModel->testList);
+            acu_destroyList(testModel->testList);
             acu_free(testModel->testList);
             testModel->testList = NULL;
         }

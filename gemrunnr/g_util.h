@@ -26,8 +26,8 @@
 #include <g_window.h>
 #include <g_cellsze.h>
 
-#define max(t, x, y) (##t##1 = (x), ##t##2 =(y), ##t##1 > ##t##2 ? ##t##1 : ##t##2)
-#define min(t, x, y) (##t##1 = (x), ##t##2 =(y), ##t##1 < ##t##2 ? ##t##1 : ##t##2)
+#define max(t, x, y) (##t##1 = (x), ##t##2 = (y), ##t##1 > ##t##2 ? ##t##1 : ##t##2)
+#define min(t, x, y) (##t##1 = (x), ##t##2 = (y), ##t##1 < ##t##2 ? ##t##1 : ##t##2)
 
 void gem_getWorkingRect(const WinData* wd, GRECT* rect);
 

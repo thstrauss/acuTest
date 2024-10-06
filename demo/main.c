@@ -24,6 +24,7 @@
 #include <acu_fxtr.h>
 #include <acu_tryc.h>
 #include <acu_fxtr.h>
+#include <acu_util.h>
 
 #include <stddef.h>
 
@@ -58,5 +59,6 @@ int main(void)
     acu_fixtureAccept(fixture, &report);
 
     acu_fixtureDestroy(fixture);
+    acu_free(fixture);
     return result != ACU_TEST_PASSED ? 2 : 0;
 }

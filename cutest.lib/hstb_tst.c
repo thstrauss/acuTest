@@ -40,12 +40,30 @@ static int match(const void* key1, const void* key2) {
 static void emptyHashTable(ACU_ExecuteEnv* environment, const void* context) {
     ACU_HashTable hashtable;
 
-    ACU_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*) NULL);
+    acu_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*) NULL);
 
     ACU_assert(environment, size_t, Equal, hashtable.size, 0, "Not empty")
 
-    ACU_destroyHashTable(&hashtable);
+    acu_destroyHashTable(&hashtable);
     UNUSED(context);
+}
+
+static void empty2HashTable(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_HashTable* hashtable;
+
+    hashtable = acu_mallocHashTable();
+    acu_initHashTable(hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*)NULL);
+
+    ACU_assert(environment, size_t, Equal, hashtable->size, 0, "Not empty")
+
+    acu_destroyHashTable(hashtable);
+    acu_free(hashtable);
+    UNUSED(context);
+}
+
+static void visitorFunc(const void* data, void* visitorContext) {
+    (*(int*) visitorContext)++;
+    UNUSED(data);
 }
 
 static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
@@ -53,24 +71,33 @@ static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
     unsigned int i;
     unsigned int values[40];
     unsigned int* lookupValue;
+    int count = 0;
 
-    ACU_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*) NULL);
+    ACU_HashTableVisitor visitor;
+
+    acu_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*) NULL);
 
     for (i = 0; i < 40; i++) {
         values[i] = i;
-        ACU_insertHashTable(&hashtable, &values[i]);
+        acu_insertHashTable(&hashtable, &values[i]);
     }
 
     i = 15;
     lookupValue = &i;
 
-    ACU_lookupHashTable(&hashtable, (void**) &lookupValue);
+    acu_lookupHashTable(&hashtable, (void**) &lookupValue);
 
     ACU_assert(environment, size_t, Equal, hashtable.size, 40, "Not empty");
 
     ACU_assert_ptrEqual(environment, lookupValue, &values[15], "wrong value looked up.");
 
-    ACU_destroyHashTable(&hashtable);
+    visitor.visitor = visitorFunc;
+    visitor.context = &count;
+    acu_acceptHashTable(&hashtable, &visitor);
+
+    ACU_assert(environment, int, Equal, count, 40, "Visitor not visited all elements");
+
+    acu_destroyHashTable(&hashtable);
     UNUSED(context);
 }
 
@@ -81,6 +108,7 @@ ACU_Fixture* hashTableFixture(void)
     acu_fixtureInit(fixture, "hash table tests");
     
     acu_fixtureAddTestCase(fixture, "empty Hashtable", emptyHashTable);
+    acu_fixtureAddTestCase(fixture, "empty2 Hashtable", empty2HashTable);
     acu_fixtureAddTestCase(fixture, "fill Hashtable", fillHashTable);
 
     return fixture;
