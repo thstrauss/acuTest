@@ -32,6 +32,13 @@ typedef void ACU_HashTableDestroyFunc(void* data);
 typedef unsigned int ACU_HashTableHashFunc(const void* key);
 typedef int ACU_HashTableMatchFunc(const void* key1, const void* key2);
 
+typedef void ACU_HashTableVisitorFunc(const void* data, void* visitorContext);
+
+typedef struct ACU_HashTableVisitor_ {
+    ACU_HashTableVisitorFunc* visitor;
+    void* context;
+} ACU_HashTableVisitor;
+
 typedef struct ACU_HashTable_ {
     size_t buckets;
     ACU_HashTableHashFunc* hash;
@@ -41,14 +48,19 @@ typedef struct ACU_HashTable_ {
     ACU_List* table;
 } ACU_HashTable;
 
-__EXPORT int ACU_initHashTable(ACU_HashTable* hashTable, size_t buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match, ACU_HashTableDestroyFunc* destroy);
+__EXPORT ACU_HashTable* acu_mallocHashTable(void);
 
-__EXPORT void ACU_destroyHashTable(ACU_HashTable* hashTable);
+__EXPORT int acu_initHashTable(ACU_HashTable* hashTable, size_t buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match, ACU_HashTableDestroyFunc* destroy);
 
-__EXPORT int ACU_insertHashTable(ACU_HashTable* hashTable, const void* data);
+__EXPORT void acu_destroyHashTable(ACU_HashTable* hashTable);
 
-__EXPORT int ACU_removeHashTable(ACU_HashTable* hashTable, void** data);
+__EXPORT int acu_insertHashTable(ACU_HashTable* hashTable, const void* data);
 
-__EXPORT int ACU_lookupHashTable(ACU_HashTable* hashTable, void** data);
+__EXPORT int acu_removeHashTable(ACU_HashTable* hashTable, void** data);
+
+__EXPORT int acu_lookupHashTable(ACU_HashTable* hashTable, void** data);
+
+__EXPORT void acu_acceptHashTable(const ACU_HashTable* list, ACU_HashTableVisitor* visitor);
+
 
 #endif 

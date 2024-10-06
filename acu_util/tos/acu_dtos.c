@@ -33,7 +33,7 @@
         do {
             ACU_FileEntry* entry = acu_emalloc(sizeof(ACU_FileEntry));
             entry->fileName = acu_estrdup(findFirst.ff_name);
-            acu_listAppend(files->fileList, (void*) entry);
+            acu_appendList(files->fileList, (void*) entry);
         } while (findnext(&findFirst) == 0);
     }
 }

@@ -48,7 +48,7 @@ void acu_filesCollect(ACU_Files* files, const char* fileMask)
                 wcstombs_s(&size, buffer, 260, findFileData.cFileName, _TRUNCATE);
                 ACU_FileEntry* entry = acu_emalloc(sizeof(ACU_FileEntry));
                 entry->fileName = acu_estrdup(buffer);
-                acu_listAppend(files->fileList, (void*)entry);
+                acu_appendList(files->fileList, (void*)entry);
             }
         } while (FindNextFileW(hFind, &findFileData) != 0);
 

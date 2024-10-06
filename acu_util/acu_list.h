@@ -47,22 +47,22 @@ typedef struct ACU_List_ {
     ACU_ListDestroyFunc* destroy;
 } ACU_List;
 
-__EXPORT void acu_listInit(ACU_List* list, ACU_ListDestroyFunc destroy);
+__EXPORT void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy);
 
 __EXPORT ACU_ListElement* acu_listHead(const ACU_List* list);
 
 __EXPORT ACU_ListElement* acu_listNext(ACU_ListElement* element);
 
-__EXPORT ACU_List* acu_listMalloc(void);
+__EXPORT ACU_List* acu_mallocList(void);
 
-__EXPORT void acu_listDestroy(ACU_List* list);
+__EXPORT void acu_destroyList(ACU_List* list);
 
-__EXPORT int acu_listAppend(ACU_List* list, const void* data);
+__EXPORT int acu_appendList(ACU_List* list, const void* data);
 
-__EXPORT int acu_listInsertNext(ACU_List* list, ACU_ListElement* element, const void* data);
+__EXPORT int acu_insertNextList(ACU_List* list, ACU_ListElement* element, const void* data);
 
-__EXPORT int acu_listRemoveNext(ACU_List* list, ACU_ListElement* element, void** data);
+__EXPORT int acu_removeNextList(ACU_List* list, ACU_ListElement* element, void** data);
 
-__EXPORT void acu_listAccept(const ACU_List* list, ACU_ListVisitor* visitor);
+__EXPORT void acu_acceptList(const ACU_List* list, ACU_ListVisitor* visitor);
 
 #endif 
