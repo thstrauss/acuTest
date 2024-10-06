@@ -45,7 +45,9 @@ typedef struct TestModel_ {
     OBJECT* content; 
 } TestModel;
 
-void updateSlider(const VerticalSlider* slider, const void* model);
+void updateVerticalSlider(const VerticalSlider* slider, const void* model);
+
+void updateHorizontalSlider(const HorizontalSlider* slider, const void* model);
 
 void gem_selectFile(const WinData* wd);
 
