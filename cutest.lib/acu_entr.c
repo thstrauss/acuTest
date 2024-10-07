@@ -57,7 +57,7 @@ ACU_Entry* acu_init() {
     acu_entryInit(entry, suite);
 
     acu_fixtureInit(suite, "acu test suite");
-
+    
     acu_fixtureAddChildFixture(suite, dirFixture());
     acu_fixtureAddChildFixture(suite, fixtureFixture());
     acu_fixtureAddChildFixture(suite, floatFixture());
@@ -80,7 +80,7 @@ ACU_Entry* acu_init() {
     acu_fixtureAddChildFixture(suite, unsignedLongFixture());
     acu_fixtureAddChildFixture(suite, unsignedShortFixture());
     acu_fixtureAddChildFixture(suite, utilFixture());
-    acu_fixtureAddChildFixture(suite, uuidFixture());
+    acu_fixtureAddChildFixture(suite, uuidFixture()); 
 
     return entry;
 }

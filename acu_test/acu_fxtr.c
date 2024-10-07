@@ -22,6 +22,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <stdio.h>
 
 #include "acu_eenv.h"
 #include "acu_fxtr.h"
@@ -80,11 +81,11 @@ static ACU_TestCase* acuTest_testCaseMalloc(void) {
 
 void acu_fixtureInit(ACU_Fixture* fixture, const char* name) {
     ACU_List* testCases = acu_mallocList();
-    ACU_List* fixtures = acu_mallocList();
+    ACU_List* childFixtures = acu_mallocList();
     acu_initList(testCases, (ACU_ListDestroyFunc*) acuTest_testCaseDestroy);
-    acu_initList(fixtures, (ACU_ListDestroyFunc*) acu_fixtureDestroy);
+    acu_initList(childFixtures, (ACU_ListDestroyFunc*) acu_fixtureDestroy);
     fixture->testCases = testCases;
-    fixture->childFixtures = fixtures;
+    fixture->childFixtures = childFixtures;
     fixture->name = acu_estrdup(name);
     fixture->start = (clock_t)-1;
     fixture->end = (clock_t)-1;
@@ -146,7 +147,7 @@ void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor) {
 
 ACU_Fixture* acu_fixtureMalloc(void)
 {
-    return (ACU_Fixture*)acu_emalloc(sizeof(ACU_Fixture));
+    return (ACU_Fixture*) acu_emalloc(sizeof(ACU_Fixture));
 }
 
 void acu_fixtureDestroy(ACU_Fixture* fixture) {
@@ -155,4 +156,5 @@ void acu_fixtureDestroy(ACU_Fixture* fixture) {
     acu_destroyList(fixture->childFixtures);
     acu_free(fixture->childFixtures);
     acu_free(fixture->name);
+    acu_free(fixture);
 }

@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <math.h>
 
 #include "acu_util.h"
 #include "acu_hstb.h"
@@ -123,15 +124,16 @@ static ACU_HashTable allocTable;
 typedef struct Block_ {
     void* p;
     size_t size;
+    const char* format;
     const char* fileName;
     int line;
 } Block;
 
-static int shift = 3;
+static int __shift = 3;
 
-static int hash(const void* key) {
+static unsigned int hash(const void* key) {
     const Block* block = key;
-    return (int) ((size_t) block->p) >> shift;
+    return (unsigned int) ((size_t) block->p) >> __shift;
 }
 
 static int match(const void* key1, const void* key2) {
@@ -147,6 +149,7 @@ static void destroy(void* data) {
 void acu_enabledTrackMemory(int enabled)
 {
     if (enabled) {
+        __shift = (int) (log(sizeof(void*)+1.0) / log(2.0));
         acu_initHashTable(&allocTable, 2003, hash, match, destroy);
     }
     else {
@@ -157,9 +160,11 @@ void acu_enabledTrackMemory(int enabled)
 
 static void report(const void* data, void* visitorContext) {
     const Block* block = data;
-    char buffer[256];
-    buffer[0] = '\0';
-    acu_printf_s(buffer, sizeof buffer, "\n\r%s:%d size = %ld", block->fileName, block->line, block->size);
+    char buffer1[512];
+    char buffer2[256];
+    acu_vsprintf_s(buffer2, sizeof buffer2, block->format, block->p);
+    acu_printf_s(buffer1, sizeof buffer1, "\n\r%s:%d size = %ld: %s", block->fileName, block->line, block->size, buffer2);
+    UNUSED(visitorContext);
 }
 
 __EXPORT void acu_reportTrackMemory(void)
@@ -171,10 +176,11 @@ __EXPORT void acu_reportTrackMemory(void)
     
 }
 
-void __addTo(void* p, size_t size, const char* fileName, int line) {
+void __addTo(void* p, size_t size, const char* format, const char* fileName, int line) {
     Block* block = (Block*) malloc(sizeof(Block));
     __enabledTrackMemory = !__enabledTrackMemory;
     block->p = p;
+    block->format = format;
     block->size = size;
     block->fileName = fileName;
     block->line = line;
@@ -186,7 +192,7 @@ void* __acu_emalloc(size_t size, const char* fileName, int line) {
     void* p = malloc(size);
     if (p) {
         if (__enabledTrackMemory) {
-            __addTo(p, size, fileName, line);
+            __addTo(p, size, "%p", fileName, line);
         }
         __acu_allocCount++;
         return p;
@@ -202,7 +208,7 @@ __EXPORT void acu_free(void* block)
         Block* out = &key;
         key.p = block;
         __enabledTrackMemory = !__enabledTrackMemory;
-        if (acu_removeHashTable(&allocTable, &out) == 0) {
+        if (acu_removeHashTable(&allocTable, (void*) &out) == 0) {
             free(out);
         }
         __enabledTrackMemory = !__enabledTrackMemory;

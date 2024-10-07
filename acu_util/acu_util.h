@@ -85,7 +85,7 @@ __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* forma
 
 __EXPORT size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width);
 
-void __addTo(void* p, size_t size, const char* fileName, int line);
+void __addTo(void* p, size_t size, const char* format, const char* fileName, int line);
 
 /*
 	Converts a NULL reference to the "NULL" string.

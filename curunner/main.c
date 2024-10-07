@@ -94,6 +94,7 @@ int main(int argc, const char* argv[]) {
     acu_filesAccept(files, &testExecuteVisitor);
 
     acu_filesDestroy(files);
+    acu_free(files);
 
     acu_printf_s(buffer, sizeof(buffer), "%d of %d failed.\n\r", result.summary.failedTestCases, result.summary.totalTestCases);
     

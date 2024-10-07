@@ -120,7 +120,6 @@ static void failingFixtureInSuiteTest(ACU_ExecuteEnv* environment, const void* c
     acu_fixtureAddChildFixture(localSuite, failingFixture());
     suiteResult = acu_fixtureExecute(localSuite, &progress);
     acu_fixtureDestroy(localSuite);
-    acu_free(localSuite);
 
     ACU_assert(environment, int, Equal, result, 3, "Number of failing tests");
     ACU_assert(environment, int, Equal, suiteResult, ACU_TEST_FAILED, "suite does not return ACU_TEST_FAILED");
@@ -142,7 +141,6 @@ static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     fixtureResult = acu_fixtureExecute(fixture, &progress);
 
     acu_fixtureDestroy(fixture);
-    acu_free(fixture);
     
     ACU_assert(environment, int, Equal, result, 3, "Number of failing tests");
     ACU_assert(environment, int, Equal, fixtureResult, ACU_TEST_FAILED, "fixture does not return ACU_TEST_FAILED");
@@ -163,7 +161,6 @@ static void passingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     acu_fixtureAddChildFixture(localSuite, passingFixture());
     suiteResult = acu_fixtureExecute(localSuite, &progress);
     acu_fixtureDestroy(localSuite);
-    acu_free(localSuite);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
     ACU_assert(environment, int, Equal, suiteResult, ACU_TEST_PASSED, "passingFixtureTest");
@@ -184,7 +181,6 @@ static void emptyFixtureInSuiteTest(ACU_ExecuteEnv* environment, const void* con
     acu_fixtureAddChildFixture(localSuite, emptyFixture());
     suiteResult = acu_fixtureExecute(localSuite, &progress);
     acu_fixtureDestroy(localSuite);
-    acu_free(localSuite);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
     ACU_assert(environment, int, Equal, suiteResult, ACU_TEST_PASSED, "Suite does not return ACU_TEST_PASSED");
@@ -203,7 +199,6 @@ static void emptyFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 
     fixtureResult = acu_fixtureExecute(fixture, &progress);
     acu_fixtureDestroy(fixture);
-    acu_free(fixture);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
     ACU_assert(environment, int, Equal, fixtureResult, ACU_TEST_PASSED, "Suite does not return ACU_TEST_PASSED");
@@ -222,7 +217,6 @@ static void noAssertFixtureTest(ACU_ExecuteEnv* environment, const void* context
 
     fixtureResult = acu_fixtureExecute(fixture, &progress);
     acu_fixtureDestroy(fixture);
-    acu_free(fixture);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
     ACU_assert(environment, int, Equal, fixtureResult, ACU_TEST_PASSED, "Suite does not return ACU_TEST_PASSED");

@@ -36,7 +36,7 @@ int acu_initHashTable(ACU_HashTable* hashTable, size_t buckets, ACU_HashTableHas
     }
     hashTable->buckets = buckets;
     for (i = 0; i < buckets; i++) {
-        acu_initList(&hashTable->table[i], destroy);
+        acu_initList(&hashTable->table[i], (ACU_ListDestroyFunc*) destroy);
     }
     hashTable->hash = hash;
     hashTable->match = match;

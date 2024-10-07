@@ -67,7 +67,7 @@ char* __acu_estrdup(const char* s, const char* fileName, int line) {
     char* temp = _strdup(s);
     if (temp) {
         if (__enabledTrackMemory) {
-            __addTo(temp, sizeof(temp), fileName, line);
+            __addTo(temp, strlen(temp), "%s", fileName, line);
         }
         __acu_allocCount++;
         return temp;
