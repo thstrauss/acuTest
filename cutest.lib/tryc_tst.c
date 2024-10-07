@@ -106,7 +106,7 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_TRY
             visited = 1;
-        ACU_assert(testEnvironment, int, Equal, 0, 1, "xxx");
+        ACU_assert(testEnvironment, int, Equal, 0, 1, "visitFinallyTest");
         visited = 2;
         ACU_FINALLY
             finally = 1;
