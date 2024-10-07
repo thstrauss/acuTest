@@ -118,6 +118,7 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, visited, 1, "block visited");
     ACU_assert(environment, int, Equal, finally, 1, "finally not visited"); 
     acu_free(testEnvironment);
+    acuTest_resultDestroy(resultBuf);
     acu_free(resultBuf);
 
 
