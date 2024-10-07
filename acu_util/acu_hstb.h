@@ -40,7 +40,7 @@ typedef struct ACU_HashTableVisitor_ {
 } ACU_HashTableVisitor;
 
 typedef struct ACU_HashTable_ {
-    size_t buckets;
+    unsigned int buckets;
     ACU_HashTableHashFunc* hash;
     ACU_HashTableMatchFunc* match;
 
@@ -50,7 +50,7 @@ typedef struct ACU_HashTable_ {
 
 __EXPORT ACU_HashTable* acu_mallocHashTable(void);
 
-__EXPORT int acu_initHashTable(ACU_HashTable* hashTable, size_t buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match, ACU_HashTableDestroyFunc* destroy);
+__EXPORT int acu_initHashTable(ACU_HashTable* hashTable, unsigned int buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match, ACU_HashTableDestroyFunc* destroy);
 
 __EXPORT void acu_destroyHashTable(ACU_HashTable* hashTable);
 
