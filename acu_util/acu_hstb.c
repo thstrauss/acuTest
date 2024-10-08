@@ -102,7 +102,7 @@ int acu_removeHashTable(ACU_HashTable* hashTable, void** data)
         if (hashTable->match(*data, element->data)) {
             acu_removeNextList(bucketList, prev, data);
             hashTable->size--;
-            return 0;            
+            return 0;
         }
         prev = element;
     }
@@ -118,7 +118,7 @@ int acu_lookupHashTable(ACU_HashTable* hashTable, void** data)
 
     for (element = (hashTable->table + bucket)->head; element; element = element->next) {
         if (hashTable->match(*data, element->data)) {
-            *data = (void*) element->data;
+            *data = element->data;
             return 0;
         }
     }

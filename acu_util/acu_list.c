@@ -118,8 +118,8 @@ int acu_insertNextList(ACU_List* list, ACU_ListElement* element, const void* dat
 
 int acu_removeNextList(ACU_List* list, ACU_ListElement* element, void** data)
 {
-    ACU_ListElement* oldListElement;
     if (list->size) {
+        ACU_ListElement* oldListElement;
         if (!element) {
             *data = (void*) list->head->data;
             oldListElement = list->head;
@@ -141,17 +141,15 @@ int acu_removeNextList(ACU_List* list, ACU_ListElement* element, void** data)
         acu_free(oldListElement);
         list->size--;
         return 0;
-        }
+    }
     return -1;
 }
 
 __EXPORT void acu_acceptList(const ACU_List* list, ACU_ListVisitor* visitor)
 {
     ACU_ListElement* listElement = list->head;
-    ACU_ListVisitorFunc* visitorFunc = visitor->visitor;
-    void* context = visitor->context;
     while (listElement) {
-        visitorFunc(listElement->data, context);
+        visitor->visitor(listElement->data, visitor->context);
         listElement = listElement->next;
     }
 }
