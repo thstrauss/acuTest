@@ -23,10 +23,10 @@
 #include "acu_util.h"
 
 void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy) {
-    list->size = 0;
-    list->destroy = destroy;
     list->head = NULL;
     list->tail = NULL;
+    list->size = 0;
+    list->destroy = destroy;
 }
 
 ACU_ListElement* acu_listHead(const ACU_List* list) {
@@ -68,6 +68,24 @@ int acu_appendList(ACU_List* list, const void* data) {
 
         list->size++;
 
+        return 0;
+    }
+    return -1;
+}
+
+int acu_insertHeadList(ACU_List* list, const void* data)
+{
+    ACU_ListElement* newListElement = acu_listElementMalloc();
+    if (newListElement) {
+        newListElement->data = (void*)data;
+
+        if (list->size == 0) {
+            list->tail = newListElement;
+        }
+        newListElement->next = list->head;
+        list->head = newListElement;
+
+        list->size++;
         return 0;
     }
     return -1;

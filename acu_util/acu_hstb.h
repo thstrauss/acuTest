@@ -40,12 +40,11 @@ typedef struct ACU_HashTableVisitor_ {
 } ACU_HashTableVisitor;
 
 typedef struct ACU_HashTable_ {
+    ACU_List* table;
     unsigned int buckets;
     ACU_HashTableHashFunc* hash;
     ACU_HashTableMatchFunc* match;
-
     size_t size;
-    ACU_List* table;
 } ACU_HashTable;
 
 __EXPORT ACU_HashTable* acu_mallocHashTable(void);

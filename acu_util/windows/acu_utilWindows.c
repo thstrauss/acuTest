@@ -27,8 +27,9 @@
 
 static char errorBuffer[1024];
 
-extern ACU_ErrorHandlerFunc* acu_errorHandler;
+extern ACU_ErrorHandlerFunc* __acu_errorHandler;
 extern int __acu_allocCount;
+extern int __enabledTrackMemory;
 
 void va_acu_printf(ACU_Level level, const char* format, va_list args) {
     int bufPos = 0;
@@ -43,7 +44,7 @@ void va_acu_printf(ACU_Level level, const char* format, va_list args) {
         strerror_s(buffer, 50, errno);
         bufPos += acu_sprintf_s(errorBuffer + bufPos, sizeof(errorBuffer) - bufPos, " %d %s", errno, buffer);
     }
-    acu_errorHandler(level, errorBuffer);
+    __acu_errorHandler(level, errorBuffer);
 }
 
 int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...)
@@ -61,13 +62,12 @@ int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_lis
     return vsprintf_s(buffer, sizeOfBuffer, format, args);
 }
 
-extern int __enabledTrackMemory;
 
 char* __acu_estrdup(const char* s, const char* fileName, int line) {
     char* temp = _strdup(s);
     if (temp) {
         if (__enabledTrackMemory) {
-            __addTo(temp, strlen(temp), "%s", fileName, line);
+            __addMallocToAllocTable(temp, strlen(temp), "%s", fileName, line);
         }
         __acu_allocCount++;
         return temp;

@@ -60,6 +60,6 @@ int main(void) {
     acu_freeFrameStack();
     acu_reportTrackMemory();
     acu_enabledTrackMemory(0);
-	fprintf(stdout, "\n\rallocs = %d", acu_getAllocCount());
+	fprintf(stdout, "\n\rallocs = %ld", acu_getAllocCount());
 	return 0;
 }

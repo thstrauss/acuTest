@@ -69,7 +69,7 @@ static ACU_List* acu_lookupBucketList(ACU_HashTable* hashTable,const void* data)
 
     bucket = hashTable->hash(data) % hashTable->buckets;
 
-    bucketList = &hashTable->table[bucket];
+    bucketList = hashTable->table + bucket;
     for (element = bucketList->head; element; element = element->next) {
         if (hashTable->match(data, element->data)) {
             return NULL;
@@ -81,35 +81,28 @@ static ACU_List* acu_lookupBucketList(ACU_HashTable* hashTable,const void* data)
 int acu_insertHashTable(ACU_HashTable* hashTable, const void* data)
 {
     ACU_List* bucketList = acu_lookupBucketList(hashTable, data);
-    int retval;
 
-
-    if (!bucketList) {
-        return 1;
-    }
-
-    if ((retval = acu_insertNextList(bucketList, NULL, data)) == 0) {
+    if (bucketList && (acu_insertHeadList(bucketList, data)) == 0) {
         hashTable->size++;
+        return 0;
     }
 
-    return retval;
+    return 1;
 }
 
 int acu_removeHashTable(ACU_HashTable* hashTable, void** data)
 {
-    ACU_ListElement* element, *prev;
+    ACU_ListElement* element, *prev = NULL;
     ACU_List* bucketList;
     unsigned int bucket;
 
     bucket = hashTable->hash(*data) % hashTable->buckets;
-    prev = NULL;
-    bucketList = &hashTable->table[bucket];
+    bucketList = hashTable->table + bucket;
     for (element = bucketList->head; element; element = element->next) {
         if (hashTable->match(*data, element->data)) {
-            if (!acu_removeNextList(bucketList, prev, data)) {
-                hashTable->size--;
-                return 0;
-            }
+            acu_removeNextList(bucketList, prev, data);
+            hashTable->size--;
+            return 0;            
         }
         prev = element;
     }
@@ -123,7 +116,7 @@ int acu_lookupHashTable(ACU_HashTable* hashTable, void** data)
 
     bucket = hashTable->hash(*data) % hashTable->buckets;
 
-    for (element = (&hashTable->table[bucket])->head; element; element = element->next) {
+    for (element = (hashTable->table + bucket)->head; element; element = element->next) {
         if (hashTable->match(*data, element->data)) {
             *data = (void*) element->data;
             return 0;
