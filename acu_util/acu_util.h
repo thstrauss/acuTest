@@ -99,4 +99,6 @@ __EXPORT ACU_HashTable* __allocTable;
 */
 #define SAFE_REF(ref) ((ref)?(ref):"NULL")
 
+__EXPORT long acu_prime(long n);
+
 #endif

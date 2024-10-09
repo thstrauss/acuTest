@@ -229,3 +229,27 @@ __EXPORT void acu_free(void* block)
     free(block);
 }
 
+long acu_prime(long n) {
+    long i, j; 
+    if (!(n & 1)) {
+        n--;
+    }
+
+    for (i = n; i >= 2; i -= 2) {
+        double sqrtI;
+        if (i % 2 == 0) {
+            continue;
+        }
+        sqrtI = sqrt(i);
+        for (j = 3; j <= sqrtI; j += 2) {
+            if (i % j == 0) {
+                break;
+            }
+        }
+        if (j > sqrtI) {
+            return i;
+        }
+    }
+    return 2;
+}
+
