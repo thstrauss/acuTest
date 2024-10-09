@@ -20,6 +20,7 @@
  */
  
 #include <ext.h>
+#include <string.h>
  
 #include "acu_dir.h"
 #include "acu_util.h"

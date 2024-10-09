@@ -36,16 +36,17 @@ int acu_initHashTable(ACU_HashTable* hashTable, unsigned int buckets, ACU_HashTa
     if (!hashTable->table) {
         return -1;
     }
+    hashTable->hash = hash;
+    hashTable->match = match;
+    hashTable->size = 0;
     hashTable->buckets = buckets;
+
     bucketList = hashTable->table;
     bucketListEnd = hashTable->table + hashTable->buckets;
 
     for (; bucketList < bucketListEnd; bucketList++) {
         acu_initList(bucketList, (ACU_ListDestroyFunc*) destroy);
     }
-    hashTable->hash = hash;
-    hashTable->match = match;
-    hashTable->size = 0;
     return 0;
 }
 
@@ -118,7 +119,7 @@ int acu_lookupHashTable(ACU_HashTable* hashTable, void** data)
 
     for (element = (hashTable->table + bucket)->head; element; element = element->next) {
         if (hashTable->match(*data, element->data)) {
-            *data = element->data;
+            *data = (void*) element->data;
             return 0;
         }
     }

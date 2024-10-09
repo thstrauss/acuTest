@@ -116,9 +116,7 @@ int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...)
     return result;
 }
 
-long __acu_allocCount = 0;
-int __enabledTrackMemory = 0;
-static ACU_HashTable __allocTable;
+ACU_HashTable* __allocTable = NULL;
 static unsigned int __shift = 3;
 
 typedef struct Block_ {
@@ -144,16 +142,28 @@ static void destroy(void* data) {
     free(data);
 }
 
+static void __freeAllocTable(void) {
+    if (__allocTable) {
+        acu_destroyHashTable(__allocTable);
+        free(__allocTable);
+        __allocTable = NULL;
+    }
+}
+
 void acu_enabledTrackMemory(int enabled)
 {
     if (enabled) {
+    	ACU_HashTable* allocTable;
+        __freeAllocTable();
+        allocTable = malloc(sizeof(ACU_HashTable));
         __shift = (int) (log(sizeof(void*)+1.0) / log(2.0));
-        acu_initHashTable(&__allocTable, 2003, hash, match, destroy);
+        allocTable = malloc(sizeof(ACU_HashTable));
+        acu_initHashTable(allocTable, 2003, hash, match, destroy);
+        __allocTable = allocTable;
     }
     else {
-        acu_destroyHashTable(&__allocTable);
+        __freeAllocTable();
     }
-    __enabledTrackMemory = enabled;
 }
 
 static void report(const void* data, void* visitorContext) {
@@ -167,34 +177,35 @@ static void report(const void* data, void* visitorContext) {
 
 __EXPORT void acu_reportTrackMemory(void)
 {
-    ACU_HashTableVisitor visitor;
-    visitor.visitor = report;
-    visitor.context = NULL;
-    acu_acceptHashTable(&__allocTable, &visitor);
-    
-}
-
-void __addMallocToAllocTable(void* p, size_t size, const char* format, const char* fileName, int line) {
-    Block* block = (Block*)malloc(sizeof(Block));
-    if (block) {
-        __enabledTrackMemory = 0;
-        block->p = p;
-        block->format = format;
-        block->size = size;
-        block->fileName = fileName;
-        block->line = line;
-        acu_insertHashTable(&__allocTable, block);
-        __enabledTrackMemory = 1;
+	if (__allocTable) {
+	    ACU_HashTableVisitor visitor;
+    	visitor.visitor = report;
+    	visitor.context = NULL;
+    	acu_acceptHashTable(__allocTable, &visitor);
     }
 }
 
-void* __acu_emalloc(size_t size, const char* fileName, int line) {
+void* __addMallocToAllocTable(void* p, size_t size, const char* format, const char* fileName, int line) {
+    if (__allocTable) {
+        Block* block = (Block*)malloc(sizeof(Block));
+        if (block) {
+            ACU_HashTable* allocTable = __allocTable;
+            __allocTable = NULL;
+            block->p = p;
+            block->format = format;
+            block->size = size;
+            block->fileName = fileName;
+            block->line = line;
+            acu_insertHashTable(allocTable, block);
+            __allocTable = allocTable;
+        }
+    }
+    return p;
+}
+
+void* __acu_emalloc(size_t size) {
     void* p = malloc(size);
     if (p) {
-        if (__enabledTrackMemory) {
-            __addMallocToAllocTable(p, size, "%p", fileName, line);
-        }
-        __acu_allocCount++;
         return p;
     }
     acu_eprintf("acu_emalloc of %u bytes failed:", size);
@@ -203,22 +214,18 @@ void* __acu_emalloc(size_t size, const char* fileName, int line) {
 
 __EXPORT void acu_free(void* block)
 {
-    if (__enabledTrackMemory) {
+    if (__allocTable) {
+        ACU_HashTable* allocTable;
         Block key;
         Block* out = &key;
         key.p = block;
-        __enabledTrackMemory = 0;
-        if (acu_removeHashTable(&__allocTable, (void*) &out) == 0) {
+        allocTable = __allocTable;
+        __allocTable = NULL;
+        if (acu_removeHashTable(allocTable, (void*) &out) == 0) {
             free(out);
         }
-        __enabledTrackMemory = 1;
+        __allocTable = allocTable;
     }
-    __acu_allocCount--;
     free(block);
-}
-
-__EXPORT long acu_getAllocCount(void)
-{
-    return __acu_allocCount;
 }
 

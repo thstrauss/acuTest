@@ -26,6 +26,7 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include "acu_cmmn.h"
+#include "acu_hstb.h"
 
 typedef enum ACU_Level_
 {
@@ -67,25 +68,30 @@ __EXPORT void acu_wprintf(const char* format, ...);
 
 __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...);
 
-#define acu_estrdup(s) __acu_estrdup(s, __FILE__, __LINE__)
-__EXPORT char* __acu_estrdup(const char* s, const char* fileName, int line);
+#define acu_estrdup(s) (__allocTable ?(char*)__addMallocToAllocTable(__acu_estrdup((s)), strlen(s), "%s", __FILE__, __LINE__):__acu_estrdup((s))) 
+__EXPORT char* __acu_estrdup(const char* s);
 
 __EXPORT void acu_enabledTrackMemory(int enabled);
 __EXPORT void acu_reportTrackMemory(void);
 
-#define acu_emalloc(n) __acu_emalloc((n), __FILE__, __LINE__) 
-__EXPORT void* __acu_emalloc(size_t n, const char* fileName, int line);
+#define acu_emalloc(n) (__allocTable ? __addMallocToAllocTable(__acu_emalloc((n)), (n), "%p", __FILE__, __LINE__) :__acu_emalloc((n)))
+
+__EXPORT void* __acu_emalloc(size_t n);
 
 __EXPORT void acu_free(void* buf);
-
-__EXPORT long acu_getAllocCount(void);
 
 __EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
 __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
 
 __EXPORT size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width);
 
-void __addMallocToAllocTable(void* p, size_t size, const char* format, const char* fileName, int line);
+__EXPORT void* __addMallocToAllocTable(void* p, size_t size, const char* format, const char* fileName, int line);
+
+#ifdef __TOS__
+extern ACU_HashTable* __allocTable;
+#else
+__EXPORT ACU_HashTable* __allocTable;
+#endif
 
 /*
 	Converts a NULL reference to the "NULL" string.

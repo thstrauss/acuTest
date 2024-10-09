@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "acu_eenv.h"
 #include "acu_fxtr.h"

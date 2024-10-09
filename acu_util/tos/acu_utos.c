@@ -24,12 +24,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "..\acu_hstb.h"
 #include "..\acu_util.h"
 
 static char errorBuffer[1024];
 
 extern ACU_ErrorHandlerFunc* __acu_errorHandler;
-extern int __acu_allocCount;
+extern ACU_HashTable* __allocTable;
 
 void va_acu_printf(ACU_Level level, const char* format, va_list args) {
     int bufPos = 0;
@@ -62,15 +63,9 @@ int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_lis
     return vsprintf(buffer, format, args);
 }
 
-extern int __enabledTrackMemory;
-
-char* __acu_estrdup(const char* s, const char* fileName, int line) {
+char* __acu_estrdup(const char* s) {
     char* temp = strdup(s);
     if (temp) {
-        if (__enabledTrackMemory) {
-            __addMallocToAllocTable(temp, strlen(temp), "%s", fileName, line);
-        }
-        __acu_allocCount++;
         return temp;
     }
     acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);

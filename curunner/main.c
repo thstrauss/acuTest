@@ -75,7 +75,6 @@ int main(int argc, const char* argv[]) {
     Summary result = { {0,0}, 0 };
     static char buffer[256];
     ACU_Files* files;
-    long allocs;
 
     ACU_FilesVisitor testExecuteVisitor = { execute , NULL };
     testExecuteVisitor.context = (void*) &result;
@@ -104,7 +103,5 @@ int main(int argc, const char* argv[]) {
 
     acu_enabledTrackMemory(0);
 
-    allocs = acu_getAllocCount();
-    printf("\n\rallocs = %ld", allocs);
     return result.returnValue == ACU_TEST_PASSED ? 0 : 2;
 }
