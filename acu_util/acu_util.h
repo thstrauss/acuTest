@@ -25,6 +25,7 @@
 
 #include <stdarg.h>
 #include <stddef.h>
+#include <string.h>
 #include "acu_cmmn.h"
 #include "acu_hstb.h"
 
