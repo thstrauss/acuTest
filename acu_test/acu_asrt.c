@@ -34,6 +34,11 @@
 static const maxPtrLength = 16;
 
 static size_t acu_estimateBufferLength(const char* format, va_list args) {
+#ifdef __TOS__
+	UNUSED(format);
+	UNUSED(args);
+	return 512;
+#else
     size_t formatLength = strlen(format);
     size_t bufferSize = formatLength;
     char* formatPtr = (char*) format;
@@ -52,6 +57,7 @@ static size_t acu_estimateBufferLength(const char* format, va_list args) {
         }
     }
     return bufferSize;
+#endif
 }
 
 static char* acu_sFormatMessage(const char* format, ...)
