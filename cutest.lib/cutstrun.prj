@@ -21,6 +21,7 @@
 
 ..\curunner\cutstrun.tos
 
+.C [ -8- ]
 .C [ -I..\acu_test ]
 .C [ -I..\acu_util ]
 .C [ -P ]

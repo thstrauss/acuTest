@@ -21,6 +21,7 @@
 
 ..\lib\cutest.lib
 
+.C [ -8- ]
 .C [ -I..\acu_util ]
 .C [ -I..\acu_test ]
 .C [ -P ]

@@ -21,9 +21,11 @@
 
 ..\curunner\cutscup.cup
 
+.C [ -8- ]
 .C [ -I..\acu_test ]
 .C [ -P ]
 .L [ -Y ]
+.L [ -S=0 ]
 
 =
 

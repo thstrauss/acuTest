@@ -21,6 +21,7 @@
 
 ..\curunner\cuempty.cup
 
+.C [ -8- ]
 .C [ -I..\acu_util ]
 .C [ -I..\acu_test ]
 .L [ -S=0 ]

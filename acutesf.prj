@@ -19,26 +19,27 @@
 ; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ;
 
-curunner.ttp
+stub.tos
 
-.C [ -8- ]
-.C [ -I..\acu_util ]
-.C [ -I..\acu_test ]
+.L [ -G ]
+.L [ -L ]
+.L [ -Y ]
 
 =
 
 pcstart.o
 
-main.c
+stub.c
 
-..\acu_util\acu_util.prj
-..\acu_test\acu_test.prj
-..\cutest.lib\cutest.prj
-..\cutest.lib\cuempty.prj
-..\cutest.lib\cutstrun.prj
-..\cutest.lib\cutscup.prj
+acu_util\acu_utif.prj
+acu_test\acu_tesf.prj
+cutest.lib\cutesf.prj
+cutest.lib\cuemptf.prj
+cutest.lib\cutstruf.prj
+cutest.lib\cutscuf.prj
+curunner\curunnef.prj
 
-PCFLTLIB.LIB
-PCTOSLIB.LIB
+gemrunnr\gemrunnr.prj
+demo\demo.prj
+
 PCSTDLIB.LIB
-PCEXTLIB.LIB
