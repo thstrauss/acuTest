@@ -59,11 +59,7 @@ static size_t acu_estimateBufferLength(const char* format, va_list args) {
                     double d = (double) va_arg(args, double);
                     UNUSED(d);
                 } else {
-#ifdef __TOS__
-                    float f = (float)va_arg(args, double);
-#else
-                    float f = (float)va_arg(args, float);
-#endif
+                    float f = (float) va_arg(args, double);
                     UNUSED(f);
                 }
                 formatPtr++;
