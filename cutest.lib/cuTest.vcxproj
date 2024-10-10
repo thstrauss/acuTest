@@ -151,6 +151,7 @@
     <ClCompile Include="acu_entr.c" />
     <ClCompile Include="dir_tst.c" />
     <ClCompile Include="hstb_tst.c" />
+    <ClCompile Include="misc_tst.c" />
     <ClCompile Include="rnd_tst.c" />
     <ClCompile Include="rprt_tst.c" />
     <ClCompile Include="sizt_tst.c" />
@@ -194,6 +195,7 @@
     <ClInclude Include="int_tst.h" />
     <ClInclude Include="list_tst.h" />
     <ClInclude Include="long_tst.h" />
+    <ClInclude Include="misc_tst.h" />
     <ClInclude Include="mtch_tst.h" />
     <ClInclude Include="ptr_tst.h" />
     <ClInclude Include="rnd_tst.h" />

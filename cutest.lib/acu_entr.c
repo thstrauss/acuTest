@@ -49,6 +49,7 @@
 #include "uuid_tst.h"
 #include "hstb_tst.h"
 #include "sizt_tst.h"
+#include "misc_tst.h"
 
 ACU_Entry* acu_init() {
     ACU_Fixture* suite = acu_fixtureMalloc();
@@ -58,6 +59,7 @@ ACU_Entry* acu_init() {
 
     acu_fixtureInit(suite, "acu test suite");
     
+    acu_fixtureAddChildFixture(suite, miscFixture());
     acu_fixtureAddChildFixture(suite, dirFixture());
     acu_fixtureAddChildFixture(suite, fixtureFixture());
     acu_fixtureAddChildFixture(suite, floatFixture());
