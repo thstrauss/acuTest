@@ -95,10 +95,8 @@ int acu_removeHashTable(ACU_HashTable* hashTable, void** data)
 {
     ACU_ListElement* element, *prev = NULL;
     ACU_List* bucketList;
-    unsigned int bucket;
 
-    bucket = hashTable->hash(*data) % hashTable->buckets;
-    bucketList = hashTable->table + bucket;
+    bucketList = hashTable->table + hashTable->hash(*data) % hashTable->buckets;
     for (element = bucketList->head; element; element = element->next) {
         if (hashTable->match(*data, element->data)) {
             acu_removeNextList(bucketList, prev, data);

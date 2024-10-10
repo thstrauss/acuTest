@@ -177,11 +177,11 @@ static void report(const void* data, void* visitorContext) {
 
 __EXPORT void acu_reportTrackMemory(void)
 {
-	if (__allocTable) {
-	    ACU_HashTableVisitor visitor;
-    	visitor.visitor = report;
-    	visitor.context = NULL;
-    	acu_acceptHashTable(__allocTable, &visitor);
+    if (__allocTable) {
+        ACU_HashTableVisitor visitor;
+        visitor.visitor = report;
+        visitor.context = NULL;
+        acu_acceptHashTable(__allocTable, &visitor);
     }
 }
 
@@ -189,13 +189,14 @@ void* __addMallocToAllocTable(void* p, size_t size, const char* format, const ch
     if (__allocTable) {
         Block* block = (Block*)malloc(sizeof(Block));
         if (block) {
-            ACU_HashTable* allocTable = __allocTable;
-            __allocTable = NULL;
+            ACU_HashTable* allocTable;
             block->p = p;
             block->format = format;
             block->size = size;
             block->fileName = fileName;
             block->line = line;
+            allocTable = __allocTable;
+            __allocTable = NULL;
             acu_insertHashTable(allocTable, block);
             __allocTable = allocTable;
         }
