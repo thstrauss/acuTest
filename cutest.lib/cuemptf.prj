@@ -19,7 +19,7 @@
 ; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ;
 
-..\curunner\cuemptf.cup
+..\curunner\cuemptf.cuf
 
 .C [ -8 ]
 .C [ -I..\acu_util ]
