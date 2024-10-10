@@ -96,7 +96,7 @@ __IMPORT extern ACU_Funcs acu_##type##op##Funcs;
 #endif
 
 /* Equal assert for signed char */
-CREATE_ASSERT_FUNC(signedChar, Equal, == , % c)
+CREATE_ASSERT_FUNC(signedChar, Equal, == , %c)
 CREATE_ASSERT_FUNC(signedChar, NotEqual, != , %c)
 CREATE_ASSERT_FUNC(signedChar, Less, < , %c)
 CREATE_ASSERT_FUNC(signedChar, Greater, > , %c)
@@ -146,13 +146,12 @@ CREATE_ASSERT_FUNC(long, Greater, > , %ld)
 CREATE_ASSERT_FUNC(long, LessEqual, <= , %ld)
 CREATE_ASSERT_FUNC(long, GreaterEqual, >= , %ld)
 
-CREATE_ASSERT_FUNC(size_t, Equal, == , % ld)
-CREATE_ASSERT_FUNC(size_t, NotEqual, != , % ld)
-CREATE_ASSERT_FUNC(size_t, Less, < , % ld)
-CREATE_ASSERT_FUNC(size_t, Greater, > , % ld)
-CREATE_ASSERT_FUNC(size_t, LessEqual, <= , % ld)
-CREATE_ASSERT_FUNC(size_t, GreaterEqual, >= , % ld)
-
+CREATE_ASSERT_FUNC(size_t, Equal, == , %ld)
+CREATE_ASSERT_FUNC(size_t, NotEqual, != , %ld)
+CREATE_ASSERT_FUNC(size_t, Less, < , %ld)
+CREATE_ASSERT_FUNC(size_t, Greater, > , %ld)
+CREATE_ASSERT_FUNC(size_t, LessEqual, <= , %ld)
+CREATE_ASSERT_FUNC(size_t, GreaterEqual, >= , %ld)
 
 CREATE_ASSERT_FUNC(unsignedLong, Equal, ==, %lu)
 CREATE_ASSERT_FUNC(unsignedLong, NotEqual, != , %lu)
@@ -169,7 +168,7 @@ CREATE_ASSERT_FUNC(float, LessEqual, <=, %f)
 CREATE_ASSERT_FUNC(float, GreaterEqual, >= , %f)
 
 CREATE_ASSERT_FUNC(double, Equal, ==, %lf)
-CREATE_ASSERT_FUNC(double, NotEqual, != , % lf)
+CREATE_ASSERT_FUNC(double, NotEqual, != , %lf)
 CREATE_ASSERT_FUNC(double, Less, <, %lf)
 CREATE_ASSERT_FUNC(double, Greater, >, %lf)
 CREATE_ASSERT_FUNC(double, LessEqual, <=, %lf)
