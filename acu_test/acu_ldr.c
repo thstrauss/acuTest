@@ -32,11 +32,11 @@ static int checkVersion(ACU_Entry* entry) {
     ACU_Version* libVersion = entry->getAcuTestVersion();
     ACU_Version* version = acu_getVersion();
     if (!acu_compareVersion(version, libVersion)) {
-        char* libversionStr = acu_formatVersion(libVersion);
-        char* versionStr = acu_formatVersion(version);
+        char libversionStr[8];
+        char versionStr[8];
+        acu_formatVersion(libversionStr, sizeof libversionStr, libVersion);
+        acu_formatVersion(versionStr, sizeof versionStr, version);
         acu_eprintf("Version of acu library %s does not match to runner %s", libversionStr, versionStr);
-        acu_free(versionStr);
-        acu_free(libversionStr);
         return 0;
     }
     return 1;

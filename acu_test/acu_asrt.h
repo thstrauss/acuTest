@@ -160,29 +160,31 @@ CREATE_ASSERT_FUNC(unsignedLong, Greater, >, %lu)
 CREATE_ASSERT_FUNC(unsignedLong, LessEqual, <=, %lu)
 CREATE_ASSERT_FUNC(unsignedLong, GreaterEqual, >= , %lu)
 
-CREATE_ASSERT_FUNC(float, Equal, ==, %f)
-CREATE_ASSERT_FUNC(float, NotEqual, != , %f)
-CREATE_ASSERT_FUNC(float, Less, <, %f)
-CREATE_ASSERT_FUNC(float, Greater, >, %f)
-CREATE_ASSERT_FUNC(float, LessEqual, <=, %f)
-CREATE_ASSERT_FUNC(float, GreaterEqual, >= , %f)
+CREATE_ASSERT_FUNC(float, Equal, ==, %e)
+CREATE_ASSERT_FUNC(float, NotEqual, != , %e)
+CREATE_ASSERT_FUNC(float, Less, <, %e)
+CREATE_ASSERT_FUNC(float, Greater, >, %e)
+CREATE_ASSERT_FUNC(float, LessEqual, <=, %e)
+CREATE_ASSERT_FUNC(float, GreaterEqual, >= , %e)
 
-CREATE_ASSERT_FUNC(double, Equal, ==, %lf)
-CREATE_ASSERT_FUNC(double, NotEqual, != , %lf)
-CREATE_ASSERT_FUNC(double, Less, <, %lf)
-CREATE_ASSERT_FUNC(double, Greater, >, %lf)
-CREATE_ASSERT_FUNC(double, LessEqual, <=, %lf)
-CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %lf)
+CREATE_ASSERT_FUNC(double, Equal, ==, %le)
+CREATE_ASSERT_FUNC(double, NotEqual, != , %le)
+CREATE_ASSERT_FUNC(double, Less, <, %le)
+CREATE_ASSERT_FUNC(double, Greater, >, %le)
+CREATE_ASSERT_FUNC(double, LessEqual, <=, %le)
+CREATE_ASSERT_FUNC(double, GreaterEqual, >= , %le)
 
 /* ACU_PrepareParameter macro defines and fills parameter for the assert call. Filled at runtime. */
-#define ACU_PrepareParameter(type, op, actualValue, expectedValue, messageValue) \
-            ACU_AssertParameter parameter; \
-            parameter.funcs = &acu_##type##op##Funcs; \
-            parameter.values.actual.type##Type = (actualValue); \
-            parameter.values.expected.type##Type = (expectedValue); \
-            parameter.message = (messageValue); \
-            parameter.sourceFileName = __FILE__;\
-            parameter.sourceLine = __LINE__;
+#define __ACU_PrepareParameter(type, op, actualValue, expectedValue, messageValue, parameterName) \
+            ACU_AssertParameter parameterName; \
+            parameterName.funcs = &acu_##type##op##Funcs; \
+            parameterName.values.actual.type##Type = (actualValue); \
+            parameterName.values.expected.type##Type = (expectedValue); \
+            parameterName.message = (messageValue); \
+            parameterName.sourceFileName = __FILE__;\
+            parameterName.sourceLine = __LINE__;
+
+#define ACU_PrepareParameter(type, op, actualValue, expectedValue, messageValue) __ACU_PrepareParameter(type, op, actualValue, expectedValue, messageValue, parameter)
 
 /* Macro which performs the assert call.
 environment: filled from framework.

@@ -54,7 +54,7 @@ static size_t acu_estimateBufferLength(const char* format, va_list args) {
             if (*formatPtr == 's' && *formatPtr != '\0') {
                 char* arg = (char*)va_arg(args, char*);
                 bufferSize += strlen(arg);
-            } else if (*formatPtr == 'f' && *formatPtr != '\0') {
+            } else if (*formatPtr == 'f' || *formatPtr == 'e' && *formatPtr != '\0') {
                 if (longArg) {
                     double d = (double) va_arg(args, double);
                     UNUSED(d);
