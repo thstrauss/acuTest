@@ -37,14 +37,16 @@
     ACU_ExecuteEnv testEnvironment; \
     ACU_Result resultBuf; \
     ACU_Frame frame; \
+    ACU_StackElement stackElement; \
     testEnvironment.result = &resultBuf; \
     testEnvironment.exceptionFrame = &frame; \
+    stackElement.data = &frame; \
     acu_initResult(&resultBuf); \
-    acu_stackPush(acu_getFrameStack(), &frame); \
+    acu_stackPushElement(acu_getFrameStack(), &stackElement); \
     if (!setjmp(frame.exceptionBuf)) { \
         ACU_assert(&testEnvironment, type, operation, actual, expected, #type#operation#postfix); \
     } \
-    acu_stackDrop(acu_getFrameStack()); \
+    acu_stackDropElement(acu_getFrameStack()); \
     ACU_assert(environment, int, Equal, resultBuf.status, ACU_TEST_PASSED, STR(notPassed_)#type#operation#postfix); \
     ACU_assert_ptrIsNull(environment, resultBuf.message, STR(messageIsNotNull_)#type#operation#postfix); \
     UNUSED(context); \
@@ -54,14 +56,16 @@
     ACU_ExecuteEnv testEnvironment; \
     ACU_Result resultBuf; \
     ACU_Frame frame; \
+    ACU_StackElement stackElement; \
+    stackElement.data = &frame; \
     testEnvironment.result = &resultBuf; \
     testEnvironment.exceptionFrame = &frame; \
     acu_initResult(&resultBuf); \
-    acu_stackPush(acu_getFrameStack(), &frame); \
+    acu_stackPushElement(acu_getFrameStack(), &stackElement); \
     if (!setjmp(frame.exceptionBuf)) { \
         ACU_assert(&testEnvironment, type, operation, actual, expected, #type#operation#postfix); \
     } \
-    acu_stackDrop(acu_getFrameStack()); \
+    acu_stackDropElement(acu_getFrameStack()); \
     ACU_assert(environment, int, Equal, resultBuf.status, ACU_TEST_FAILED, STR(passed_)#type#operation#postfix); \
     ACU_assert_ptrIsNotNull(environment, resultBuf.message, STR(messageIsNotNull_)#type#operation#postfix); \
     acu_free(resultBuf.message); \
