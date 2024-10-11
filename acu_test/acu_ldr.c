@@ -51,6 +51,7 @@ void acu_initEntry(ACU_Entry* entry, ACU_Fixture* fixture) {
     entry->getAcuTestVersion = acu_getVersion;
     entry->setWriteHandler = acu_setWriteHandler;
     entry->setFrameStack = acu_setFrameStack;
+    entry->setAllocTable = acu_setAllocTable;
 }
 
 void acu_destroyEntry(ACU_Entry* entry) {
@@ -63,6 +64,7 @@ void acu_executeEntry(const ACU_Entry* entry, ACU_Progress* progress)
 {
     if (entry) {
         entry->setWriteHandler(acu_getWriteHandler());
+        entry->setAllocTable(acu_getAllocTable());
         acu_executeFixture(entry->fixture, progress);
     }
 }

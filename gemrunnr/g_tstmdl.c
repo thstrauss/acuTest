@@ -149,7 +149,7 @@ void gem_freeContent(const TestModel* testModel) {
         for (i = 0; i < numberOfLines; i++) {
             acu_free(testModel->content[i + 1].ob_spec.free_string);
         }
-        free(testModel->content);
+        acu_free(testModel->content);
     }
 }
 

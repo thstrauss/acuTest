@@ -67,10 +67,14 @@ void setClip(const WinData* wd, const GRECT* rect, int flag) {
     vs_clip(wd->grafHandle, flag, pxy);
 }
 
-static void updateSlider(const VerticalSlider* slider, const void* model) {
+static void updateVerticalSlider(const VerticalSlider* slider, const void* model) {
     TestModel* testModel = model;
     slider->available = testModel->totalTestNumber;
     slider->offset = testModel->verticalPositionN;
+}
+
+static void updateHorizontalSlider(const HorizontalSlider* slider, const void* model)
+{
 }
 
 void drawInterior(const WinData* wd, const GRECT* clippingRect) {
@@ -92,7 +96,7 @@ void drawInterior(const WinData* wd, const GRECT* clippingRect) {
     wd->drawViewModel(wd, gem_getViewModel(wd), clippingRect, &workingRect);
 
     setClip(wd, clippingRect, 0);
-    gem_updateSliders(&wd->verticalSlider);
+    gem_updateSliders(wd);
     graf_mouse(M_ON, NULL);
 }
 
@@ -284,6 +288,13 @@ void doArrowed(const WinData* wd, int arrow) {
         case WA_DNLINE: {
             doDownLine(wd);
         } break;
+        case WA_LFPAGE:
+        case WA_RTPAGE: {
+        } break;
+        case WA_LFLINE: {
+        } break;
+        case WA_RTLINE: {
+        } break;
     }
 }
 
@@ -413,7 +424,11 @@ int startProgram(WinData* wd) {
 
     gem_content(&wd->cellSize, gem_getViewModel(wd));
 
-    gem_setDrawViewModelFunc(wd, gem_drawContent, updateSlider);
+    gem_setDrawViewModelFunc(
+    	wd, 
+    	gem_drawContent, 
+    	updateVerticalSlider,
+    	updateHorizontalSlider);
 
     if (gemrunnr_rsc_load(wd->cellSize.width, wd->cellSize.height) == 0) {
         form_alert(1, "[3][Could not load rsc][ Exit ]");
@@ -428,7 +443,7 @@ int startProgram(WinData* wd) {
         wind_get(0, WF_WORKXYWH, &fullx, &fully, &fullw, &fullh);
     
         wd->windowHandle = wind_create(
-            NAME | MOVER | SIZER | FULLER | INFO | VSLIDE | UPARROW | DNARROW, 
+            NAME | MOVER | SIZER | FULLER | INFO | VSLIDE | HSLIDE | LFARROW | RTARROW | UPARROW | DNARROW, 
             fullx, fully, fullw, fullh);
             
         wind_set(wd->windowHandle, WF_NAME, "GEM Runner", 0, 0);

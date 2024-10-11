@@ -39,6 +39,7 @@ typedef enum ACU_Level_
 typedef void ACU_ErrorHandlerFunc(enum ACU_Level errorLevel, const char* errorMessage);
 typedef size_t ACU_WriteHandlerFunc(const char* buffer);
 typedef void ACU_setWriteHandlerFunc(ACU_WriteHandlerFunc* writeHandler);
+typedef void ACU_setAllocTableFunc(ACU_HashTable* hashTable);
 
 /*
 * Returns the program name.
@@ -51,6 +52,9 @@ __EXPORT char* acu_progName(void);
 __EXPORT void acu_setProgName(const char* progName);
 
 __EXPORT void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler);
+
+__EXPORT ACU_HashTable* acu_getAllocTable(void);
+__EXPORT void acu_setAllocTable(ACU_HashTable* allocTable);
 
 __EXPORT ACU_WriteHandlerFunc* acu_getWriteHandler(void);
 __EXPORT void acu_setWriteHandler(ACU_WriteHandlerFunc* writeHandler);
@@ -69,13 +73,13 @@ __EXPORT void acu_wprintf(const char* format, ...);
 
 __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...);
 
-#define acu_estrdup(s) (__allocTable ?(char*)__addMallocToAllocTable(__acu_estrdup((s)), strlen(s), "%s", __FILE__, __LINE__):__acu_estrdup((s))) 
+#define acu_estrdup(s) (acu_getAllocTable() ?(char*)__addMallocToAllocTable(__acu_estrdup((s)), strlen(s), __FILE__, __LINE__):__acu_estrdup((s))) 
 __EXPORT char* __acu_estrdup(const char* s);
 
 __EXPORT void acu_enabledTrackMemory(int enabled);
 __EXPORT void acu_reportTrackMemory(void);
 
-#define acu_emalloc(n) (__allocTable ? __addMallocToAllocTable(__acu_emalloc((n)), (n), "%p", __FILE__, __LINE__) :__acu_emalloc((n)))
+#define acu_emalloc(n) (acu_getAllocTable() ? __addMallocToAllocTable(__acu_emalloc((n)), (n), __FILE__, __LINE__) :__acu_emalloc((n)))
 
 __EXPORT void* __acu_emalloc(size_t n);
 
@@ -86,12 +90,10 @@ __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* forma
 
 __EXPORT size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width);
 
-__EXPORT void* __addMallocToAllocTable(void* p, size_t size, const char* format, const char* fileName, int line);
+__EXPORT void* __addMallocToAllocTable(void* p, size_t size, const char* fileName, int line);
 
 #ifdef __TOS__
-extern ACU_HashTable* __allocTable;
 #else
-__EXPORT ACU_HashTable* __allocTable;
 #endif
 
 /*

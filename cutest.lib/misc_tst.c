@@ -5,6 +5,7 @@
 #include <acu_util.h>
 #include <acu_tryc.h>
 #include <acu_list.h>
+#include <acu_util.h>
 
 #include <stdarg.h>
 #include <string.h>
@@ -39,6 +40,12 @@ static void floatInVaArgsTest(ACU_ExecuteEnv* environment, const void* context) 
     UNUSED(context);
 }
 
+void* p;
+
+static void orphanedAlloc(ACU_ExecuteEnv* environment, const void* context) {
+    p = acu_emalloc(1);
+}
+
 ACU_Fixture* miscFixture(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
@@ -46,6 +53,7 @@ ACU_Fixture* miscFixture(void)
     acu_initFixture(fixture, "mixed bag of tests");
 
     acu_addTestCase(fixture, "float In VaArgs are implicit converted to double", floatInVaArgsTest);
+    acu_addTestCase(fixture, "float In VaArgs are implicit converted to double", orphanedAlloc);
 
     return fixture;
 }

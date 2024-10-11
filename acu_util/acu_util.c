@@ -32,6 +32,8 @@
 extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 
 static char* programName = NULL;
+static ACU_HashTable* __allocTable = NULL;
+static unsigned int __shift = 3;
 
 char* acu_progName(void) {
     return programName;
@@ -66,6 +68,16 @@ void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler)
     } else {
         __acu_errorHandler = defaultErrorHandler;
     }
+}
+
+__EXPORT ACU_HashTable* acu_getAllocTable(void)
+{
+    return __allocTable;
+}
+
+void acu_setAllocTable(ACU_HashTable* allocTable)
+{
+    __allocTable = allocTable;
 }
 
 static size_t defaultWriteHandler(const char* buffer) {
@@ -116,13 +128,9 @@ int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...)
     return result;
 }
 
-ACU_HashTable* __allocTable = NULL;
-static unsigned int __shift = 3;
-
 typedef struct Block_ {
     void* p;
     size_t size;
-    const char* format;
     const char* fileName;
     int line;
 } Block;
@@ -139,6 +147,8 @@ static int match(const void* key1, const void* key2) {
 }
 
 static void destroy(void* data) {
+    Block* block = data;
+    acu_free(block->fileName);
     free(data);
 }
 
@@ -169,34 +179,31 @@ void acu_enabledTrackMemory(int enabled)
 static void report(const void* data, void* visitorContext) {
     const Block* block = data;
     char buffer1[512];
-    char buffer2[256];
-    acu_vsprintf_s(buffer2, sizeof buffer2, block->format, block->p);
-    acu_printf_s(buffer1, sizeof buffer1, "\n\r%s:%d size = %ld: %s", block->fileName, block->line, block->size, buffer2);
+    acu_printf_s(buffer1, sizeof buffer1, "%s:%d size = %ld: %p\n\r", block->fileName, block->line, block->size, block->p);
     UNUSED(visitorContext);
 }
 
 __EXPORT void acu_reportTrackMemory(void)
 {
-    if (__allocTable) {
+    if (acu_getAllocTable()) {
         ACU_HashTableVisitor visitor;
         visitor.visitor = report;
         visitor.context = NULL;
-        acu_acceptHashTable(__allocTable, &visitor);
+        acu_acceptHashTable(acu_getAllocTable(), &visitor);
     }
 }
 
-void* __addMallocToAllocTable(void* p, size_t size, const char* format, const char* fileName, int line) {
+void* __addMallocToAllocTable(void* p, size_t size, const char* fileName, int line) {
     if (__allocTable) {
         Block* block = (Block*)malloc(sizeof(Block));
         if (block) {
             ACU_HashTable* allocTable;
             block->p = p;
-            block->format = format;
             block->size = size;
-            block->fileName = fileName;
             block->line = line;
             allocTable = __allocTable;
             __allocTable = NULL;
+            block->fileName = acu_estrdup(fileName);
             acu_insertHashTable(allocTable, block);
             __allocTable = allocTable;
         }
