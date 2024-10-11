@@ -60,42 +60,42 @@ static void failedTest(ACU_ExecuteEnv* environment, const void* context) {
 }
 
 static ACU_Fixture* failingFixture(void) {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "testFixture");
-    acu_fixtureSetContext(fixture, "context");
+    acu_initFixture(fixture, "testFixture");
+    acu_setFixtureContext(fixture, "context");
 
-    acu_fixtureAddTestCase(fixture, "test1", test1);
-    acu_fixtureAddTestCase(fixture, "test2", test2);
-    acu_fixtureAddTestCase(fixture, "failingStrNotEqualTest", failingStrNotEqualTest);
-    acu_fixtureAddTestCase(fixture, "failedTest", failedTest);
+    acu_addTestCase(fixture, "test1", test1);
+    acu_addTestCase(fixture, "test2", test2);
+    acu_addTestCase(fixture, "failingStrNotEqualTest", failingStrNotEqualTest);
+    acu_addTestCase(fixture, "failedTest", failedTest);
     return fixture;
 }
 
 static ACU_Fixture* passingFixture(void) {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "testFixture");
-    acu_fixtureSetContext(fixture, "context");
+    acu_initFixture(fixture, "testFixture");
+    acu_setFixtureContext(fixture, "context");
 
-    acu_fixtureAddTestCase(fixture, "test2", test2);
+    acu_addTestCase(fixture, "test2", test2);
     return fixture;
 }
 
 static ACU_Fixture* emptyFixture(void) {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "emptyFixture");
+    acu_initFixture(fixture, "emptyFixture");
 
     return fixture;
 }
 
 static ACU_Fixture* fixtureWithTestWitNoAssert(void) {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "emptyFixture");
+    acu_initFixture(fixture, "emptyFixture");
 
-    acu_fixtureAddTestCase(fixture, "no assert", noAssertTest);
+    acu_addTestCase(fixture, "no assert", noAssertTest);
 
     return fixture;
 }
@@ -110,15 +110,15 @@ static void failingFixtureInSuiteTest(ACU_ExecuteEnv* environment, const void* c
 {
     int result = 0;
     int suiteResult;
-    ACU_Fixture* localSuite = acu_fixtureMalloc();
+    ACU_Fixture* localSuite = acu_mallocFixture();
 
     ACU_Progress progress;
     progress.progress = localProgress;
     progress.context = &result;
 
-    acu_fixtureInit(localSuite, "testSuite");
-    acu_fixtureAddChildFixture(localSuite, failingFixture());
-    suiteResult = acu_fixtureExecute(localSuite, &progress);
+    acu_initFixture(localSuite, "testSuite");
+    acu_addChildFixture(localSuite, failingFixture());
+    suiteResult = acu_executeFixture(localSuite, &progress);
     acu_fixtureDestroy(localSuite);
 
     ACU_assert(environment, int, Equal, result, 3, "Number of failing tests");
@@ -138,7 +138,7 @@ static void failingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     progress.progress = localProgress;
     progress.context = &result;
 
-    fixtureResult = acu_fixtureExecute(fixture, &progress);
+    fixtureResult = acu_executeFixture(fixture, &progress);
 
     acu_fixtureDestroy(fixture);
     
@@ -152,14 +152,14 @@ static void passingFixtureTest(ACU_ExecuteEnv* environment, const void* context)
 {
     int result = 0;
     int suiteResult;
-    ACU_Fixture* localSuite = acu_fixtureMalloc();
+    ACU_Fixture* localSuite = acu_mallocFixture();
     ACU_Progress progress;
     progress.progress = localProgress;
     progress.context = &result;
 
-    acu_fixtureInit(localSuite, "testSuite");
-    acu_fixtureAddChildFixture(localSuite, passingFixture());
-    suiteResult = acu_fixtureExecute(localSuite, &progress);
+    acu_initFixture(localSuite, "testSuite");
+    acu_addChildFixture(localSuite, passingFixture());
+    suiteResult = acu_executeFixture(localSuite, &progress);
     acu_fixtureDestroy(localSuite);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
@@ -172,14 +172,14 @@ static void emptyFixtureInSuiteTest(ACU_ExecuteEnv* environment, const void* con
 {
     int result = 0;
     int suiteResult;
-    ACU_Fixture* localSuite = acu_fixtureMalloc();
+    ACU_Fixture* localSuite = acu_mallocFixture();
     ACU_Progress progress;
     progress.progress = localProgress;
     progress.context = &result;
 
-    acu_fixtureInit(localSuite, "testSuite");
-    acu_fixtureAddChildFixture(localSuite, emptyFixture());
-    suiteResult = acu_fixtureExecute(localSuite, &progress);
+    acu_initFixture(localSuite, "testSuite");
+    acu_addChildFixture(localSuite, emptyFixture());
+    suiteResult = acu_executeFixture(localSuite, &progress);
     acu_fixtureDestroy(localSuite);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
@@ -197,7 +197,7 @@ static void emptyFixtureTest(ACU_ExecuteEnv* environment, const void* context)
     progress.progress = localProgress;
     progress.context = &result;
 
-    fixtureResult = acu_fixtureExecute(fixture, &progress);
+    fixtureResult = acu_executeFixture(fixture, &progress);
     acu_fixtureDestroy(fixture);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
@@ -215,7 +215,7 @@ static void noAssertFixtureTest(ACU_ExecuteEnv* environment, const void* context
     progress.progress = localProgress;
     progress.context = &result;
 
-    fixtureResult = acu_fixtureExecute(fixture, &progress);
+    fixtureResult = acu_executeFixture(fixture, &progress);
     acu_fixtureDestroy(fixture);
 
     ACU_assert(environment, int, Equal, result, 0, "Number of failing tests");
@@ -225,14 +225,14 @@ static void noAssertFixtureTest(ACU_ExecuteEnv* environment, const void* context
 
 ACU_Fixture* fixtureFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
-    acu_fixtureInit(fixture, "fixture tests");
+    ACU_Fixture* fixture = acu_mallocFixture();
+    acu_initFixture(fixture, "fixture tests");
 
-    acu_fixtureAddTestCase(fixture, "Failing Fixture", failingFixtureTest);
-    acu_fixtureAddTestCase(fixture, "Failing Fixture InSuite", failingFixtureInSuiteTest);
-    acu_fixtureAddTestCase(fixture, "Passing Fixture", passingFixtureTest);
-    acu_fixtureAddTestCase(fixture, "Empty Fixture in Suite", emptyFixtureInSuiteTest);
-    acu_fixtureAddTestCase(fixture, "Empty Fixture xxx", emptyFixtureTest);
-    acu_fixtureAddTestCase(fixture, "fixtureWithTestWitNoAssert", noAssertFixtureTest);
+    acu_addTestCase(fixture, "Failing Fixture", failingFixtureTest);
+    acu_addTestCase(fixture, "Failing Fixture InSuite", failingFixtureInSuiteTest);
+    acu_addTestCase(fixture, "Passing Fixture", passingFixtureTest);
+    acu_addTestCase(fixture, "Empty Fixture in Suite", emptyFixtureInSuiteTest);
+    acu_addTestCase(fixture, "Empty Fixture xxx", emptyFixtureTest);
+    acu_addTestCase(fixture, "fixtureWithTestWitNoAssert", noAssertFixtureTest);
     return fixture;
 }

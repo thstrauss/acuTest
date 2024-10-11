@@ -255,16 +255,14 @@ static void strEqual(ACU_ExecuteEnv* environment, const void* context) {
 
 static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
-    ACU_Result* resultBuf = acuTest_resultMalloc();
+    ACU_Result resultBuf;
     ACU_Stack* frameStack = acu_getFrameStack();
     ACU_Frame frame;
     acu_stackPush(frameStack, &frame);
     testEnvironment->exceptionFrame = &frame;
 
-    testEnvironment->result = resultBuf;
-    resultBuf->status = ACU_TEST_PASSED;
-    resultBuf->message = NULL;
-    resultBuf->sourceFileName = NULL; 
+    testEnvironment->result = &resultBuf;
+    acu_initResult(&resultBuf);
     
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_assert_strNotEqual(testEnvironment, "ptr1", "ptr2", "strNotEqual");
@@ -274,10 +272,7 @@ static void strNotEqual(ACU_ExecuteEnv* environment, const void* context) {
         ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_PASSED, "strNotEqual"); \
         ACU_assert_ptrEqual(environment, testEnvironment->result->message, NULL, "strNotEqual"); \
     ACU_FINALLY
-        if (resultBuf->message) {
-            acu_free(resultBuf->message);
-        }
-        acu_free(resultBuf);
+        acu_destroyResult(&resultBuf);
         acu_free(testEnvironment);
     ACU_ETRY;
     UNUSED(context);
@@ -315,20 +310,20 @@ static void strNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
  
 ACU_Fixture* strFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "str tests");
+    acu_initFixture(fixture, "str tests");
     
-    acu_fixtureAddTestCase(fixture, "str Not Empty Fails", strIsNotEmptyFails);
-    acu_fixtureAddTestCase(fixture, "str Not Empty", strIsNotEmpty);
-    acu_fixtureAddTestCase(fixture, "str Empty", strIsEmpty);
-    acu_fixtureAddTestCase(fixture, "str Not Contains", strNotContains);
-    acu_fixtureAddTestCase(fixture, "str Contains", strContains);
-    acu_fixtureAddTestCase(fixture, "str Equal both NULL", strEqualBothNull);
-    acu_fixtureAddTestCase(fixture, "str Equal actual NULL", strEqualActualNull);
-    acu_fixtureAddTestCase(fixture, "str Equal", strEqual);
-    acu_fixtureAddTestCase(fixture, "str Not Equal", strNotEqual);
-    acu_fixtureAddTestCase(fixture, "str Not Equal NULL", strNotEqualNull);
+    acu_addTestCase(fixture, "str Not Empty Fails", strIsNotEmptyFails);
+    acu_addTestCase(fixture, "str Not Empty", strIsNotEmpty);
+    acu_addTestCase(fixture, "str Empty", strIsEmpty);
+    acu_addTestCase(fixture, "str Not Contains", strNotContains);
+    acu_addTestCase(fixture, "str Contains", strContains);
+    acu_addTestCase(fixture, "str Equal both NULL", strEqualBothNull);
+    acu_addTestCase(fixture, "str Equal actual NULL", strEqualActualNull);
+    acu_addTestCase(fixture, "str Equal", strEqual);
+    acu_addTestCase(fixture, "str Not Equal", strNotEqual);
+    acu_addTestCase(fixture, "str Not Equal NULL", strNotEqualNull);
 
     return fixture;
 }

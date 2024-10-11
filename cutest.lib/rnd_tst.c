@@ -38,11 +38,11 @@ static void randomTest(ACU_ExecuteEnv* environment, const void* context) {
 
 ACU_Fixture* randomFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "random tests");
+    acu_initFixture(fixture, "random tests");
 
-    acu_fixtureAddTestCase(fixture, "random", randomTest);
+    acu_addTestCase(fixture, "random", randomTest);
 
     return fixture;
 }

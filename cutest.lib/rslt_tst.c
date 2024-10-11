@@ -63,15 +63,15 @@ static void resultFailedInitialErrorTest(ACU_ExecuteEnv* environment, const void
 
 ACU_Fixture* resultFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "result tests");
+    acu_initFixture(fixture, "result tests");
 
-    acu_fixtureAddTestCase(fixture, "result aggregation Test", resultFailedTest);
-    acu_fixtureAddTestCase(fixture, "result aggregation Test", resultErrorTest);
-    acu_fixtureAddTestCase(fixture, "result aggregation Test", resultPassedInitialFailedTest);
-    acu_fixtureAddTestCase(fixture, "result aggregation Test", resultPassedInitialErrorTest);
-    acu_fixtureAddTestCase(fixture, "result aggregation Test", resultFailedInitialErrorTest);
+    acu_addTestCase(fixture, "result aggregation Test", resultFailedTest);
+    acu_addTestCase(fixture, "result aggregation Test", resultErrorTest);
+    acu_addTestCase(fixture, "result aggregation Test", resultPassedInitialFailedTest);
+    acu_addTestCase(fixture, "result aggregation Test", resultPassedInitialErrorTest);
+    acu_addTestCase(fixture, "result aggregation Test", resultFailedInitialErrorTest);
 
 
     return fixture;

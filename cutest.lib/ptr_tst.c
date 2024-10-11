@@ -156,14 +156,14 @@ static void ptrNotEqualNull(ACU_ExecuteEnv* environment, const void* context) {
  
 ACU_Fixture* ptrFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "ptr tests");
+    acu_initFixture(fixture, "ptr tests");
     
-    acu_fixtureAddTestCase(fixture, "ptr Equal NULL", ptrEqualNull);
-    acu_fixtureAddTestCase(fixture, "ptr Equal", ptrEqual);
-    acu_fixtureAddTestCase(fixture, "ptr Not Equal", ptrNotEqual);
-    acu_fixtureAddTestCase(fixture, "ptr Not Equal NULL", ptrNotEqualNull);
+    acu_addTestCase(fixture, "ptr Equal NULL", ptrEqualNull);
+    acu_addTestCase(fixture, "ptr Equal", ptrEqual);
+    acu_addTestCase(fixture, "ptr Not Equal", ptrNotEqual);
+    acu_addTestCase(fixture, "ptr Not Equal NULL", ptrNotEqualNull);
 
     return fixture;
 }

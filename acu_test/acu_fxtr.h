@@ -44,21 +44,21 @@ typedef struct ACU_Fixture_ {
 } ACU_Fixture;
 
 /* Allocates memory for an ACU_Fixture. */
-__EXPORT ACU_Fixture* acu_fixtureMalloc(void);
+__EXPORT ACU_Fixture* acu_mallocFixture(void);
 
 /* Initializes an ACU_Fixture.*/
-__EXPORT void acu_fixtureInit(ACU_Fixture* fixture, const char* name);
+__EXPORT void acu_initFixture(ACU_Fixture* fixture, const char* name);
 
 __EXPORT void acu_fixtureDestroy(ACU_Fixture* fixture);
 
-__EXPORT void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char *name, ACU_TestFunc testFunc);
+__EXPORT void acu_addTestCase(ACU_Fixture* fixture, const char *name, ACU_TestFunc testFunc);
 
-__EXPORT void acu_fixtureAddChildFixture(ACU_Fixture* fixture, ACU_Fixture* childFixture);
+__EXPORT void acu_addChildFixture(ACU_Fixture* fixture, ACU_Fixture* childFixture);
 
-__EXPORT void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context);
+__EXPORT void acu_setFixtureContext(ACU_Fixture* fixture, const void* context);
 
-__EXPORT enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progress);
+__EXPORT enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progress);
 
-__EXPORT void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor);
+__EXPORT void acu_acceptFixture(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor);
 
 #endif

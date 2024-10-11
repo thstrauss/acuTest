@@ -43,25 +43,25 @@ TESTBED_FAILED(, int, GreaterEqual, 1, 2)
 
 ACU_Fixture* intFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "int tests");
+    acu_initFixture(fixture, "int tests");
 
-    acu_fixtureAddTestCase(fixture, "int Equal", testintEqual);
-    acu_fixtureAddTestCase(fixture, "int NotEqual", testintNotEqual);
-    acu_fixtureAddTestCase(fixture, "int Less", testintLess);
-    acu_fixtureAddTestCase(fixture, "int LessEqual", testintLessEqual);
-    acu_fixtureAddTestCase(fixture, "int LessEqualEq", testintLessEqualEq);
-    acu_fixtureAddTestCase(fixture, "int Greater", testintGreater);
-    acu_fixtureAddTestCase(fixture, "int GreaterEqualEq", testintGreaterEqualEq);
-    acu_fixtureAddTestCase(fixture, "int GreaterEqual", testintGreaterEqual);
+    acu_addTestCase(fixture, "int Equal", testintEqual);
+    acu_addTestCase(fixture, "int NotEqual", testintNotEqual);
+    acu_addTestCase(fixture, "int Less", testintLess);
+    acu_addTestCase(fixture, "int LessEqual", testintLessEqual);
+    acu_addTestCase(fixture, "int LessEqualEq", testintLessEqualEq);
+    acu_addTestCase(fixture, "int Greater", testintGreater);
+    acu_addTestCase(fixture, "int GreaterEqualEq", testintGreaterEqualEq);
+    acu_addTestCase(fixture, "int GreaterEqual", testintGreaterEqual);
 
-    acu_fixtureAddTestCase(fixture, "int Equal failed", testFailedintEqual);
-    acu_fixtureAddTestCase(fixture, "int NotEqual failed", testFailedintNotEqual);
-    acu_fixtureAddTestCase(fixture, "int Less failed", testFailedintLess);
-    acu_fixtureAddTestCase(fixture, "int LessEqual failed", testFailedintLessEqual);
-    acu_fixtureAddTestCase(fixture, "int Greater failed", testFailedintGreater);
-    acu_fixtureAddTestCase(fixture, "int GreaterEqual failed", testFailedintGreaterEqual);
+    acu_addTestCase(fixture, "int Equal failed", testFailedintEqual);
+    acu_addTestCase(fixture, "int NotEqual failed", testFailedintNotEqual);
+    acu_addTestCase(fixture, "int Less failed", testFailedintLess);
+    acu_addTestCase(fixture, "int LessEqual failed", testFailedintLessEqual);
+    acu_addTestCase(fixture, "int Greater failed", testFailedintGreater);
+    acu_addTestCase(fixture, "int GreaterEqual failed", testFailedintGreaterEqual);
 
     return fixture;
 }

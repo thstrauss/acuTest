@@ -43,23 +43,23 @@ TESTBED_FAILED(, size_t, GreaterEqual, 1, 2)
 
 ACU_Fixture* size_tFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "size_t tests");
+    acu_initFixture(fixture, "size_t tests");
 
-    acu_fixtureAddTestCase(fixture, "size_t Equal", testsize_tEqual);
-    acu_fixtureAddTestCase(fixture, "size_t NotEqual", testsize_tNotEqual);
-    acu_fixtureAddTestCase(fixture, "size_t Less", testsize_tLess);
-    acu_fixtureAddTestCase(fixture, "size_t LessEqual", testsize_tLessEqual);
-    acu_fixtureAddTestCase(fixture, "size_t LessEqualEq", testsize_tLessEqualEq);
-    acu_fixtureAddTestCase(fixture, "size_t Greater", testsize_tGreater);
-    acu_fixtureAddTestCase(fixture, "size_t GreaterEqualEq", testsize_tGreaterEqualEq);
-    acu_fixtureAddTestCase(fixture, "size_t GreaterEqual", testsize_tGreaterEqual);
-    acu_fixtureAddTestCase(fixture, "size_t Equal failed", testFailedsize_tEqual);
-    acu_fixtureAddTestCase(fixture, "size_t NotEqual failed", testFailedsize_tNotEqual);
-    acu_fixtureAddTestCase(fixture, "size_t Less failed", testFailedsize_tLess);
-    acu_fixtureAddTestCase(fixture, "size_t LessEqual failed", testFailedsize_tLessEqual);
-    acu_fixtureAddTestCase(fixture, "size_t Greater failed", testFailedsize_tGreater);
-    acu_fixtureAddTestCase(fixture, "size_t GreaterEqual failed", testFailedsize_tGreaterEqual);
+    acu_addTestCase(fixture, "size_t Equal", testsize_tEqual);
+    acu_addTestCase(fixture, "size_t NotEqual", testsize_tNotEqual);
+    acu_addTestCase(fixture, "size_t Less", testsize_tLess);
+    acu_addTestCase(fixture, "size_t LessEqual", testsize_tLessEqual);
+    acu_addTestCase(fixture, "size_t LessEqualEq", testsize_tLessEqualEq);
+    acu_addTestCase(fixture, "size_t Greater", testsize_tGreater);
+    acu_addTestCase(fixture, "size_t GreaterEqualEq", testsize_tGreaterEqualEq);
+    acu_addTestCase(fixture, "size_t GreaterEqual", testsize_tGreaterEqual);
+    acu_addTestCase(fixture, "size_t Equal failed", testFailedsize_tEqual);
+    acu_addTestCase(fixture, "size_t NotEqual failed", testFailedsize_tNotEqual);
+    acu_addTestCase(fixture, "size_t Less failed", testFailedsize_tLess);
+    acu_addTestCase(fixture, "size_t LessEqual failed", testFailedsize_tLessEqual);
+    acu_addTestCase(fixture, "size_t Greater failed", testFailedsize_tGreater);
+    acu_addTestCase(fixture, "size_t GreaterEqual failed", testFailedsize_tGreaterEqual);
     return fixture;
 }

@@ -39,7 +39,7 @@
     ACU_Frame frame; \
     testEnvironment.result = &resultBuf; \
     testEnvironment.exceptionFrame = &frame; \
-    acuTest_resultInit(&resultBuf); \
+    acu_initResult(&resultBuf); \
     acu_stackPush(acu_getFrameStack(), &frame); \
     if (!setjmp(frame.exceptionBuf)) { \
         ACU_assert(&testEnvironment, type, operation, actual, expected, #type#operation#postfix); \
@@ -56,7 +56,7 @@
     ACU_Frame frame; \
     testEnvironment.result = &resultBuf; \
     testEnvironment.exceptionFrame = &frame; \
-    acuTest_resultInit(&resultBuf); \
+    acu_initResult(&resultBuf); \
     acu_stackPush(acu_getFrameStack(), &frame); \
     if (!setjmp(frame.exceptionBuf)) { \
         ACU_assert(&testEnvironment, type, operation, actual, expected, #type#operation#postfix); \

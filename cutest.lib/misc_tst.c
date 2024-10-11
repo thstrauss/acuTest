@@ -41,11 +41,11 @@ static void floatInVaArgsTest(ACU_ExecuteEnv* environment, const void* context) 
 
 ACU_Fixture* miscFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "mixed bag of tests");
+    acu_initFixture(fixture, "mixed bag of tests");
 
-    acu_fixtureAddTestCase(fixture, "float In VaArgs are implicit converted to double", floatInVaArgsTest);
+    acu_addTestCase(fixture, "float In VaArgs are implicit converted to double", floatInVaArgsTest);
 
     return fixture;
 }

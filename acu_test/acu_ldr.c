@@ -42,28 +42,28 @@ static int checkVersion(ACU_Entry* entry) {
     return 1;
 }
 
-ACU_Entry* acu_entryMalloc(void) {
+ACU_Entry* acu_mallocEntry(void) {
     return acu_emalloc(sizeof(ACU_Entry));
 }
 
-void acu_entryInit(ACU_Entry* entry, ACU_Fixture* fixture) {
+void acu_initEntry(ACU_Entry* entry, ACU_Fixture* fixture) {
     entry->fixture = fixture;
     entry->getAcuTestVersion = acu_getVersion;
     entry->setWriteHandler = acu_setWriteHandler;
     entry->setFrameStack = acu_setFrameStack;
 }
 
-void acu_entryDestroy(ACU_Entry* entry) {
+void acu_destroyEntry(ACU_Entry* entry) {
     if (entry) {
         acu_fixtureDestroy((ACU_Fixture*) entry->fixture);
     }
 }
 
-void acu_entryExecute(const ACU_Entry* entry, ACU_Progress* progress)
+void acu_executeEntry(const ACU_Entry* entry, ACU_Progress* progress)
 {
     if (entry) {
         entry->setWriteHandler(acu_getWriteHandler());
-        acu_fixtureExecute(entry->fixture, progress);
+        acu_executeFixture(entry->fixture, progress);
     }
 }
 
@@ -88,6 +88,6 @@ ACU_Entry* cup_load(const char* cu_name) {
 void cup_unload(ACU_Entry* entry) {
     acu_pluginUnload(entry->plugin);
     acu_free(entry->plugin);
-    acu_entryDestroy(entry);
+    acu_destroyEntry(entry);
     acu_free(entry);
 }

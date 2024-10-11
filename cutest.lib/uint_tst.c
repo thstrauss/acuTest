@@ -43,25 +43,25 @@ TESTBED_FAILED(, unsignedInt, GreaterEqual, 1, 2)
 
 ACU_Fixture* unsignedIntFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "unsigned int tests");
+    acu_initFixture(fixture, "unsigned int tests");
 
-    acu_fixtureAddTestCase(fixture, "unsigned int Equal", testunsignedIntEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned int NotEqual", testunsignedIntNotEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned int Less", testunsignedIntLess);
-    acu_fixtureAddTestCase(fixture, "unsigned int LessEqual", testunsignedIntLessEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned int LessEqualEq", testunsignedIntLessEqualEq);
-    acu_fixtureAddTestCase(fixture, "unsigned int Greater", testunsignedIntGreater);
-    acu_fixtureAddTestCase(fixture, "unsigned int GreaterEqualEq", testunsignedIntGreaterEqualEq);
-    acu_fixtureAddTestCase(fixture, "unsigned int GreaterEqual", testunsignedIntGreaterEqual);
+    acu_addTestCase(fixture, "unsigned int Equal", testunsignedIntEqual);
+    acu_addTestCase(fixture, "unsigned int NotEqual", testunsignedIntNotEqual);
+    acu_addTestCase(fixture, "unsigned int Less", testunsignedIntLess);
+    acu_addTestCase(fixture, "unsigned int LessEqual", testunsignedIntLessEqual);
+    acu_addTestCase(fixture, "unsigned int LessEqualEq", testunsignedIntLessEqualEq);
+    acu_addTestCase(fixture, "unsigned int Greater", testunsignedIntGreater);
+    acu_addTestCase(fixture, "unsigned int GreaterEqualEq", testunsignedIntGreaterEqualEq);
+    acu_addTestCase(fixture, "unsigned int GreaterEqual", testunsignedIntGreaterEqual);
 
-    acu_fixtureAddTestCase(fixture, "unsigned int Equal failed", testFailedunsignedIntEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned int NotEqual failed", testFailedunsignedIntNotEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned int Less failed", testFailedunsignedIntLess);
-    acu_fixtureAddTestCase(fixture, "unsigned int LessEqual failed", testFailedunsignedIntLessEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned int Greater failed", testFailedunsignedIntGreater);
-    acu_fixtureAddTestCase(fixture, "unsigned int GreaterEqual failed", testFailedunsignedIntGreaterEqual);
+    acu_addTestCase(fixture, "unsigned int Equal failed", testFailedunsignedIntEqual);
+    acu_addTestCase(fixture, "unsigned int NotEqual failed", testFailedunsignedIntNotEqual);
+    acu_addTestCase(fixture, "unsigned int Less failed", testFailedunsignedIntLess);
+    acu_addTestCase(fixture, "unsigned int LessEqual failed", testFailedunsignedIntLessEqual);
+    acu_addTestCase(fixture, "unsigned int Greater failed", testFailedunsignedIntGreater);
+    acu_addTestCase(fixture, "unsigned int GreaterEqual failed", testFailedunsignedIntGreaterEqual);
 
     return fixture;
 }

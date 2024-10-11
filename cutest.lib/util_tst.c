@@ -107,13 +107,13 @@ static void ellipsisTest(ACU_ExecuteEnv* environment, const void* context) {
 
 ACU_Fixture* utilFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "utility Tests");
-    acu_fixtureAddTestCase(fixture, "error Handler", errorHandlerTest);
-    acu_fixtureAddTestCase(fixture, "warning Handler", warningErrorHandlerTest);
-    acu_fixtureAddTestCase(fixture, "program Name", programNameTest);
-    acu_fixtureAddTestCase(fixture, "ellipsis", ellipsisTest);
+    acu_initFixture(fixture, "utility Tests");
+    acu_addTestCase(fixture, "error Handler", errorHandlerTest);
+    acu_addTestCase(fixture, "warning Handler", warningErrorHandlerTest);
+    acu_addTestCase(fixture, "program Name", programNameTest);
+    acu_addTestCase(fixture, "ellipsis", ellipsisTest);
 
     return fixture;
 }

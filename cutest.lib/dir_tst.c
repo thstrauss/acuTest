@@ -70,14 +70,14 @@ static void dirTestNull(ACU_ExecuteEnv* environment, const void* context) {
 
 ACU_Fixture* dirFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "dir Tests");
+    acu_initFixture(fixture, "dir Tests");
 
-    acu_fixtureAddTestCase(fixture, "dir test", dirTest);
-    acu_fixtureAddTestCase(fixture, "dir test null", dirTestNull);
-    acu_fixtureAddTestCase(fixture, "dir test empty", dirTestEmpty);
-    acu_fixtureAddTestCase(fixture, "dir test no separator", dirTestNoSeparator);
+    acu_addTestCase(fixture, "dir test", dirTest);
+    acu_addTestCase(fixture, "dir test null", dirTestNull);
+    acu_addTestCase(fixture, "dir test empty", dirTestEmpty);
+    acu_addTestCase(fixture, "dir test no separator", dirTestNoSeparator);
 
     return fixture;
 }

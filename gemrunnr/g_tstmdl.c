@@ -120,7 +120,7 @@ static void gem_setInfoLine(const TestModel* testModel) {
     ACU_Count count = {0,0, {NULL, NULL}};
     counter.context = (void*)&count;
 
-    acu_fixtureAccept(testModel->entry->fixture, &counter);
+    acu_acceptFixture(testModel->entry->fixture, &counter);
 
     acu_sprintf_s(testModel->infoLine, sizeof(testModel->infoLine), "%d tests in %d fixtures", count.testCaseCount, count.testFixtureCount);
 }
@@ -139,7 +139,7 @@ static void gem_collectTestCases(const TestModel* testModel){
     testCases.testCases = testModel->testList;
     collect.context = (void*) &testCases;
     
-    acu_fixtureAccept(testModel->entry->fixture, &collect); 
+    acu_acceptFixture(testModel->entry->fixture, &collect); 
 }
 
 void gem_freeContent(const TestModel* testModel) {
@@ -221,7 +221,7 @@ void gem_execute(const TestModel* testModel, const CellSize* cellSize) {
     if (testModel->entry) {
         graf_mouse(BUSYBEE, 0L);
         gem_showProgressBar(bar);
-        acu_entryExecute(testModel->entry, &progress);
+        acu_executeEntry(testModel->entry, &progress);
         gem_freeContent(testModel);
         gem_content(cellSize, testModel);
         gem_hideProgressBar(bar);

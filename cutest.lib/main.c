@@ -48,13 +48,13 @@ int main(void) {
 	report.context = &reportHelper;
 	reportSummary.context = &summary;
 	
-	acu_fixtureAccept(entry->fixture, &counter);
+	acu_acceptFixture(entry->fixture, &counter);
 	fprintf(stdout, "count = %d \n\r", count);
-	acu_fixtureExecute(entry->fixture, (ACU_Progress*) NULL);
+	acu_executeFixture(entry->fixture, (ACU_Progress*) NULL);
 	fprintf(stdout, "\n\r");
-	acu_fixtureAccept(entry->fixture, &report);
-	acu_fixtureAccept(entry->fixture, &reportSummary);
-	acu_entryDestroy(entry);
+	acu_acceptFixture(entry->fixture, &report);
+	acu_acceptFixture(entry->fixture, &reportSummary);
+	acu_destroyEntry(entry);
 	acu_free(entry);
 	fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
     acu_freeFrameStack();
