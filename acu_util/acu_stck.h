@@ -50,8 +50,10 @@ __EXPORT ACU_Stack* acu_stackMalloc(void);
 __EXPORT void acu_stackDestroy(ACU_Stack* stack);
 
 __EXPORT int acu_stackPush(ACU_Stack* stack, void* data);
+__EXPORT void acu_stackPushElement(ACU_Stack* stack, ACU_StackElement* element);
 
 __EXPORT int acu_stackPop(ACU_Stack* stack, void** data);
 __EXPORT int acu_stackDrop(ACU_Stack* stack);
+__EXPORT void acu_stackDropElement(ACU_Stack* stack);
 
 #endif 
