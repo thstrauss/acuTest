@@ -71,7 +71,7 @@ static unsigned char* readRelocationData(long handle, long fsize, const PH* prog
     long relo_len = fsize - sizeof(PH) - TD_len - programHeader->ph_slen;
 
     if ((programHeader->ph_absflag == 0) && relo_len) {
-        relo_mem = malloc(relo_len);
+        relo_mem = acu_emalloc(relo_len);
         if (relo_mem) {
             if (!Fread((int)handle, relo_len, relo_mem) == relo_len) {
                 acu_free(relo_mem);
@@ -97,7 +97,7 @@ static void* load_and_reloc(long handle, long fsize, const PH* programHeader)
     long TD_len = programHeader->ph_tlen + programHeader->ph_dlen;
     long TDB_len = TD_len + programHeader->ph_blen;
 
-    textAndData = malloc(TDB_len);
+    textAndData = acu_emalloc(TDB_len);
     if (textAndData) {
 
         if (Fread((int)handle, TD_len, textAndData) == TD_len) {

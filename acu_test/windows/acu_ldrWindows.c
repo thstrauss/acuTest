@@ -23,6 +23,7 @@
 
 #include "..\acu_ldr.h"
 #include "..\acu_tryc.h"
+#include <acu_util.h>
 
 
 #include <string.h>
@@ -35,5 +36,6 @@ void initFunc(ACU_Plugin* plugin, void* initContext) {
     ACU_init* init = (ACU_init*)GetProcAddress(plugin->pluginCode, "acu_init");
     pluginContext->entry = init();
     pluginContext->entry->setFrameStack(acu_getFrameStack());
+    pluginContext->entry->setAllocTable(acu_getAllocTable());
     pluginContext->entry->plugin = plugin;
 }
