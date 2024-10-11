@@ -41,11 +41,13 @@ typedef struct Summary_ {
 
 static void executeEntry(const char* cupName, Summary* summary) {
     static char buffer[] = "\n\r";
-    ACU_Entry* entry = cup_load(cupName);
     ACU_Progress progress = { acu_progress , NULL };
-    ACU_ReportHelper reportHelper = {NULL, NULL};
-    ACU_ReportVisitor report = { acu_report , NULL};
+    ACU_ReportHelper reportHelper = { NULL, NULL };
+    ACU_ReportVisitor report = { acu_report , NULL };
     ACU_ReportVisitor reportSummary = { acu_reportSummary , NULL };
+    ACU_Entry* entry;
+    
+    entry = cup_load(cupName);
     
     report.context = (void*) &reportHelper;
     
@@ -57,10 +59,10 @@ static void executeEntry(const char* cupName, Summary* summary) {
         return;
     }
 
-    summary->returnValue = acu_fixtureExecute(entry->fixture, &progress);
+    summary->returnValue = acu_executeFixture(entry->fixture, &progress);
     acu_printf_s(buffer, sizeof(buffer), "\n\r");
-    acu_fixtureAccept(entry->fixture, &report);
-    acu_fixtureAccept(entry->fixture, &reportSummary);
+    acu_acceptFixture(entry->fixture, &report);
+    acu_acceptFixture(entry->fixture, &reportSummary);
 
     cup_unload(entry);
 }
@@ -73,7 +75,6 @@ int main(int argc, const char* argv[]) {
     Summary result = { {0,0}, 0 };
     static char buffer[256];
     ACU_Files* files;
-    int allocs;
 
     ACU_FilesVisitor testExecuteVisitor = { execute , NULL };
     testExecuteVisitor.context = (void*) &result;
@@ -81,6 +82,8 @@ int main(int argc, const char* argv[]) {
     if (argc < 2) {
         printHelp();
     }
+
+    acu_enabledTrackMemory(1);
 
     files = acu_filesMalloc();
     acu_filesInit(files);
@@ -90,12 +93,15 @@ int main(int argc, const char* argv[]) {
     acu_filesAccept(files, &testExecuteVisitor);
 
     acu_filesDestroy(files);
+    acu_free(files);
 
     acu_printf_s(buffer, sizeof(buffer), "%d of %d failed.\n\r", result.summary.failedTestCases, result.summary.totalTestCases);
     
     acu_freeFrameStack();
 
-    allocs = acu_getAllocCount();
-    printf("allocs = %d", allocs);
+    acu_reportTrackMemory();
+
+    acu_enabledTrackMemory(0);
+
     return result.returnValue == ACU_TEST_PASSED ? 0 : 2;
 }

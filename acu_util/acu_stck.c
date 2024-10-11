@@ -38,7 +38,7 @@ void acu_stackInit(ACU_Stack* stack, ACU_StackDataDestroy destroy) {
 
 void* acu_stackPeek(const ACU_Stack* stack)
 {
-    return (stack->size == 0) ? NULL : stack->head->data;
+    return (stack->head) ? stack->head->data : NULL;
 }
 
 ACU_Stack* acu_stackMalloc(void)
@@ -48,7 +48,7 @@ ACU_Stack* acu_stackMalloc(void)
 
 void acu_stackDestroy(ACU_Stack* stack)
 {
-    while (stack->size > 0) {
+    while (stack->size) {
         acu_stackDrop(stack);
     }
 }
@@ -57,7 +57,7 @@ int acu_stackPush(ACU_Stack* stack, void* data)
 {
     ACU_StackElement* newElement = acu_emalloc(sizeof(ACU_StackElement));
     if (newElement) {
-        newElement->data = (void*)data;
+        newElement->data = data;
 
         newElement->next = stack->head;
         stack->head = newElement;
@@ -68,11 +68,19 @@ int acu_stackPush(ACU_Stack* stack, void* data)
     return -1;
 }
 
+__EXPORT void acu_stackPushElement(ACU_Stack* stack, ACU_StackElement* newElement)
+{
+    newElement->next = stack->head;
+    stack->head = newElement;
+
+    stack->size++;
+}
+
 int acu_stackPop(ACU_Stack* stack, void** data)
 {
     ACU_StackElement* oldElement;
 
-    if (stack->size == 0) {
+    if (!stack->size) {
         if (data) {
             *data = NULL;
         }
@@ -109,4 +117,14 @@ __EXPORT int acu_stackDrop(ACU_Stack* stack)
     }
     return -1;
 }
+
+__EXPORT void acu_stackDropElement(ACU_Stack* stack)
+{
+    if (stack->head) {
+        ACU_StackElement* oldElement = stack->head;
+        stack->head = oldElement->next;
+
+        stack->size--;
+    }
+    }
 

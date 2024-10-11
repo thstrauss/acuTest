@@ -19,26 +19,23 @@
 ; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ;
 
-curunner.ttp
+cutscuf.cuf
 
-.C [ -8- ]
-.C [ -I..\acu_util ]
+.C [ -8 ]
 .C [ -I..\acu_test ]
+.C [ -I..\acu_util ]
+.C [ -P ]
+.L [ -Y ]
 
 =
 
-pcstart.o
+..\acu_test\plgstart.s
 
-main.c
+..\acu_util\acu_utif.prj
+..\acu_test\acu_tesf.prj
+..\cutest.lib\cutesf.prj
 
-..\acu_util\acu_util.prj
-..\acu_test\acu_test.prj
-..\cutest.lib\cutest.prj
-..\cutest.lib\cuempty.prj
-..\cutest.lib\cutstrun.prj
-..\cutest.lib\cutscup.prj
-
-PCFLTLIB.LIB
-PCTOSLIB.LIB
+PC881LIB.LIB
 PCSTDLIB.LIB
+PCTOSLIB.LIB
 PCEXTLIB.LIB

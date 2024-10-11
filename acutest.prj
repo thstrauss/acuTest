@@ -37,6 +37,8 @@ cutest.lib\cutest.prj
 cutest.lib\cuempty.prj
 cutest.lib\cutstrun.prj
 cutest.lib\cutscup.prj
+curunner\curunner.prj
+
 gemrunnr\gemrunnr.prj
 demo\demo.prj
 

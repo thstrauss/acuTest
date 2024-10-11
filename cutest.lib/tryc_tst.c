@@ -89,7 +89,7 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     int visited = 0;
     int finally = 0;
     ACU_ExecuteEnv* testEnvironment = acu_emalloc(sizeof(ACU_ExecuteEnv));
-    ACU_Result* resultBuf = acuTest_resultMalloc();
+    ACU_Result resultBuf;
 
     ACU_Frame frame;
     frame.exception = 0;
@@ -97,15 +97,13 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     acu_stackPush(acu_getFrameStack(), &frame);
     testEnvironment->exceptionFrame = &frame;
 
-    testEnvironment->result = resultBuf;
-    resultBuf->status = ACU_TEST_PASSED;
-    resultBuf->message = NULL;
-    resultBuf->sourceFileName = NULL;
+    testEnvironment->result = &resultBuf;
+    acu_initResult(&resultBuf);
 
     if (!setjmp(testEnvironment->exceptionFrame->exceptionBuf)) {
         ACU_TRY
             visited = 1;
-        ACU_assert(testEnvironment, int, Equal, 0, 1, "xxx");
+        ACU_assert(testEnvironment, int, Equal, 0, 1, "visitFinallyTest");
         visited = 2;
         ACU_FINALLY
             finally = 1;
@@ -116,6 +114,9 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_FAILED, "failed");
     ACU_assert(environment, int, Equal, visited, 1, "block visited");
     ACU_assert(environment, int, Equal, finally, 1, "finally not visited"); 
+    acu_free(testEnvironment);
+    acu_destroyResult(&resultBuf);
+
     UNUSED(context);
 }
 
@@ -165,18 +166,18 @@ static void visitOverlappingThrowTest(ACU_ExecuteEnv* environment, const void* c
 
 ACU_Fixture* tryCatchFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
     
-    acu_fixtureInit(fixture, "try catch finally");
+    acu_initFixture(fixture, "try catch finally");
 
-    acu_fixtureAddTestCase(fixture, "try etry", tryETryTests);
-    acu_fixtureAddTestCase(fixture, "try catch", tryCatchNotVisitedTests);
-    acu_fixtureAddTestCase(fixture, "try throw catch", tryCatchVisitedTests);
-    acu_fixtureAddTestCase(fixture, "try throw catch finally", tryCatchFinallyVisitedTests);
+    acu_addTestCase(fixture, "try etry", tryETryTests);
+    acu_addTestCase(fixture, "try catch", tryCatchNotVisitedTests);
+    acu_addTestCase(fixture, "try throw catch", tryCatchVisitedTests);
+    acu_addTestCase(fixture, "try throw catch finally", tryCatchFinallyVisitedTests);
 
-    acu_fixtureAddTestCase(fixture, "visitFinallyTest", visitFinallyTest);
-    acu_fixtureAddTestCase(fixture, "visitFinallyAfterThrowTest", visitFinallyAfterThrowTest);
-    acu_fixtureAddTestCase(fixture, "visitOverlappingThrowTest", visitOverlappingThrowTest); 
+    acu_addTestCase(fixture, "visitFinallyTest", visitFinallyTest);
+    acu_addTestCase(fixture, "visitFinallyAfterThrowTest", visitFinallyAfterThrowTest);
+    acu_addTestCase(fixture, "visitOverlappingThrowTest", visitOverlappingThrowTest); 
 
     return fixture;
 }

@@ -33,6 +33,6 @@ typedef ACU_Version* (ACU_getVersionFunc)(void);
 
 ACU_Version* acu_getVersion(void);
 __EXPORT int acu_compareVersion(const ACU_Version* version1, const ACU_Version* version2);
-__EXPORT char* acu_formatVersion(const ACU_Version* version);
+__EXPORT char* acu_formatVersion(char* buffer, size_t bufferSize, const ACU_Version* version);
 
 #endif

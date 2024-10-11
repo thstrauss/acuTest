@@ -22,6 +22,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "acu_eenv.h"
 #include "acu_fxtr.h"
@@ -36,15 +38,17 @@ static ACU_Stack* frameStack = NULL;
 static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_Progress* progress) {
     ACU_ExecuteEnv environment;
     ACU_Frame frame;
+    ACU_StackElement stackElement;
     ACU_Result* result = &testCase->result;
     frame.exception = 0;
+    stackElement.data = &frame;
 
     environment.result = result;
     environment.exceptionFrame = &frame;
 
-    acu_stackPush(frameStack, &frame);
+    acu_stackPushElement(frameStack, &stackElement);
 
-    acuTest_resultPrepare(result);
+    acu_prepareResult(result);
     result->start = clock();
     do {
         switch (setjmp(frame.exceptionBuf)) {
@@ -61,7 +65,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
         }
     } while (0);
     result->end = clock();
-    acu_stackDrop(frameStack);
+    acu_stackDropElement(frameStack);
     if (progress && progress->progress) {
         progress->progress(testCase, progress->context);
     }
@@ -70,7 +74,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
 
 static void acuTest_testCaseDestroy(ACU_TestCase* testCase) {
     acu_free(testCase->name);
-    acuTest_resultDestroy(&testCase->result);
+    acu_destroyResult(&testCase->result);
     acu_free(testCase);
 }
 
@@ -78,38 +82,38 @@ static ACU_TestCase* acuTest_testCaseMalloc(void) {
     return (ACU_TestCase*)acu_emalloc(sizeof(ACU_TestCase));
 }
 
-void acu_fixtureInit(ACU_Fixture* fixture, const char* name) {
+void acu_initFixture(ACU_Fixture* fixture, const char* name) {
     ACU_List* testCases = acu_mallocList();
-    ACU_List* fixtures = acu_mallocList();
+    ACU_List* childFixtures = acu_mallocList();
     acu_initList(testCases, (ACU_ListDestroyFunc*) acuTest_testCaseDestroy);
-    acu_initList(fixtures, (ACU_ListDestroyFunc*) acu_fixtureDestroy);
+    acu_initList(childFixtures, (ACU_ListDestroyFunc*) acu_fixtureDestroy);
     fixture->testCases = testCases;
-    fixture->childFixtures = fixtures;
+    fixture->childFixtures = childFixtures;
     fixture->name = acu_estrdup(name);
     fixture->start = (clock_t)-1;
     fixture->end = (clock_t)-1;
 }
 
-void acu_fixtureAddTestCase(ACU_Fixture* fixture, const char* name, ACU_TestFunc testFunc) {
+void acu_addTestCase(ACU_Fixture* fixture, const char* name, ACU_TestFunc testFunc) {
     ACU_TestCase* testCase = acuTest_testCaseMalloc();
     testCase->name = acu_estrdup(name);
     testCase->testFunc = testFunc;
     testCase->fixture = fixture;
-    acuTest_resultInit(&testCase->result);
+    acu_initResult(&testCase->result);
     acu_appendList(fixture->testCases, (void*)testCase);
 }
 
-void acu_fixtureAddChildFixture(ACU_Fixture* fixture, ACU_Fixture* childFixture) {
+void acu_addChildFixture(ACU_Fixture* fixture, ACU_Fixture* childFixture) {
     childFixture->parentFixture = fixture;
     acu_appendList(fixture->childFixtures, (void*) childFixture);
 }
 
-void acu_fixtureSetContext(ACU_Fixture* fixture, const void* context)
+void acu_setFixtureContext(ACU_Fixture* fixture, const void* context)
 {
     fixture->context = context;
 }
 
-enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progress) {
+enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progress) {
     ACU_ListElement* testElement = acu_listHead(fixture->testCases);
     ACU_ListElement* childFixture = acu_listHead(fixture->childFixtures);
     const void* context = fixture->context;
@@ -119,7 +123,7 @@ enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progr
     }
     fixture->start = clock();
     while (childFixture) {
-        result = acuTest_calcResult(result, acu_fixtureExecute((ACU_Fixture*)childFixture->data, progress));
+        result = acuTest_calcResult(result, acu_executeFixture((ACU_Fixture*)childFixture->data, progress));
         childFixture = acu_listNext(childFixture);
     }
     while (testElement) {
@@ -130,10 +134,10 @@ enum ACU_TestResult acu_fixtureExecute(ACU_Fixture* fixture, ACU_Progress* progr
     return result;
 }
 
-void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor) {
+void acu_acceptFixture(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor) {
     ACU_ListVisitor listVisitor;
 
-    listVisitor.visitor = (ACU_ListVisitorFunc*) acu_fixtureAccept;
+    listVisitor.visitor = (ACU_ListVisitorFunc*) acu_acceptFixture;
     listVisitor.context = visitor;
 
     acu_acceptList(fixture->childFixtures, &listVisitor);
@@ -144,9 +148,9 @@ void acu_fixtureAccept(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor) {
     acu_acceptList(fixture->testCases, &listVisitor);
 }
 
-ACU_Fixture* acu_fixtureMalloc(void)
+ACU_Fixture* acu_mallocFixture(void)
 {
-    return (ACU_Fixture*)acu_emalloc(sizeof(ACU_Fixture));
+    return (ACU_Fixture*) acu_emalloc(sizeof(ACU_Fixture));
 }
 
 void acu_fixtureDestroy(ACU_Fixture* fixture) {
@@ -155,4 +159,5 @@ void acu_fixtureDestroy(ACU_Fixture* fixture) {
     acu_destroyList(fixture->childFixtures);
     acu_free(fixture->childFixtures);
     acu_free(fixture->name);
+    acu_free(fixture);
 }

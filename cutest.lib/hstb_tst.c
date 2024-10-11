@@ -103,13 +103,13 @@ static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
 
 ACU_Fixture* hashTableFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "hash table tests");
+    acu_initFixture(fixture, "hash table tests");
     
-    acu_fixtureAddTestCase(fixture, "empty Hashtable", emptyHashTable);
-    acu_fixtureAddTestCase(fixture, "empty2 Hashtable", empty2HashTable);
-    acu_fixtureAddTestCase(fixture, "fill Hashtable", fillHashTable);
+    acu_addTestCase(fixture, "empty Hashtable", emptyHashTable);
+    acu_addTestCase(fixture, "empty2 Hashtable", empty2HashTable);
+    acu_addTestCase(fixture, "fill Hashtable", fillHashTable);
 
     return fixture;
 }

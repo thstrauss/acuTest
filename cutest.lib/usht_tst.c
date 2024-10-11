@@ -43,25 +43,25 @@ TESTBED_FAILED(, unsignedShort, GreaterEqual, 1, 2)
 
 ACU_Fixture* unsignedShortFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "unsigned short tests");
+    acu_initFixture(fixture, "unsigned short tests");
 
-    acu_fixtureAddTestCase(fixture, "unsigned short Equal", testunsignedShortEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned short NotEqual", testunsignedShortNotEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned short Less", testunsignedShortLess);
-    acu_fixtureAddTestCase(fixture, "unsigned short LessEqual", testunsignedShortLessEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned short LessEqualEq", testunsignedShortLessEqualEq);
-    acu_fixtureAddTestCase(fixture, "unsigned short Greater", testunsignedShortGreater);
-    acu_fixtureAddTestCase(fixture, "unsigned short GreaterEqualEq", testunsignedShortGreaterEqualEq);
-    acu_fixtureAddTestCase(fixture, "unsigned short GreaterEqual", testunsignedShortGreaterEqual);
+    acu_addTestCase(fixture, "unsigned short Equal", testunsignedShortEqual);
+    acu_addTestCase(fixture, "unsigned short NotEqual", testunsignedShortNotEqual);
+    acu_addTestCase(fixture, "unsigned short Less", testunsignedShortLess);
+    acu_addTestCase(fixture, "unsigned short LessEqual", testunsignedShortLessEqual);
+    acu_addTestCase(fixture, "unsigned short LessEqualEq", testunsignedShortLessEqualEq);
+    acu_addTestCase(fixture, "unsigned short Greater", testunsignedShortGreater);
+    acu_addTestCase(fixture, "unsigned short GreaterEqualEq", testunsignedShortGreaterEqualEq);
+    acu_addTestCase(fixture, "unsigned short GreaterEqual", testunsignedShortGreaterEqual);
 
-    acu_fixtureAddTestCase(fixture, "unsigned short Equal failed", testFailedunsignedShortEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned short NotEqual failed", testFailedunsignedShortNotEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned short Less failed", testFailedunsignedShortLess);
-    acu_fixtureAddTestCase(fixture, "unsigned short LessEqual failed", testFailedunsignedShortLessEqual);
-    acu_fixtureAddTestCase(fixture, "unsigned short Greater failed", testFailedunsignedShortGreater);
-    acu_fixtureAddTestCase(fixture, "unsigned short GreaterEqual failed", testFailedunsignedShortGreaterEqual);
+    acu_addTestCase(fixture, "unsigned short Equal failed", testFailedunsignedShortEqual);
+    acu_addTestCase(fixture, "unsigned short NotEqual failed", testFailedunsignedShortNotEqual);
+    acu_addTestCase(fixture, "unsigned short Less failed", testFailedunsignedShortLess);
+    acu_addTestCase(fixture, "unsigned short LessEqual failed", testFailedunsignedShortLessEqual);
+    acu_addTestCase(fixture, "unsigned short Greater failed", testFailedunsignedShortGreater);
+    acu_addTestCase(fixture, "unsigned short GreaterEqual failed", testFailedunsignedShortGreaterEqual);
 
     return fixture;
 }

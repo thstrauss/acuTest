@@ -104,14 +104,14 @@ static void listRemoveElement(ACU_ExecuteEnv* environment, const void* context) 
 
 ACU_Fixture* listFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "list tests");
+    acu_initFixture(fixture, "list tests");
 
-    acu_fixtureAddTestCase(fixture, "emptyList", emptyList);
-    acu_fixtureAddTestCase(fixture, "listInsert", listInsert);
-    acu_fixtureAddTestCase(fixture, "listRemoveNull", listRemoveNull);
-    acu_fixtureAddTestCase(fixture, "listRemoveElement", listRemoveElement);
+    acu_addTestCase(fixture, "emptyList", emptyList);
+    acu_addTestCase(fixture, "listInsert", listInsert);
+    acu_addTestCase(fixture, "listRemoveNull", listRemoveNull);
+    acu_addTestCase(fixture, "listRemoveElement", listRemoveElement);
 
     return fixture;
 }

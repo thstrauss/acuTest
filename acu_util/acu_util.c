@@ -24,8 +24,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <math.h>
 
 #include "acu_util.h"
+#include "acu_hstb.h"
 
 extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 
@@ -55,14 +57,14 @@ static void defaultErrorHandler(enum ACU_Level level, const char* message) {
     }
 }
 
-ACU_ErrorHandlerFunc* acu_errorHandler = defaultErrorHandler;
+ACU_ErrorHandlerFunc* __acu_errorHandler = defaultErrorHandler;
 
 void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler)
 {
     if (errorHandler) {
-        acu_errorHandler = errorHandler;
+        __acu_errorHandler = errorHandler;
     } else {
-        acu_errorHandler = defaultErrorHandler;
+        __acu_errorHandler = defaultErrorHandler;
     }
 }
 
@@ -114,12 +116,97 @@ int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...)
     return result;
 }
 
-int __acu_allocCount = 0;
+ACU_HashTable* __allocTable = NULL;
+static unsigned int __shift = 3;
 
-void* acu_emalloc(size_t size) {
+typedef struct Block_ {
+    void* p;
+    size_t size;
+    const char* format;
+    const char* fileName;
+    int line;
+} Block;
+
+static unsigned int hash(const void* key) {
+    const Block* block = key;
+    return (unsigned int) ((size_t) block->p) >> __shift;
+}
+
+static int match(const void* key1, const void* key2) {
+    const Block* block1 = key1;
+    const Block* block2 = key2;
+    return block1->p == block2->p;
+}
+
+static void destroy(void* data) {
+    free(data);
+}
+
+static void __freeAllocTable(void) {
+    if (__allocTable) {
+        acu_destroyHashTable(__allocTable);
+        free(__allocTable);
+        __allocTable = NULL;
+    }
+}
+
+void acu_enabledTrackMemory(int enabled)
+{
+    if (enabled) {
+    	ACU_HashTable* allocTable;
+        __freeAllocTable();
+        allocTable = malloc(sizeof(ACU_HashTable));
+        __shift = (int) (log(sizeof(void*)+1.0) / log(2.0));
+        allocTable = malloc(sizeof(ACU_HashTable));
+        acu_initHashTable(allocTable, 2003, hash, match, destroy);
+        __allocTable = allocTable;
+    }
+    else {
+        __freeAllocTable();
+    }
+}
+
+static void report(const void* data, void* visitorContext) {
+    const Block* block = data;
+    char buffer1[512];
+    char buffer2[256];
+    acu_vsprintf_s(buffer2, sizeof buffer2, block->format, block->p);
+    acu_printf_s(buffer1, sizeof buffer1, "\n\r%s:%d size = %ld: %s", block->fileName, block->line, block->size, buffer2);
+    UNUSED(visitorContext);
+}
+
+__EXPORT void acu_reportTrackMemory(void)
+{
+    if (__allocTable) {
+        ACU_HashTableVisitor visitor;
+        visitor.visitor = report;
+        visitor.context = NULL;
+        acu_acceptHashTable(__allocTable, &visitor);
+    }
+}
+
+void* __addMallocToAllocTable(void* p, size_t size, const char* format, const char* fileName, int line) {
+    if (__allocTable) {
+        Block* block = (Block*)malloc(sizeof(Block));
+        if (block) {
+            ACU_HashTable* allocTable;
+            block->p = p;
+            block->format = format;
+            block->size = size;
+            block->fileName = fileName;
+            block->line = line;
+            allocTable = __allocTable;
+            __allocTable = NULL;
+            acu_insertHashTable(allocTable, block);
+            __allocTable = allocTable;
+        }
+    }
+    return p;
+}
+
+void* __acu_emalloc(size_t size) {
     void* p = malloc(size);
     if (p) {
-        __acu_allocCount++;
         return p;
     }
     acu_eprintf("acu_emalloc of %u bytes failed:", size);
@@ -128,12 +215,42 @@ void* acu_emalloc(size_t size) {
 
 __EXPORT void acu_free(void* block)
 {
-    __acu_allocCount--;
+    if (__allocTable) {
+        ACU_HashTable* allocTable;
+        Block key;
+        Block* out = &key;
+        key.p = block;
+        allocTable = __allocTable;
+        __allocTable = NULL;
+        if (acu_removeHashTable(allocTable, (void*) &out) == 0) {
+            free(out);
+        }
+        __allocTable = allocTable;
+    }
     free(block);
 }
 
-__EXPORT int acu_getAllocCount(void)
-{
-    return __acu_allocCount;
+long acu_prime(long n) {
+    long i, j; 
+    if (!(n & 1)) {
+        n--;
+    }
+
+    for (i = n; i >= 2; i -= 2) {
+        double sqrtI;
+        if (i % 2 == 0) {
+            continue;
+        }
+        sqrtI = sqrt(i);
+        for (j = 3; j <= sqrtI; j += 2) {
+            if (i % j == 0) {
+                break;
+            }
+        }
+        if (j > sqrtI) {
+            return i;
+        }
+    }
+    return 2;
 }
 

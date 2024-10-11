@@ -74,16 +74,16 @@ static void noMatchTest(ACU_ExecuteEnv* environment, const void* context) {
 
 ACU_Fixture* matchFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "match Tests");
-    acu_fixtureAddTestCase(fixture, "Match test", matchTest);
-    acu_fixtureAddTestCase(fixture, "Star Match test", starMatchTest);
-    acu_fixtureAddTestCase(fixture, "Not Start Match test", notStartMatchTest);
-    acu_fixtureAddTestCase(fixture, "Start Match test", startMatchTest);
-    acu_fixtureAddTestCase(fixture, "No Match test", noMatchTest);
-    acu_fixtureAddTestCase(fixture, "End Match test", endMatchTest);
-    acu_fixtureAddTestCase(fixture, "No End Match test", noEndMatchTest);
+    acu_initFixture(fixture, "match Tests");
+    acu_addTestCase(fixture, "Match test", matchTest);
+    acu_addTestCase(fixture, "Star Match test", starMatchTest);
+    acu_addTestCase(fixture, "Not Start Match test", notStartMatchTest);
+    acu_addTestCase(fixture, "Start Match test", startMatchTest);
+    acu_addTestCase(fixture, "No Match test", noMatchTest);
+    acu_addTestCase(fixture, "End Match test", endMatchTest);
+    acu_addTestCase(fixture, "No End Match test", noEndMatchTest);
 
     return fixture;
 }

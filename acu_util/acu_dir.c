@@ -48,8 +48,8 @@ void acu_filesInit(ACU_Files* files)
 void acu_filesDestroy(ACU_Files* files)
 {
     acu_destroyList(files->fileList);
+    acu_free(files->fileList);
     files->fileList = NULL;
-    acu_free(files);
 }
 
 void acu_filesAccept(const ACU_Files* files, ACU_FilesVisitor* visitor) {

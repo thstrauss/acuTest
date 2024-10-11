@@ -58,13 +58,13 @@ __EXPORT ACU_Entry* acu_init(void);
 __EXPORT ACU_Entry* cup_load(const char* cu_name);
 __EXPORT void cup_unload(ACU_Entry* entry);
 
-__EXPORT ACU_Entry* acu_entryMalloc(void);
-__EXPORT void acu_entryInit(ACU_Entry* entry, ACU_Fixture* fixture);
-__EXPORT void acu_entryDestroy(ACU_Entry* entry);
+__EXPORT ACU_Entry* acu_mallocEntry(void);
+__EXPORT void acu_initEntry(ACU_Entry* entry, ACU_Fixture* fixture);
+__EXPORT void acu_destroyEntry(ACU_Entry* entry);
 
 /*
 Executes the tests in the plug-in.
 */
-__EXPORT void acu_entryExecute(const ACU_Entry* entry, ACU_Progress* progress);
+__EXPORT void acu_executeEntry(const ACU_Entry* entry, ACU_Progress* progress);
  
 #endif

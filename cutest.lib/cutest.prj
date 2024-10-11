@@ -21,6 +21,7 @@
 
 ..\lib\cutest.lib
 
+.C [ -8- ]
 .C [ -I..\acu_util ]
 .C [ -I..\acu_test ]
 .C [ -P ]
@@ -28,6 +29,7 @@
 
 =
 
+asrt_tst.c
 acu_entr.c (..\acu_test\acu_ldr.h)
 char_tst.c (char_tst.h, tst_bed.h)
 dir_tst.c (dir_tst.h)
@@ -52,3 +54,4 @@ ulng_tst.c (ulng_tst.h, tst_bed.h)
 usht_tst.c (usht_tst.h, tst_bed.h)
 util_tst.c (util_tst.h)
 uuid_tst.c (uuid_tst.h)
+misc_tst.c

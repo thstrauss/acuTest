@@ -43,25 +43,25 @@ TESTBED_FAILED(, signedChar, GreaterEqual, 'b', 'c')
 
 ACU_Fixture* signedCharFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "signed char tests");
+    acu_initFixture(fixture, "signed char tests");
 
-    acu_fixtureAddTestCase(fixture, "signed char Equal", testsignedCharEqual);
-    acu_fixtureAddTestCase(fixture, "signed char NotEqual", testsignedCharNotEqual);
-    acu_fixtureAddTestCase(fixture, "signed char Less", testsignedCharLess);
-    acu_fixtureAddTestCase(fixture, "signed char LessEqual", testsignedCharLessEqual);
-    acu_fixtureAddTestCase(fixture, "signed char LessEqualEq", testsignedCharLessEqualEq);
-    acu_fixtureAddTestCase(fixture, "signed char Greater", testsignedCharGreater);
-    acu_fixtureAddTestCase(fixture, "signed char GreaterEqualEq", testsignedCharGreaterEqualEq);
-    acu_fixtureAddTestCase(fixture, "signed char GreaterEqual", testsignedCharGreaterEqual);
+    acu_addTestCase(fixture, "signed char Equal", testsignedCharEqual);
+    acu_addTestCase(fixture, "signed char NotEqual", testsignedCharNotEqual);
+    acu_addTestCase(fixture, "signed char Less", testsignedCharLess);
+    acu_addTestCase(fixture, "signed char LessEqual", testsignedCharLessEqual);
+    acu_addTestCase(fixture, "signed char LessEqualEq", testsignedCharLessEqualEq);
+    acu_addTestCase(fixture, "signed char Greater", testsignedCharGreater);
+    acu_addTestCase(fixture, "signed char GreaterEqualEq", testsignedCharGreaterEqualEq);
+    acu_addTestCase(fixture, "signed char GreaterEqual", testsignedCharGreaterEqual);
 
-    acu_fixtureAddTestCase(fixture, "signed char Equal failed", testFailedsignedCharEqual);
-    acu_fixtureAddTestCase(fixture, "signed char NotEqual failed", testFailedsignedCharNotEqual);
-    acu_fixtureAddTestCase(fixture, "signed char Less failed", testFailedsignedCharLess);
-    acu_fixtureAddTestCase(fixture, "signed char LessEqual failed", testFailedsignedCharLessEqual);
-    acu_fixtureAddTestCase(fixture, "signed char Greater failed", testFailedsignedCharGreater);
-    acu_fixtureAddTestCase(fixture, "signed char GreaterEqual failed", testFailedsignedCharGreaterEqual);
+    acu_addTestCase(fixture, "signed char Equal failed", testFailedsignedCharEqual);
+    acu_addTestCase(fixture, "signed char NotEqual failed", testFailedsignedCharNotEqual);
+    acu_addTestCase(fixture, "signed char Less failed", testFailedsignedCharLess);
+    acu_addTestCase(fixture, "signed char LessEqual failed", testFailedsignedCharLessEqual);
+    acu_addTestCase(fixture, "signed char Greater failed", testFailedsignedCharGreater);
+    acu_addTestCase(fixture, "signed char GreaterEqual failed", testFailedsignedCharGreaterEqual);
 
     return fixture;
 }

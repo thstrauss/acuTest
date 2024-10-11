@@ -56,7 +56,7 @@ static void collectTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_TestCases tests;
 
     ACU_List list;
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
     acu_initList(&list, (ACU_ListDestroyFunc*) NULL);
 
@@ -64,28 +64,27 @@ static void collectTest(ACU_ExecuteEnv* environment, const void* context) {
     collect.context = &tests;
 
 
-    acu_fixtureInit(fixture, "testFixture");
-    acu_fixtureSetContext(fixture, "context");
+    acu_initFixture(fixture, "testFixture");
+    acu_setFixtureContext(fixture, "context");
 
-    acu_fixtureAddTestCase(fixture, "test1", test1);
-    acu_fixtureAddTestCase(fixture, "test2", test2);
-    acu_fixtureAddTestCase(fixture, "test3", test3);
+    acu_addTestCase(fixture, "test1", test1);
+    acu_addTestCase(fixture, "test2", test2);
+    acu_addTestCase(fixture, "test3", test3);
 
-    acu_fixtureAccept(fixture, &collect);
+    acu_acceptFixture(fixture, &collect);
 
     ACU_assert(environment, size_t, Equal, list.size, 3, "Wrong number of tests");
 
     acu_destroyList(&list);
     acu_fixtureDestroy(fixture);
-    acu_free(fixture);
     
     UNUSED(context);
 }
 
 ACU_Fixture* reportFixture(void) {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "report tests");
-    acu_fixtureAddTestCase(fixture, "collect", collectTest);
+    acu_initFixture(fixture, "report tests");
+    acu_addTestCase(fixture, "collect", collectTest);
     return fixture;
 }

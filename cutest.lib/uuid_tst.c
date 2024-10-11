@@ -65,12 +65,12 @@ static void compareTest(ACU_ExecuteEnv* environment, const void* context) {
 
 ACU_Fixture* uuidFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "uuid Tests");
+    acu_initFixture(fixture, "uuid Tests");
 
-    acu_fixtureAddTestCase(fixture, "uuid test", uuidTest);
-    acu_fixtureAddTestCase(fixture, "compare uuid test", compareTest);
+    acu_addTestCase(fixture, "uuid test", uuidTest);
+    acu_addTestCase(fixture, "compare uuid test", compareTest);
 
 
     return fixture;

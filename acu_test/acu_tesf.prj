@@ -1,6 +1,6 @@
-..\lib\acu_test.lib
+..\lib\acu_tesf.lib
 
-.C [ -8- ]
+.C [ -8 ]
 .C [ -P ]
 .C [ -I..\acu_util ]
 .L [ -J ] 

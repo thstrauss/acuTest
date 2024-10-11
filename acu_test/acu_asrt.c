@@ -39,11 +39,48 @@ static size_t acu_estimateBufferLength(const char* format, va_list args) {
     char* formatPtr = (char*) format;
 
     for (; *formatPtr != '\0'; formatPtr++) {
+        int longArg = 0;
+        int shortArg = 0;
         if (*formatPtr == '%') {
             formatPtr++;
+            if (*formatPtr == 'l') { 
+                longArg = 1;
+                formatPtr++;
+            }
+            if (*formatPtr == 'h') {
+                shortArg = 1;
+                formatPtr++;
+            }
             if (*formatPtr == 's' && *formatPtr != '\0') {
                 char* arg = (char*)va_arg(args, char*);
                 bufferSize += strlen(arg);
+            } else if (*formatPtr == 'f' || *formatPtr == 'e' && *formatPtr != '\0') {
+                if (longArg) {
+                    double d = (double) va_arg(args, double);
+                    UNUSED(d);
+                } else {
+                    float f = (float) va_arg(args, double);
+                    UNUSED(f);
+                }
+                formatPtr++;
+                bufferSize += 16;
+            } else if ((*formatPtr == 'd' || *formatPtr == 'u') && *formatPtr != '\0') {
+                if (longArg) {
+                    long l = (long)va_arg(args, long);
+                    UNUSED(l);
+                } else if (shortArg) {
+                    short l = (short)va_arg(args, short);
+                    UNUSED(l);
+                } else {
+                    int i = (int)va_arg(args, int);
+                    UNUSED(i);
+                }
+                formatPtr++;
+                bufferSize += 16;
+            } else if (*formatPtr == 'c' && *formatPtr != '\0') {
+                char c = (char)va_arg(args, char);
+                UNUSED(c);
+                bufferSize += 1;
             } else if (*formatPtr != '%' && *formatPtr != '\0') {
                 void* temp = va_arg(args, void*);
                 bufferSize += 32;
@@ -93,7 +130,7 @@ static enum ACU_TestResult acu_##type##op(const ACU_Types* actual, const ACU_Typ
     return actual->type##Type opcode expected->type##Type; \
 } \
 static char* acu_##type##op##FormatMessage(const ACU_AssertParameter* parameter) { \
-    return acu_sFormatMessage(STR(actual value format not opcode to format: %s), parameter->values.actual.type##Type, parameter->values.expected.type##Type, parameter->message); \
+    return acu_sFormatMessage(STR(actual value format not opcode to format: %s), (type) parameter->values.actual.type##Type, (type) parameter->values.expected.type##Type, parameter->message); \
 } \
 __EXPORT const ACU_Funcs acu_##type##op##Funcs = {acu_##type##op, acu_##type##op##FormatMessage, NULL};
 

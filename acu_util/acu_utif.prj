@@ -1,6 +1,6 @@
-..\lib\acu_util.lib
+..\lib\acu_utif.lib
 
-.C [ -8- ]
+.C [ -8 ]
 .C [ -P ]
 .L [ -J ] 
 

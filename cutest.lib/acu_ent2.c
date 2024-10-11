@@ -25,12 +25,12 @@
 #include <acu_tryc.h>
 
 ACU_Entry* acu_init() {
-	ACU_Fixture* suite = acu_fixtureMalloc();
-    ACU_Entry* entry = acu_entryMalloc();
+	ACU_Fixture* suite = acu_mallocFixture();
+    ACU_Entry* entry = acu_mallocEntry();
     
-    acu_entryInit(entry, suite);
+    acu_initEntry(entry, suite);
     
-    acu_fixtureInit(suite, "empty");
+    acu_initFixture(suite, "empty");
         
 	return entry;
 }

@@ -35,15 +35,15 @@ static void simpleTestCase(ACU_ExecuteEnv* environment, const void* context) {
 
 ACU_Fixture* sampleFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
-    acu_fixtureInit(fixture, "sample tests");
-    acu_fixtureAddTestCase(fixture, "simpleTestCase", simpleTestCase);
+    ACU_Fixture* fixture = acu_mallocFixture();
+    acu_initFixture(fixture, "sample tests");
+    acu_addTestCase(fixture, "simpleTestCase", simpleTestCase);
     return fixture;
 }
 
 int main(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
     ACU_ReportHelper reportHelper = { NULL, NULL };
     ACU_ReportVisitor report = { acu_report, NULL };
     ACU_Progress progress = { acu_progress , NULL };
@@ -51,14 +51,13 @@ int main(void)
 
     report.context = &reportHelper;
 
-    acu_fixtureInit(fixture, "Sample test suite");
-    acu_fixtureAddChildFixture(fixture, sampleFixture());
+    acu_initFixture(fixture, "Sample test suite");
+    acu_addChildFixture(fixture, sampleFixture());
 
-    result = acu_fixtureExecute(fixture, &progress);
+    result = acu_executeFixture(fixture, &progress);
 
-    acu_fixtureAccept(fixture, &report);
+    acu_acceptFixture(fixture, &report);
 
     acu_fixtureDestroy(fixture);
-    acu_free(fixture);
     return result != ACU_TEST_PASSED ? 2 : 0;
 }

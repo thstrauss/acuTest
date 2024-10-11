@@ -43,25 +43,25 @@ TESTBED_FAILED(, long, GreaterEqual, 1, 2)
 
 ACU_Fixture* longFixture(void)
 {
-    ACU_Fixture* fixture = acu_fixtureMalloc();
+    ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_fixtureInit(fixture, "long tests");
+    acu_initFixture(fixture, "long tests");
 
-    acu_fixtureAddTestCase(fixture, "long Equal", testlongEqual);
-    acu_fixtureAddTestCase(fixture, "long NotEqual", testlongNotEqual);
-    acu_fixtureAddTestCase(fixture, "long Less", testlongLess);
-    acu_fixtureAddTestCase(fixture, "long LessEqual", testlongLessEqual);
-    acu_fixtureAddTestCase(fixture, "long LessEqualEq", testlongLessEqualEq);
-    acu_fixtureAddTestCase(fixture, "long Greater", testlongGreater);
-    acu_fixtureAddTestCase(fixture, "long GreaterEqualEq", testlongGreaterEqualEq);
-    acu_fixtureAddTestCase(fixture, "long GreaterEqual", testlongGreaterEqual);
+    acu_addTestCase(fixture, "long Equal", testlongEqual);
+    acu_addTestCase(fixture, "long NotEqual", testlongNotEqual);
+    acu_addTestCase(fixture, "long Less", testlongLess);
+    acu_addTestCase(fixture, "long LessEqual", testlongLessEqual);
+    acu_addTestCase(fixture, "long LessEqualEq", testlongLessEqualEq);
+    acu_addTestCase(fixture, "long Greater", testlongGreater);
+    acu_addTestCase(fixture, "long GreaterEqualEq", testlongGreaterEqualEq);
+    acu_addTestCase(fixture, "long GreaterEqual", testlongGreaterEqual);
 
-    acu_fixtureAddTestCase(fixture, "long Equal failed", testFailedlongEqual);
-    acu_fixtureAddTestCase(fixture, "long NotEqual failed", testFailedlongNotEqual);
-    acu_fixtureAddTestCase(fixture, "long Less failed", testFailedlongLess);
-    acu_fixtureAddTestCase(fixture, "long LessEqual failed", testFailedlongLessEqual);
-    acu_fixtureAddTestCase(fixture, "long Greater failed", testFailedlongGreater);
-    acu_fixtureAddTestCase(fixture, "long GreaterEqual failed", testFailedlongGreaterEqual);
+    acu_addTestCase(fixture, "long Equal failed", testFailedlongEqual);
+    acu_addTestCase(fixture, "long NotEqual failed", testFailedlongNotEqual);
+    acu_addTestCase(fixture, "long Less failed", testFailedlongLess);
+    acu_addTestCase(fixture, "long LessEqual failed", testFailedlongLessEqual);
+    acu_addTestCase(fixture, "long Greater failed", testFailedlongGreater);
+    acu_addTestCase(fixture, "long GreaterEqual failed", testFailedlongGreaterEqual);
 
     return fixture;
 }
