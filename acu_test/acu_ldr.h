@@ -36,6 +36,7 @@ typedef struct ACU_Entry_ {
     ACU_getVersionFunc* getAcuTestVersion;
     ACU_setWriteHandlerFunc* setWriteHandler;
     ACU_setFrameStackFunc* setFrameStack;
+    ACU_setAllocTableFunc* setAllocTable;
     ACU_Plugin* plugin;
 } ACU_Entry;
 

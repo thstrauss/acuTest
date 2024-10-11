@@ -28,6 +28,7 @@
 
 #include "acu_tryc.h"
 #include "acu_stck.h"
+#include <acu_util.h>
 
 typedef void ACU_exitFunc(int errorCode);
 
@@ -47,6 +48,8 @@ void initFunc(ACU_Plugin* plugin, void* initContext) {
     pluginContext->entry = init();
 
     pluginContext->entry->setFrameStack(acu_getFrameStack());
+    pluginContext->entry->setAllocTable(acu_getAllocTable());
+
     setExit(exit);
 
     pluginContext->entry->plugin = plugin;

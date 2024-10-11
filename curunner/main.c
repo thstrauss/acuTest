@@ -96,7 +96,7 @@ int main(int argc, const char* argv[]) {
     acu_free(files);
 
     acu_printf_s(buffer, sizeof(buffer), "%d of %d failed.\n\r", result.summary.failedTestCases, result.summary.totalTestCases);
-    
+
     acu_freeFrameStack();
 
     acu_reportTrackMemory();
