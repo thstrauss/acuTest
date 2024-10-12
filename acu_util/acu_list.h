@@ -53,7 +53,7 @@ __EXPORT ACU_ListElement* acu_listHead(const ACU_List* list);
 
 __EXPORT ACU_ListElement* acu_listNext(ACU_ListElement* element);
 
-__EXPORT ACU_List* acu_mallocList(void);
+#define acu_mallocList() ((ACU_List*) acu_emalloc(sizeof(ACU_List)))
 
 __EXPORT void acu_destroyList(ACU_List* list);
 

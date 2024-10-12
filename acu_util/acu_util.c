@@ -148,7 +148,7 @@ static int match(const void* key1, const void* key2) {
 
 static void destroy(void* data) {
     Block* block = data;
-    acu_free(block->fileName);
+    free(block->fileName);
     free(data);
 }
 
@@ -203,7 +203,7 @@ void* __addMallocToAllocTable(void* p, size_t size, const char* fileName, int li
             block->line = line;
             allocTable = __allocTable;
             __allocTable = NULL;
-            block->fileName = acu_estrdup(fileName);
+            block->fileName = __acu_estrdup(fileName);
             acu_insertHashTable(allocTable, block);
             __allocTable = allocTable;
         }
