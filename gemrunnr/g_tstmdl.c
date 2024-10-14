@@ -89,7 +89,7 @@ void gem_content(const CellSize* cellSize, const TestModel* testModel) {
     int numberOfLines;
     ACU_ListElement* testElement;
         
-    numberOfLines = (int) ((testModel->testList) ? testModel->testList->size : 0);
+    numberOfLines = (int) ((testModel->testList) ? acu_getListSize(testModel->testList) : 0);
     testModel->content = (OBJECT*) acu_emalloc(sizeof(OBJECT)*(numberOfLines+1));
     
     memcpy(&testModel->content[0], &box, sizeof(OBJECT));
@@ -145,7 +145,7 @@ static void gem_collectTestCases(const TestModel* testModel){
 void gem_freeContent(const TestModel* testModel) {
     if (testModel->content) {
         int i;
-        int numberOfLines = (int) ((testModel->testList) ? testModel->testList->size : 0);
+        int numberOfLines = (int) ((testModel->testList) ? acu_getListSize(testModel->testList) : 0);
         for (i = 0; i < numberOfLines; i++) {
             acu_free(testModel->content[i + 1].ob_spec.free_string);
         }

@@ -42,7 +42,7 @@ static void emptyHashTable(ACU_ExecuteEnv* environment, const void* context) {
 
     acu_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*) NULL);
 
-    ACU_assert(environment, size_t, Equal, hashtable.size, 0, "Not empty")
+    ACU_assert(environment, size_t, Equal, acu_getHashTableSize(&hashtable), 0, "Not empty")
 
     acu_destroyHashTable(&hashtable);
     UNUSED(context);
@@ -54,7 +54,7 @@ static void empty2HashTable(ACU_ExecuteEnv* environment, const void* context) {
     hashtable = acu_mallocHashTable();
     acu_initHashTable(hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*)NULL);
 
-    ACU_assert(environment, size_t, Equal, hashtable->size, 0, "Not empty")
+    ACU_assert(environment, size_t, Equal, acu_getHashTableSize(hashtable), 0, "Not empty")
 
     acu_destroyHashTable(hashtable);
     acu_free(hashtable);
@@ -83,11 +83,10 @@ static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
     }
 
     i = 15;
-    lookupValue = &i;
 
-    acu_lookupHashTable(&hashtable, (void**) &lookupValue);
+    lookupValue = acu_lookupHashTable(&hashtable, &i);
 
-    ACU_assert(environment, size_t, Equal, hashtable.size, 40, "Not empty");
+    ACU_assert(environment, size_t, Equal, acu_getHashTableSize(&hashtable), 40, "Not empty");
 
     ACU_assert_ptrEqual(environment, lookupValue, &values[15], "wrong value looked up.");
 

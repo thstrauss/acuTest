@@ -148,7 +148,7 @@ static int match(const void* key1, const void* key2) {
 
 static void destroy(void* data) {
     Block* block = data;
-    free(block->fileName);
+    free((void*) block->fileName);
     free(data);
 }
 
@@ -160,6 +160,15 @@ static void __freeAllocTable(void) {
     }
 }
 
+static void* createBlock(void* key) {
+    Block* block = (Block*)malloc(sizeof(Block));
+    if (block) {
+        block->p = ((Block*)key)->p;
+    }
+    return block;
+}
+
+
 void acu_enabledTrackMemory(int enabled)
 {
     if (enabled) {
@@ -169,6 +178,7 @@ void acu_enabledTrackMemory(int enabled)
         __shift = (int) (log(sizeof(void*)+1.0) / log(2.0));
         allocTable = malloc(sizeof(ACU_HashTable));
         acu_initHashTable(allocTable, 2003, hash, match, destroy);
+        allocTable->createData = createBlock;
         __allocTable = allocTable;
     }
     else {
@@ -195,18 +205,17 @@ __EXPORT void acu_reportTrackMemory(void)
 
 void* __addMallocToAllocTable(void* p, size_t size, const char* fileName, int line) {
     if (__allocTable) {
-        Block* block = (Block*)malloc(sizeof(Block));
-        if (block) {
-            ACU_HashTable* allocTable;
-            block->p = p;
-            block->size = size;
-            block->line = line;
-            allocTable = __allocTable;
-            __allocTable = NULL;
-            block->fileName = __acu_estrdup(fileName);
-            acu_insertHashTable(allocTable, block);
-            __allocTable = allocTable;
-        }
+        Block key;
+        Block* block;
+        ACU_HashTable* allocTable;
+        key.p = p;
+        allocTable = __allocTable;
+        __allocTable = NULL;
+        block = acu_lookupOrAddHashTable(allocTable, &key);
+        __allocTable = allocTable;
+        block->size = size;
+        block->fileName = __acu_estrdup(fileName);
+        block->line = line;
     }
     return p;
 }
@@ -220,17 +229,18 @@ void* __acu_emalloc(size_t size) {
     return NULL;
 }
 
-__EXPORT void acu_free(void* block)
+void acu_free(void* block)
 {
     if (__allocTable) {
         ACU_HashTable* allocTable;
+        void* out;
         Block key;
-        Block* out = &key;
         key.p = block;
         allocTable = __allocTable;
         __allocTable = NULL;
-        if (acu_removeHashTable(allocTable, (void*) &out) == 0) {
-            free(out);
+        out = acu_removeHashTable(allocTable, &key);
+        if (out) {
+            destroy(out);
         }
         __allocTable = allocTable;
     }

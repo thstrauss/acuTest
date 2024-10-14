@@ -73,7 +73,7 @@ static void collectTest(ACU_ExecuteEnv* environment, const void* context) {
 
     acu_acceptFixture(fixture, &collect);
 
-    ACU_assert(environment, size_t, Equal, list.size, 3, "Wrong number of tests");
+    ACU_assert(environment, size_t, Equal, acu_getListSize(&list), 3, "Wrong number of tests");
 
     acu_destroyList(&list);
     acu_fixtureDestroy(fixture);

@@ -43,7 +43,6 @@ typedef struct ACU_ListVisitor_ {
 typedef struct ACU_List_ {
     ACU_ListElement* head;
     ACU_ListElement* tail;
-    size_t size;
     ACU_ListDestroyFunc* destroy;
 } ACU_List;
 
@@ -66,5 +65,7 @@ __EXPORT int acu_insertNextList(ACU_List* list, ACU_ListElement* element, const 
 __EXPORT int acu_removeNextList(ACU_List* list, ACU_ListElement* element, void** data);
 
 __EXPORT void acu_acceptList(const ACU_List* list, ACU_ListVisitor* visitor);
+
+__EXPORT size_t acu_getListSize(const ACU_List* list);
 
 #endif 
