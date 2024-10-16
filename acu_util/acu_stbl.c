@@ -27,6 +27,7 @@
 
 typedef struct ACU_StringTableData_ {
     const char* string;
+    int referenceCount;
 } ACU_StringTableData;
 
 static unsigned int acu_stringHash(const void* key) {
@@ -70,6 +71,7 @@ const char* acu_acquireString(ACU_HashTable* hashTable, const char* string)
     key.string = string;
     stringTableData = acu_lookupOrAddHashTable(hashTable, &key);
     if (stringTableData) {
+        stringTableData->referenceCount++;
         return stringTableData->string;
     }
     return NULL;
