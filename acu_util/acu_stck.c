@@ -25,18 +25,23 @@
 #include "acu_stck.h"
 #include "acu_util.h"
 
-size_t acu_stackSize(const ACU_Stack* stack)
+size_t acu_getStackSize(const ACU_Stack* stack)
 {
-    return stack->size;
+    size_t size = 0;
+    ACU_StackElement* stackElement = stack->head;
+    while (stackElement) {
+        size++;
+        stackElement = stackElement->next;
+    }
+    return size;
 }
 
-void acu_stackInit(ACU_Stack* stack, ACU_StackDataDestroy destroy) {
-    stack->size = 0;
+void acu_initStack(ACU_Stack* stack, ACU_StackDataDestroy destroy) {
     stack->destroy = destroy;
     stack->head = NULL;
 }
 
-void* acu_stackPeek(const ACU_Stack* stack)
+void* acu_peekStack(const ACU_Stack* stack)
 {
     return (stack->head) ? stack->head->data : NULL;
 }
@@ -46,14 +51,14 @@ ACU_Stack* acu_stackMalloc(void)
     return acu_emalloc(sizeof(ACU_Stack));
 }
 
-void acu_stackDestroy(ACU_Stack* stack)
+void acu_destroyStack(ACU_Stack* stack)
 {
-    while (stack->size) {
-        acu_stackDrop(stack);
+    while (stack->head) {
+        acu_dropStack(stack);
     }
 }
 
-int acu_stackPush(ACU_Stack* stack, void* data)
+int acu_pushStack(ACU_Stack* stack, void* data)
 {
     ACU_StackElement* newElement = acu_emalloc(sizeof(ACU_StackElement));
     if (newElement) {
@@ -61,49 +66,38 @@ int acu_stackPush(ACU_Stack* stack, void* data)
 
         newElement->next = stack->head;
         stack->head = newElement;
-
-        stack->size++;
-        return 0;
     }
-    return -1;
+    return !newElement;
 }
 
-__EXPORT void acu_stackPushElement(ACU_Stack* stack, ACU_StackElement* newElement)
+__EXPORT void acu_pushStackElement(ACU_Stack* stack, ACU_StackElement* newElement)
 {
     newElement->next = stack->head;
     stack->head = newElement;
-
-    stack->size++;
 }
 
-int acu_stackPop(ACU_Stack* stack, void** data)
+void* acu_popStack(ACU_Stack* stack)
 {
     ACU_StackElement* oldElement;
+    void* result;
 
-    if (!stack->size) {
-        if (data) {
-            *data = NULL;
-        }
-        return -1;
+    if (!stack->head) {
+        return NULL;
     }
 
     oldElement = stack->head;
-    if (data) {
-        *data = oldElement->data;
-    }
+    result = oldElement->data;
 
-    stack->head = stack->head->next;
+    stack->head = oldElement->next;
 
     acu_free(oldElement);
 
-    stack->size--;
-
-    return 0;
+    return result;
 }
 
-__EXPORT int acu_stackDrop(ACU_Stack* stack)
+__EXPORT int acu_dropStack(ACU_Stack* stack)
 {
-    if (stack->size) {
+    if (stack->head) {
         ACU_StackElement* oldElement = stack->head;
         stack->head = oldElement->next;
 
@@ -111,20 +105,16 @@ __EXPORT int acu_stackDrop(ACU_Stack* stack)
             stack->destroy(oldElement->data);
         }
         acu_free(oldElement);
-        stack->size--;
 
-        return 0;
     }
-    return -1;
+    return !stack->head;
 }
 
-__EXPORT void acu_stackDropElement(ACU_Stack* stack)
+__EXPORT void acu_dropStackElement(ACU_Stack* stack)
 {
     if (stack->head) {
         ACU_StackElement* oldElement = stack->head;
         stack->head = oldElement->next;
-
-        stack->size--;
     }
-    }
+}
 

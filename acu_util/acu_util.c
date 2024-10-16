@@ -28,11 +28,14 @@
 
 #include "acu_util.h"
 #include "acu_hstb.h"
+#include "acu_stbl.h"
 
 extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 
 static char* programName = NULL;
 static ACU_HashTable* __allocTable = NULL;
+static ACU_HashTable* __stringTable = NULL;
+static int __acuMemoryTrackingEnabled = 0;
 static unsigned int __shift = 3;
 
 char* acu_progName(void) {
@@ -70,9 +73,14 @@ void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler)
     }
 }
 
-__EXPORT ACU_HashTable* acu_getAllocTable(void)
+ACU_HashTable* acu_getAllocTable(void)
 {
     return __allocTable;
+}
+
+int acu_isMemoryTrackingEnabled(void)
+{
+    return __acuMemoryTrackingEnabled;
 }
 
 void acu_setAllocTable(ACU_HashTable* allocTable)
@@ -148,11 +156,18 @@ static int match(const void* key1, const void* key2) {
 
 static void destroy(void* data) {
     Block* block = data;
-    free((void*) block->fileName);
+    if (__stringTable) {
+        acu_releaseString(__stringTable, block->fileName);
+    }
     free(data);
 }
 
 static void __freeAllocTable(void) {
+    if (__stringTable) {
+        acu_destroyHashTable(__stringTable);
+        free(__stringTable);
+        __stringTable = NULL;
+    }
     if (__allocTable) {
         acu_destroyHashTable(__allocTable);
         free(__allocTable);
@@ -172,18 +187,18 @@ static void* createBlock(void* key) {
 void acu_enabledTrackMemory(int enabled)
 {
     if (enabled) {
-    	ACU_HashTable* allocTable;
         __freeAllocTable();
-        allocTable = malloc(sizeof(ACU_HashTable));
         __shift = (int) (log(sizeof(void*)+1.0) / log(2.0));
-        allocTable = malloc(sizeof(ACU_HashTable));
-        acu_initHashTable(allocTable, 2003, hash, match, destroy);
-        allocTable->createData = createBlock;
-        __allocTable = allocTable;
+        __allocTable = malloc(sizeof(ACU_HashTable));
+        acu_initHashTable(__allocTable, 2003, hash, match, createBlock, destroy);
+
+        __stringTable = malloc(sizeof(ACU_HashTable));
+            acu_initStringTable(__stringTable);
     }
     else {
         __freeAllocTable();
     }
+    __acuMemoryTrackingEnabled = enabled;
 }
 
 static void report(const void* data, void* visitorContext) {
@@ -204,17 +219,15 @@ __EXPORT void acu_reportTrackMemory(void)
 }
 
 void* __addMallocToAllocTable(void* p, size_t size, const char* fileName, int line) {
-    if (__allocTable) {
+    if (__acuMemoryTrackingEnabled) {
         Block key;
         Block* block;
-        ACU_HashTable* allocTable;
         key.p = p;
-        allocTable = __allocTable;
-        __allocTable = NULL;
-        block = acu_lookupOrAddHashTable(allocTable, &key);
-        __allocTable = allocTable;
+        __acuMemoryTrackingEnabled = 0;
+        block = acu_lookupOrAddHashTable(__allocTable, &key);
+        block->fileName = acu_acquireString(__stringTable, fileName);
+        __acuMemoryTrackingEnabled = 1;
         block->size = size;
-        block->fileName = __acu_estrdup(fileName);
         block->line = line;
     }
     return p;
@@ -231,18 +244,16 @@ void* __acu_emalloc(size_t size) {
 
 void acu_free(void* block)
 {
-    if (__allocTable) {
-        ACU_HashTable* allocTable;
+    if (__acuMemoryTrackingEnabled) {
         void* out;
         Block key;
         key.p = block;
-        allocTable = __allocTable;
-        __allocTable = NULL;
-        out = acu_removeHashTable(allocTable, &key);
+        __acuMemoryTrackingEnabled = 0;
+        out = acu_removeHashTable(__allocTable, &key);
         if (out) {
             destroy(out);
         }
-        __allocTable = allocTable;
+        __acuMemoryTrackingEnabled = 1;
     }
     free(block);
 }

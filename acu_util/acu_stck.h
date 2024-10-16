@@ -35,25 +35,24 @@ typedef void ACU_StackDataDestroy(void* data);
 
 typedef struct ACU_Stack_ {
     ACU_StackElement* head;
-    size_t size;
     ACU_StackDataDestroy* destroy;
 } ACU_Stack;
 
-__EXPORT size_t acu_stackSize(const ACU_Stack* stack);
+__EXPORT size_t acu_getStackSize(const ACU_Stack* stack);
 
-__EXPORT void acu_stackInit(ACU_Stack* stack, ACU_StackDataDestroy destroy);
+__EXPORT void acu_initStack(ACU_Stack* stack, ACU_StackDataDestroy destroy);
 
-__EXPORT void* acu_stackPeek(const ACU_Stack* stack);
+__EXPORT void* acu_peekStack(const ACU_Stack* stack);
 
 __EXPORT ACU_Stack* acu_stackMalloc(void);
 
-__EXPORT void acu_stackDestroy(ACU_Stack* stack);
+__EXPORT void acu_destroyStack(ACU_Stack* stack);
 
-__EXPORT int acu_stackPush(ACU_Stack* stack, void* data);
-__EXPORT void acu_stackPushElement(ACU_Stack* stack, ACU_StackElement* element);
+__EXPORT int acu_pushStack(ACU_Stack* stack, void* data);
+__EXPORT void acu_pushStackElement(ACU_Stack* stack, ACU_StackElement* element);
 
-__EXPORT int acu_stackPop(ACU_Stack* stack, void** data);
-__EXPORT int acu_stackDrop(ACU_Stack* stack);
-__EXPORT void acu_stackDropElement(ACU_Stack* stack);
+__EXPORT void* acu_popStack(ACU_Stack* stack);
+__EXPORT int acu_dropStack(ACU_Stack* stack);
+__EXPORT void acu_dropStackElement(ACU_Stack* stack);
 
 #endif 

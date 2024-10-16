@@ -42,6 +42,7 @@
 #include "rslt_tst.h"
 #include "shrt_tst.h"
 #include "sizt_tst.h"
+#include "stck_tst.h"
 #include "str_tst.h"
 #include "tryc_tst.h"
 #include "uchr_tst.h"
@@ -75,6 +76,7 @@ ACU_Entry* acu_init() {
     acu_addChildFixture(suite, reportFixture());
     acu_addChildFixture(suite, shortFixture());
     acu_addChildFixture(suite, signedCharFixture());
+    acu_addChildFixture(suite, stackFixture());
     acu_addChildFixture(suite, strFixture());
     acu_addChildFixture(suite, size_tFixture());
     acu_addChildFixture(suite, tryCatchFixture());

@@ -46,7 +46,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
     environment.result = result;
     environment.exceptionFrame = &frame;
 
-    acu_stackPushElement(frameStack, &stackElement);
+    acu_pushStackElement(frameStack, &stackElement);
 
     acu_prepareResult(result);
     result->start = clock();
@@ -65,7 +65,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
         }
     } while (0);
     result->end = clock();
-    acu_stackDropElement(frameStack);
+    acu_dropStackElement(frameStack);
     if (progress && progress->progress) {
         progress->progress(testCase, progress->context);
     }

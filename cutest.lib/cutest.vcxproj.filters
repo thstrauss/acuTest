@@ -96,6 +96,9 @@
     <ClCompile Include="asrt_tst.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stck_tst.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="flt_test.h">
@@ -174,6 +177,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="asrt_tst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stck_tst.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

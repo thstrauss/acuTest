@@ -40,7 +40,7 @@ static int match(const void* key1, const void* key2) {
 static void emptyHashTable(ACU_ExecuteEnv* environment, const void* context) {
     ACU_HashTable hashtable;
 
-    acu_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*) NULL);
+    acu_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableCreateDataFunc*) NULL,  (ACU_HashTableDestroyFunc*) NULL);
 
     ACU_assert(environment, size_t, Equal, acu_getHashTableSize(&hashtable), 0, "Not empty")
 
@@ -52,7 +52,7 @@ static void empty2HashTable(ACU_ExecuteEnv* environment, const void* context) {
     ACU_HashTable* hashtable;
 
     hashtable = acu_mallocHashTable();
-    acu_initHashTable(hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*)NULL);
+    acu_initHashTable(hashtable, 10, hash, match, (ACU_HashTableCreateDataFunc*) NULL, (ACU_HashTableDestroyFunc*)NULL);
 
     ACU_assert(environment, size_t, Equal, acu_getHashTableSize(hashtable), 0, "Not empty")
 
@@ -75,7 +75,7 @@ static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
 
     ACU_HashTableVisitor visitor;
 
-    acu_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableDestroyFunc*) NULL);
+    acu_initHashTable(&hashtable, 10, hash, match, (ACU_HashTableCreateDataFunc*) NULL, (ACU_HashTableDestroyFunc*) NULL);
 
     for (i = 0; i < 40; i++) {
         values[i] = i;

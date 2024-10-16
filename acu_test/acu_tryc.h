@@ -78,7 +78,7 @@ __EXPORT void acu_freeFrameStack(void);
 #define ACU_TRY_CTX(CONTEXT) do { \
     ACU_Frame _##CONTEXT##_Frame; \
     _##CONTEXT##_Frame.exception = 0; \
-    acu_stackPush(acu_getFrameStack(), &_##CONTEXT##_Frame); \
+    acu_pushStack(acu_getFrameStack(), &_##CONTEXT##_Frame); \
     switch(setjmp(_##CONTEXT##_Frame.exceptionBuf) ) { \
          case 0: while(1) {
 
@@ -89,8 +89,8 @@ __EXPORT void acu_freeFrameStack(void);
 #define ACU_ETRY_CTX(CONTEXT) \
     { \
         ACU_Frame* f; \
-        acu_stackDrop(acu_getFrameStack()); \
-        f = acu_stackPeek(acu_getFrameStack()); \
+        acu_dropStack(acu_getFrameStack()); \
+        f = acu_peekStack(acu_getFrameStack()); \
         if (f && f->exception != 0) { \
             longjmp(f->exceptionBuf, f->exception != 0 ? f->exception : ACU_EXCEPTION_DEFAULT); \
         } \
@@ -98,7 +98,7 @@ __EXPORT void acu_freeFrameStack(void);
     break; } } while(0);
 
 #define ACU_THROW_CTX(CONTEXT, x) { \
-    ACU_Frame* f = acu_stackPeek(acu_getFrameStack()); \
+    ACU_Frame* f = acu_peekStack(acu_getFrameStack()); \
     _##CONTEXT##_Frame.exception=(x); \
     longjmp(f->exceptionBuf, f->exception != 0 ? f->exception : ACU_EXCEPTION_DEFAULT);}
 

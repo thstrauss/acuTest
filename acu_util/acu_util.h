@@ -54,6 +54,7 @@ __EXPORT void acu_setProgName(const char* progName);
 __EXPORT void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler);
 
 __EXPORT ACU_HashTable* acu_getAllocTable(void);
+__EXPORT int acu_isMemoryTrackingEnabled(void);
 __EXPORT void acu_setAllocTable(ACU_HashTable* allocTable);
 
 __EXPORT ACU_WriteHandlerFunc* acu_getWriteHandler(void);
@@ -73,13 +74,13 @@ __EXPORT void acu_wprintf(const char* format, ...);
 
 __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...);
 
-#define acu_estrdup(s) (acu_getAllocTable() ?(char*)__addMallocToAllocTable(__acu_estrdup((s)), strlen(s), __FILE__, __LINE__):__acu_estrdup((s))) 
+#define acu_estrdup(s) (acu_isMemoryTrackingEnabled() ?(char*)__addMallocToAllocTable(__acu_estrdup((s)), strlen(s), __FILE__, __LINE__):__acu_estrdup((s))) 
 __EXPORT char* __acu_estrdup(const char* s);
 
 __EXPORT void acu_enabledTrackMemory(int enabled);
 __EXPORT void acu_reportTrackMemory(void);
 
-#define acu_emalloc(n) (acu_getAllocTable() ? __addMallocToAllocTable(__acu_emalloc((n)), (n), __FILE__, __LINE__) :__acu_emalloc((n)))
+#define acu_emalloc(n) (acu_isMemoryTrackingEnabled() ? __addMallocToAllocTable(__acu_emalloc((n)), (n), __FILE__, __LINE__) :__acu_emalloc((n)))
 
 __EXPORT void* __acu_emalloc(size_t n);
 

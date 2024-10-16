@@ -94,7 +94,7 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_Frame frame;
     frame.exception = 0;
 
-    acu_stackPush(acu_getFrameStack(), &frame);
+    acu_pushStack(acu_getFrameStack(), &frame);
     testEnvironment->exceptionFrame = &frame;
 
     testEnvironment->result = &resultBuf;
@@ -109,7 +109,7 @@ static void visitFinallyTest(ACU_ExecuteEnv* environment, const void* context) {
             finally = 1;
         ACU_ETRY;
     }
-    acu_stackDrop(acu_getFrameStack());
+    acu_dropStack(acu_getFrameStack());
     ACU_assert(environment, int, Equal, frame.exception, ACU_EXCEPTION_ABORTED, "failed");
     ACU_assert(environment, int, Equal, testEnvironment->result->status, ACU_TEST_FAILED, "failed");
     ACU_assert(environment, int, Equal, visited, 1, "block visited");

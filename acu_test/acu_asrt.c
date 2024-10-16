@@ -301,7 +301,7 @@ static void acu_finalizeFailed(ACU_ExecuteEnv* environment, const ACU_AssertPara
     result->sourceFileName = parameter->sourceFileName; 
     result->sourceLine = parameter->sourceLine;
     environment->exceptionFrame->exception = ACU_EXCEPTION_ABORTED;
-    frame = acu_stackPeek(acu_getFrameStack());
+    frame = acu_peekStack(acu_getFrameStack());
     longjmp(frame->exceptionBuf, frame->exception != 0 ? frame->exception : 0xffff);
 }
 
@@ -318,7 +318,7 @@ void acu_assert(ACU_ExecuteEnv* environment, const ACU_AssertParameter* paramete
 void acu_assertFail(ACU_ExecuteEnv* environment, ACU_AssertParameter* parameter)
 {
     ACU_Result* result = environment->result;
-    ACU_Frame* frame = acu_stackPeek(acu_getFrameStack());
+    ACU_Frame* frame = acu_peekStack(acu_getFrameStack());
 
     result->status = ACU_TEST_FAILED;
     result->message = acu_sFormatMessage("Failed: %s", parameter->message);

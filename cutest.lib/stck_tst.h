@@ -7,47 +7,25 @@
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
  * and/or sell copies of the Software, and to permit persons to whom the Software
  * is furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall 
+ *
+ * The above copyright notice and this permission notice shall
  * be included in all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <stdlib.h>
-#include <stddef.h>
+#pragma once
+#ifndef __STACK_TEST__
+#define __STACK_TEST__
 
-#include "acu_stck.h"
-#include "acu_tryc.h"
-#include "acu_util.h"
+#include <acu_cmmn.h>
+#include <acu_fxtr.h>
 
-static ACU_Stack* __acu_jmpBufFrames = NULL;
+__EXPORT ACU_Fixture* stackFixture(void);
 
-ACU_Stack* acu_getFrameStack(void)
-{
-    if (!__acu_jmpBufFrames) {
-        __acu_jmpBufFrames = acu_stackMalloc();
-        acu_initStack(__acu_jmpBufFrames, (ACU_StackDataDestroy*) NULL);
-    }
-    return __acu_jmpBufFrames;
-}
-
-void acu_setFrameStack(ACU_Stack* jmpBufFrames)
-{
-    __acu_jmpBufFrames = jmpBufFrames;
-}
-
-void acu_freeFrameStack(void)
-{
-    if (__acu_jmpBufFrames) {
-        acu_destroyStack(__acu_jmpBufFrames);
-        acu_free(__acu_jmpBufFrames);
-        __acu_jmpBufFrames = NULL;
-    }
-}
-
+#endif

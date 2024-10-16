@@ -46,6 +46,7 @@ rprt_tst.c (rprt_tst.h)
 rslt_tst.c (rslt_tst.h)
 shrt_tst.c (shrt_tst.h, tst_bed.h)
 sizt_tst.c (sizt_tst.h, tst_bed.h)
+stck_tst.c (stck_tst.h)
 str_tst.c (str_tst.h)
 tryc_tst.c (tryc_tst.h) [-R]
 uchr_tst.c (uchr_tst.h, tst_bed.h)

@@ -145,6 +145,7 @@
     <ClCompile Include="acu_mtch.c" />
     <ClCompile Include="acu_plgn.c" />
     <ClCompile Include="acu_rand.c" />
+    <ClCompile Include="acu_stbl.c" />
     <ClCompile Include="acu_stck.c" />
     <ClCompile Include="acu_util.c" />
     <ClCompile Include="acu_uuid.c" />
@@ -162,6 +163,7 @@
     <ClInclude Include="acu_plgn.h" />
     <ClInclude Include="acu_hstb.h" />
     <ClInclude Include="acu_rand.h" />
+    <ClInclude Include="acu_stbl.h" />
     <ClInclude Include="acu_stck.h" />
     <ClInclude Include="acu_util.h" />
     <ClInclude Include="acu_uuid.h" />

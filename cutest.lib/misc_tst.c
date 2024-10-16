@@ -44,6 +44,8 @@ void* p;
 
 static void orphanedAlloc(ACU_ExecuteEnv* environment, const void* context) {
     p = acu_emalloc(1);
+    UNUSED(environment);
+    UNUSED(context);
 }
 
 ACU_Fixture* miscFixture(void)

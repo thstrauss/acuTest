@@ -46,11 +46,17 @@ typedef struct ACU_HashTable_ {
     ACU_HashTableHashFunc* hash;
     ACU_HashTableMatchFunc* match;
     ACU_HashTableCreateDataFunc* createData;
+    ACU_HashTableDestroyFunc* destroyData;
 } ACU_HashTable;
 
 __EXPORT ACU_HashTable* acu_mallocHashTable(void);
 
-__EXPORT int acu_initHashTable(ACU_HashTable* hashTable, unsigned int buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match, ACU_HashTableDestroyFunc* destroy);
+__EXPORT int acu_initHashTable(ACU_HashTable* hashTable, 
+    unsigned int buckets, 
+    ACU_HashTableHashFunc* hash, 
+    ACU_HashTableMatchFunc* match, 
+    ACU_HashTableCreateDataFunc* create,
+    ACU_HashTableDestroyFunc* destroy);
 
 __EXPORT void acu_destroyHashTable(ACU_HashTable* hashTable);
 

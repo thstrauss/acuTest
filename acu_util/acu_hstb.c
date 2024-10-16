@@ -27,7 +27,7 @@ ACU_HashTable* acu_mallocHashTable(void)
     return acu_emalloc(sizeof(ACU_HashTable));
 }
 
-int acu_initHashTable(ACU_HashTable* hashTable, unsigned int buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match, ACU_HashTableDestroyFunc* destroy)
+int acu_initHashTable(ACU_HashTable* hashTable, unsigned int buckets, ACU_HashTableHashFunc* hash, ACU_HashTableMatchFunc* match,ACU_HashTableCreateDataFunc* create, ACU_HashTableDestroyFunc* destroy)
 {
     ACU_List* bucketList;
     ACU_List* bucketListEnd;
@@ -38,6 +38,8 @@ int acu_initHashTable(ACU_HashTable* hashTable, unsigned int buckets, ACU_HashTa
     }
     hashTable->hash = hash;
     hashTable->match = match;
+    hashTable->createData = create;
+    hashTable->destroyData = destroy;
     hashTable->buckets = buckets;
 
     bucketList = hashTable->table;
