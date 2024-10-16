@@ -27,37 +27,14 @@
 
 typedef struct ACU_StringTableData_ {
     const char* string;
-    size_t referenceCount;
 } ACU_StringTableData;
 
 static unsigned int acu_stringHash(const void* key) {
     unsigned int hashValue = 0;
     const unsigned char* strPtr = (unsigned char*) ((ACU_StringTableData*)key)->string;
+    unsigned int c;
 
-    while (1) {
-        unsigned int c;
-        c = *strPtr++;
-        if (c == '\0') {
-            break;
-        }
-        hashValue ^= c;
-        hashValue = (hashValue << 4) + hashValue;
-        c = *strPtr++;
-        if (!c == '\0') {
-            break;
-        }
-        hashValue ^= c;
-        hashValue = (hashValue << 4) + hashValue;
-        c = *strPtr++;
-        if (c == '\0') {
-            break;
-        }
-        hashValue ^= c;
-        hashValue = (hashValue << 4) + hashValue;
-        c = *strPtr++;
-        if (c == '\0') {
-            break;
-        }
+    while ((c = *strPtr++) == '\0') {
         hashValue ^= c;
         hashValue = (hashValue << 4) + hashValue;
     }
@@ -73,7 +50,6 @@ static void* acu_createStringTableData(void* key) {
     ACU_StringTableData* stringTableData = acu_emalloc(sizeof(ACU_StringTableData));
     if (stringTableData) {
         stringTableData->string = acu_estrdup(((ACU_StringTableData*)key)->string);
-        stringTableData->referenceCount = 0;
     }
     return stringTableData;
 }
@@ -94,7 +70,6 @@ const char* acu_acquireString(ACU_HashTable* hashTable, const char* string)
     key.string = string;
     stringTableData = acu_lookupOrAddHashTable(hashTable, &key);
     if (stringTableData) {
-        stringTableData->referenceCount++;
         return stringTableData->string;
     }
     return NULL;
