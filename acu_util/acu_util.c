@@ -155,10 +155,6 @@ static int match(const void* key1, const void* key2) {
 }
 
 static void destroy(void* data) {
-    Block* block = data;
-    if (__stringTable) {
-        acu_releaseString(__stringTable, block->fileName);
-    }
     free(data);
 }
 
@@ -175,7 +171,7 @@ static void __freeAllocTable(void) {
     }
 }
 
-static void* createBlock(void* key) {
+static void* createBlock(const void* key) {
     Block* block = (Block*)malloc(sizeof(Block));
     if (block) {
         block->p = ((Block*)key)->p;
@@ -193,7 +189,7 @@ void acu_enabledTrackMemory(int enabled)
         acu_initHashTable(__allocTable, 2003, hash, match, createBlock, destroy);
 
         __stringTable = malloc(sizeof(ACU_HashTable));
-            acu_initStringTable(__stringTable);
+        acu_initStringTable(__stringTable);
     }
     else {
         __freeAllocTable();

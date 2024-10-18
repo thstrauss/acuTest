@@ -90,7 +90,7 @@ int acu_insertHashTable(ACU_HashTable* hashTable, const void* data)
     return 1;
 }
 
-void* acu_removeHashTable(ACU_HashTable* hashTable, void* key)
+void* acu_removeHashTable(ACU_HashTable* hashTable, const void* key)
 {
     ACU_ListElement* element, *prev = NULL;
     ACU_List* bucketList;
@@ -107,7 +107,7 @@ void* acu_removeHashTable(ACU_HashTable* hashTable, void* key)
     return NULL;
 }
 
-void* acu_lookupHashTable(ACU_HashTable* hashTable, void* key)
+void* acu_lookupHashTable(ACU_HashTable* hashTable, const void* key)
 {
     ACU_ListElement* element;
     unsigned int bucket;
@@ -122,20 +122,19 @@ void* acu_lookupHashTable(ACU_HashTable* hashTable, void* key)
     return NULL;
 }
 
-void* acu_lookupOrAddHashTable(ACU_HashTable* hashTable, void* key)
+void* acu_lookupOrAddHashTable(ACU_HashTable* hashTable, const void* key)
 {
     void* result;
     ACU_ListElement* element;
-
     ACU_List* bucketList;
 
     bucketList = hashTable->table + hashTable->hash(key) % hashTable->buckets;
-
-    for (element = bucketList->head; element; element = element->next) {
+    element = bucketList->head;
+    while(element) {
         if (hashTable->match(key, element->data)) {
-            result = (void*)element->data;
-            return result;
+            return (void*)element->data;
         }
+        element = element->next;
     }
     result = hashTable->createData(key);
     if (result && (acu_insertHeadList(bucketList, result)) == 0) {

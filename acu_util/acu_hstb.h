@@ -28,7 +28,7 @@
 
 #include <stddef.h>
 
-typedef void* ACU_HashTableCreateDataFunc(void* key);
+typedef void* ACU_HashTableCreateDataFunc(const void* key);
 typedef void ACU_HashTableDestroyFunc(void* data);
 typedef unsigned int ACU_HashTableHashFunc(const void* key);
 typedef int ACU_HashTableMatchFunc(const void* key1, const void* key2);
@@ -62,11 +62,11 @@ __EXPORT void acu_destroyHashTable(ACU_HashTable* hashTable);
 
 __EXPORT int acu_insertHashTable(ACU_HashTable* hashTable, const void* data);
 
-__EXPORT void* acu_removeHashTable(ACU_HashTable* hashTable, void* key);
+__EXPORT void* acu_removeHashTable(ACU_HashTable* hashTable, const void* key);
 
-__EXPORT void* acu_lookupHashTable(ACU_HashTable* hashTable, void* key);
+__EXPORT void* acu_lookupHashTable(ACU_HashTable* hashTable, const void* key);
 
-__EXPORT void* acu_lookupOrAddHashTable(ACU_HashTable* hashTable, void* key);
+__EXPORT void* acu_lookupOrAddHashTable(ACU_HashTable* hashTable, const void* key);
 
 __EXPORT void acu_acceptHashTable(const ACU_HashTable* list, ACU_HashTableVisitor* visitor);
 

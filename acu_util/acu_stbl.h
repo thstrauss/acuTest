@@ -29,6 +29,5 @@
 __EXPORT void acu_initStringTable(ACU_HashTable* hashTable);
 
 __EXPORT const char* acu_acquireString(ACU_HashTable* hashTable, const char* string);
-__EXPORT void acu_releaseString(ACU_HashTable* hashTable, const char* string);
 
 #endif
