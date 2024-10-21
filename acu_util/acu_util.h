@@ -25,6 +25,7 @@
 
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <string.h>
 #include "acu_cmmn.h"
 #include "acu_hstb.h"
@@ -75,6 +76,7 @@ __EXPORT void acu_wprintf(const char* format, ...);
 __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...);
 
 #define acu_estrdup(s) (acu_isMemoryTrackingEnabled() ?(char*)__addMallocToAllocTable(__acu_estrdup((s)), strlen(s), __FILE__, __LINE__):__acu_estrdup((s))) 
+
 __EXPORT char* __acu_estrdup(const char* s);
 
 __EXPORT void acu_enabledTrackMemory(int enabled);
@@ -84,7 +86,9 @@ __EXPORT void acu_reportTrackMemory(void);
 
 __EXPORT void* __acu_emalloc(size_t n);
 
-__EXPORT void acu_free(void* buf);
+#define acu_free(buf) (acu_isMemoryTrackingEnabled() ? __acu_free(buf) : free(buf))
+
+__EXPORT void __acu_free(void* buf);
 
 __EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
 __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);

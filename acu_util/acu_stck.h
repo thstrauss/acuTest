@@ -44,7 +44,7 @@ __EXPORT void acu_initStack(ACU_Stack* stack, ACU_StackDataDestroy destroy);
 
 __EXPORT void* acu_peekStack(const ACU_Stack* stack);
 
-__EXPORT ACU_Stack* acu_stackMalloc(void);
+#define acu_stackMalloc() ((ACU_Stack*) acu_emalloc(sizeof(ACU_Stack)));
 
 __EXPORT void acu_destroyStack(ACU_Stack* stack);
 

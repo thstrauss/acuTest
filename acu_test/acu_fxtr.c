@@ -78,9 +78,7 @@ static void acuTest_testCaseDestroy(ACU_TestCase* testCase) {
     acu_free(testCase);
 }
 
-static ACU_TestCase* acuTest_testCaseMalloc(void) {
-    return (ACU_TestCase*)acu_emalloc(sizeof(ACU_TestCase));
-}
+#define acuTest_testCaseMalloc() ((ACU_TestCase*) acu_emalloc(sizeof(ACU_TestCase)))
 
 void acu_initFixture(ACU_Fixture* fixture, const char* name) {
     ACU_List* testCases = acu_mallocList();
@@ -146,11 +144,6 @@ void acu_acceptFixture(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor) {
     listVisitor.context = visitor->context;
 
     acu_acceptList(fixture->testCases, &listVisitor);
-}
-
-ACU_Fixture* acu_mallocFixture(void)
-{
-    return (ACU_Fixture*) acu_emalloc(sizeof(ACU_Fixture));
 }
 
 void acu_fixtureDestroy(ACU_Fixture* fixture) {

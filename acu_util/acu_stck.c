@@ -46,11 +46,6 @@ void* acu_peekStack(const ACU_Stack* stack)
     return (stack->head) ? stack->head->data : NULL;
 }
 
-ACU_Stack* acu_stackMalloc(void)
-{
-    return acu_emalloc(sizeof(ACU_Stack));
-}
-
 void acu_destroyStack(ACU_Stack* stack)
 {
     while (stack->head) {

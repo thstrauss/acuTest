@@ -29,6 +29,7 @@
 #include "acu_rslt.h"
 #include "acu_tcse.h"
 #include "acu_rprt.h"
+#include <acu_util.h>
 
 struct ACU_List_;
 
@@ -44,7 +45,7 @@ typedef struct ACU_Fixture_ {
 } ACU_Fixture;
 
 /* Allocates memory for an ACU_Fixture. */
-__EXPORT ACU_Fixture* acu_mallocFixture(void);
+#define acu_mallocFixture() ((ACU_Fixture*) acu_emalloc(sizeof(ACU_Fixture)))
 
 /* Initializes an ACU_Fixture.*/
 __EXPORT void acu_initFixture(ACU_Fixture* fixture, const char* name);

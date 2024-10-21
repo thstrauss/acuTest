@@ -238,18 +238,14 @@ void* __acu_emalloc(size_t size) {
     return NULL;
 }
 
-void acu_free(void* block)
+void __acu_free(void* block)
 {
-    if (__acuMemoryTrackingEnabled) {
-        void* out;
-        Block key;
-        key.p = block;
-        __acuMemoryTrackingEnabled = 0;
-        out = acu_removeHashTable(__allocTable, &key);
-        if (out) {
-            destroy(out);
-        }
-        __acuMemoryTrackingEnabled = 1;
+    void* out;
+    Block key;
+    key.p = block;
+    out = acu_removeHashTable(__allocTable, &key);
+    if (out) {
+        destroy(out);
     }
     free(block);
 }

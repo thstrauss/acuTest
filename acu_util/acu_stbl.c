@@ -25,12 +25,14 @@
 #include <stddef.h>
 #include <string.h>
 
+#include <stdio.h>
+
 static unsigned int acu_stringHash(const void* key) {
     unsigned int hashValue = 2003;
     const unsigned char* strPtr = (unsigned char*) key;
-    unsigned int c;
+    unsigned char c;
 
-    while ((c = *strPtr++) == '\0') {
+    while ((c = *strPtr++) != '\0') {
         hashValue ^= c;
         hashValue = (hashValue << 4) + hashValue;
     }
