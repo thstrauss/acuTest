@@ -45,7 +45,7 @@ static int acu_stringMatch(const void* key1, const void* key2) {
 }
 
 static void* acu_createStringTableData(const void* key) {
-    return __acu_estrdup(key);
+    return acu_estrdup(key);
 }
 
 static void acu_stringDestroy(void* data) {
