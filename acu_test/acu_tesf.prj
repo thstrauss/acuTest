@@ -3,7 +3,6 @@
 .C [ -8 ]
 .C [ -P ]
 .C [ -I..\acu_util ]
-.C [ -Nout_f ]
 .L [ -J ] 
 
 =
