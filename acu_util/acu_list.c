@@ -141,14 +141,15 @@ void acu_acceptList(const ACU_List* list, ACU_ListVisitor* visitor)
     }
 }
 
+static void acu_countVisitor(void* data, void* visitorContext) {
+    (*(size_t*) visitorContext)++;
+}
+
 size_t acu_getListSize(const ACU_List* list)
 {
     size_t size=0;
-    ACU_ListElement* listElement = list->head;
-    while (listElement) {
-        size++;
-        listElement = listElement->next;
-    }
+    ACU_ListVisitor visitor = { acu_countVisitor, &size };
+    acu_acceptList(list, &visitor);
     return size;
 }
 
