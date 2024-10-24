@@ -25,10 +25,8 @@
 #include <stddef.h>
 #include <string.h>
 
-static unsigned long acu_stringHash(const void* key) {
-    #define SEED_PRIME 2003
-    #define MULTIPLICATOR_PRIME 121
-    unsigned long hashValue = SEED_PRIME;
+static unsigned int acu_stringHash(const void* key) {
+    unsigned long hashValue = 2003;
     const unsigned long* longPtr = (unsigned long*)key;
 
     while (1) {
@@ -42,16 +40,16 @@ static unsigned long acu_stringHash(const void* key) {
             const unsigned char* strPtr = (unsigned char*) longPtr;
             while ((c = *strPtr++) != '\0') {
                 hashValue ^= c;
-                hashValue = hashValue * MULTIPLICATOR_PRIME;
+                hashValue = (hashValue << 4) + hashValue;
             }
             break;
         }
         hashValue ^= l;
-        hashValue = hashValue * MULTIPLICATOR_PRIME;
+        hashValue = (hashValue << 4) + hashValue;
         longPtr++;
     }
     
-    return hashValue;
+    return (unsigned int) hashValue;
 }
 
 static int acu_stringMatch(const void* key1, const void* key2) {

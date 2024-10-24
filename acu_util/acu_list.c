@@ -22,7 +22,7 @@
 #include "acu_list.h"
 #include "acu_util.h"
 
-static void __acu_defaultDestroyListElement(void* data) {
+static void __acu_dummyDestroy(void* data) {
     UNUSED(data);
 }
 
@@ -33,7 +33,7 @@ void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy) {
         list->destroy = destroy;
     }
     else {
-        list->destroy = __acu_defaultDestroyListElement;
+        list->destroy = __acu_dummyDestroy;
     }
 }
 
