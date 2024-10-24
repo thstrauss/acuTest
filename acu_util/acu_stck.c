@@ -36,8 +36,17 @@ size_t acu_getStackSize(const ACU_Stack* stack)
     return size;
 }
 
+static void __acu_defaultDestroyStackElement(void* data) {
+	UNUSED(data);
+}
+
 void acu_initStack(ACU_Stack* stack, ACU_StackDataDestroy destroy) {
-    stack->destroy = destroy;
+    if (destroy) {
+        stack->destroy = destroy;
+    }
+    else {
+        stack->destroy = __acu_defaultDestroyStackElement;
+    }
     stack->head = NULL;
 }
 
@@ -96,7 +105,7 @@ __EXPORT int acu_dropStack(ACU_Stack* stack)
         ACU_StackElement* oldElement = stack->head;
         stack->head = oldElement->next;
 
-        if (stack->destroy && oldElement->data) {
+        if (oldElement->data) {
             stack->destroy(oldElement->data);
         }
         acu_free(oldElement);
