@@ -22,10 +22,19 @@
 #include "acu_list.h"
 #include "acu_util.h"
 
+static void __acu_dummyDestroy(void* data) {
+    UNUSED(data);
+}
+
 void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy) {
     list->head = NULL;
     list->tail = NULL;
-    list->destroy = destroy;
+    if (destroy) {
+        list->destroy = destroy;
+    }
+    else {
+        list->destroy = __acu_dummyDestroy;
+    }
 }
 
 ACU_ListElement* acu_listHead(const ACU_List* list) {
@@ -164,7 +173,7 @@ void acu_destroyList(ACU_List* list) {
     while (list->head) {
         ACU_ListElement* oldElement = list->head;
         void* data = (void*) oldElement->data;
-        if (data && destroy) {
+        if (data) {
             destroy(data);
         }
         list->head = oldElement->next;

@@ -45,6 +45,8 @@ typedef struct ACU_Result_ {
 __EXPORT void acu_initResult(ACU_Result* result);
 __EXPORT void acu_prepareResult(ACU_Result* result);
 __EXPORT void acu_destroyResult(ACU_Result* result);
-__EXPORT enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedresult, enum ACU_TestResult result);
+
+#define acuTest_calcResult(aggregatedResult, result) \
+    ((result) == ACU_TEST_PASSED ? (aggregatedResult) : ((result) == ACU_TEST_FAILED ? ACU_TEST_FAILED : ACU_TEST_ERROR))
 
 #endif

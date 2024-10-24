@@ -54,7 +54,7 @@ int acu_initHashTable(ACU_HashTable* hashTable, unsigned int buckets, ACU_HashTa
 void acu_destroyHashTable(ACU_HashTable* hashTable)
 {
     ACU_List* bucketList = hashTable->table;
-    ACU_List* bucketListEnd = hashTable->table + hashTable->buckets;
+    ACU_List* bucketListEnd = bucketList + hashTable->buckets;
 
     for (; bucketList < bucketListEnd; bucketList++) {
         acu_destroyList(bucketList);

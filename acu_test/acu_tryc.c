@@ -28,13 +28,15 @@
 
 static ACU_Stack* __acu_jmpBufFrames = NULL;
 
+static ACU_Stack* __acu_initStackFrame(void) {
+    ACU_Stack* frames = acu_stackMalloc();
+    acu_initStack(frames, (ACU_StackDataDestroy*)NULL);
+    return frames;
+}
+
 ACU_Stack* acu_getFrameStack(void)
 {
-    if (!__acu_jmpBufFrames) {
-        __acu_jmpBufFrames = acu_stackMalloc();
-        acu_initStack(__acu_jmpBufFrames, (ACU_StackDataDestroy*) NULL);
-    }
-    return __acu_jmpBufFrames;
+    return __acu_jmpBufFrames ? __acu_jmpBufFrames : (__acu_jmpBufFrames = __acu_initStackFrame());
 }
 
 void acu_setFrameStack(ACU_Stack* jmpBufFrames)

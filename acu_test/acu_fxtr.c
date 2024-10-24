@@ -112,8 +112,8 @@ void acu_setFixtureContext(ACU_Fixture* fixture, const void* context)
 }
 
 enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progress) {
-    ACU_ListElement* testElement = acu_listHead(fixture->testCases);
-    ACU_ListElement* childFixture = acu_listHead(fixture->childFixtures);
+    ACU_ListElement* testElement = fixture->testCases->head;
+    ACU_ListElement* childFixture = fixture->childFixtures->head;
     const void* context = fixture->context;
     enum ACU_TestResult result = ACU_TEST_PASSED;
     if (!frameStack) {
@@ -121,12 +121,14 @@ enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progr
     }
     fixture->start = clock();
     while (childFixture) {
-        result = acuTest_calcResult(result, acu_executeFixture((ACU_Fixture*)childFixture->data, progress));
-        childFixture = acu_listNext(childFixture);
+        enum ACU_TestResult r = acu_executeFixture((ACU_Fixture*)childFixture->data, progress);
+        result = acuTest_calcResult(result, r);
+        childFixture = childFixture->next;
     }
     while (testElement) {
-        result = acuTest_calcResult(result, acuTest_run((ACU_TestCase*) testElement->data, context, progress));
-        testElement = acu_listNext(testElement);
+        enum ACU_TestResult r = acuTest_run((ACU_TestCase*)testElement->data, context, progress);
+        result = acuTest_calcResult(result, r);
+        testElement = testElement->next;
     }
     fixture->end = clock();
     return result;

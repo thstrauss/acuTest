@@ -22,13 +22,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#include "acu_cmmn.h"
 #include "acu_rslt.h"
 #include "acu_util.h"
-
-enum ACU_TestResult acuTest_calcResult(enum ACU_TestResult aggregatedResult, enum ACU_TestResult result) {
-    return result == ACU_TEST_PASSED ? aggregatedResult : result == ACU_TEST_FAILED ? ACU_TEST_FAILED : ACU_TEST_ERROR;
-}
 
 void acu_destroyResult(ACU_Result* result) {
     if (result->message) {
