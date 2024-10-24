@@ -59,10 +59,6 @@ void acu_initStringTable(ACU_HashTable* hashTable)
 
 const char* acu_acquireString(ACU_HashTable* hashTable, const char* string)
 {
-    char * stringTableData = acu_lookupOrAddHashTable(hashTable, string);
-    if (stringTableData) {
-        return stringTableData;
-    }
-    return NULL;
+    return acu_lookupOrAddHashTable(hashTable, string);;
 }
 

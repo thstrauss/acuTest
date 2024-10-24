@@ -220,7 +220,7 @@ void* __addMallocToAllocTable(void* p, size_t size, const char* fileName, int li
         Block* block;
         key.p = p;
         __acuMemoryTrackingEnabled = 0;
-        block = acu_lookupOrAddHashTable(__allocTable, &key);
+        block = (Block*) acu_lookupOrAddHashTable(__allocTable, &key);
         block->fileName = acu_acquireString(__stringTable, fileName);
         __acuMemoryTrackingEnabled = 1;
         block->size = size;

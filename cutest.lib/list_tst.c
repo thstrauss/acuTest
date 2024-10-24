@@ -68,7 +68,7 @@ static void listRemoveNull(ACU_ExecuteEnv* environment, const void* context) {
     acu_insertNextList(list, NULL, &data1);
     acu_insertNextList(list, acu_listHead(list), &data2);
 
-    acu_removeNextList(list, NULL, (void*) &data);
+    data = acu_removeNextList(list, NULL);
 
     ACU_TRY
         ACU_assert(environment, int, Equal, *data, data1, "");
@@ -89,7 +89,7 @@ static void listRemoveElement(ACU_ExecuteEnv* environment, const void* context) 
     acu_insertNextList(list, NULL, &data1);
     acu_insertNextList(list, acu_listHead(list), &data2);
 
-    acu_removeNextList(list, acu_listHead(list), (void *)&data);
+    data = acu_removeNextList(list, acu_listHead(list));
 
     ACU_TRY
         ACU_assert(environment, int, Equal, *data, data2, "");

@@ -60,13 +60,13 @@ __EXPORT int acu_initHashTable(ACU_HashTable* hashTable,
 
 __EXPORT void acu_destroyHashTable(ACU_HashTable* hashTable);
 
-__EXPORT int acu_insertHashTable(ACU_HashTable* hashTable, const void* data);
+__EXPORT const void* acu_insertHashTable(ACU_HashTable* hashTable, const void* data);
 
 __EXPORT void* acu_removeHashTable(ACU_HashTable* hashTable, const void* key);
 
 __EXPORT void* acu_lookupHashTable(ACU_HashTable* hashTable, const void* key);
 
-__EXPORT void* acu_lookupOrAddHashTable(ACU_HashTable* hashTable, const void* key);
+__EXPORT const void* acu_lookupOrAddHashTable(ACU_HashTable* hashTable, const void* key);
 
 __EXPORT void acu_acceptHashTable(const ACU_HashTable* list, ACU_HashTableVisitor* visitor);
 
