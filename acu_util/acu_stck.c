@@ -99,19 +99,18 @@ void* acu_popStack(ACU_Stack* stack)
     return result;
 }
 
-__EXPORT int acu_dropStack(ACU_Stack* stack)
+__EXPORT void acu_dropStack(ACU_Stack* stack)
 {
-    if (stack->head) {
-        ACU_StackElement* oldElement = stack->head;
-        stack->head = oldElement->next;
 
+    ACU_StackElement* oldElement = stack->head;
+    if (oldElement) {
+        stack->head = oldElement->next;
+            
         if (oldElement->data) {
             stack->destroy(oldElement->data);
         }
         acu_free(oldElement);
-
     }
-    return !stack->head;
 }
 
 __EXPORT void acu_dropStackElement(ACU_Stack* stack)

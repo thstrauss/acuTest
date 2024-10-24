@@ -52,7 +52,7 @@ __EXPORT int acu_pushStack(ACU_Stack* stack, void* data);
 __EXPORT void acu_pushStackElement(ACU_Stack* stack, ACU_StackElement* element);
 
 __EXPORT void* acu_popStack(ACU_Stack* stack);
-__EXPORT int acu_dropStack(ACU_Stack* stack);
+__EXPORT void acu_dropStack(ACU_Stack* stack);
 __EXPORT void acu_dropStackElement(ACU_Stack* stack);
 
 #endif 

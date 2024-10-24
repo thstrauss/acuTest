@@ -88,19 +88,19 @@ const void* acu_insertNextList(ACU_List* list, ACU_ListElement* element, const v
 {
     ACU_ListElement *newListElement = acu_listElementMalloc();
     if (newListElement) {
-        newListElement->data = (void*)data;
 
-        if (!element) {
+        if (element) {
+            newListElement->next = element->next;
+            element->next = newListElement;
+        }
+        else {
             if (!list->head) {
                 list->tail = newListElement;
             }
             newListElement->next = list->head;
             list->head = newListElement;
         }
-        else {
-            newListElement->next = element->next;
-            element->next = newListElement;
-        }
+        newListElement->data = (void*)data;
         return data;
     }
     return NULL;
@@ -108,31 +108,28 @@ const void* acu_insertNextList(ACU_List* list, ACU_ListElement* element, const v
 
 void* acu_removeNextList(ACU_List* list, ACU_ListElement* element)
 {
-    if (list->head) {
-        void* data;
-        ACU_ListElement* oldListElement;
-        if (element) {
-        	if (!element->next) {
-                return NULL;
-            }
-            data = (void*) element->next->data;
-            oldListElement = element->next;
-            element->next = element->next->next;
-            if (!element->next) {
-                list->tail = element;
-            }
-         } else {
-            data = (void*) list->head->data;
-            oldListElement = list->head;
-            list->head = list->head->next;
-            if (!list->head) {
-                list->tail = NULL;
-            }
+    void* data;
+    ACU_ListElement* oldListElement;
+    if (element) {
+        if (!element->next) {
+            return NULL;
         }
-        acu_free(oldListElement);
-        return data;
+        oldListElement = element->next;
+        data = (void*)oldListElement->data;
+        element->next = oldListElement->next;
+        if (!element->next) {
+            list->tail = element;
+        }
+    } else {
+        oldListElement = list->head;
+        data = (void*)oldListElement->data;
+        list->head = oldListElement->next;
+        if (!list->head) {
+            list->tail = NULL;
+        }
     }
-    return NULL;
+    acu_free(oldListElement);
+    return data;
 }
 
 void acu_acceptList(const ACU_List* list, ACU_ListVisitor* visitor)
@@ -155,34 +152,16 @@ size_t acu_getListSize(const ACU_List* list)
     return size;
 }
 
-static int acu_listRemoveHead(ACU_List* list, const void** data) {
-    if (list->head) {
-        ACU_ListElement* oldElement = list->head;
-        *data = oldElement->data;
-        list->head = oldElement->next;
-        if (!list->head) {
-            list->tail = NULL;
-        }
-        acu_free(oldElement);
-    }
-    return !list->head;
-}
-
 void acu_destroyList(ACU_List* list) {
-    ACU_ListDestroyFunc* destroy = list->destroy;
-    ACU_ListElement* oldElement = NULL;
     while (list->head) {
-    	const void* data;
-        oldElement = list->head;
+        const void* data;
+        ACU_ListElement* oldElement = list->head;
         data = oldElement->data;
         if (data) {
-            destroy((void*) data);
+            list->destroy((void*) data);
         }
         list->head = oldElement->next;
         acu_free(oldElement);
-
-        if (!list->head) {
-            list->tail = NULL;
-        }
     }
+    list->tail = NULL;
 }
