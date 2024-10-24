@@ -25,7 +25,7 @@
 #include <stddef.h>
 #include <string.h>
 
-static unsigned int acu_stringHash(const void* key) {
+static unsigned long acu_stringHash(const void* key) {
     unsigned long hashValue = 2003;
     const unsigned long* longPtr = (unsigned long*)key;
 
@@ -40,16 +40,16 @@ static unsigned int acu_stringHash(const void* key) {
             const unsigned char* strPtr = (unsigned char*) longPtr;
             while ((c = *strPtr++) != '\0') {
                 hashValue ^= c;
-                hashValue = (hashValue << 4) + hashValue;
+                hashValue = 121 + hashValue;
             }
             break;
         }
         hashValue ^= l;
-        hashValue = (hashValue << 4) + hashValue;
+        hashValue = 121 * hashValue;
         longPtr++;
     }
     
-    return (unsigned int) hashValue;
+    return hashValue;
 }
 
 static int acu_stringMatch(const void* key1, const void* key2) {

@@ -143,9 +143,9 @@ typedef struct Block_ {
     int line;
 } Block;
 
-static unsigned int hash(const void* key) {
+static unsigned long hash(const void* key) {
     const Block* block = key;
-    return (unsigned int) ((size_t) block->p) >> __shift;
+    return (unsigned long) ((size_t) block->p) >> __shift;
 }
 
 static int match(const void* key1, const void* key2) {

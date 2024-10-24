@@ -29,12 +29,12 @@
 #include <acu_tryc.h>
 #include <acu_hstb.h>
 
-static unsigned int hash(const void* data) {
-    return *(unsigned*) data;
+static unsigned long hash(const void* data) {
+    return *(unsigned int*) data;
 }
 
 static int match(const void* key1, const void* key2) {
-    return *(unsigned*)key1 == *(unsigned*)key2;
+    return *(unsigned int*)key1 == *(unsigned int*)key2;
 }
 
 static void emptyHashTable(ACU_ExecuteEnv* environment, const void* context) {

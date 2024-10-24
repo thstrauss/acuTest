@@ -30,7 +30,7 @@
 
 typedef void* ACU_HashTableCreateDataFunc(const void* key);
 typedef void ACU_HashTableDestroyFunc(void* data);
-typedef unsigned int ACU_HashTableHashFunc(const void* key);
+typedef unsigned long ACU_HashTableHashFunc(const void* key);
 typedef int ACU_HashTableMatchFunc(const void* key1, const void* key2);
 
 typedef void ACU_HashTableVisitorFunc(const void* data, void* visitorContext);
