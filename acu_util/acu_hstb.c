@@ -127,13 +127,13 @@ const void* acu_lookupOrAddHashTable(ACU_HashTable* hashTable, const void* key)
 void acu_acceptHashTable(const ACU_HashTable* hashTable, ACU_HashTableVisitor* visitor)
 {
     ACU_ListVisitor listVisitor;
-    ACU_List* bucketList;
-    ACU_List* bucketListEnd = hashTable->table + hashTable->buckets;
+    ACU_List* bucketList = hashTable->table;
+    ACU_List* bucketListEnd = bucketList + hashTable->buckets;
 
     listVisitor.visitor = (ACU_ListVisitorFunc*) visitor->visitor;
     listVisitor.context = visitor->context;
 
-    for (bucketList = hashTable->table; bucketList < bucketListEnd; bucketList++) {
+    for (; bucketList < bucketListEnd; bucketList++) {
         if (bucketList->head) {
             acu_acceptList(bucketList, &listVisitor);
         }
@@ -149,6 +149,20 @@ size_t acu_getHashTableSize(const ACU_HashTable* hashTable)
     for (bucketList = hashTable->table; bucketList < bucketListEnd; bucketList++) {
         if (bucketList->head) {
             size += acu_getListSize(bucketList);
+        }
+    }
+    return size;
+}
+
+size_t acu_getUsedBucketCount(const ACU_HashTable* hashTable)
+{
+    size_t size = 0;
+    ACU_List* bucketList;
+    ACU_List* bucketListEnd = hashTable->table + hashTable->buckets;
+
+    for (bucketList = hashTable->table; bucketList < bucketListEnd; bucketList++) {
+        if (bucketList->head) {
+            size ++;
         }
     }
     return size;

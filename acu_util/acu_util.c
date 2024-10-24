@@ -34,7 +34,7 @@ extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 
 static char* programName = NULL;
 static ACU_HashTable* __allocTable = NULL;
-static ACU_HashTable* __stringTable = NULL;
+ACU_HashTable* __stringTable = NULL;
 static int __acuMemoryTrackingEnabled = 0;
 static unsigned int __shift = 3;
 
@@ -143,9 +143,9 @@ typedef struct Block_ {
     int line;
 } Block;
 
-static unsigned int hash(const void* key) {
+static unsigned long hash(const void* key) {
     const Block* block = key;
-    return (unsigned int) ((size_t) block->p) >> __shift;
+    return (unsigned long) ((size_t) block->p) >> __shift;
 }
 
 static int match(const void* key1, const void* key2) {
@@ -198,8 +198,8 @@ void acu_enabledTrackMemory(int enabled)
 }
 
 static void report(const void* data, void* visitorContext) {
+    static char buffer1[512];
     const Block* block = data;
-    char buffer1[512];
     acu_printf_s(buffer1, sizeof buffer1, "%s:%d size = %ld: %p\n\r", block->fileName, block->line, block->size, block->p);
     UNUSED(visitorContext);
 }
@@ -210,6 +210,7 @@ __EXPORT void acu_reportTrackMemory(void)
         ACU_HashTableVisitor visitor;
         visitor.visitor = report;
         visitor.context = NULL;
+        printf("occupied buckets = %lu elements = %lu\n\r", acu_getUsedBucketCount(__stringTable), acu_getHashTableSize(__stringTable));
         acu_acceptHashTable(acu_getAllocTable(), &visitor);
     }
 }

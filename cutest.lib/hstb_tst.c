@@ -29,12 +29,12 @@
 #include <acu_tryc.h>
 #include <acu_hstb.h>
 
-static unsigned int hash(const void* data) {
-    return *(unsigned*) data;
+static unsigned long hash(const void* data) {
+    return *(unsigned long*) data;
 }
 
 static int match(const void* key1, const void* key2) {
-    return *(unsigned*)key1 == *(unsigned*)key2;
+    return *(unsigned long*)key1 == *(unsigned long*)key2;
 }
 
 static void emptyHashTable(ACU_ExecuteEnv* environment, const void* context) {
@@ -68,9 +68,9 @@ static void visitorFunc(const void* data, void* visitorContext) {
 
 static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
     ACU_HashTable hashtable;
-    unsigned int i;
-    unsigned int values[40];
-    unsigned int* lookupValue;
+    unsigned long i;
+    unsigned long values[40];
+    unsigned long* lookupValue;
     int count = 0;
 
     ACU_HashTableVisitor visitor;
