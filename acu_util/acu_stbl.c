@@ -40,7 +40,7 @@ static unsigned long acu_stringHash(const void* key) {
             const unsigned char* strPtr = (unsigned char*) longPtr;
             while ((c = *strPtr++) != '\0') {
                 hashValue ^= c;
-                hashValue = 121 + hashValue;
+                hashValue = 121 * hashValue;
             }
             break;
         }

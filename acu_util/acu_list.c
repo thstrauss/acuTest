@@ -111,15 +111,8 @@ void* acu_removeNextList(ACU_List* list, ACU_ListElement* element)
     if (list->head) {
         void* data;
         ACU_ListElement* oldListElement;
-        if (!element) {
-            data = (void*) list->head->data;
-            oldListElement = list->head;
-            list->head = list->head->next;
-            if (!list->head) {
-                list->tail = NULL;
-            }
-        } else {
-            if (!element->next) {
+        if (element) {
+        	if (!element->next) {
                 return NULL;
             }
             data = (void*) element->next->data;
@@ -127,6 +120,13 @@ void* acu_removeNextList(ACU_List* list, ACU_ListElement* element)
             element->next = element->next->next;
             if (!element->next) {
                 list->tail = element;
+            }
+         } else {
+            data = (void*) list->head->data;
+            oldListElement = list->head;
+            list->head = list->head->next;
+            if (!list->head) {
+                list->tail = NULL;
             }
         }
         acu_free(oldListElement);
