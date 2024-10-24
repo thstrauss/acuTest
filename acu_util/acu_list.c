@@ -170,11 +170,13 @@ static int acu_listRemoveHead(ACU_List* list, const void** data) {
 
 void acu_destroyList(ACU_List* list) {
     ACU_ListDestroyFunc* destroy = list->destroy;
+    ACU_ListElement* oldElement = NULL;
     while (list->head) {
-        ACU_ListElement* oldElement = list->head;
-        void* data = (void*) oldElement->data;
+    	const void* data;
+        oldElement = list->head;
+        data = oldElement->data;
         if (data) {
-            destroy(data);
+            destroy((void*) data);
         }
         list->head = oldElement->next;
         acu_free(oldElement);
