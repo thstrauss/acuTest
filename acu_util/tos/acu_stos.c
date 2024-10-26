@@ -19,46 +19,43 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "../acu_strg.h"
+
 #include <stddef.h>
-#include <stdio.h>
+#include <string.h>
 
-#include <acu_ldr.h>
-#include <acu_fxtr.h>
-#include <acu_rprt.h>
-#include <acu_tryc.h>
-#include <acu_stck.h>
-#include <acu_util.h>
+size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width)
+{
+#define ellipsesChar '.'
+#define ellipsesLength 3
 
-int main(void) {
-	ACU_Entry* entry;
-	ACU_Summary summary = {0,0};
-	
-	ACU_ReportVisitor report = {acu_report, NULL};
-	ACU_ReportHelper reportHelper = {NULL, NULL};
+    size_t length = strlen(s);
+    if (length <= width) {
+        strncpy(buffer, s, length);
+        width = length;
+    }
+    else if (width < ellipsesLength) {
+        char* bufferPtr = buffer;
+        int i;
+        for (i = 0; i < width; i++) {
+            *(bufferPtr++) = ellipsesChar;
+        }
+        length = width;
+    }
+    else {
+        size_t remainderEnd = (width - ellipsesLength) >> 1;
+        size_t remainderStart = width - remainderEnd - ellipsesLength;
+        char* bufferPtr = buffer;
 
-	ACU_ReportVisitor counter = {acu_countTestCases, NULL};
-	
-	ACU_ReportVisitor reportSummary = {acu_reportSummary, NULL};
-	
-	int count=0;
-	
-	acu_enabledTrackMemory(0);
-	entry = acu_init();
-	counter.context = (void*) &count;
-	report.context = &reportHelper;
-	reportSummary.context = &summary;
-	
-	acu_acceptFixture(entry->fixture, &counter);
-	fprintf(stdout, "count = %d \n\r", count);
-	acu_executeFixture(entry->fixture, (ACU_Progress*) NULL);
-	fprintf(stdout, "\n\r");
-	acu_acceptFixture(entry->fixture, &report);
-	acu_acceptFixture(entry->fixture, &reportSummary);
-	acu_destroyEntry(entry);
-	acu_free(entry);
-	fprintf(stdout, "%d of %d failed.\n\r", summary.failedTestCases, summary.totalTestCases);
-    acu_freeFrameStack();
-    acu_reportTrackMemory();
-    acu_enabledTrackMemory(0);
-	return 0;
+        strncpy(bufferPtr, s, remainderStart);
+        bufferPtr += remainderStart;
+        *(bufferPtr++) = ellipsesChar;
+        *(bufferPtr++) = ellipsesChar;
+        *(bufferPtr++) = ellipsesChar;
+        strncpy(bufferPtr, s + (length - remainderEnd), remainderEnd);
+        length = width;
+    }
+    buffer[width] = '\0';
+    UNUSED(bufferSize);
+    return length;
 }

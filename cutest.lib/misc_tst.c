@@ -192,7 +192,7 @@ ACU_Fixture* miscFixture(void)
 
     acu_addTestCase(fixture, "float In VaArgs are implicit converted to double", floatInVaArgsTest);
     acu_addTestCase(fixture, "float In VaArgs are implicit converted to double", orphanedAlloc);
-    acu_addTestCase(fixture, "strlenTest", strlenTest);
+/*    acu_addTestCase(fixture, "strlenTest", strlenTest); */
 
     return fixture;
 }

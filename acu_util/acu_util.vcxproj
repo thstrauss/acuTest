@@ -147,12 +147,14 @@
     <ClCompile Include="acu_rand.c" />
     <ClCompile Include="acu_stbl.c" />
     <ClCompile Include="acu_stck.c" />
+    <ClCompile Include="acu_strg.c" />
     <ClCompile Include="acu_util.c" />
     <ClCompile Include="acu_uuid.c" />
     <ClCompile Include="dllmain.c" />
     <ClCompile Include="windows\acu_dirWindows.c" />
     <ClCompile Include="windows\acu_plgnWindows.c" />
     <ClCompile Include="windows\acu_randWindows.c" />
+    <ClCompile Include="windows\acu_stringWindows.c" />
     <ClCompile Include="windows\acu_utilWindows.c" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +167,7 @@
     <ClInclude Include="acu_rand.h" />
     <ClInclude Include="acu_stbl.h" />
     <ClInclude Include="acu_stck.h" />
+    <ClInclude Include="acu_strg.h" />
     <ClInclude Include="acu_util.h" />
     <ClInclude Include="acu_uuid.h" />
   </ItemGroup>

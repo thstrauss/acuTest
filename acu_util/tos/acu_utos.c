@@ -64,44 +64,42 @@ int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_lis
 }
 
 char* __acu_estrdup(const char* s) {
-    char* temp = strdup(s);
+    size_t size = strlen(s);
+    char* temp = malloc(size+1);
     if (temp) {
+        char* sPtr = (char*) s; 
+        char* esPtr = sPtr+size+1;
+        char* tPtr = temp;
+        while (sPtr < esPtr) {
+            *((unsigned long *) tPtr) = *((unsigned long *) sPtr);
+            sPtr += sizeof(unsigned long);
+            tPtr += sizeof(unsigned long);
+            if (sPtr >= esPtr) {
+                break;
+            }
+            *((unsigned long*)tPtr) = *((unsigned long*)sPtr);
+            sPtr += sizeof(unsigned long);
+            tPtr += sizeof(unsigned long);
+            if (sPtr >= esPtr) {
+                break;
+            }
+            *((unsigned long*)tPtr) = *((unsigned long*)sPtr);
+            sPtr += sizeof(unsigned long);
+            tPtr += sizeof(unsigned long);
+            if (sPtr >= esPtr) {
+                break;
+            }
+            *((unsigned long*)tPtr) = *((unsigned long*)sPtr);
+            sPtr += sizeof(unsigned long);
+            tPtr += sizeof(unsigned long);
+        }
+        sPtr = (char*) s + (size - 4);
+        tPtr = temp + (size - 4);
+        while (sPtr < esPtr) {
+            *(tPtr++) = *(sPtr++);
+        }
         return temp;
     }
     acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
     return NULL;
-}
-
-size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width)
-{
-	#define ellipsesChar '.'
-	#define ellipsesLength 3
-	
-    size_t length = strlen(s);
-    if (length <= width) {
-        strncpy(buffer, s, length);
-        width = length;
-    } else if (width < ellipsesLength) {
-        char* bufferPtr = buffer;
-        int i;
-        for (i = 0; i < width; i++) {
-            *(bufferPtr++) = ellipsesChar;
-        }
-        length = width;
-    } else {
-        size_t remainderEnd = (width - ellipsesLength) >> 1;
-        size_t remainderStart = width - remainderEnd - ellipsesLength;
-        char* bufferPtr = buffer;
-
-        strncpy(bufferPtr, s, remainderStart);
-        bufferPtr += remainderStart;
-        *(bufferPtr++) = ellipsesChar;
-        *(bufferPtr++) = ellipsesChar;
-        *(bufferPtr++) = ellipsesChar;
-        strncpy(bufferPtr, s + (length - remainderEnd), remainderEnd);
-        length = width;
-    }
-	buffer[width]='\0';
-	UNUSED(bufferSize);
-    return length;
 }

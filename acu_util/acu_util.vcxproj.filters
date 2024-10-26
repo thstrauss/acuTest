@@ -60,6 +60,12 @@
     <ClCompile Include="acu_stbl.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="acu_strg.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\acu_stringWindows.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="acu_dir.h">
@@ -93,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_stbl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="acu_strg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
