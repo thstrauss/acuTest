@@ -56,3 +56,5 @@ usht_tst.c (usht_tst.h, tst_bed.h)
 util_tst.c (util_tst.h)
 uuid_tst.c (uuid_tst.h)
 misc_tst.c
+
+fstrlen.s
