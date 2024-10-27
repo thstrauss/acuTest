@@ -31,6 +31,7 @@
 #include "acu_rslt.h"
 #include "acu_tcse.h"
 #include "acu_util.h"
+#include "acu_strg.h"
 #include "acu_tryc.h"
 
 static ACU_Stack* frameStack = NULL;

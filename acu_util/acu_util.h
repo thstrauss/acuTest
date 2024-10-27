@@ -75,9 +75,7 @@ __EXPORT void acu_wprintf(const char* format, ...);
 
 __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...);
 
-#define acu_estrdup(s) (acu_isMemoryTrackingEnabled() ?(char*)__addMallocToAllocTable(__acu_estrdup((s)), strlen(s), __FILE__, __LINE__):__acu_estrdup((s))) 
 
-__EXPORT char* __acu_estrdup(const char* s);
 
 __EXPORT void acu_enabledTrackMemory(int enabled);
 __EXPORT void acu_reportTrackMemory(void);

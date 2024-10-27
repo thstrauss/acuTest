@@ -51,6 +51,8 @@ void acu_enableCache(void) {
 
 long acu_getCacr(void) {
 #ifdef __TOS__
-	return Supexec(__getCacr);#
+	return Supexec(__getCacr);
+#else
+    return -1;
 #endif
 }

@@ -21,6 +21,8 @@
 
 #include "acu_stbl.h"
 #include "acu_util.h"
+#include "acu_strg.h"
+
 
 #include <stddef.h>
 #include <string.h>

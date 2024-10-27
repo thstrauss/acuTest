@@ -58,3 +58,13 @@ size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t
     buffer[width] = '\0';
     return length;
 }
+
+
+char* __acu_estrdup(const char* s) {
+    char* temp = _strdup(s);
+    if (temp) {
+        return temp;
+    }
+    acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
+    return NULL;
+}

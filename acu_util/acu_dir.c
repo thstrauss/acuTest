@@ -26,6 +26,8 @@
 #include "acu_dir.h"
 #include "acu_util.h"
 #include "acu_list.h"
+#include "acu_strg.h"
+
 
 ACU_Files* acu_filesMalloc(void)
 {

@@ -29,6 +29,7 @@
 #include "acu_util.h"
 #include "acu_hstb.h"
 #include "acu_stbl.h"
+#include "acu_strg.h"
 
 extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 
