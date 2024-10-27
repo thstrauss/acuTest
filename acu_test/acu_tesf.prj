@@ -1,6 +1,7 @@
 ..\lib\acu_tesf.lib
 
 .C [ -8 ]
+.C [ -2 ]
 .C [ -P ]
 .C [ -I..\acu_util ]
 .L [ -J ] 
@@ -10,6 +11,7 @@
 acu_asrt (acu_asrt.h, acu_eenv.h, acu_rslt.h)
 acu_fxtr (acu_fxtr.h)
 acu_ldr (acu_ldr.h)
+acu_perf (acu_perf.h)
 acu_rprt (acu_rprt.h, acu_tcse.h, acu_fxtr.h, acu_tryc.h)
 acu_rslt (acu_rslt.h)
 acu_tryc (acu_tryc.h)

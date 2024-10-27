@@ -143,6 +143,7 @@
     <ClCompile Include="acu_hstb.c" />
     <ClCompile Include="acu_list.c" />
     <ClCompile Include="acu_mtch.c" />
+    <ClCompile Include="acu_perf.c" />
     <ClCompile Include="acu_plgn.c" />
     <ClCompile Include="acu_rand.c" />
     <ClCompile Include="acu_stbl.c" />
@@ -162,6 +163,7 @@
     <ClInclude Include="acu_dir.h" />
     <ClInclude Include="acu_list.h" />
     <ClInclude Include="acu_mtch.h" />
+    <ClInclude Include="acu_perf.h" />
     <ClInclude Include="acu_plgn.h" />
     <ClInclude Include="acu_hstb.h" />
     <ClInclude Include="acu_rand.h" />

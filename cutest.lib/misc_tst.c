@@ -2,10 +2,7 @@
 
 #include <acu_fxtr.h>
 #include <acu_asrt.h>
-#include <acu_util.h>
-#include <acu_tryc.h>
-#include <acu_list.h>
-#include <acu_util.h>
+#include <acu_perf.h>
 
 #include <stdarg.h>
 #include <string.h>
@@ -107,54 +104,42 @@ static size_t fstrlen_C(const char* s) {
     return sPtr - s;
 }
 
-typedef void TestFunc(void);
-
-static unsigned long measureLoop(clock_t duration, TestFunc* func) {
-    unsigned long count = 0;
-    clock_t end = clock() + duration;
-    while (clock() < end) {
-        count++;
-        func();
-    }
-    return count;
-}
-
 static size_t x  = 0;
 
-static void voidFunc(void) {
+static void voidFunc(void *context) {
 	int i;
 	size_t s=0;
 	for (i=0; i<10000; i++) {
         s = 0;
 	}
     x = s;
-	UNUSED(s);
+	UNUSED(context);
 }
 
-static void strLenFunc(void) {
+static void strLenFunc(void* context) {
 	int i;
 	size_t s=0;
 	for (i=0; i<10000; i++) {
     	s = strlen("The quick brown fox jumps over the lazy dog");
     }
     x = s;
-    UNUSED(s);
+    UNUSED(context);
 }
 
 #ifdef __TOS__
 extern size_t fstrlen(const char*);
 
-static void fstrLenFunc(void) {
+static void fstrLenFunc(void* context) {
     int i;
 	size_t s = 0;
 	for (i=0; i<10000; i++) {
 		fstrlen("The quick brown fox jumps over the lazy dog");
     }
-    UNUSED(s);
+    UNUSED(context);
     }
 #endif
 
-static void fstrlen_CFunc(void) {
+static void fstrlen_CFunc(void* context) {
     int i;
 	size_t s = 0;
 	for (i=0; i<10000; i++) {
@@ -168,12 +153,12 @@ static void fstrlen_CFunc(void) {
 static void strlenTest(ACU_ExecuteEnv* environment, const void* context) {
 
     #define DIVISOR 5
-    printf("voidFunc\t%ld\n\r", (measureLoop(CLK_TCK / DIVISOR, voidFunc))*DIVISOR);
-    printf("strLenFunc\t%ld\n\r", (measureLoop(CLK_TCK / DIVISOR, strLenFunc))*DIVISOR);
+    printf("voidFunc\t%ld\n\r", (acu_measureLoop(voidFunc, CLK_TCK / DIVISOR, NULL))*DIVISOR);
+    printf("strLenFunc\t%ld\n\r", (acu_measureLoop(strLenFunc, CLK_TCK / DIVISOR, NULL))*DIVISOR);
 #ifdef __TOS__
-    printf("fstrLenFunc\t%ld\n\r", (measureLoop(CLK_TCK / DIVISOR , fstrLenFunc))*DIVISOR);
+    printf("fstrLenFunc\t%ld\n\r", (fstrLenFunc, acu_measureLoop(CLK_TCK / DIVISOR, NULL))*DIVISOR);
 #endif
-    printf("fstrlen_CFunc\t%ld\n\r", (measureLoop(CLK_TCK / DIVISOR, fstrlen_CFunc))*DIVISOR);
+    printf("fstrlen_CFunc\t%ld\n\r", (acu_measureLoop(fstrlen_CFunc, CLK_TCK / DIVISOR, NULL))*DIVISOR);
 
     printf("%ld\n\r", (long) fstrlen_C("The quick brown fox jumps over the lazy dog"));
 
@@ -192,7 +177,7 @@ ACU_Fixture* miscFixture(void)
 
     acu_addTestCase(fixture, "float In VaArgs are implicit converted to double", floatInVaArgsTest);
     acu_addTestCase(fixture, "float In VaArgs are implicit converted to double", orphanedAlloc);
-/*    acu_addTestCase(fixture, "strlenTest", strlenTest); */
+    acu_addTestCase(fixture, "strlenTest", strlenTest);
 
     return fixture;
 }
