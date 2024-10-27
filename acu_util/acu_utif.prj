@@ -6,6 +6,7 @@
 
 =
 
+acu_cach (acu_cach.h)
 acu_dir (acu_dir.h, acu_cmmn.h, acu_util.h)
 acu_hstb (acu_hstb.h, acu_list.h, acu_cmmn.h, acu_util.h)
 acu_list (acu_list.h, acu_cmmn.h, acu_util.h)
@@ -21,5 +22,7 @@ tos\acu_ptos (acu_plgn.h, acu_util.h)
 tos\acu_rtos (acu_rand.h)
 tos\acu_stos (acu_strg.h)
 tos\acu_utos (acu_util.h)
+
+tos\acu_cach.s [ -3 -S ]
 
 

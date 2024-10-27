@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="acu_perf.c" />
     <ClCompile Include="acu_asrt.c" />
     <ClCompile Include="acu_fxtr.c" />
     <ClCompile Include="acu_ldr.c" />
@@ -162,6 +163,7 @@
     <None Include="acu_test.licenseheader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="acu_perf.h" />
     <ClInclude Include="acu_asrt.h" />
     <ClInclude Include="acu_eenv.h" />
     <ClInclude Include="acu_fxtr.h" />

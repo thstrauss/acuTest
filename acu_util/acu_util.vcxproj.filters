@@ -66,7 +66,7 @@
     <ClCompile Include="windows\acu_stringWindows.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="acu_perf.c">
+    <ClCompile Include="ACU_CACH.C">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,7 +107,7 @@
     <ClInclude Include="acu_strg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="acu_perf.h">
+    <ClInclude Include="ACU_CACH.H">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

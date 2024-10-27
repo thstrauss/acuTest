@@ -19,17 +19,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-
-#ifndef __acu_performance__
-#define __acu_performance__
+#ifndef __acu_cache__
+#define __acu_cache__
 
 #include "acu_cmmn.h"
 
-#include <time.h>
-
-typedef void TestFunc(void* context);
-
-__EXPORT unsigned long acu_measureLoop(TestFunc* func, clock_t duration, void* context);
+__EXPORT void acu_clearCache(void);
+__EXPORT void acu_disableCache(void);
+__EXPORT void acu_enableCache(void);
+__EXPORT long acu_getCacr(void);
 
 #endif

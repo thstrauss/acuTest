@@ -16,6 +16,7 @@
         OR.L      D2, D1                                              
         NOT.L     D1                                                         
         BNE.B     .loope
+
         ADDQ.W    #4,A1
         MOVE.L    (A1), D0                                                
         MOVE.L    D0, D1                                                      
@@ -25,6 +26,7 @@
         OR.L      D2, D1                                              
         NOT.L     D1                                                         
         BNE.B     .loope
+        
         ADDQ.W    #4,A1
         MOVE.L    (A1), D0                                                
         MOVE.L    D0, D1                                                      
@@ -33,7 +35,18 @@
         OR.L      D0, D1                                                      
         OR.L      D2, D1                                              
         NOT.L     D1                                                         
-        BEQ.B     .loop                                                    
+        BNE.B     .loope
+        
+        ADDQ.W    #4,A1
+        MOVE.L    (A1), D0                                                
+        MOVE.L    D0, D1                                                      
+        AND.L     D2, D1                                               
+        ADD.L     D2, D1                                              
+        OR.L      D0, D1                                                      
+        OR.L      D2, D1                                              
+        NOT.L     D1                                                         
+        BEQ.B     .loop      
+                                                      
 .loope:	TST.B     (A1)+
 		BEQ.B     .end                                                                              
 		TST.B     (A1)+
