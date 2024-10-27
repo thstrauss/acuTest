@@ -25,17 +25,10 @@
 
 #include <tos.h>
 
-extern long __clearInstructionCache(void);
 extern long __disableInstructionCache(void);
 extern long __enableInstructionCache(void);
 extern long __getCacr(void);
 #endif
-
-void acu_clearCache(void) {
-#ifdef __TOS__
-	Supexec(__clearInstructionCache);
-#endif
-}
 
 void acu_disableCache(void) {
 #ifdef __TOS__

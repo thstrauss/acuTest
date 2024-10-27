@@ -24,7 +24,6 @@
 
 #include "acu_cmmn.h"
 
-__EXPORT void acu_clearCache(void);
 __EXPORT void acu_disableCache(void);
 __EXPORT void acu_enableCache(void);
 __EXPORT long acu_getCacr(void);
