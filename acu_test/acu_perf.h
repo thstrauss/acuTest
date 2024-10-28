@@ -26,10 +26,31 @@
 
 #include <acu_cmmn.h>   
 
-#include <time.h>
+extern long __disableInstructionCache(void);
+extern long __enableInstructionCache(void);
+extern long __getCacr(void);
 
-typedef void TestFunc(void);
+static long cacr = -1;
 
-__EXPORT unsigned long acu_measureLoop(TestFunc* func, clock_t duration);
+#endif
+
+void acu_disableCache(void) {
+#ifdef __TOS__
+	if (cacr == -1) {
+		cacr = acu_getCacr();
+	}
+	if (cacr & 0x0101) {
+		Supexec(__disableInstructionCache);
+	}
+#endif
+}
+
+void acu_enableCache(void) {
+#ifdef __TOS__
+	if (cacr & 0x0101) {
+		Supexec(__enableInstructionCache);
+	}
+#endif
+}
 
 #endif
