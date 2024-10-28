@@ -29,7 +29,7 @@ size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t
 #define ellipsesChar '.'
 #define ellipsesLength 3
 
-    size_t length = strlen(s);
+    size_t length = acu_strlen(s);
     if (length <= width) {
         strncpy(buffer, s, length);
         width = length;

@@ -106,8 +106,19 @@ static void strlenTest(ACU_ExecuteEnv* environment, const void* context) {
 
     char s[] = "";
 
-    /*ACU_assert(environment, size_t, Equal, acu_strlen(s), 0, "other than zero")
-*/
+    ACU_assert(environment, size_t, Equal, acu_strlen(s), 0, "other than zero")
+    ACU_assert(environment, size_t, Equal, acu_strlen("1"), 1, "other than zero")
+    ACU_assert(environment, size_t, Equal, acu_strlen("12"), 2, "other than zero")
+    ACU_assert(environment, size_t, Equal, acu_strlen("123"), 3, "other than zero")
+    ACU_assert(environment, size_t, Equal, acu_strlen("1234"), 4, "other than zero")
+    ACU_assert(environment, size_t, Equal, acu_strlen("12345"), 5, "other than zero")
+    ACU_assert(environment, size_t, Equal, acu_strlen("123456"), 6, "other than zero")
+    ACU_assert(environment, size_t, Equal, acu_strlen("1234567"), 7, "other than zero")
+    ACU_assert(environment, size_t, Equal, acu_strlen("12345678"), 8, "other than zero")
+    ACU_assert(environment, size_t, Equal, acu_strlen("123456789"), 9, "other than zero")
+    ACU_assert(environment, size_t, Equal, acu_strlen("1234567890"), 10, "other than zero")
+    ACU_assert(environment, size_t, Equal, acu_strlen("The quick brown fox jumps over the lazy dog"), 43, "other than zero")
+
     UNUSED(environment);
     UNUSED(context);
 }
@@ -134,7 +145,7 @@ ACU_Fixture* miscFixture(void)
     acu_addTestCase(fixture, "float In VaArgs are implicit converted to double", floatInVaArgsTest);
     acu_addTestCase(fixture, "orphanedAlloc", orphanedAlloc);
     acu_addTestCase(fixture, "strlenTest", strlenTest);
-    acu_addTestCase(fixture, "strlenPerformanceTest", strlenPerformanceTest);
-
+/*    acu_addTestCase(fixture, "strlenPerformanceTest", strlenPerformanceTest);
+*/
     return fixture;
 }

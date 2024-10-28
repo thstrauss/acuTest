@@ -30,11 +30,12 @@
 #include "acu_rslt.h"
 #include "acu_tryc.h"
 #include "acu_stck.h"
+#include "acu_strg.h"
 
 static const maxPtrLength = 16;
 
 static size_t acu_estimateBufferLength(const char* format, va_list args) {
-    size_t formatLength = strlen(format);
+    size_t formatLength = acu_strlen(format);
     size_t bufferSize = formatLength;
     char* formatPtr = (char*) format;
 
@@ -53,7 +54,7 @@ static size_t acu_estimateBufferLength(const char* format, va_list args) {
             }
             if (*formatPtr == 's' && *formatPtr != '\0') {
                 char* arg = (char*)va_arg(args, char*);
-                bufferSize += strlen(arg);
+                bufferSize += acu_strlen(arg);
             } else if (*formatPtr == 'f' || *formatPtr == 'e' && *formatPtr != '\0') {
                 if (longArg) {
                     double d = (double) va_arg(args, double);
@@ -115,7 +116,7 @@ static char* acu_sFormatMessage(const char* format, ...)
 
 static char* acu_formatErrorMessage(const char* message, const char* parameterMessage) {
     static char* messageFormat = "Error in: %s: %s";
-    size_t bufferSize = strlen(messageFormat) + strlen(message) + strlen(parameterMessage);
+    size_t bufferSize = acu_strlen(messageFormat) + acu_strlen(message) + acu_strlen(parameterMessage);
     char* buffer = acu_emalloc(bufferSize);
 
     if (buffer) {
@@ -145,7 +146,7 @@ static enum ACU_TestResult acu_equalPtr(const ACU_Types* actual, const ACU_Types
 static char* acu_equalPtrFailedFormatMessage(const ACU_AssertParameter* parameter) {
 
     static char* messageFormat = "actual value 0X%p equal to 0X%p: %s";
-    size_t bufferSize = strlen(messageFormat) + 2 * maxPtrLength + strlen(parameter->message);
+    size_t bufferSize = acu_strlen(messageFormat) + 2 * maxPtrLength + acu_strlen(parameter->message);
     char* buffer = acu_emalloc(bufferSize);
 
     if (buffer) {
@@ -162,7 +163,7 @@ static enum ACU_TestResult acu_notEqualPtr(const ACU_Types* actual, const ACU_Ty
 
 static char* acu_notEqualPtrFailedFormatMessage(const ACU_AssertParameter* parameter) {
     static char* messageFormat = "actual value 0X%p equal to 0X%p: %s";
-    size_t bufferSize = strlen(messageFormat) + 2 * maxPtrLength + strlen(parameter->message);
+    size_t bufferSize = acu_strlen(messageFormat) + 2 * maxPtrLength + acu_strlen(parameter->message);
     char* buffer = acu_emalloc(bufferSize);
 
     if (buffer) {
@@ -184,7 +185,7 @@ static char* acu_containsStrFailedFormatMessage(const ACU_AssertParameter* param
     static char* messageFormat = "actual value \"%s\" does not contain \"%s\": %s";
     const char* actual = parameter->values.actual.charPtrType;
     const char* expected = parameter->values.expected.charPtrType;
-    size_t bufferSize = strlen(messageFormat) + strlen(actual) + strlen(expected) + strlen(parameter->message);
+    size_t bufferSize = acu_strlen(messageFormat) + acu_strlen(actual) + acu_strlen(expected) + acu_strlen(parameter->message);
     char* buffer = acu_emalloc(bufferSize);
 
     if (buffer) {
@@ -212,7 +213,7 @@ static char* acu_notContainsStrFailedFormatMessage(const ACU_AssertParameter* pa
     static char* messageFormat = "actual value \"%s\" does contain \"%s\": %s";
     const char* actual = parameter->values.actual.charPtrType;
     const char* expected = parameter->values.expected.charPtrType;
-    size_t bufferSize = strlen(messageFormat) + strlen(actual) + strlen(expected) + strlen(parameter->message);
+    size_t bufferSize = acu_strlen(messageFormat) + acu_strlen(actual) + acu_strlen(expected) + acu_strlen(parameter->message);
     char* buffer = acu_emalloc(bufferSize);
 
     if (buffer) {
@@ -240,7 +241,7 @@ static char* acu_equalStrFailedFormatMessage(const ACU_AssertParameter* paramete
     static char* messageFormat = "actual value \"%s\" not equal to \"%s\": %s";
     const char* actual = parameter->values.actual.charPtrType;
     const char* expected = parameter->values.expected.charPtrType;
-    size_t bufferSize = strlen(messageFormat) + strlen(actual) + strlen(expected) + strlen(parameter->message);
+    size_t bufferSize = acu_strlen(messageFormat) + acu_strlen(actual) + acu_strlen(expected) + acu_strlen(parameter->message);
     char* buffer = acu_emalloc(bufferSize);
 
     if (buffer) {
@@ -267,7 +268,7 @@ static char* acu_notEqualStrFailedFormatMessage(const ACU_AssertParameter* param
     static char* messageFormat = "actual value \"%s\" equal to \"%s\": %s";
     const char* actual = parameter->values.actual.charPtrType;
     const char* expected = parameter->values.expected.charPtrType;
-    size_t bufferSize = strlen(messageFormat) + strlen(actual) + strlen(expected) + strlen(parameter->message);
+    size_t bufferSize = acu_strlen(messageFormat) + acu_strlen(actual) + acu_strlen(expected) + acu_strlen(parameter->message);
     char* buffer = acu_emalloc(bufferSize);
 
     if (buffer) {

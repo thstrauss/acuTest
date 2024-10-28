@@ -26,6 +26,7 @@
 
 #include "..\acu_hstb.h"
 #include "..\acu_util.h"
+#include "..\acu_strg.h"
 
 static char errorBuffer[1024];
 
@@ -40,7 +41,7 @@ void va_acu_printf(ACU_Level level, const char* format, va_list args) {
 
     bufPos += acu_sprintf_s(errorBuffer + bufPos, sizeof(errorBuffer) - bufPos, format, args);
 
-    if (format[0] != '\0' && format[strlen(format) - 1] == ':') {
+    if (format[0] != '\0' && format[acu_strlen(format) - 1] == ':') {
         bufPos += acu_sprintf_s(errorBuffer + bufPos, sizeof(errorBuffer) - bufPos, " %d %s", errno, strerror(errno));
     }
     __acu_errorHandler(level, errorBuffer);
@@ -64,7 +65,7 @@ int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_lis
 }
 
 char* __acu_estrdup(const char* s) {
-    size_t size = strlen(s);
+    size_t size = acu_strlen(s);
     char* temp = malloc(size+1);
     if (temp) {
  		strncpy(temp, s, size+1);

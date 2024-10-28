@@ -36,7 +36,7 @@ extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 static char* programName = NULL;
 static ACU_HashTable* __allocTable = NULL;
 static ACU_HashTable* __stringTable = NULL;
-static int __acuMemoryTrackingEnabled = 0;
+__EXPORT int __acuMemoryTrackingEnabled = 0;
 static unsigned int __shift = 3;
 
 char* acu_progName(void) {
@@ -79,18 +79,13 @@ ACU_HashTable* acu_getAllocTable(void)
     return __allocTable;
 }
 
-int acu_isMemoryTrackingEnabled(void)
-{
-    return __acuMemoryTrackingEnabled;
-}
-
 void acu_setAllocTable(ACU_HashTable* allocTable)
 {
     __allocTable = allocTable;
 }
 
 static size_t defaultWriteHandler(const char* buffer) {
-    return fwrite(buffer, sizeof(char), strlen(buffer), stdout);
+    return fwrite(buffer, sizeof(char), acu_strlen(buffer), stdout);
 }
 
 static ACU_WriteHandlerFunc* acu_writeHandler = defaultWriteHandler;

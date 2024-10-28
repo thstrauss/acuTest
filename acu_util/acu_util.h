@@ -55,7 +55,9 @@ __EXPORT void acu_setProgName(const char* progName);
 __EXPORT void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler);
 
 __EXPORT ACU_HashTable* acu_getAllocTable(void);
-__EXPORT int acu_isMemoryTrackingEnabled(void);
+#define acu_isMemoryTrackingEnabled() __acuMemoryTrackingEnabled
+__IMPORT extern int __acuMemoryTrackingEnabled;
+
 __EXPORT void acu_setAllocTable(ACU_HashTable* allocTable);
 
 __EXPORT ACU_WriteHandlerFunc* acu_getWriteHandler(void);

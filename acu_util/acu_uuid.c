@@ -23,10 +23,10 @@
 #include "acu_rand.h"
 #include "acu_cmmn.h"
 #include "acu_util.h"
+#include "acu_strg.h"
 
 
 #include <ctype.h>
-#include <string.h>
 #include <time.h>
 
 static ACU_UUID _NIL = { 0,0,0,0 };
@@ -110,7 +110,7 @@ static unsigned char acu_hexChar(unsigned char c)
 }
 
 static int acu_isValidUuid(const char* buffer) {
-    return buffer && strlen(buffer) == 36 &&
+    return buffer && acu_strlen(buffer) == 36 &&
         isxdigit(*buffer++) &&
         isxdigit(*buffer++) &&
         isxdigit(*buffer++) &&
