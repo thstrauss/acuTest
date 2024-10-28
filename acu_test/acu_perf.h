@@ -19,13 +19,38 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __acu_cache__
-#define __acu_cache__
+#pragma once
 
-#include "acu_cmmn.h"
+#ifndef __acu_performance__
+#define __acu_performance__
 
-__EXPORT void acu_disableCache(void);
-__EXPORT void acu_enableCache(void);
-__EXPORT long acu_getCacr(void);
+#include <acu_cmmn.h>   
+
+extern long __disableInstructionCache(void);
+extern long __enableInstructionCache(void);
+extern long __getCacr(void);
+
+static long cacr = -1;
+
+#endif
+
+void acu_disableCache(void) {
+#ifdef __TOS__
+	if (cacr == -1) {
+		cacr = acu_getCacr();
+	}
+	if (cacr & 0x0101) {
+		Supexec(__disableInstructionCache);
+	}
+#endif
+}
+
+void acu_enableCache(void) {
+#ifdef __TOS__
+	if (cacr & 0x0101) {
+		Supexec(__enableInstructionCache);
+	}
+#endif
+}
 
 #endif
