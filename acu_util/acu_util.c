@@ -144,10 +144,18 @@ static unsigned long hash(const void* key) {
     return (unsigned long) ((size_t) block->p) >> __shift;
 }
 
+static unsigned long hash2(const void* key) {
+    const Block* block = key;
+    return (unsigned long)((size_t)block->p) >> 2;
+}
+
+static unsigned long hash3(const void* key) {
+    const Block* block = key;
+    return (unsigned long)((size_t)block->p) >> 3;
+}
+
 static int match(const void* key1, const void* key2) {
-    const Block* block1 = key1;
-    const Block* block2 = key2;
-    return block1->p == block2->p;
+    return (((size_t) ((Block*) key1)->p) - ((size_t) ((Block*)key2)->p)) == 0;
 }
 
 static void destroy(void* data) {
@@ -179,10 +187,19 @@ static void* createBlock(const void* key) {
 void acu_enabledTrackMemory(int enabled)
 {
     if (enabled) {
+        ACU_HashTableHashFunc* hashFunc = hash;
+        
         __freeAllocTable();
         __shift = (int) (log(sizeof(void*)+1.0) / log(2.0));
+        
+        if (__shift == 2) {
+            hashFunc = hash2;
+        }
+        else if (__shift == 3) {
+            hashFunc = hash3;
+        }
         __allocTable = malloc(sizeof(ACU_HashTable));
-        acu_initHashTable(__allocTable, 2003, hash, match, createBlock, destroy);
+        acu_initHashTable(__allocTable, 2003, hashFunc, match, createBlock, destroy);
 
         __stringTable = malloc(sizeof(ACU_HashTable));
         acu_initStringTable(__stringTable);
