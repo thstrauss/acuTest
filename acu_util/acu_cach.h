@@ -24,10 +24,10 @@
 #ifndef __acu_cache__
 #define __acu_cache__
 
-void acu_disableCache(void);
+#include "acu_cmmn.h"
 
-void acu_enableCache(void);
+__EXPORT void acu_disableCache(void);
 
-long acu_getCacr(void);
+__EXPORT void acu_enableCache(void);
 
 #endif

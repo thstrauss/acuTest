@@ -32,6 +32,14 @@ extern long __getCacr(void);
 static long cacr = -1;
 #endif
 
+static long acu_getCacr(void) {
+#ifdef __TOS__
+    return Supexec(__getCacr);
+#else
+    return -1;
+#endif
+}
+
 void acu_disableCache(void) {
 #ifdef __TOS__
     if (cacr == -1) {
@@ -51,10 +59,3 @@ void acu_enableCache(void) {
 #endif
 }
 
-long acu_getCacr(void) {
-#ifdef __TOS__
-	return Supexec(__getCacr);
-#else
-    return -1;
-#endif
-}
