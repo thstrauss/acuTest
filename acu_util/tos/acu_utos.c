@@ -67,38 +67,8 @@ char* __acu_estrdup(const char* s) {
     size_t size = strlen(s);
     char* temp = malloc(size+1);
     if (temp) {
-        char* sPtr = (char*) s; 
-        char* esPtr = sPtr+size+1;
-        char* tPtr = temp;
-        while (sPtr < esPtr) {
-            *((unsigned long *) tPtr) = *((unsigned long *) sPtr);
-            sPtr += sizeof(unsigned long);
-            tPtr += sizeof(unsigned long);
-            if (sPtr >= esPtr) {
-                break;
-            }
-            *((unsigned long*)tPtr) = *((unsigned long*)sPtr);
-            sPtr += sizeof(unsigned long);
-            tPtr += sizeof(unsigned long);
-            if (sPtr >= esPtr) {
-                break;
-            }
-            *((unsigned long*)tPtr) = *((unsigned long*)sPtr);
-            sPtr += sizeof(unsigned long);
-            tPtr += sizeof(unsigned long);
-            if (sPtr >= esPtr) {
-                break;
-            }
-            *((unsigned long*)tPtr) = *((unsigned long*)sPtr);
-            sPtr += sizeof(unsigned long);
-            tPtr += sizeof(unsigned long);
-        }
-        sPtr = (char*) s + (size - 4);
-        tPtr = temp + (size - 4);
-        while (sPtr < esPtr) {
-            *(tPtr++) = *(sPtr++);
-        }
-        return temp;
+ 		strncpy(temp, s, size+1);
+ 		return temp;
     }
     acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
     return NULL;

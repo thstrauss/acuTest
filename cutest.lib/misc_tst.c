@@ -3,10 +3,10 @@
 #include <acu_fxtr.h>
 #include <acu_asrt.h>
 #include <acu_perf.h>
-#include <acu_cach.h>
 #include <acu_strg.h>
 
 #include <stdarg.h>
+#include <stddef.h>
 #include <string.h>
 #include <stdio.h>
 #include <time.h>
@@ -23,7 +23,7 @@ static float func2(float f1, ...) {
     f3 = (float)va_arg(list, double);
     s = (char*)va_arg(list, char*);
 
-    len = acu_strlen(s);
+    len = strlen(s);
 
     va_end(list);
 
@@ -52,7 +52,7 @@ static int zbyter(unsigned long x) {
     unsigned long y;
 
     y = (x & 0x7F7F7F7FL) + 0x7F7F7F7FL;
-    y = ~(y | x | 0x7F7F7F7FL);        
+    y = ~(y | x | 0x7F7F7F7FL);
 
     if (y == 0) {
         return 4;
@@ -104,12 +104,22 @@ static void acu_strlenFunc(void) {
 
 static void strlenTest(ACU_ExecuteEnv* environment, const void* context) {
 
-    #define DIVISOR 2
+    char s[] = "";
+
+    /*ACU_assert(environment, size_t, Equal, acu_strlen(s), 0, "other than zero")
+*/
+    UNUSED(environment);
+    UNUSED(context);
+}
+
+static void strlenPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
+
+    #define DIVISOR 3
     printf("voidFunc\t%ld\n\r", (acu_measureLoop(voidFunc, CLK_TCK / DIVISOR))*DIVISOR);
     printf("strLenFunc\t%ld\n\r", (acu_measureLoop(strLenFunc, CLK_TCK / DIVISOR))*DIVISOR);
     printf("acu_strlenFunc\t%ld\n\r", (acu_measureLoop(acu_strlenFunc, CLK_TCK / DIVISOR))*DIVISOR);
 
-    printf("%ld\n\r", (long) acu_strlen("The quick brown fox jumps over the lazy dog"));
+    #undef DIVISOR
 
     UNUSED(environment);
     UNUSED(context);
@@ -122,8 +132,9 @@ ACU_Fixture* miscFixture(void)
     acu_initFixture(fixture, "mixed bag of tests");
 
     acu_addTestCase(fixture, "float In VaArgs are implicit converted to double", floatInVaArgsTest);
-    acu_addTestCase(fixture, "float In VaArgs are implicit converted to double", orphanedAlloc);
-    /*acu_addTestCase(fixture, "strlenTest", strlenTest); */
+    acu_addTestCase(fixture, "orphanedAlloc", orphanedAlloc);
+    acu_addTestCase(fixture, "strlenTest", strlenTest);
+    acu_addTestCase(fixture, "strlenPerformanceTest", strlenPerformanceTest);
 
     return fixture;
 }
