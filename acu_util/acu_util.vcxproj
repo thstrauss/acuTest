@@ -159,7 +159,7 @@
     <ClCompile Include="windows\acu_utilWindows.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ACU_CACH.H" />
+    <ClInclude Include="acu_cach.h" />
     <ClInclude Include="acu_cmmn.h" />
     <ClInclude Include="acu_dir.h" />
     <ClInclude Include="acu_list.h" />
