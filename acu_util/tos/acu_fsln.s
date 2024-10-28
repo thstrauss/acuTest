@@ -1,8 +1,8 @@
 .TEXT
 
-        EXPORT fstrlen
+        EXPORT acu_strlen
 
-.MODULE fstrlen
+.MODULE acu_strlen
                                               
         MOVEA.L   A0,A1
         MOVE.L	  #$7F7F7F7F, D2                                                      

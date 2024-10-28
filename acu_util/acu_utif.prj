@@ -24,5 +24,6 @@ tos\acu_stos (acu_strg.h)
 tos\acu_utos (acu_util.h)
 
 tos\acu_cach.s [ -3 -S ]
+tos\acu_fsln.s
 
 

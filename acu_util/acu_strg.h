@@ -29,7 +29,9 @@
 
 __EXPORT char* __acu_estrdup(const char* s);
 
-#define acu_estrdup(s) (acu_isMemoryTrackingEnabled() ?(char*)__addMallocToAllocTable(__acu_estrdup((s)), strlen(s), __FILE__, __LINE__):__acu_estrdup((s))) 
+__EXPORT size_t acu_strlen(const char* s);
+
+#define acu_estrdup(s) (acu_isMemoryTrackingEnabled() ?(char*)__addMallocToAllocTable(__acu_estrdup((s)), acu_strlen(s), __FILE__, __LINE__):__acu_estrdup((s))) 
 
 __EXPORT size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width);
 

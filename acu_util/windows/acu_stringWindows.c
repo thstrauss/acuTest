@@ -68,3 +68,30 @@ char* __acu_estrdup(const char* s) {
     acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
     return NULL;
 }
+
+static size_t acu_strlen(const char* s) {
+    const char* sPtr = s;
+    unsigned long  magic = 0x7F7F7F7FL;
+
+    unsigned long  l = *((const unsigned long*)sPtr);
+    while (!~(((l & magic) + magic) | l | magic)) {
+        sPtr += sizeof(unsigned long);
+        l = *((const unsigned long*)sPtr);
+        if (~(((l & magic) + magic) | l | magic)) {
+            break;
+        }
+        sPtr += sizeof(unsigned long);
+        l = *((const unsigned long*)sPtr);
+        if (~(((l & magic) + magic) | l | magic)) {
+            break;
+        }
+        sPtr += sizeof(unsigned long);
+        l = *((const unsigned long*)sPtr);
+    }
+    while (*sPtr) {
+        if (!*(++sPtr)) break;
+        if (!*(++sPtr)) break;
+        sPtr++;
+    }
+    return sPtr - s;
+}
