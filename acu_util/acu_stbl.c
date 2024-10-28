@@ -29,28 +29,19 @@
 
 static unsigned long acu_stringHash(const void* key) {
     unsigned long hashValue = 2003;
-    const unsigned long* longPtr = (unsigned long*)key;
-
-    while (1) {
-        unsigned long l;
-        unsigned long anyZeroBytes;
-        l = *longPtr;
-        anyZeroBytes = (l & 0x7F7F7F7FL) + 0x7F7F7F7FL;
-        anyZeroBytes = ~(anyZeroBytes | l | 0x7F7F7F7FL);
-        if (anyZeroBytes) {
-            unsigned char c;
-            const unsigned char* strPtr = (unsigned char*) longPtr;
-            while ((c = *strPtr++) != '\0') {
-                hashValue ^= c;
-                hashValue = 121 * hashValue;
-            }
-            break;
-        }
+    unsigned long mask = 0x7F7F7F7FL;
+    unsigned long l = *(unsigned long*) key;
+    while (!(~((l & mask) + mask | l | mask))) {
         hashValue ^= l;
         hashValue = 121 * hashValue;
-        longPtr++;
+        ((unsigned char*)key) += sizeof(unsigned long);
+        l = *(unsigned long*)key;
     }
-    
+    while ((l = *((unsigned char*)key)++) != '\0') {
+        hashValue ^= l;
+        hashValue = 121 * hashValue;
+    }
+
     return hashValue;
 }
 
