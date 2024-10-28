@@ -28,17 +28,27 @@
 extern long __disableInstructionCache(void);
 extern long __enableInstructionCache(void);
 extern long __getCacr(void);
+
+static long cacr = -1;
+
 #endif
 
 void acu_disableCache(void) {
 #ifdef __TOS__
-	Supexec(__disableInstructionCache);
+	if (cacr == -1) {
+		cacr = acu_getCacr();
+	}
+	if (cacr & 0x0101) {
+		Supexec(__disableInstructionCache);
+	}
 #endif
 }
 
 void acu_enableCache(void) {
 #ifdef __TOS__
-	Supexec(__enableInstructionCache);
+	if (cacr & 0x0101) {
+		Supexec(__enableInstructionCache);
+	}
 #endif
 }
 
