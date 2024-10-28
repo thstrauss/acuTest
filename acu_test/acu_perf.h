@@ -24,33 +24,12 @@
 #ifndef __acu_performance__
 #define __acu_performance__
 
-#include <acu_cmmn.h>   
+#include <acu_cmmn.h>
 
-extern long __disableInstructionCache(void);
-extern long __enableInstructionCache(void);
-extern long __getCacr(void);
+#include <time.h>
 
-static long cacr = -1;
+typedef void TestFunc(void);
 
-#endif
-
-void acu_disableCache(void) {
-#ifdef __TOS__
-	if (cacr == -1) {
-		cacr = acu_getCacr();
-	}
-	if (cacr & 0x0101) {
-		Supexec(__disableInstructionCache);
-	}
-#endif
-}
-
-void acu_enableCache(void) {
-#ifdef __TOS__
-	if (cacr & 0x0101) {
-		Supexec(__enableInstructionCache);
-	}
-#endif
-}
+__EXPORT unsigned long acu_measureLoop(TestFunc* func, clock_t duration);
 
 #endif
