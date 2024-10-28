@@ -102,7 +102,7 @@ static void listRemoveElement(ACU_ExecuteEnv* environment, const void* context) 
 }
 
 
-ACU_Fixture* listFixture(void)
+ACU_Fixture* listTests(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
 

@@ -68,7 +68,7 @@ static void dirTestNull(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
-ACU_Fixture* dirFixture(void)
+ACU_Fixture* dirTests(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
 

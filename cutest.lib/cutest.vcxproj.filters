@@ -13,177 +13,192 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\util">
+      <UniqueIdentifier>{44f3c040-cdff-4139-98e6-ee7a10baf50d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\util">
+      <UniqueIdentifier>{f27ec735-4a0f-4f1e-b0c7-da5199d2c2e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\test">
+      <UniqueIdentifier>{6f5b87ee-d6ad-45eb-8622-958c1145d492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\test">
+      <UniqueIdentifier>{6323e723-2635-4f56-bc50-d499394f39bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.c">
+    <ClCompile Include="util\util_fxt.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\dir_tst.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\hstb_tst.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\list_tst.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\misc_tst.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\mtch_tst.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\rnd_tst.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\stck_tst.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\util_tst.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\uuid_tst.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="acu_entr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="flt_test.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\test_fxt.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="fxtr_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\asrt_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="tryc_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\char_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="int_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\flt_test.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="long_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\fxtr_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="ACU_ENTR.C">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\int_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="char_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\long_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="UINT_TST.C">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\ptr_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="ULNG_TST.C">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\rprt_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="uchr_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\rslt_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="ptr_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\shrt_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="shrt_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\sizt_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="usht_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\str_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="str_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\tryc_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="list_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\uchr_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="rslt_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\uint_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="util_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\ulng_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="mtch_tst.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rnd_tst.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="uuid_tst.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dir_tst.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rprt_tst.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hstb_tst.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sizt_tst.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="misc_tst.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="asrt_tst.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stck_tst.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="test\usht_tst.c">
+      <Filter>Source Files\test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="flt_test.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="util\dir_tst.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="fxtr_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="util\hstb_tst.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="tryc_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="util\list_tst.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="tst_bed.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="util\misc_tst.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="int_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="util\mtch_tst.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="long_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="util\rnd_tst.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="UCHR_TST.H">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="util\stck_tst.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="UINT_TST.H">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="util\util_tst.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="ULNG_TST.H">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="util\uuid_tst.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="CHAR_TST.H">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="util\util_fxt.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
-    <ClInclude Include="ptr_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\asrt_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="shrt_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\char_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="usht_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\flt_test.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="str_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\fxtr_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="list_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\int_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="rslt_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\long_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="util_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\ptr_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="mtch_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\rprt_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="rnd_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\rslt_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="uuid_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\shrt_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="dir_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\sizt_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="rprt_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\str_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="hstb_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\tryc_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="sizt_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\tst_bed.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="misc_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\uchr_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="asrt_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\uint_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="stck_tst.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="test\ulng_tst.h">
+      <Filter>Header Files\test</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cutest.lib.licenseheader" />
+    <ClInclude Include="test\usht_tst.h">
+      <Filter>Header Files\test</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
