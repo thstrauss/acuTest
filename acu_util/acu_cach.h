@@ -21,15 +21,13 @@
 
 #pragma once
 
-#ifndef __acu_performance__
-#define __acu_performance__
+#ifndef __acu_cache__
+#define __acu_cache__
 
-#include <acu_cmmn.h>
+#include "acu_cmmn.h"
 
-#include <time.h>
+__EXPORT void acu_disableCache(void);
 
-typedef void TestFunc(void);
-
-__EXPORT unsigned long acu_measureLoop(TestFunc* func, clock_t duration);
+__EXPORT void acu_enableCache(void);
 
 #endif

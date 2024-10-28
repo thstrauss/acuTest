@@ -19,17 +19,43 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
+#include "acu_cach.h"
 
-#ifndef __acu_performance__
-#define __acu_performance__
+#ifdef __TOS__
 
-#include <acu_cmmn.h>
+#include <tos.h>
 
-#include <time.h>
+extern long __disableInstructionCache(void);
+extern long __enableInstructionCache(void);
+extern long __getCacr(void);
 
-typedef void TestFunc(void);
-
-__EXPORT unsigned long acu_measureLoop(TestFunc* func, clock_t duration);
-
+static long cacr = -1;
 #endif
+
+static long acu_getCacr(void) {
+#ifdef __TOS__
+    return Supexec(__getCacr);
+#else
+    return -1;
+#endif
+}
+
+void acu_disableCache(void) {
+#ifdef __TOS__
+    if (cacr == -1) {
+        cacr = acu_getCacr();
+    }
+    if (cacr & 0x0101) {
+        Supexec(__disableInstructionCache);
+    }
+#endif
+}
+
+void acu_enableCache(void) {
+#ifdef __TOS__
+    if (cacr & 0x0101) {
+        Supexec(__enableInstructionCache);
+    }
+#endif
+}
+

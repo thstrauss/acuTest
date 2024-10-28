@@ -107,7 +107,7 @@
     <ClInclude Include="acu_strg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ACU_CACH.H">
+    <ClInclude Include="acu_cach.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
