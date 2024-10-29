@@ -105,7 +105,7 @@ static void ellipsisTest(ACU_ExecuteEnv* environment, const void* context) {
 }
 
 
-ACU_Fixture* utilFixture(void)
+ACU_Fixture* utilTests(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
 

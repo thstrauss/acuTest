@@ -20,11 +20,11 @@
  */
 
 #pragma once
-#ifndef __dir_test__
-#define __dir_test__
+#ifndef __util_test__
+#define __util_test__
 
-#include <acu_dir.h>
+#include <acu_fxtr.h>
 
-ACU_Fixture* dirFixture(void);
+ACU_Fixture* utilTests(void);
 
 #endif

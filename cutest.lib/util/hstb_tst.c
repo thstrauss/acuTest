@@ -100,7 +100,7 @@ static void fillHashTable(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
-ACU_Fixture* hashTableFixture(void)
+ACU_Fixture* hashTableTests(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
 
