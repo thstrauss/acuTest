@@ -25,6 +25,6 @@
 
 #include <acu_fxtr.h>
 
-ACU_Fixture* uuidFixture(void);
+ACU_Fixture* uuidTests(void);
 
 #endif

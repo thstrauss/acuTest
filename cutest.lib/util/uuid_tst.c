@@ -19,30 +19,59 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "rnd_tst.h"
+#include <stddef.h>
 
 #include <acu_fxtr.h>
 #include <acu_asrt.h>
 #include <acu_util.h>
-#include <acu_stck.h>
 #include <acu_tryc.h>
+#include <acu_list.h>
 
+#include "uuid_tst.h"
+
+#include <acu_uuid.h>
 #include <acu_rand.h>
+#include <time.h>
 
-static void randomTest(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_RandState state;
-    acu_srand(&state, 1);
-    ACU_assert(environment, unsignedLong, NotEqual, acu_rand(&state), acu_rand(&state), "Error");
+static void uuidTest(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_UUID uuid;
+    ACU_UUID parsed = {0,0,0,0};
+    char guidBuffer[] = "00000000-0000-0000-0000-000000000000";
+    acu_initUuid(&uuid);
+    acu_initUuid(&uuid);
+    acu_formatUuid(guidBuffer, &uuid);
+
+    acu_parseUuid(guidBuffer, &parsed);
+
+    ACU_assert(environment, int, Equal, acu_compareUuid(&uuid, &parsed), 1, "not equal");
+
     UNUSED(context);
 }
 
-ACU_Fixture* randomFixture(void)
+static void compareTest(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_UUID uuid1;
+    ACU_UUID uuid2;
+
+    acu_initUuid(&uuid1);
+    acu_initUuid(&uuid2);
+
+    ACU_assert(environment, int, Equal, acu_compareUuid(&uuid1, &uuid2), 0, "");
+    ACU_assert(environment, int, Equal, acu_compareUuid(&uuid1, &uuid1), 1, "");
+    ACU_assert(environment, int, Equal, acu_compareUuid(NULL, &uuid1), 0, "");
+    ACU_assert(environment, int, Equal, acu_compareUuid(&uuid1, NULL), 0, "");
+    ACU_assert(environment, int, Equal, acu_compareUuid(NULL, NULL), 0, "");
+    UNUSED(context);
+}
+
+ACU_Fixture* uuidTests(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_initFixture(fixture, "random tests");
+    acu_initFixture(fixture, "uuid Tests");
 
-    acu_addTestCase(fixture, "random", randomTest);
+    acu_addTestCase(fixture, "uuid test", uuidTest);
+    acu_addTestCase(fixture, "compare uuid test", compareTest);
+
 
     return fixture;
 }

@@ -136,7 +136,7 @@ static void strlenPerformanceTest(ACU_ExecuteEnv* environment, const void* conte
     UNUSED(context);
 }
 
-ACU_Fixture* miscFixture(void)
+ACU_Fixture* miscTests(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
 

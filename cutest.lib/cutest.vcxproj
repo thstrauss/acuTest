@@ -148,36 +148,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="acu_entr.c" />
-    <ClCompile Include="asrt_tst.c" />
-    <ClCompile Include="dir_tst.c" />
-    <ClCompile Include="hstb_tst.c" />
-    <ClCompile Include="misc_tst.c" />
-    <ClCompile Include="rnd_tst.c" />
-    <ClCompile Include="rprt_tst.c" />
-    <ClCompile Include="sizt_tst.c" />
-    <ClCompile Include="stck_tst.c" />
-    <ClCompile Include="uchr_tst.c" />
-    <ClCompile Include="dllmain.c" />
-    <ClCompile Include="flt_test.c" />
-    <ClCompile Include="fxtr_tst.c" />
-    <ClCompile Include="int_tst.c" />
-    <ClCompile Include="list_tst.c" />
-    <ClCompile Include="long_tst.c" />
-    <ClCompile Include="mtch_tst.c" />
-    <ClCompile Include="ptr_tst.c" />
-    <ClCompile Include="rslt_tst.c" />
-    <ClCompile Include="shrt_tst.c" />
-    <ClCompile Include="str_tst.c" />
-    <ClCompile Include="tryc_tst.c" />
-    <ClCompile Include="char_tst.c" />
-    <ClCompile Include="uint_tst.c" />
-    <ClCompile Include="ulng_tst.c" />
-    <ClCompile Include="usht_tst.c" />
-    <ClCompile Include="util_tst.c" />
-    <ClCompile Include="uuid_tst.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\acu_test\acu_test.vcxproj">
       <Project>{9f2aab5a-d806-4669-8e72-7525930721ad}</Project>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
@@ -190,36 +160,65 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="asrt_tst.h" />
-    <ClInclude Include="char_tst.h" />
-    <ClInclude Include="dir_tst.h" />
-    <ClInclude Include="flt_test.h" />
-    <ClInclude Include="fxtr_tst.h" />
-    <ClInclude Include="int_tst.h" />
-    <ClInclude Include="list_tst.h" />
-    <ClInclude Include="long_tst.h" />
-    <ClInclude Include="misc_tst.h" />
-    <ClInclude Include="mtch_tst.h" />
-    <ClInclude Include="ptr_tst.h" />
-    <ClInclude Include="rnd_tst.h" />
-    <ClInclude Include="rprt_tst.h" />
-    <ClInclude Include="rslt_tst.h" />
-    <ClInclude Include="shrt_tst.h" />
-    <ClInclude Include="hstb_tst.h" />
-    <ClInclude Include="sizt_tst.h" />
-    <ClInclude Include="stck_tst.h" />
-    <ClInclude Include="str_tst.h" />
-    <ClInclude Include="tryc_tst.h" />
-    <ClInclude Include="tst_bed.h" />
-    <ClInclude Include="uchr_tst.h" />
-    <ClInclude Include="uint_tst.h" />
-    <ClInclude Include="ulng_tst.h" />
-    <ClInclude Include="usht_tst.h" />
-    <ClInclude Include="util_tst.h" />
-    <ClInclude Include="uuid_tst.h" />
+    <ClCompile Include="acu_entr.c" />
+    <ClCompile Include="test\test_fxt.c" />
+    <ClCompile Include="test\asrt_tst.c" />
+    <ClCompile Include="test\char_tst.c" />
+    <ClCompile Include="test\flt_test.c" />
+    <ClCompile Include="test\fxtr_tst.c" />
+    <ClCompile Include="test\int_tst.c" />
+    <ClCompile Include="test\long_tst.c" />
+    <ClCompile Include="test\ptr_tst.c" />
+    <ClCompile Include="test\rprt_tst.c" />
+    <ClCompile Include="test\rslt_tst.c" />
+    <ClCompile Include="test\shrt_tst.c" />
+    <ClCompile Include="test\sizt_tst.c" />
+    <ClCompile Include="test\str_tst.c" />
+    <ClCompile Include="test\tryc_tst.c" />
+    <ClCompile Include="test\uchr_tst.c" />
+    <ClCompile Include="test\uint_tst.c" />
+    <ClCompile Include="test\ulng_tst.c" />
+    <ClCompile Include="test\usht_tst.c" />
+    <ClCompile Include="util\util_fxt.c" />
+    <ClCompile Include="util\dir_tst.c" />
+    <ClCompile Include="util\hstb_tst.c" />
+    <ClCompile Include="util\list_tst.c" />
+    <ClCompile Include="util\misc_tst.c" />
+    <ClCompile Include="util\mtch_tst.c" />
+    <ClCompile Include="util\rnd_tst.c" />
+    <ClCompile Include="util\stck_tst.c" />
+    <ClCompile Include="util\util_tst.c" />
+    <ClCompile Include="util\uuid_tst.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cutest.lib.licenseheader" />
+    <ClInclude Include="test\asrt_tst.h" />
+    <ClInclude Include="test\char_tst.h" />
+    <ClInclude Include="test\flt_test.h" />
+    <ClInclude Include="test\fxtr_tst.h" />
+    <ClInclude Include="test\int_tst.h" />
+    <ClInclude Include="test\long_tst.h" />
+    <ClInclude Include="test\ptr_tst.h" />
+    <ClInclude Include="test\rprt_tst.h" />
+    <ClInclude Include="test\rslt_tst.h" />
+    <ClInclude Include="test\shrt_tst.h" />
+    <ClInclude Include="test\sizt_tst.h" />
+    <ClInclude Include="test\str_tst.h" />
+    <ClInclude Include="test\tryc_tst.h" />
+    <ClInclude Include="test\tst_bed.h" />
+    <ClInclude Include="test\uchr_tst.h" />
+    <ClInclude Include="test\uint_tst.h" />
+    <ClInclude Include="test\ulng_tst.h" />
+    <ClInclude Include="test\usht_tst.h" />
+    <ClInclude Include="util\dir_tst.h" />
+    <ClInclude Include="util\hstb_tst.h" />
+    <ClInclude Include="util\list_tst.h" />
+    <ClInclude Include="util\misc_tst.h" />
+    <ClInclude Include="util\mtch_tst.h" />
+    <ClInclude Include="util\rnd_tst.h" />
+    <ClInclude Include="util\stck_tst.h" />
+    <ClInclude Include="util\util_fxt.h" />
+    <ClInclude Include="util\util_tst.h" />
+    <ClInclude Include="util\uuid_tst.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -72,7 +72,7 @@ static void noMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
-ACU_Fixture* matchFixture(void)
+ACU_Fixture* matchTests(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
 

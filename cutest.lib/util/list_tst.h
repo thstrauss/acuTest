@@ -20,12 +20,12 @@
  */
 
 #pragma once
-#ifndef __RANDOM_TEST__
-#define __RANDOM_TEST__
+#ifndef __LIST_TEST__
+#define __LIST_TEST__
 
 #include <acu_cmmn.h>
 #include <acu_fxtr.h>
 
-__EXPORT ACU_Fixture* randomFixture(void);
+__EXPORT ACU_Fixture* listTests(void);
 
 #endif
