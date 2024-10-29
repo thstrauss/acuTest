@@ -36,7 +36,7 @@
 
 static ACU_Stack* frameStack = NULL;
 
-static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_Progress* progress) {
+static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, ACU_Progress* progress) {
     ACU_ExecuteEnv environment;
     ACU_Frame frame;
     ACU_StackElement stackElement;
@@ -54,7 +54,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
         switch (setjmp(frame.exceptionBuf)) {
             case 0: {
                 while (1) {
-                    testCase->testFunc(&environment, context);
+                    testCase->testFunc(&environment, testCase->context);
                     break;
                 }
                 break;
@@ -114,7 +114,6 @@ void acu_setFixtureContext(ACU_Fixture* fixture, const void* context)
 enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progress) {
     ACU_ListElement* testElement = fixture->testCases->head;
     ACU_ListElement* childFixture = fixture->childFixtures->head;
-    const void* context = fixture->context;
     enum ACU_TestResult result = ACU_TEST_PASSED;
     if (!frameStack) {
         frameStack = acu_getFrameStack();
@@ -126,7 +125,10 @@ enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progr
         childFixture = childFixture->next;
     }
     while (testElement) {
-        enum ACU_TestResult r = acuTest_run((ACU_TestCase*)testElement->data, context, progress);
+        ACU_TestCase* testCase = (ACU_TestCase*)testElement->data;
+        enum ACU_TestResult r;
+        testCase->context = fixture->context;
+        r = acuTest_run(testCase, progress);
         result = acuTest_calcResult(result, r);
         testElement = testElement->next;
     }

@@ -34,8 +34,9 @@ typedef void ACU_TestFunc(ACU_ExecuteEnv* environment, const void* context);
 typedef struct ACU_TestCase_ {
     ACU_TestFunc* testFunc;
     char* name;
-    ACU_Result result;
     const struct ACU_Fixture_* fixture;
+    ACU_Result result;
+    const void* context;
 } ACU_TestCase;
 
 #endif
