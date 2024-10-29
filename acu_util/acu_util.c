@@ -36,7 +36,7 @@ extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 static char* programName = NULL;
 static ACU_HashTable* __allocTable = NULL;
 static ACU_HashTable* __stringTable = NULL;
-__EXPORT int __acuMemoryTrackingEnabled = 0;
+int __acuMemoryTrackingEnabled = 0;
 static unsigned int __shift = 3;
 
 char* acu_progName(void) {
@@ -139,27 +139,23 @@ typedef struct Block_ {
     int line;
 } Block;
 
-static unsigned long hash(const void* key) {
+static unsigned long acu_hashPtr(const void* key) {
     const Block* block = key;
     return (unsigned long) ((size_t) block->p) >> __shift;
 }
 
-static unsigned long hash2(const void* key) {
+static unsigned long acu_hashPtr2(const void* key) {
     const Block* block = key;
     return (unsigned long)((size_t)block->p) >> 2;
 }
 
-static unsigned long hash3(const void* key) {
+static unsigned long acu_hashPtr3(const void* key) {
     const Block* block = key;
     return (unsigned long)((size_t)block->p) >> 3;
 }
 
-static int match(const void* key1, const void* key2) {
+static int acu_matchPtr(const void* key1, const void* key2) {
     return (((size_t) ((Block*) key1)->p) - ((size_t) ((Block*)key2)->p)) == 0;
-}
-
-static void destroy(void* data) {
-    free(data);
 }
 
 static void __freeAllocTable(void) {
@@ -175,7 +171,7 @@ static void __freeAllocTable(void) {
     }
 }
 
-static void* createBlock(const void* key) {
+static void* acu_createBlock(const void* key) {
     Block* block = (Block*)malloc(sizeof(Block));
     if (block) {
         block->p = ((Block*)key)->p;
@@ -187,19 +183,19 @@ static void* createBlock(const void* key) {
 void acu_enabledTrackMemory(int enabled)
 {
     if (enabled) {
-        ACU_HashTableHashFunc* hashFunc = hash;
+        ACU_HashTableHashFunc* hashFunc = acu_hashPtr;
         
         __freeAllocTable();
         __shift = (int) (log(sizeof(void*)+1.0) / log(2.0));
         
         if (__shift == 2) {
-            hashFunc = hash2;
+            hashFunc = acu_hashPtr2;
         }
         else if (__shift == 3) {
-            hashFunc = hash3;
+            hashFunc = acu_hashPtr3;
         }
         __allocTable = malloc(sizeof(ACU_HashTable));
-        acu_initHashTable(__allocTable, 2003, hashFunc, match, createBlock, destroy);
+        acu_initHashTable(__allocTable, 2003, hashFunc, acu_matchPtr, acu_createBlock, free);
 
         __stringTable = malloc(sizeof(ACU_HashTable));
         acu_initStringTable(__stringTable);
@@ -258,7 +254,7 @@ void __acu_free(void* block)
     key.p = block;
     out = acu_removeHashTable(__allocTable, &key);
     if (out) {
-        destroy(out);
+        free(out);
     }
     free(block);
 }
