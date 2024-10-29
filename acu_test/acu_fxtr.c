@@ -40,17 +40,16 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
     ACU_ExecuteEnv environment;
     ACU_Frame frame;
     ACU_StackElement stackElement;
-    ACU_Result* result = &testCase->result;
-    frame.exception = 0;
-    stackElement.data = &frame;
 
-    environment.result = result;
+    environment.result = &testCase->result;
     environment.exceptionFrame = &frame;
+    stackElement.data = &frame;
+    frame.exception = 0;
 
-    acu_pushStackElement(frameStack, &stackElement);
+    ACU_PUSHSTACKELEMENT(frameStack, stackElement);
 
-    acu_prepareResult(result);
-    result->start = clock();
+    acu_prepareResult(environment.result);
+    environment.result->start = clock();
     do {
         switch (setjmp(frame.exceptionBuf)) {
             case 0: {
@@ -65,12 +64,12 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
             }
         }
     } while (0);
-    result->end = clock();
-    acu_dropStackElement(frameStack);
+    environment.result->end = clock();
+    ACU_DROPSTACKELEMENT(frameStack);
     if (progress && progress->progress) {
         progress->progress(testCase, progress->context);
     }
-    return result->status;
+    return environment.result->status;
 }
 
 static void acuTest_testCaseDestroy(ACU_TestCase* testCase) {
