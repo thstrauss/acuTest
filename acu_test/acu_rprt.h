@@ -67,6 +67,8 @@ typedef struct ACU_TestCases_ {
     ACU_List* testCases;
 } ACU_TestCases;
 
+__EXPORT void acu_performProgress(const ACU_Progress* progress, ACU_TestCase* testCase);
+
 __EXPORT void acu_reportSummary(const ACU_TestCase* testCase, void* context);
 
 #endif

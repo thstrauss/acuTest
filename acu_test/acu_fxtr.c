@@ -36,7 +36,7 @@
 
 static ACU_Stack* frameStack = NULL;
 
-static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, ACU_Progress* progress) {
+static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase) {
     ACU_ExecuteEnv environment;
     ACU_Frame frame;
     ACU_StackElement stackElement;
@@ -66,8 +66,8 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, ACU_Progress* pro
     } while (0);
     environment.result->end = clock();
     ACU_DROPSTACKELEMENT(frameStack);
-    if (progress && progress->progress) {
-        progress->progress(testCase, progress->context);
+    if (testCase->progress) {
+        acu_performProgress(testCase->progress, testCase);
     }
     return environment.result->status;
 }
@@ -128,7 +128,8 @@ enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progr
         ACU_TestCase* testCase = (ACU_TestCase*)testElement->data;
         enum ACU_TestResult r;
         testCase->context = fixture->context;
-        r = acuTest_run(testCase, progress);
+        testCase->progress = progress;
+        r = acuTest_run(testCase);
         result = acuTest_calcResult(result, r);
         testElement = testElement->next;
     }

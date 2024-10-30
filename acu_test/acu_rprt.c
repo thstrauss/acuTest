@@ -75,6 +75,13 @@ void acu_collectTestCases(const ACU_TestCase* testCase, void* context)
     acu_appendList(testCases->testCases, testCase);
 }
 
+void acu_performProgress(const ACU_Progress* progress, ACU_TestCase *testCase)
+{
+    if (progress->progress) {
+        progress->progress(testCase, progress->context);
+    }
+}
+
 void acu_reportSummary(const ACU_TestCase* testCase, void* context)
 {
     ACU_Summary* summary = (ACU_Summary*) context;
