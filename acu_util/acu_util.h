@@ -82,11 +82,11 @@ __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, .
 __EXPORT void acu_enabledTrackMemory(int enabled);
 __EXPORT void acu_reportTrackMemory(void);
 
-#define acu_emalloc(n) (acu_isMemoryTrackingEnabled() ? __addMallocToAllocTable(__acu_emalloc((n)), (n), __FILE__, __LINE__) :__acu_emalloc((n)))
+#define acu_emalloc(n) (!acu_isMemoryTrackingEnabled() ? __acu_emalloc((n)) : __addMallocToAllocTable(__acu_emalloc((n)), (n), __FILE__, __LINE__) )
 
 __EXPORT void* __acu_emalloc(size_t n);
 
-#define acu_free(buf) (acu_isMemoryTrackingEnabled() ? __acu_free(buf) : free(buf))
+#define acu_free(buf) (!acu_isMemoryTrackingEnabled() ?  free(buf) :__acu_free(buf) )
 
 __EXPORT void __acu_free(void* buf);
 

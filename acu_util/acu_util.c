@@ -36,7 +36,7 @@ extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 static char* programName = NULL;
 static ACU_HashTable* __allocTable = NULL;
 static ACU_HashTable* __stringTable = NULL;
-int __acuMemoryTrackingEnabled = 0;
+__EXPORT int __acuMemoryTrackingEnabled = 0;
 static unsigned int __shift = 3;
 
 char* acu_progName(void) {

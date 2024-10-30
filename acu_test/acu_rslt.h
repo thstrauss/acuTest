@@ -46,6 +46,13 @@ __EXPORT void acu_initResult(ACU_Result* result);
 __EXPORT void acu_prepareResult(ACU_Result* result);
 __EXPORT void acu_destroyResult(ACU_Result* result);
 
+#define ACU_PREPARERESULT(result) \
+    result->status = ACU_TEST_PASSED; \
+    if (result->message) { \
+        acu_free(result->message); \
+        result->message = NULL; \
+    }
+
 #define acuTest_calcResult(aggregatedResult, result) \
     ((result) == ACU_TEST_PASSED ? (aggregatedResult) : ((result) == ACU_TEST_FAILED ? ACU_TEST_FAILED : ACU_TEST_ERROR))
 

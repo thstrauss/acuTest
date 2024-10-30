@@ -48,7 +48,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, ACU_Progress* pro
 
     ACU_PUSHSTACKELEMENT(frameStack, stackElement);
 
-    acu_prepareResult(environment.result);
+    ACU_PREPARERESULT(environment.result);
     environment.result->start = clock();
     do {
         switch (setjmp(frame.exceptionBuf)) {

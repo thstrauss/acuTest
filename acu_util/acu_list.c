@@ -135,9 +135,10 @@ void* acu_removeNextList(ACU_List* list, ACU_ListElement* element)
 void acu_acceptList(const ACU_List* list, ACU_ListVisitor* visitor)
 {
 	void* context = visitor->context;
-	ACU_ListElement* listElement = list->head;    
+    ACU_ListVisitorFunc* visitorFunc = visitor->visitor;
+	ACU_ListElement* listElement = list->head;
     while (listElement) {
-        visitor->visitor(listElement->data, context);
+        visitorFunc(listElement->data, context);
         listElement = listElement->next;
     }
 }
