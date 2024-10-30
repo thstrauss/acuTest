@@ -65,12 +65,52 @@ int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_lis
 }
 
 char* __acu_estrdup(const char* s) {
-    size_t size = acu_strlen(s);
-    char* temp = malloc(size+1);
+    size_t size = acu_strlen(s) + 1;
+    char* temp = malloc(size);
     if (temp) {
- 		strncpy(temp, s, size+1);
- 		return temp;
+        const char *end = temp + (size / sizeof(unsigned long)) * sizeof(unsigned long);
+        char* t = temp;
+        while (t < end) {
+            *((unsigned long*)t) = *((unsigned long*)s);
+            t += (size_t) sizeof(unsigned long);
+            s += (size_t) sizeof(unsigned long);
+            if (t >= end) {
+                break;
+            }
+            *((unsigned long*)t) = *((unsigned long*)s);
+            t += (size_t) sizeof(unsigned long);
+            s += (size_t) sizeof(unsigned long);
+            if (t >= end) {
+                break;
+            }
+            *((unsigned long*)t) = *((unsigned long*)s);
+            t += (size_t) sizeof(unsigned long);
+            s += (size_t) sizeof(unsigned long);
+            if (t >= end) {
+                break;
+            }
+            *((unsigned long*)t) = *((unsigned long*)s);
+            t += (size_t) sizeof(unsigned long);
+            s += (size_t) sizeof(unsigned long);
+            if (t >= end) {
+                break;
+            }
+            *((unsigned long*)t) = *((unsigned long*)s);
+            t += (size_t) sizeof(unsigned long);
+            s += (size_t) sizeof(unsigned long);
+            if (t >= end) {
+                break;
+            }
+            *((unsigned long*)t) = *((unsigned long*)s);
+            t += (size_t) sizeof(unsigned long);
+            s += (size_t) sizeof(unsigned long);
+        }
+        end = temp + size;
+        while (t < end) {
+            *(t++) = *(s++);
+        }
+        return temp;
     }
     acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
-    return NULL;
+    return NULL; 
 }
