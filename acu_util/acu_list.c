@@ -51,18 +51,19 @@ ACU_ListElement* acu_listNext(ACU_ListElement* element) {
 const void* acu_appendList(ACU_List* list, const void* data) {
     ACU_ListElement* newElement = acu_listElementMalloc();
     if (newElement) {
-        ACU_ListElement* tailElement = list->tail;
+    	ACU_ListElement* tailElement;
+        newElement->next = NULL;
+        newElement->data = data;
+        if (!list->head) {
+            list->head = newElement;
+        }
+
+        tailElement = list->tail;
         if (tailElement) {
             tailElement->next = newElement;
         }
         list->tail = newElement;
 
-        newElement->next = NULL;
-        newElement->data = data;
-
-        if (!list->head) {
-            list->head = newElement;
-        }
         return data;
     }
     return NULL;
