@@ -104,6 +104,36 @@ char* __acu_estrdup(const char* s) {
             *((unsigned long*)t) = *((unsigned long*)s);
             t += (size_t) sizeof(unsigned long);
             s += (size_t) sizeof(unsigned long);
+            if (t >= end) {
+                break;
+            }
+            *((unsigned long*)t) = *((unsigned long*)s);
+            t += (size_t)sizeof(unsigned long);
+            s += (size_t)sizeof(unsigned long);
+            if (t >= end) {
+                break;
+            }
+            *((unsigned long*)t) = *((unsigned long*)s);
+            t += (size_t)sizeof(unsigned long);
+            s += (size_t)sizeof(unsigned long);
+            if (t >= end) {
+                break;
+            }
+            *((unsigned long*)t) = *((unsigned long*)s);
+            t += (size_t)sizeof(unsigned long);
+            s += (size_t)sizeof(unsigned long);
+            if (t >= end) {
+                break;
+            }
+            *((unsigned long*)t) = *((unsigned long*)s);
+            t += (size_t)sizeof(unsigned long);
+            s += (size_t)sizeof(unsigned long);
+            if (t >= end) {
+                break;
+            }
+            *((unsigned long*)t) = *((unsigned long*)s);
+            t += (size_t)sizeof(unsigned long);
+            s += (size_t)sizeof(unsigned long);
         }
         end = temp + size;
         while (t < end) {
