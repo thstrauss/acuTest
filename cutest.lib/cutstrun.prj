@@ -25,7 +25,7 @@
 .C [ -I..\acu_test ]
 .C [ -I..\acu_util ]
 .C [ -P ]
-.L [ -S=8192 ]	
+.L [ -S=8192 -L- -G -Y ]	
 
 =
 

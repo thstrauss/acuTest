@@ -38,8 +38,7 @@ typedef struct ACU_Result_ {
     char* message;
     const char* sourceFileName;
     int sourceLine;
-    clock_t start;
-    clock_t end;
+    clock_t duration;
 } ACU_Result;
 
 __EXPORT void acu_initResult(ACU_Result* result);

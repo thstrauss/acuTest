@@ -40,6 +40,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase) {
     ACU_ExecuteEnv environment;
     ACU_Frame frame;
     ACU_StackElement stackElement;
+    clock_t start;
 
     environment.result = &testCase->result;
     environment.exceptionFrame = &frame;
@@ -49,7 +50,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase) {
     ACU_PUSHSTACKELEMENT(frameStack, stackElement);
 
     ACU_PREPARERESULT(environment.result);
-    environment.result->start = clock();
+    start = clock();
     do {
         switch (setjmp(frame.exceptionBuf)) {
             case 0: {
@@ -64,7 +65,7 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase) {
             }
         }
     } while (0);
-    environment.result->end = clock();
+    environment.result->duration = clock() - start;
     ACU_DROPSTACKELEMENT(frameStack);
     if (testCase->progress) {
         acu_performProgress(testCase->progress, testCase);
@@ -88,8 +89,7 @@ void acu_initFixture(ACU_Fixture* fixture, const char* name) {
     fixture->testCases = testCases;
     fixture->childFixtures = childFixtures;
     fixture->name = acu_estrdup(name);
-    fixture->start = (clock_t)-1;
-    fixture->end = (clock_t)-1;
+    fixture->duration = (clock_t)0;
 }
 
 void acu_addTestCase(ACU_Fixture* fixture, const char* name, ACU_TestFunc testFunc) {
@@ -118,10 +118,12 @@ enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progr
     if (!frameStack) {
         frameStack = acu_getFrameStack();
     }
-    fixture->start = clock();
+    fixture->duration = 0;
+
     while (childFixture) {
         enum ACU_TestResult r = acu_executeFixture((ACU_Fixture*)childFixture->data, progress);
         result = acuTest_calcResult(result, r);
+        fixture->duration += ((ACU_Fixture*)childFixture->data)->duration;
         childFixture = childFixture->next;
     }
     while (testElement) {
@@ -130,10 +132,11 @@ enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progr
         testCase->context = fixture->context;
         testCase->progress = progress;
         r = acuTest_run(testCase);
+        fixture->duration += (testCase->result).duration;
+
         result = acuTest_calcResult(result, r);
         testElement = testElement->next;
     }
-    fixture->end = clock();
     return result;
 }
 
