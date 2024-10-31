@@ -149,7 +149,7 @@ extern int __acuMemoryTrackingEnabled;
 extern ACU_HashTable* __allocTable;
 extern ACU_HashTable* __stringTable;
 
-char* __strdupToAllocTable(const char* s, const char* fileName, int line) {
+const char* __strdupToAllocTable(const char* s, const char* fileName, int line) {
     size_t size = acu_strlen(s) + 1;
     char* temp = malloc(size);
     if (temp) {

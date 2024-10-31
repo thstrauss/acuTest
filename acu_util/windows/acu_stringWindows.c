@@ -22,6 +22,7 @@
 #include "../acu_strg.h"
 
 #include "../acu_util.h"
+#include "../acu_stbl.h"
 
 #include <stddef.h>
 #include <string.h>
@@ -75,7 +76,7 @@ extern ACU_HashTable* __allocTable;
 extern ACU_HashTable* __stringTable;
 
 
-void* __strdupToAllocTable(const char* s, const char* fileName, int line) {
+const char* __strdupToAllocTable(const char* s, const char* fileName, int line) {
     const char* p = __acu_estrdup(s);
     if (__acuMemoryTrackingEnabled) {
         Block key;

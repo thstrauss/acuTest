@@ -35,6 +35,6 @@ __EXPORT size_t acu_strlen(const char* s);
 
 __EXPORT size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width);
 
-__EXPORT char* __strdupToAllocTable(const char* s, const char* fileName, int line);
+__EXPORT const char* __strdupToAllocTable(const char* s, const char* fileName, int line);
 
 #endif
