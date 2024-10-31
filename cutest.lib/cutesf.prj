@@ -22,6 +22,7 @@
 ..\lib\cutesf.lib
 
 .C [ -8 ]
+.C [ -2 ]
 .C [ -I..\acu_util ]
 .C [ -I..\acu_test ]
 .C [ -P ]

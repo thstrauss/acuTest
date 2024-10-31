@@ -34,8 +34,8 @@
 extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 
 static char* programName = NULL;
-static ACU_HashTable* __allocTable = NULL;
-static ACU_HashTable* __stringTable = NULL;
+ACU_HashTable* __allocTable = NULL;
+ACU_HashTable* __stringTable = NULL;
 __EXPORT int __acuMemoryTrackingEnabled = 0;
 static unsigned int __shift = 3;
 
@@ -48,7 +48,7 @@ void acu_setProgName(const char* progName) {
         acu_free(programName);
     }
     if (progName) {
-        programName = acu_estrdup(progName);
+        programName = (__acuMemoryTrackingEnabled ? (char*)__strdupToAllocTable(progName, "C:\\thomas\\Atari\\Drive\\K\\cutest.t\\acu_util\\acu_util.c", 51) : __acu_estrdup((progName)));
     }
     else {
         programName = NULL;
@@ -131,13 +131,6 @@ int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...)
 
     return result;
 }
-
-typedef struct Block_ {
-    void* p;
-    size_t size;
-    const char* fileName;
-    int line;
-} Block;
 
 static unsigned long acu_hashPtr(const void* key) {
     const Block* block = key;
@@ -223,19 +216,26 @@ __EXPORT void acu_reportTrackMemory(void)
     }
 }
 
-void* __addMallocToAllocTable(void* p, size_t size, const char* fileName, int line) {
-    if (__acuMemoryTrackingEnabled) {
-        Block key;
-        Block* block;
-        key.p = p;
-        __acuMemoryTrackingEnabled = 0;
-        block = (Block*) acu_lookupOrAddHashTable(__allocTable, &key);
-        block->fileName = acu_acquireString(__stringTable, fileName);
-        __acuMemoryTrackingEnabled = 1;
-        block->size = size;
-        block->line = line;
+
+
+void* __mallocToAllocTable(size_t size, const char* fileName, int line) {
+    void* p = malloc(size);
+    if (p) {
+        if (__acuMemoryTrackingEnabled) {
+            Block key;
+            Block* block;
+            key.p = p;
+            __acuMemoryTrackingEnabled = 0;
+            block = (Block*)acu_lookupOrAddHashTable(__allocTable, &key);
+            block->fileName = acu_acquireString(__stringTable, fileName);
+            __acuMemoryTrackingEnabled = 1;
+            block->size = size;
+            block->line = line;
+        }
+        return p;
     }
-    return p;
+    acu_eprintf("acu_emalloc of %u bytes failed:", size);
+    return NULL;
 }
 
 void* __acu_emalloc(size_t size) {

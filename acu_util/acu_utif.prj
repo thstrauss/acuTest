@@ -1,6 +1,7 @@
 ..\lib\acu_utif.lib
 
 .C [ -8 ]
+.C [ -2 ]
 .C [ -P ]
 .L [ -J ] 
 

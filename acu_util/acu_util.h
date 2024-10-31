@@ -82,7 +82,7 @@ __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, .
 __EXPORT void acu_enabledTrackMemory(int enabled);
 __EXPORT void acu_reportTrackMemory(void);
 
-#define acu_emalloc(n) (!acu_isMemoryTrackingEnabled() ? __acu_emalloc((n)) : __addMallocToAllocTable(__acu_emalloc((n)), (n), __FILE__, __LINE__) )
+#define acu_emalloc(n) (!acu_isMemoryTrackingEnabled() ? __acu_emalloc((n)) : __mallocToAllocTable((n), __FILE__, __LINE__) )
 
 __EXPORT void* __acu_emalloc(size_t n);
 
@@ -94,7 +94,7 @@ __EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format
 __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
 
 
-__EXPORT void* __addMallocToAllocTable(void* p, size_t size, const char* fileName, int line);
+__EXPORT void* __mallocToAllocTable(size_t size, const char* fileName, int line);
 
 /*
 	Converts a NULL reference to the "NULL" string.
@@ -102,5 +102,13 @@ __EXPORT void* __addMallocToAllocTable(void* p, size_t size, const char* fileNam
 #define SAFE_REF(ref) ((ref)?(ref):"NULL")
 
 __EXPORT long acu_prime(long n);
+
+
+typedef struct Block_ {
+    const void* p;
+    size_t size;
+    const char* fileName;
+    int line;
+} Block;
 
 #endif
