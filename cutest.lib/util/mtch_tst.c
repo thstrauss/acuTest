@@ -32,43 +32,43 @@
 
 static void matchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("123", "0012300");
-    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "Does not Match");
     UNUSED(context);
 }
 
 static void starMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("1*3", "00____300");
-    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "Does not Match");
     UNUSED(context);
 }
 
 static void notStartMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("^123", "0012300");
-    ACU_assert(environment, int, Equal, result, 0, "Does not Match");
+    ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "Does not Match");
     UNUSED(context);
 }
 
 static void startMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("^123", "1230000");
-    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "Does not Match");
     UNUSED(context);
 }
 
 static void endMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("123$", "000123");
-    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "Does not Match");
     UNUSED(context);
 }
 
 static void noEndMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("123$", "1230000");
-    ACU_assert(environment, int, Equal, result, 0, "Does not Match");
+    ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "Does not Match");
     UNUSED(context);
 }
 
 static void noMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("1234", "0012300");
-    ACU_assert(environment, int, Equal, result, 0, "Does match");
+    ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "Does match");
     UNUSED(context);
 }
 
