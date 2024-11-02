@@ -127,7 +127,7 @@ static char* acu_formatErrorMessage(const char* message, const char* parameterMe
 
 #define STR(str) #str
 #define CREATE_ASSERT_FUNC(type, op, opcode, format) \
-static enum ACU_TestResult acu_##type##op(const ACU_Types* actual, const ACU_Types* expected) { \
+static ACU_TestResult acu_##type##op(const ACU_Types* actual, const ACU_Types* expected) { \
     return actual->type##Type opcode expected->type##Type; \
 } \
 static char* acu_##type##op##FormatMessage(const ACU_AssertParameter* parameter) { \
@@ -139,7 +139,7 @@ __EXPORT const ACU_Funcs acu_##type##op##Funcs = {acu_##type##op, acu_##type##op
 #include "acu_asrt.h"
 #undef __ACU_EMIT_ASSERT_FUNCS__
 
-static enum ACU_TestResult acu_equalPtr(const ACU_Types* actual, const ACU_Types* expected) {
+static ACU_TestResult acu_equalPtr(const ACU_Types* actual, const ACU_Types* expected) {
     return actual->voidPtrType == expected->voidPtrType;
 }
 
@@ -157,7 +157,7 @@ static char* acu_equalPtrFailedFormatMessage(const ACU_AssertParameter* paramete
 
 __EXPORT const ACU_Funcs acu_equalPtrFuncs = { acu_equalPtr, acu_equalPtrFailedFormatMessage, NULL };
 
-static enum ACU_TestResult acu_notEqualPtr(const ACU_Types* actual, const ACU_Types* expected) {
+static ACU_TestResult acu_notEqualPtr(const ACU_Types* actual, const ACU_Types* expected) {
     return actual->voidPtrType != expected->voidPtrType;
 }
 
@@ -174,7 +174,7 @@ static char* acu_notEqualPtrFailedFormatMessage(const ACU_AssertParameter* param
 
 __EXPORT const ACU_Funcs acu_notEqualPtrFuncs = { acu_notEqualPtr, acu_notEqualPtrFailedFormatMessage, NULL };
 
-static enum ACU_TestResult acu_containsStr(const ACU_Types* actual, const ACU_Types* expected) {
+static ACU_TestResult acu_containsStr(const ACU_Types* actual, const ACU_Types* expected) {
     if (!actual->voidPtrType || !expected->voidPtrType) {
         return ACU_TEST_ERROR;
     }
@@ -202,7 +202,7 @@ static char* acu_containsStrErrorFormatMessage(const ACU_AssertParameter* parame
 
 __EXPORT const ACU_Funcs acu_containsStrFuncs = { acu_containsStr, acu_containsStrFailedFormatMessage, acu_containsStrErrorFormatMessage };
 
-static enum ACU_TestResult acu_notContainsStr(const ACU_Types* actual, const ACU_Types* expected) {
+static ACU_TestResult acu_notContainsStr(const ACU_Types* actual, const ACU_Types* expected) {
     if (!actual->voidPtrType || !expected->voidPtrType) {
         return ACU_TEST_ERROR;
     }
@@ -230,7 +230,7 @@ static char* acu_notContainsStrErrorFormatMessage(const ACU_AssertParameter* par
 
 __EXPORT const ACU_Funcs acu_notContainsStrFuncs = { acu_notContainsStr, acu_notContainsStrFailedFormatMessage, acu_notContainsStrFailedFormatMessage };
 
-static enum ACU_TestResult acu_equalStr(const ACU_Types* actual, const ACU_Types* expected) {
+static ACU_TestResult acu_equalStr(const ACU_Types* actual, const ACU_Types* expected) {
     if (!actual->voidPtrType || !expected->voidPtrType) {
         return ACU_TEST_ERROR;
     }
@@ -257,7 +257,7 @@ static char* acu_equalStrErrorFormatMessage(const ACU_AssertParameter* parameter
 
 __EXPORT const ACU_Funcs acu_equalStrFuncs = { acu_equalStr, acu_equalStrFailedFormatMessage, acu_equalStrErrorFormatMessage };
 
-static enum ACU_TestResult acu_notEqualStr(const ACU_Types* actual, const ACU_Types* expected) {
+static ACU_TestResult acu_notEqualStr(const ACU_Types* actual, const ACU_Types* expected) {
     if (!actual->voidPtrType || !expected->voidPtrType) {
         return ACU_TEST_ERROR;
     }

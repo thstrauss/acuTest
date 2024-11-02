@@ -34,7 +34,7 @@ typedef enum ACU_TestResult_ {
 } ACU_TestResult;
 
 typedef struct ACU_Result_ {
-    enum ACU_TestResult status;
+    ACU_TestResult status;
     char* message;
     const char* sourceFileName;
     int sourceLine;

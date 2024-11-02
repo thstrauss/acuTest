@@ -64,7 +64,7 @@ typedef struct ACU_Values_ {
 } ACU_Values;
 
 /* Function prototype for assert functions */
-typedef enum ACU_TestResult (ACU_assertFunc)(const ACU_Types* actual, const ACU_Types* expected);
+typedef ACU_TestResult (ACU_assertFunc)(const ACU_Types* actual, const ACU_Types* expected);
 /* Function prototype for functions to format messages for specific asserts */
 typedef char* (ACU_formatMessageFunc)(const struct ACU_AssertParameter_* parameter);
 
@@ -97,7 +97,7 @@ __IMPORT extern ACU_Funcs acu_##type##op##Funcs;
 #endif
 
 /* Equal assert for signed char */
-CREATE_ASSERT_FUNC(signedChar, Equal, == , %c)
+CREATE_ASSERT_FUNC(signedChar, Equal, == , % c)
 CREATE_ASSERT_FUNC(signedChar, NotEqual, != , %c)
 CREATE_ASSERT_FUNC(signedChar, Less, < , %c)
 CREATE_ASSERT_FUNC(signedChar, Greater, > , %c)
