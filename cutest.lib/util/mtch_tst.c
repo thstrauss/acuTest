@@ -32,43 +32,67 @@
 
 static void matchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("123", "0012300");
-    ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "Does not Match");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
     UNUSED(context);
 }
 
 static void starMatchTest(ACU_ExecuteEnv* environment, const void* context) {
-    int result = acu_match("1*3", "00____300");
-    ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "Does not Match");
+    int result = acu_match("1*3", "011111300");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    UNUSED(context);
+}
+
+static void starMatchWrongTest(ACU_ExecuteEnv* environment, const void* context) {
+    int result = acu_match("01?3", "0300");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    UNUSED(context);
+}
+
+static void starMatchNoTest(ACU_ExecuteEnv* environment, const void* context) {
+    int result = acu_match("1*3", "0111100");
+    ACU_assert(environment, int, Equal, result, 0, "Does not Match");
+    UNUSED(context);
+}
+
+static void starMatchFailsTest(ACU_ExecuteEnv* environment, const void* context) {
+    int result = acu_match("1*3", "0000300");
+    ACU_assert(environment, int, Equal, result, 1, "Does Match");
     UNUSED(context);
 }
 
 static void notStartMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("^123", "0012300");
-    ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "Does not Match");
+    ACU_assert(environment, int, Equal, result, 0, "Does Match");
     UNUSED(context);
 }
 
 static void startMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("^123", "1230000");
-    ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "Does not Match");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
     UNUSED(context);
 }
 
 static void endMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("123$", "000123");
-    ACU_assert(environment, int, Equal, result, ACU_TEST_PASSED, "Does not Match");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    UNUSED(context);
+}
+
+static void escapeMatchTest(ACU_ExecuteEnv* environment, const void* context) {
+    int result = acu_match("\\$", "000$123");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
     UNUSED(context);
 }
 
 static void noEndMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("123$", "1230000");
-    ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "Does not Match");
+    ACU_assert(environment, int, Equal, result, 0, "Does Match");
     UNUSED(context);
 }
 
 static void noMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("1234", "0012300");
-    ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "Does match");
+    ACU_assert(environment, int, Equal, result, 0, "Does match");
     UNUSED(context);
 }
 
@@ -79,10 +103,14 @@ ACU_Fixture* matchTests(void)
     acu_initFixture(fixture, "match Tests");
     acu_addTestCase(fixture, "Match test", matchTest);
     acu_addTestCase(fixture, "Star Match test", starMatchTest);
+    acu_addTestCase(fixture, "starMatchWrongTest", starMatchWrongTest);
+    acu_addTestCase(fixture, "starMatchNoTest", starMatchNoTest);
+    acu_addTestCase(fixture, "Star Match fails test", starMatchFailsTest);
     acu_addTestCase(fixture, "Not Start Match test", notStartMatchTest);
     acu_addTestCase(fixture, "Start Match test", startMatchTest);
     acu_addTestCase(fixture, "No Match test", noMatchTest);
     acu_addTestCase(fixture, "End Match test", endMatchTest);
+    acu_addTestCase(fixture, "escapeMatchTest", escapeMatchTest);
     acu_addTestCase(fixture, "No End Match test", noEndMatchTest);
 
     return fixture;

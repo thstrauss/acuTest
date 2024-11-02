@@ -23,12 +23,16 @@
 
 int matchHere(const char* regexp, const char* text);
 
+static int matchChar(int c, const char* text) {
+    return *text != '\0' && (*text == c || c == '.');
+}
+
 static int matchStar(int c, const char* regexp, const char* text) {
     do {
         if (matchHere(regexp, text)) {
             return 1;
         }
-    } while (*text != '\0' && (*text++ == c || c == '.'));
+    } while (matchChar(c, text++));
     return 0;
 }
 
@@ -36,13 +40,25 @@ static int matchHere(const char* regexp, const char* text) {
     if (regexp[0] == '\0') {
         return 1;
     }
+    if (regexp[0] == '\\') {
+        return matchHere(regexp + 1, text);
+    }
     if (regexp[1] == '*') {
         return matchStar(regexp[0], regexp + 2, text);
+    }    
+    if (regexp[1] == '+') {
+        return matchChar(regexp[0], text) && matchStar(regexp[0], regexp + 2, text + 1);
+    }
+    if (regexp[1] == '?') {
+        if (matchChar(regexp[0], text)) {
+            return matchHere(regexp + 2, text + 1);
+        }
+        return matchHere(regexp + 2, text);
     }
     if (regexp[0] == '$' && regexp[1] == '\0') {
         return *text == '\0';
     }
-    if (*text != '\0' && (regexp[0] == '.' || regexp[0] == *text)) {
+    if (matchChar(regexp[0], text)) {
         return matchHere(regexp + 1, text + 1);
     }
     return 0;
