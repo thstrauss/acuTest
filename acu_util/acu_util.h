@@ -101,7 +101,7 @@ __EXPORT void* __mallocToAllocTable(size_t size, const char* fileName, int line)
 */
 #define SAFE_REF(ref) ((ref)?(ref):"NULL")
 
-__EXPORT long acu_prime(long n);
+__EXPORT unsigned long acu_prime(unsigned long n);
 
 
 typedef struct Block_ {

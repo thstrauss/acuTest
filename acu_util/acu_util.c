@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include <math.h>
 
 #include "acu_util.h"
 #include "acu_hstb.h"
@@ -173,13 +172,26 @@ static void* acu_createBlock(const void* key) {
 }
 
 
+static int nlz(unsigned long x) {
+    int n;
+
+    if (x == 0) return(32);
+    n = 0;
+    if (x <= 0x0000FFFFL) { n = n + 16; x = x << 16; }
+    if (x <= 0x00FFFFFFL) { n = n + 8; x = x << 8; }
+    if (x <= 0x0FFFFFFFL) { n = n + 4; x = x << 4; }
+    if (x <= 0x3FFFFFFFL) { n = n + 2; x = x << 2; }
+    if (x <= 0x7FFFFFFFL) { n = n + 1; }
+    return n;
+}
+
 void acu_enabledTrackMemory(int enabled)
 {
     if (enabled) {
         ACU_HashTableHashFunc* hashFunc = acu_hashPtr;
         
         __freeAllocTable();
-        __shift = (int) (log(sizeof(void*)+1.0) / log(2.0));
+        __shift = 31-nlz(sizeof(void*));
         
         if (__shift == 2) {
             hashFunc = acu_hashPtr2;
@@ -259,18 +271,40 @@ void __acu_free(void* block)
     free(block);
 }
 
-long acu_prime(long n) {
-    long i, j; 
+unsigned long isqrt(unsigned long x) {
+    unsigned long x1;
+    unsigned long s, g0, g1;
+
+    if (x <= 1) return x;
+    s = 1;
+    x1 = x - 1L;
+    if (x1 > 65535L) { s = s + 8; x1 = x1 >> 16; }
+    if (x1 > 255L) { s = s + 4; x1 = x1 >> 8; }
+    if (x1 > 15L) { s = s + 2; x1 = x1 >> 4; }
+    if (x1 > 3L) { s = s + 1; }
+
+    g0 = 1 << s;
+    g1 = (g0 + (x >> s)) >> 1;
+
+    while (g1 < g0) {
+        g0 = g1;
+        g1 = (g0 + (x / g0)) >> 1;
+    }
+    return g0;
+}
+
+unsigned long acu_prime(unsigned long n) {
+    unsigned long i, j; 
     if (!(n & 1)) {
         n--;
     }
 
     for (i = n; i >= 2; i -= 2) {
-        double sqrtI;
+        unsigned long sqrtI;
         if (i % 2 == 0) {
             continue;
         }
-        sqrtI = sqrt(i);
+        sqrtI = isqrt(i);
         for (j = 3; j <= sqrtI; j += 2) {
             if (i % j == 0) {
                 break;
