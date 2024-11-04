@@ -36,24 +36,36 @@ static int matchStar(int c, const char* regexp, const char* text) {
     return 0;
 }
 
+static int matchPlus(int c, const char* regexp, const char* text) {
+    return matchChar(c, text) && matchStar(c, regexp, text + 1);
+}
+
+static int matchQuery(int c, const char* regexp, const char* text) {
+    if (matchChar(c, text)) {
+        return matchHere(regexp, text + 1);
+    }
+    return matchHere(regexp, text);
+}
+
+static int matchEscape(const char* regexp, const char* text) {
+    return matchHere(regexp, text);
+}
+
 static int matchHere(const char* regexp, const char* text) {
     if (regexp[0] == '\0') {
         return 1;
     }
     if (regexp[0] == '\\') {
-        return matchHere(regexp + 1, text);
+        return matchEscape(regexp+1, text);
     }
     if (regexp[1] == '*') {
         return matchStar(regexp[0], regexp + 2, text);
     }    
     if (regexp[1] == '+') {
-        return matchChar(regexp[0], text) && matchStar(regexp[0], regexp + 2, text + 1);
+        return matchPlus(regexp[0], regexp + 2, text);
     }
     if (regexp[1] == '?') {
-        if (matchChar(regexp[0], text)) {
-            return matchHere(regexp + 2, text + 1);
-        }
-        return matchHere(regexp + 2, text);
+        return matchQuery(regexp[0], regexp + 2, text);
     }
     if (regexp[0] == '$' && regexp[1] == '\0') {
         return *text == '\0';
