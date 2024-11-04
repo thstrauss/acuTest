@@ -37,25 +37,25 @@ static void matchTest(ACU_ExecuteEnv* environment, const void* context) {
 }
 
 static void starMatchTest(ACU_ExecuteEnv* environment, const void* context) {
-    int result = acu_match("1*3", "011111300");
+    int result = acu_match("12*3", "01222300");
     ACU_assert(environment, int, Equal, result, 1, "Does not Match");
     UNUSED(context);
 }
 
 static void starMatchWrongTest(ACU_ExecuteEnv* environment, const void* context) {
-    int result = acu_match("01?3", "0300");
+    int result = acu_match("012?3", "01300");
     ACU_assert(environment, int, Equal, result, 1, "Does not Match");
     UNUSED(context);
 }
 
 static void starMatchNoTest(ACU_ExecuteEnv* environment, const void* context) {
-    int result = acu_match("1*3", "0111100");
-    ACU_assert(environment, int, Equal, result, 0, "Does not Match");
+    int result = acu_match("12*3", "0111100");
+    ACU_assert(environment, int, Equal, result, 0, "Does Match");
     UNUSED(context);
 }
 
 static void starMatchFailsTest(ACU_ExecuteEnv* environment, const void* context) {
-    int result = acu_match("1*3", "0000300");
+    int result = acu_match("12*3", "0001300");
     ACU_assert(environment, int, Equal, result, 1, "Does Match");
     UNUSED(context);
 }
