@@ -22,7 +22,7 @@
 #include "acu_list.h"
 #include "acu_util.h"
 
-static void __acu_dummyDestroy(void* data) {
+static void __acu_defaultListDestroy(void* data) {
     UNUSED(data);
 }
 
@@ -33,7 +33,7 @@ void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy) {
         list->destroy = destroy;
     }
     else {
-        list->destroy = __acu_dummyDestroy;
+        list->destroy = __acu_defaultListDestroy;
     }
 }
 
@@ -45,11 +45,10 @@ ACU_ListElement* acu_listNext(ACU_ListElement* element) {
     return element->next;
 }
 
-
-#define acu_listElementMalloc() ((ACU_ListElement*) acu_emalloc(sizeof(ACU_ListElement)))
+#define ACU__LISTELEMENTMALLOC() ((ACU_ListElement*) acu_emalloc(sizeof(ACU_ListElement)))
 
 const void* acu_appendList(ACU_List* list, const void* data) {
-    ACU_ListElement* newElement = acu_listElementMalloc();
+    ACU_ListElement* newElement = ACU__LISTELEMENTMALLOC();
     if (newElement) {
     	ACU_ListElement* tailElement;
         newElement->next = NULL;
@@ -71,7 +70,7 @@ const void* acu_appendList(ACU_List* list, const void* data) {
 
 const void* acu_insertHeadList(ACU_List* list, const void* data)
 {
-    ACU_ListElement* newListElement = acu_listElementMalloc();
+    ACU_ListElement* newListElement = ACU__LISTELEMENTMALLOC();
     if (newListElement) {
         newListElement->data = (void*)data;
 
@@ -87,7 +86,7 @@ const void* acu_insertHeadList(ACU_List* list, const void* data)
 
 const void* acu_insertNextList(ACU_List* list, ACU_ListElement* element, const void* data)
 {
-    ACU_ListElement *newListElement = acu_listElementMalloc();
+    ACU_ListElement *newListElement = ACU__LISTELEMENTMALLOC();
     if (newListElement) {
 
         if (element) {
