@@ -35,15 +35,17 @@ int matchHere(const char* regexp, const char* text);
 static int matchChar(const RegEx* regex, const char* text) {
     switch (regex->type)
     {
-    case CHAR: return *text != '\0' && *text == regex->charClass.matchChar;
-    case ANY: return *text != '\0';
-    default:
-        return 0;
+        case CHAR: return *text != '\0' && *text == regex->charClass.matchChar;
+        case ANY: return *text != '\0';
+        default:
+            return 0;
     }
 }
 
 static int matchStar(int c, const char* regexp, const char* text) {
-    RegEx regex = { CHAR, c };
+    RegEx regex;
+    regex.type = CHAR;
+    regex.charClass.matchChar = c;
     do {
         if (matchHere(regexp, text)) {
             return 1;
@@ -53,12 +55,16 @@ static int matchStar(int c, const char* regexp, const char* text) {
 }
 
 static int matchPlus(int c, const char* regexp, const char* text) {
-    RegEx regex = { CHAR, c };
+    RegEx regex;
+    regex.type = CHAR;
+    regex.charClass.matchChar = c;
     return matchChar(&regex, text) && matchStar(c, regexp, text + 1);
 }
 
 static int matchQuery(int c, const char* regexp, const char* text) {
-    RegEx regex = { CHAR, c };
+    RegEx regex;
+    regex.type = CHAR;
+    regex.charClass.matchChar = c;
     if (matchChar(&regex, text)) {
         return matchHere(regexp, text + 1);
     }
@@ -71,11 +77,11 @@ static int matchEscape(const char* regexp, const char* text) {
 
 static int matchAny(const char* regexp, const char* text) {
     RegEx regex = {ANY};
-    return matchChar(&regex, text);
+    return matchChar(&regex, text) && matchHere(regexp+1, text + 1);
 }
 
 static int matchHere(const char* regexp, const char* text) {
-    RegEx regex = {CHAR, regexp[0] };
+    RegEx regex;
     if (regexp[0] == '\0') {
         return 1;
     }
@@ -97,6 +103,8 @@ static int matchHere(const char* regexp, const char* text) {
     if (regexp[0] == '$' && regexp[1] == '\0') {
         return *text == '\0';
     }
+    regex.type = CHAR;
+    regex.charClass.matchChar = regexp[0];
     if (matchChar(&regex, text)) {
         return matchHere(regexp + 1, text + 1);
     }
