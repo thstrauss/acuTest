@@ -21,27 +21,45 @@
 
 #include "acu_mtch.h"
 
+typedef enum RegExType_ {CHAR, ANY, RANGE} RegExType;
+
+typedef struct RegEx_{
+    RegExType type;
+    union {
+        int matchChar;
+    } charClass;
+} RegEx;
+
 int matchHere(const char* regexp, const char* text);
 
-static int matchChar(int c, const char* text) {
-    return *text != '\0' && (*text == c || c == '.');
+static int matchChar(const RegEx* regex, const char* text) {
+    switch (regex->type)
+    {
+    case CHAR: return *text != '\0' && *text == regex->charClass.matchChar;
+    case ANY: return *text != '\0';
+    default:
+        return 0;
+    }
 }
 
 static int matchStar(int c, const char* regexp, const char* text) {
+    RegEx regex = { CHAR, c };
     do {
         if (matchHere(regexp, text)) {
             return 1;
         }
-    } while (matchChar(c, text++));
+    } while (matchChar(&regex, text++));
     return 0;
 }
 
 static int matchPlus(int c, const char* regexp, const char* text) {
-    return matchChar(c, text) && matchStar(c, regexp, text + 1);
+    RegEx regex = { CHAR, c };
+    return matchChar(&regex, text) && matchStar(c, regexp, text + 1);
 }
 
 static int matchQuery(int c, const char* regexp, const char* text) {
-    if (matchChar(c, text)) {
+    RegEx regex = { CHAR, c };
+    if (matchChar(&regex, text)) {
         return matchHere(regexp, text + 1);
     }
     return matchHere(regexp, text);
@@ -51,12 +69,21 @@ static int matchEscape(const char* regexp, const char* text) {
     return matchHere(regexp, text);
 }
 
+static int matchAny(const char* regexp, const char* text) {
+    RegEx regex = {ANY};
+    return matchChar(&regex, text);
+}
+
 static int matchHere(const char* regexp, const char* text) {
+    RegEx regex = {CHAR, regexp[0] };
     if (regexp[0] == '\0') {
         return 1;
     }
     if (regexp[0] == '\\') {
         return matchEscape(regexp+1, text);
+    }
+    if (regexp[0] == '.') {
+        return matchAny(regexp, text);
     }
     if (regexp[1] == '*') {
         return matchStar(regexp[0], regexp + 2, text);
@@ -70,7 +97,7 @@ static int matchHere(const char* regexp, const char* text) {
     if (regexp[0] == '$' && regexp[1] == '\0') {
         return *text == '\0';
     }
-    if (matchChar(regexp[0], text)) {
+    if (matchChar(&regex, text)) {
         return matchHere(regexp + 1, text + 1);
     }
     return 0;
