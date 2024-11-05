@@ -37,7 +37,7 @@ static void matchTest(ACU_ExecuteEnv* environment, const void* context) {
 }
 
 static void matchClassTest(ACU_ExecuteEnv* environment, const void* context) {
-    int result = acu_match("[12]", "00100");
+    int result = acu_match("[12]", "00200");
     ACU_assert(environment, int, Equal, result, 1, "Does not Match");
     UNUSED(context);
 }

@@ -104,8 +104,8 @@ static int matchHere(ACU_ListElement* regExElement, const char* text) {
         return matchPlus(regExElement, text);
     }
 
-    if (r->type == SINGLE_OP && matchClass(&r->class, text)) {
-        return matchHere(regExElement->next, text + 1);
+    if (r->type == SINGLE_OP) {
+        return matchClass(&r->class, text) && matchHere(regExElement->next, text + 1);
     }
     return 0;
 }
@@ -134,12 +134,22 @@ static void compile(ACU_List* regexpList, const char* regexp) {
             regEx->type = END_OP;
         }
         else if (c == '[') {
-            const char* start = ++regexp;
+        	const char* start;
             size_t size;
-            while (*regexp++ != ']');
-            size = regexp -start;
-            regEx->class.charClass.class = acu_emalloc(size);
-            strncpy_s(regEx->class.charClass.class, size, start, size-1);
+        	regexp++;
+            start = regexp;
+            while (*regexp != ']') {
+            	regexp++;
+            }
+            size = regexp - start;
+            regEx->class.charClass.class = acu_emalloc(size+1);
+            
+#ifdef __TOS__
+            strncpy(regEx->class.charClass.class, start, size);
+            *(regEx->class.charClass.class+size) = '\0';
+#else
+            strncpy_s(regEx->class.charClass.class, size+1, start, size);
+#endif
             regEx->class.type = CLASS_CLASS;
         }
         else {
