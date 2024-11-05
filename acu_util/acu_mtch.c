@@ -21,103 +21,137 @@
 
 #include "acu_mtch.h"
 
-typedef enum RegExType_ {CHAR, ANY, RANGE} RegExType;
+#include <stdio.h>
 
-typedef struct RegEx_{
-    RegExType type;
+typedef enum RegExClass_ {CHAR, ANY, RANGE} RegExClass;
+typedef enum RegExOperation_ { SINGLE, STAR, PLUS, QUERY, START, END } RegExOperation;
+
+typedef struct CharacterClass_ {
+    RegExClass type;
     union {
         int matchChar;
     } charClass;
+} CharacterClass;
+
+typedef struct RegEx_{
+    RegExOperation type;
+    CharacterClass class;
 } RegEx;
 
-int matchHere(const char* regexp, const char* text);
+static RegEx regEx[100];
+static int maxRegEx;
 
-static int matchChar(const RegEx* regex, const char* text) {
-    switch (regex->type)
+
+int matchHere(int index, const char* text);
+
+static int matchClass(const CharacterClass* class, const char* text) {
+    switch (class->type)
     {
-        case CHAR: return *text != '\0' && *text == regex->charClass.matchChar;
+        case CHAR: return *text != '\0' && *text == class->charClass.matchChar;
         case ANY: return *text != '\0';
         default:
             return 0;
     }
 }
 
-static int matchStar(int c, const char* regexp, const char* text) {
-    RegEx regex;
-    regex.type = CHAR;
-    regex.charClass.matchChar = c;
+static int matchStar(const CharacterClass* class, int index, const char* text) {
     do {
-        if (matchHere(regexp, text)) {
+        if (matchHere(index, text)) {
             return 1;
         }
-    } while (matchChar(&regex, text++));
+    } while (matchClass(class, text++));
     return 0;
 }
 
-static int matchPlus(int c, const char* regexp, const char* text) {
-    RegEx regex;
-    regex.type = CHAR;
-    regex.charClass.matchChar = c;
-    return matchChar(&regex, text) && matchStar(c, regexp, text + 1);
+static int matchPlus(int index, const char* text) {
+    return matchClass(&regEx[index].class, text) && matchStar(&regEx[index].class, index+1, text);
 }
 
-static int matchQuery(int c, const char* regexp, const char* text) {
-    RegEx regex;
-    regex.type = CHAR;
-    regex.charClass.matchChar = c;
-    if (matchChar(&regex, text)) {
-        return matchHere(regexp, text + 1);
+static int matchQuery(int index, const char* text) {
+    if (matchClass(&regEx[index].class, text)) {
+        return matchHere(index+1, text+1);
     }
-    return matchHere(regexp, text);
+    return matchHere(index+1, text);
 }
 
-static int matchEscape(const char* regexp, const char* text) {
-    return matchHere(regexp, text);
-}
-
-static int matchAny(const char* regexp, const char* text) {
-    RegEx regex = {ANY};
-    return matchChar(&regex, text) && matchHere(regexp+1, text + 1);
-}
-
-static int matchHere(const char* regexp, const char* text) {
-    RegEx regex;
-    if (regexp[0] == '\0') {
+static int matchHere(int index, const char* text) {
+    if (index == maxRegEx) {
         return 1;
     }
-    if (regexp[0] == '\\') {
-        return matchEscape(regexp+1, text);
+    if (regEx[index].type == STAR) {
+        return matchStar(&regEx[index].class, index+1, text);
     }
-    if (regexp[0] == '.') {
-        return matchAny(regexp, text);
-    }
-    if (regexp[1] == '*') {
-        return matchStar(regexp[0], regexp + 2, text);
-    }    
-    if (regexp[1] == '+') {
-        return matchPlus(regexp[0], regexp + 2, text);
-    }
-    if (regexp[1] == '?') {
-        return matchQuery(regexp[0], regexp + 2, text);
-    }
-    if (regexp[0] == '$' && regexp[1] == '\0') {
+    if (regEx[index].type == END) {
         return *text == '\0';
     }
-    regex.type = CHAR;
-    regex.charClass.matchChar = regexp[0];
-    if (matchChar(&regex, text)) {
-        return matchHere(regexp + 1, text + 1);
+    if (regEx[index].type == QUERY) {
+        return matchQuery(index, text);
+    }
+
+    if (regEx[index].type == PLUS) {
+        return matchPlus(index, text);
+    }
+
+    if (regEx[index].type == SINGLE && matchClass(&regEx[index].class, text)) {
+        return matchHere(index+1, text + 1);
     }
     return 0;
+}
+
+
+static int compile(const char* regexp) {
+    int c;
+    int index = 0;
+    while ((c = *regexp) != '\0') {
+        regEx[index].type = SINGLE;
+        regEx[index].class.type = CHAR;
+        regEx[index].class.charClass.matchChar = c;
+        if (c == '\\') {
+            regexp++;
+            if (*regexp != '\0') {
+                regEx[index].class.charClass.matchChar = *regexp;
+            }
+        }
+        else if (c == '.') {
+            regEx[index].class.type = ANY;
+        }
+        else if (c == '^') {
+            regEx[index].type = START;
+        }
+        else if (c == '$') {
+            regEx[index].type = END;
+        }
+        regexp++;
+        if (*regexp != '\0' && *regexp == '*') {
+            regEx[index].type = STAR;
+            regexp++;
+        }
+        else if (*regexp != '\0' && *regexp == '+') {
+            regEx[index].type = PLUS;
+            regexp++;
+        }
+        else if (*regexp != '\0' && *regexp == '?') {
+            regEx[index].type = QUERY;
+            regexp++;
+        }
+        index++;
+    }
+    return index;
 }
 
 int acu_match(const char* regexp, const char* text)
 {
-    if (regexp[0] == '^') {
-        return matchHere(regexp + 1, text);
+    maxRegEx = compile(regexp);
+    printf("%s\n\r", regexp);
+    for (int i = 0; i < maxRegEx; i++) {
+        printf("%d %d\n\r", regEx[i].type, regEx[i].class.type);
+    }
+    int index = 0;
+    if (regEx[index].type == START) {
+        return matchHere(index + 1, text);
     }
     do {
-        if (matchHere(regexp, text)) {
+        if (matchHere(index, text)) {
             return 1;
         }
     } while (*text++ != '\0');

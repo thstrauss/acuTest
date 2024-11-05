@@ -47,27 +47,46 @@ static void matchAnyManyTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_assert(environment, int, Equal, result, 1, "Does not Match");
     UNUSED(context);
 }
+
 static void starMatchTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("12*3", "01222300");
     ACU_assert(environment, int, Equal, result, 1, "Does not Match");
     UNUSED(context);
 }
 
-static void starMatchWrongTest(ACU_ExecuteEnv* environment, const void* context) {
-    int result = acu_match("012?3", "01300");
-    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
-    UNUSED(context);
-}
-
 static void starMatchNoTest(ACU_ExecuteEnv* environment, const void* context) {
-    int result = acu_match("12*3", "0111100");
-    ACU_assert(environment, int, Equal, result, 0, "Does Match");
+    int result = acu_match("12*3", "01300");
+    ACU_assert(environment, int, Equal, result, 1, "Does Match");
     UNUSED(context);
 }
 
 static void starMatchFailsTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("12*3", "0001300");
-    ACU_assert(environment, int, Equal, result, 1, "Does Match");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    UNUSED(context);
+}
+
+static void plusMatchTest(ACU_ExecuteEnv* environment, const void* context) {
+    int result = acu_match("12+3", "00012222300");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    UNUSED(context);
+}
+
+static void plusMatchFailTest(ACU_ExecuteEnv* environment, const void* context) {
+    int result = acu_match("12+3", "0001300");
+    ACU_assert(environment, int, Equal, result, 0, "Does Match");
+    UNUSED(context);
+}
+
+static void queryMatchTest(ACU_ExecuteEnv* environment, const void* context) {
+    int result = acu_match("012?3", "012300");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    UNUSED(context);
+}
+
+static void queryMatchWrongTest(ACU_ExecuteEnv* environment, const void* context) {
+    int result = acu_match("012?3", "01300");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
     UNUSED(context);
 }
 
@@ -116,7 +135,10 @@ ACU_Fixture* matchTests(void)
     acu_addTestCase(fixture, "matchAnyTest", matchAnyTest);
     acu_addTestCase(fixture, "matchAnyManyTest", matchAnyManyTest);
     acu_addTestCase(fixture, "Star Match test", starMatchTest);
-    acu_addTestCase(fixture, "starMatchWrongTest", starMatchWrongTest);
+    acu_addTestCase(fixture, "plusMatchTest", plusMatchTest);
+    acu_addTestCase(fixture, "plusMatchFailTest", plusMatchFailTest);
+    acu_addTestCase(fixture, "queryMatchTest", queryMatchTest);
+    acu_addTestCase(fixture, "queryMatchWrongTest", queryMatchWrongTest);
     acu_addTestCase(fixture, "starMatchNoTest", starMatchNoTest);
     acu_addTestCase(fixture, "Star Match fails test", starMatchFailsTest);
     acu_addTestCase(fixture, "Not Start Match test", notStartMatchTest);
