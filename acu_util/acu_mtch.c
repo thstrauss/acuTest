@@ -21,8 +21,6 @@
 
 #include "acu_mtch.h"
 
-#include <stdio.h>
-
 typedef enum RegExClass_ {CHAR, ANY, RANGE} RegExClass;
 typedef enum RegExOperation_ { SINGLE, STAR, PLUS, QUERY, START, END } RegExOperation;
 
@@ -142,16 +140,12 @@ static int compile(const char* regexp) {
 int acu_match(const char* regexp, const char* text)
 {
     maxRegEx = compile(regexp);
-    printf("%s\n\r", regexp);
-    for (int i = 0; i < maxRegEx; i++) {
-        printf("%d %d\n\r", regEx[i].type, regEx[i].class.type);
-    }
-    int index = 0;
-    if (regEx[index].type == START) {
-        return matchHere(index + 1, text);
+
+    if (regEx[0].type == START) {
+        return matchHere(1, text);
     }
     do {
-        if (matchHere(index, text)) {
+        if (matchHere(0, text)) {
             return 1;
         }
     } while (*text++ != '\0');
