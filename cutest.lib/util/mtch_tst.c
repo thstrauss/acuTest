@@ -36,6 +36,12 @@ static void matchTest(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
+static void matchClassTest(ACU_ExecuteEnv* environment, const void* context) {
+    int result = acu_match("[12]", "00100");
+    ACU_assert(environment, int, Equal, result, 1, "Does not Match");
+    UNUSED(context);
+}
+
 static void matchAnyTest(ACU_ExecuteEnv* environment, const void* context) {
     int result = acu_match("1.3", "0012300");
     ACU_assert(environment, int, Equal, result, 1, "Does not Match");
@@ -138,6 +144,7 @@ ACU_Fixture* matchTests(void)
 
     acu_initFixture(fixture, "match Tests");
     acu_addTestCase(fixture, "Match test", matchTest);
+    acu_addTestCase(fixture, "matchClassTest", matchClassTest);
     acu_addTestCase(fixture, "matchAnyTest", matchAnyTest);
     acu_addTestCase(fixture, "plusMatchAnyTest", plusMatchAnyTest);
     acu_addTestCase(fixture, "matchAnyManyTest", matchAnyManyTest);

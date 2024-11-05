@@ -24,14 +24,16 @@
 #include "acu_list.h"
 #include "acu_util.h"
 #include <stdlib.h>
+#include <string.h>
 
-typedef enum RegExClass_ { CHAR_CLASS, ANY_CLASS } RegExClass;
+typedef enum RegExClass_ { CHAR_CLASS, ANY_CLASS, CLASS_CLASS } RegExClass;
 typedef enum RegExOperation_ { SINGLE_OP, STAR_OP, PLUS_OP, QUERY_OP, START_OP, END_OP } RegExOperation;
 
 typedef struct CharacterClass_ {
     RegExClass type;
     union {
         int matchChar;
+        char* class;
     } charClass;
 } CharacterClass;
 
@@ -47,6 +49,16 @@ static int matchClass(const CharacterClass* class, const char* text) {
     {
         case CHAR_CLASS: return *text != '\0' && *text == class->charClass.matchChar;
         case ANY_CLASS: return *text != '\0';
+        case CLASS_CLASS: {
+            char* c = class->charClass.class;
+            int ac;
+            while ((ac = *c++) != '\0') {
+                if (ac == *text) {
+                    return 1;
+                }
+            }
+            return 0;
+        }
         default:
             return 0;
     }
@@ -88,7 +100,6 @@ static int matchHere(ACU_ListElement* regExElement, const char* text) {
     if (r->type == QUERY_OP) {
         return matchQuery(regExElement, text);
     }
-
     if (r->type == PLUS_OP) {
         return matchPlus(regExElement, text);
     }
@@ -100,9 +111,8 @@ static int matchHere(ACU_ListElement* regExElement, const char* text) {
 }
 
 
-static int compile(ACU_List* regexpList, const char* regexp) {
+static void compile(ACU_List* regexpList, const char* regexp) {
     int c;
-    int index = 0;
     while ((c = *regexp) != '\0') {
         RegEx* regEx = acu_emalloc(sizeof(RegEx));
         acu_appendList(regexpList, regEx);
@@ -123,6 +133,15 @@ static int compile(ACU_List* regexpList, const char* regexp) {
         else if (c == '$') {
             regEx->type = END_OP;
         }
+        else if (c == '[') {
+            const char* start = ++regexp;
+            size_t size;
+            while (*regexp++ != ']');
+            size = regexp -start;
+            regEx->class.charClass.class = acu_emalloc(size);
+            strncpy_s(regEx->class.charClass.class, size, start, size-1);
+            regEx->class.type = CLASS_CLASS;
+        }
         else {
             regEx->class.type = CHAR_CLASS;
             regEx->class.charClass.matchChar = c;
@@ -140,12 +159,13 @@ static int compile(ACU_List* regexpList, const char* regexp) {
             regEx->type = QUERY_OP;
             regexp++;
         }
-        index++;
     }
-    return index;
 }
 
 static void __free(void* data) {
+    if (((RegEx*)data)->class.type == CLASS_CLASS) {
+        acu_free(((RegEx*)data)->class.charClass.class);
+    }
     acu_free(data);
 }
 
