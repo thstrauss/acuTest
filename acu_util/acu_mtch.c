@@ -23,8 +23,7 @@
 
 #include "acu_list.h"
 #include "acu_util.h"
-#include <stdlib.h>
-#include <string.h>
+#include "acu_strg.h"
 
 typedef enum RegExClass_ { CHAR_CLASS, ANY_CLASS, CLASS_CLASS } RegExClass;
 typedef enum RegExOperation_ { SINGLE_OP, STAR_OP, PLUS_OP, QUERY_OP, START_OP, END_OP } RegExOperation;
@@ -142,13 +141,8 @@ static void compile(ACU_List* regexpList, const char* regexp) {
             }
             size = regexp - start;
             regEx->class.charClass.class = acu_emalloc(size+1);
-            
-#ifdef __TOS__
-            strncpy(regEx->class.charClass.class, start, size);
-            *(regEx->class.charClass.class+size) = '\0';
-#else
-            strncpy_s(regEx->class.charClass.class, size+1, start, size);
-#endif
+            acu_strncpy(regEx->class.charClass.class, start, size);
+            *(regEx->class.charClass.class + size) = '\0';
             regEx->class.type = CLASS_CLASS;
         }
         else {

@@ -27,42 +27,6 @@
 #include <stddef.h>
 #include <string.h>
 
-size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width)
-{
-    static char ellipsesChar = '.';
-    const int ellipsesLength = 3;
-
-    size_t length = strlen(s);
-    if (length <= width) {
-        strncpy_s(buffer, bufferSize, s, width);
-        width = length;
-    }
-    else if (width < ellipsesLength) {
-        char* bufferPtr = buffer;
-        int i;
-        for (i = 0; i < width; i++) {
-            *(bufferPtr++) = ellipsesChar;
-        }
-        length = width;
-    }
-    else {
-        size_t remainderEnd = (width - ellipsesLength) / 2;
-        size_t remainderStart = width - remainderEnd - ellipsesLength;
-        char* bufferPtr = buffer;
-
-        strncpy_s(bufferPtr, remainderStart + 1, s, remainderStart);
-        bufferPtr += remainderStart;
-        *(bufferPtr++) = ellipsesChar;
-        *(bufferPtr++) = ellipsesChar;
-        *(bufferPtr++) = ellipsesChar;
-        strncpy_s(bufferPtr, remainderEnd + 1, s + (length - remainderEnd), remainderEnd);
-        length = width;
-    }
-    buffer[width] = '\0';
-    return length;
-}
-
-
 char* __acu_estrdup(const char* s) {
     char* temp = _strdup(s);
     if (temp) {
@@ -117,4 +81,10 @@ static size_t acu_strlen(const char* s) {
         sPtr++;
     }
     return sPtr - s;
+}
+
+__EXPORT char* acu_strncpy(char* strDest, const char* strSource, size_t count)
+{
+    strncpy_s(strDest, count+1, strSource, count);
+    return strDest;
 }

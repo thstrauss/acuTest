@@ -26,41 +26,7 @@
 #include <stddef.h>
 #include <string.h>
 
-size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width)
-{
-#define ellipsesChar '.'
-#define ellipsesLength 3
 
-    size_t length = acu_strlen(s);
-    if (length <= width) {
-        strncpy(buffer, s, length);
-        width = length;
-    }
-    else if (width < ellipsesLength) {
-        char* bufferPtr = buffer;
-        int i;
-        for (i = 0; i < width; i++) {
-            *(bufferPtr++) = ellipsesChar;
-        }
-        length = width;
-    }
-    else {
-        size_t remainderEnd = (width - ellipsesLength) >> 1;
-        size_t remainderStart = width - remainderEnd - ellipsesLength;
-        char* bufferPtr = buffer;
-
-        strncpy(bufferPtr, s, remainderStart);
-        bufferPtr += remainderStart;
-        *(bufferPtr++) = ellipsesChar;
-        *(bufferPtr++) = ellipsesChar;
-        *(bufferPtr++) = ellipsesChar;
-        strncpy(bufferPtr, s + (length - remainderEnd), remainderEnd);
-        length = width;
-    }
-    buffer[width] = '\0';
-    UNUSED(bufferSize);
-    return length;
-}
 
 char* __acu_estrdup(const char* s) {
     size_t size = acu_strlen(s) + 1;
@@ -240,4 +206,9 @@ const char* __strdupToAllocTable(const char* s, const char* fileName, int line) 
     }
     acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
     return NULL;
+}
+
+char* acu_strncpy(char* strDest, const char* strSource, size_t count)
+{
+    return strncpy(strDest, strSource, count);
 }
