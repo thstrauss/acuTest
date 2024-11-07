@@ -55,6 +55,7 @@ void gem_updateSliders(const WinData* winData) {
     GRECT rect;
     void* model = gem_getViewModel(winData);
     VerticalSlider* verticalSlider = &winData->verticalSlider;
+    HorizontalSlider* horizontalSlider = &winData->horizontalSlider;
     
     gem_getWorkingRect(winData, &rect);
     linesShown = rect.g_h / winData->cellSize.height;
@@ -64,4 +65,8 @@ void gem_updateSliders(const WinData* winData) {
         gem_sliderSize(linesShown, verticalSlider->available), 0, 0, 0);
     wind_set(winData->windowHandle, WF_VSLIDE,
         gem_sliderPositionN(linesShown, verticalSlider->available, verticalSlider->offset), 0, 0, 0);
+    wind_set(winData->windowHandle, WF_HSLSIZE,
+        gem_sliderSize(linesShown, horizontalSlider->available), 0, 0, 0);
+    wind_set(winData->windowHandle, WF_HSLIDE,
+        gem_sliderPositionN(linesShown, horizontalSlider->available, horizontalSlider->offset), 0, 0, 0);
 }
