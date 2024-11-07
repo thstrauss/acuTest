@@ -40,8 +40,7 @@ typedef struct ACU_Fixture_ {
     char* name;
     const void* context;
     const struct ACU_Fixture_* parentFixture;
-    clock_t start;
-    clock_t end;
+    clock_t duration;
 } ACU_Fixture;
 
 /* Allocates memory for an ACU_Fixture. */

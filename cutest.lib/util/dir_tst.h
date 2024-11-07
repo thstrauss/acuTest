@@ -20,39 +20,11 @@
  */
 
 #pragma once
-#ifndef _ACU_TEST_RESULT_H_
-#define _ACU_TEST_RESULT_H_
+#ifndef __dir_test__
+#define __dir_test__
 
-#include <time.h>
-#include <acu_cmmn.h>
+#include <acu_dir.h>
 
-typedef enum ACU_TestResult_ {
-    ACU_TEST_FAILED = 0,
-    ACU_TEST_PASSED = 1,
-    ACU_TEST_UNDEFINED = -1,
-    ACU_TEST_ERROR = -2
-} ACU_TestResult;
-
-typedef struct ACU_Result_ {
-    ACU_TestResult status;
-    char* message;
-    const char* sourceFileName;
-    int sourceLine;
-    clock_t duration;
-} ACU_Result;
-
-__EXPORT void acu_initResult(ACU_Result* result);
-__EXPORT void acu_prepareResult(ACU_Result* result);
-__EXPORT void acu_destroyResult(ACU_Result* result);
-
-#define ACU_PREPARERESULT(result) \
-    result->status = ACU_TEST_PASSED; \
-    if (result->message) { \
-        acu_free(result->message); \
-        result->message = NULL; \
-    }
-
-#define acuTest_calcResult(aggregatedResult, result) \
-    ((result) == ACU_TEST_PASSED ? (aggregatedResult) : ((result) == ACU_TEST_FAILED ? ACU_TEST_FAILED : ACU_TEST_ERROR))
+ACU_Fixture* dirTests(void);
 
 #endif

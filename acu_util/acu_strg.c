@@ -19,13 +19,41 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
-#ifndef __HASHTABLE_TEST__
-#define __HASHTABLE_TEST__
+#include "acu_strg.h"
+#include "acu_util.h"
 
-#include <acu_cmmn.h>
-#include <acu_fxtr.h>
+size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width)
+{
+#define ellipsesChar '.'
+#define ellipsesLength 3
 
-__EXPORT ACU_Fixture* hashTableFixture(void);
+    size_t length = acu_strlen(s);
+    if (length <= width) {
+        acu_strncpy(buffer, s, length);
+        width = length;
+    }
+    else if (width < ellipsesLength) {
+        char* bufferPtr = buffer;
+        int i;
+        for (i = 0; i < width; i++) {
+            *(bufferPtr++) = ellipsesChar;
+        }
+        length = width;
+    }
+    else {
+        size_t remainderEnd = (width - ellipsesLength) >> 1;
+        size_t remainderStart = width - remainderEnd - ellipsesLength;
+        char* bufferPtr = buffer;
 
-#endif
+        acu_strncpy(bufferPtr, s, remainderStart);
+        bufferPtr += remainderStart;
+        *(bufferPtr++) = ellipsesChar;
+        *(bufferPtr++) = ellipsesChar;
+        *(bufferPtr++) = ellipsesChar;
+        acu_strncpy(bufferPtr, s + (length - remainderEnd), remainderEnd);
+        length = width;
+    }
+    buffer[width] = '\0';
+    UNUSED(bufferSize);
+    return length;
+}

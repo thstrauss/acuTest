@@ -19,27 +19,42 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "util_fxt.h"
+
 #include <acu_ldr.h>
 #include <acu_fxtr.h>
 #include <acu_util.h>
 #include <acu_list.h>
 #include <acu_tryc.h>
 
-#include "test\test_fxt.h"
-#include "util\util_fxt.h"
+#include "dir_tst.h"
+#include "hstb_tst.h"
+#include "list_tst.h"
+#include "misc_tst.h"
+#include "mtch_tst.h"
+#include "rnd_tst.h"
+#include "stck_tst.h"
+#include "util_tst.h"
+#include "uuid_tst.h"
 
-ACU_Entry* acu_init() {
+ACU_Fixture* utilFixture() {
     ACU_Fixture* suite = acu_mallocFixture();
-    ACU_Entry* entry = acu_mallocEntry();
 
-    acu_initEntry(entry, suite);
+    acu_initFixture(suite, "utility test suite");
+    acu_addChildFixture(suite, dirTests());
 
-    acu_initFixture(suite, "acu test suite");
-    
-    acu_addChildFixture(suite, testFixture());
-    acu_addChildFixture(suite, utilFixture());
+    acu_addChildFixture(suite, hashTableTests());
+    acu_addChildFixture(suite, listTests());
+    acu_addChildFixture(suite, matchTests());
+    acu_addChildFixture(suite, miscTests());
 
-    return entry;
+    acu_addChildFixture(suite, randomTests());
+    acu_addChildFixture(suite, stackFixture());
+
+    acu_addChildFixture(suite, utilTests());
+    acu_addChildFixture(suite, uuidTests()); 
+
+    return suite;
 }
 
 

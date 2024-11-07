@@ -20,11 +20,12 @@
  */
 
 #pragma once
-#ifndef __match_test__
-#define __match_test__
+#ifndef __LIST_TEST__
+#define __LIST_TEST__
 
+#include <acu_cmmn.h>
 #include <acu_fxtr.h>
 
-ACU_Fixture* matchFixture(void);
+__EXPORT ACU_Fixture* listTests(void);
 
 #endif

@@ -23,6 +23,8 @@
 
 #include "..\acu_dir.h"
 #include "..\acu_util.h"
+#include "..\acu_strg.h"
+
 
 void acu_filesCollect(ACU_Files* files, const char* fileMask)
 {

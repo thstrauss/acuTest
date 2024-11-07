@@ -19,27 +19,17 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <acu_ldr.h>
-#include <acu_fxtr.h>
-#include <acu_util.h>
-#include <acu_list.h>
-#include <acu_tryc.h>
+#pragma once
 
-#include "test\test_fxt.h"
-#include "util\util_fxt.h"
+#ifndef __acu_performance__
+#define __acu_performance__
 
-ACU_Entry* acu_init() {
-    ACU_Fixture* suite = acu_mallocFixture();
-    ACU_Entry* entry = acu_mallocEntry();
+#include <acu_cmmn.h>
 
-    acu_initEntry(entry, suite);
+#include <time.h>
 
-    acu_initFixture(suite, "acu test suite");
-    
-    acu_addChildFixture(suite, testFixture());
-    acu_addChildFixture(suite, utilFixture());
+typedef void TestFunc(void);
 
-    return entry;
-}
+__EXPORT unsigned long acu_measureLoop(TestFunc* func, clock_t duration);
 
-
+#endif

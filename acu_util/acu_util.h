@@ -55,7 +55,9 @@ __EXPORT void acu_setProgName(const char* progName);
 __EXPORT void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler);
 
 __EXPORT ACU_HashTable* acu_getAllocTable(void);
-__EXPORT int acu_isMemoryTrackingEnabled(void);
+#define acu_isMemoryTrackingEnabled() __acuMemoryTrackingEnabled
+__IMPORT extern int __acuMemoryTrackingEnabled;
+
 __EXPORT void acu_setAllocTable(ACU_HashTable* allocTable);
 
 __EXPORT ACU_WriteHandlerFunc* acu_getWriteHandler(void);
@@ -75,37 +77,38 @@ __EXPORT void acu_wprintf(const char* format, ...);
 
 __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...);
 
-#define acu_estrdup(s) (acu_isMemoryTrackingEnabled() ?(char*)__addMallocToAllocTable(__acu_estrdup((s)), strlen(s), __FILE__, __LINE__):__acu_estrdup((s))) 
 
-__EXPORT char* __acu_estrdup(const char* s);
 
 __EXPORT void acu_enabledTrackMemory(int enabled);
 __EXPORT void acu_reportTrackMemory(void);
 
-#define acu_emalloc(n) (acu_isMemoryTrackingEnabled() ? __addMallocToAllocTable(__acu_emalloc((n)), (n), __FILE__, __LINE__) :__acu_emalloc((n)))
+#define acu_emalloc(n) (!acu_isMemoryTrackingEnabled() ? __acu_emalloc((n)) : __mallocToAllocTable((n), __FILE__, __LINE__) )
 
 __EXPORT void* __acu_emalloc(size_t n);
 
-#define acu_free(buf) (acu_isMemoryTrackingEnabled() ? __acu_free(buf) : free(buf))
+#define acu_free(buf) (!acu_isMemoryTrackingEnabled() ?  free(buf) :__acu_free(buf) )
 
 __EXPORT void __acu_free(void* buf);
 
 __EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
 __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
 
-__EXPORT size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width);
 
-__EXPORT void* __addMallocToAllocTable(void* p, size_t size, const char* fileName, int line);
-
-#ifdef __TOS__
-#else
-#endif
+__EXPORT void* __mallocToAllocTable(size_t size, const char* fileName, int line);
 
 /*
 	Converts a NULL reference to the "NULL" string.
 */
 #define SAFE_REF(ref) ((ref)?(ref):"NULL")
 
-__EXPORT long acu_prime(long n);
+__EXPORT unsigned long acu_prime(unsigned long n);
+
+
+typedef struct Block_ {
+    const void* p;
+    size_t size;
+    const char* fileName;
+    int line;
+} Block;
 
 #endif

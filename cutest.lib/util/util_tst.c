@@ -25,9 +25,9 @@
 
 #include <acu_fxtr.h>
 #include <acu_asrt.h>
+
+#include <acu_strg.h>
 #include <acu_util.h>
-#include <acu_tryc.h>
-#include <acu_list.h>
 
 #include "util_tst.h"
 
@@ -105,7 +105,7 @@ static void ellipsisTest(ACU_ExecuteEnv* environment, const void* context) {
 }
 
 
-ACU_Fixture* utilFixture(void)
+ACU_Fixture* utilTests(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
 

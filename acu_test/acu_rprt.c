@@ -41,11 +41,11 @@ void acu_report(const ACU_TestCase* testCase, void* context) {
     ACU_ReportHelper* reportHelper = context;
     if (!reportHelper->suiteName || strcmp(reportHelper->suiteName, testCase->fixture->parentFixture->name) != 0) {
         reportHelper->suiteName = testCase->fixture->parentFixture->name;
-        fprintf(stdout, "%s took %ld ms\n\r", reportHelper->suiteName, ((testCase->fixture->parentFixture->end - testCase->fixture->parentFixture->start)*1000)/CLK_TCK);
+        fprintf(stdout, "%s took %ld ms\n\r", reportHelper->suiteName, (testCase->fixture->parentFixture->duration*1000)/CLK_TCK);
     }
     if (!reportHelper->fixtureName || strcmp(reportHelper->fixtureName, testCase->fixture->name) != 0) {
         reportHelper->fixtureName = testCase->fixture->name;
-        fprintf(stdout, "  %s took %ld ms\n\r", reportHelper->fixtureName, ((testCase->fixture->end - testCase->fixture->start) * 1000) / CLK_TCK);
+        fprintf(stdout, "  %s took %ld ms\n\r", reportHelper->fixtureName, (testCase->fixture->duration * 1000) / CLK_TCK);
     }
     if (testCase->result.status == ACU_TEST_FAILED) {
         fprintf(stdout, "    %s: %s\n\r      %s:%d:\n\r      %s\n\r", testCase->name, testCase->result.status == ACU_TEST_PASSED ? "passed" : "failed", SAFE_REF(testCase->result.sourceFileName), testCase->result.sourceLine, SAFE_REF(testCase->result.message));
@@ -73,6 +73,13 @@ void acu_collectTestCases(const ACU_TestCase* testCase, void* context)
 {
     ACU_TestCases* testCases = (ACU_TestCases*) context;
     acu_appendList(testCases->testCases, testCase);
+}
+
+void acu_performProgress(const ACU_Progress* progress, ACU_TestCase *testCase)
+{
+    if (progress->progress) {
+        progress->progress(testCase, progress->context);
+    }
 }
 
 void acu_reportSummary(const ACU_TestCase* testCase, void* context)

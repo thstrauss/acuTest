@@ -26,6 +26,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <acu_util.h>
+#include <acu_strg.h>
 
 Gem_ProgressBar* gem_mallocProgressBar() {
     return acu_emalloc(sizeof(Gem_ProgressBar));

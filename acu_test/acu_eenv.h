@@ -29,7 +29,7 @@ struct ACU_Frame_;
 /* Internally used to pass in result and exception handling to the test execution. */
 typedef struct ACU_ExecuteEnv_ {
     struct ACU_Result_* result;
-    struct ACU_Frame_ *exceptionFrame;
+    struct ACU_Frame_* exceptionFrame;
 } ACU_ExecuteEnv;
 
 #endif

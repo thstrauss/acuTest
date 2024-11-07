@@ -27,6 +27,7 @@
 #include "acu_rslt.h"
 
 struct ACU_Fixture_;
+struct ACU_Progress_;
 
 typedef void ACU_TestFunc(ACU_ExecuteEnv* environment, const void* context);
 
@@ -34,8 +35,10 @@ typedef void ACU_TestFunc(ACU_ExecuteEnv* environment, const void* context);
 typedef struct ACU_TestCase_ {
     ACU_TestFunc* testFunc;
     char* name;
-    ACU_Result result;
     const struct ACU_Fixture_* fixture;
+    ACU_Result result;
+    const void* context;
+    const struct ACU_Progress_ * progress;
 } ACU_TestCase;
 
 #endif

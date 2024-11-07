@@ -19,12 +19,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <acu_eenv.h>
+#include <acu_fxtr.h>
 #include <acu_asrt.h>
-#include <acu_fxtr.h>
-#include <acu_tryc.h>
-#include <acu_fxtr.h>
-#include <acu_util.h>
 
 #include <stddef.h>
 

@@ -19,27 +19,24 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <acu_ldr.h>
-#include <acu_fxtr.h>
-#include <acu_util.h>
-#include <acu_list.h>
-#include <acu_tryc.h>
+#ifndef __acu_string__
+#define __acu_string__
 
-#include "test\test_fxt.h"
-#include "util\util_fxt.h"
+#include "acu_cmmn.h"
+#include "acu_util.h"
 
-ACU_Entry* acu_init() {
-    ACU_Fixture* suite = acu_mallocFixture();
-    ACU_Entry* entry = acu_mallocEntry();
+#include <stddef.h> 
 
-    acu_initEntry(entry, suite);
+__EXPORT char* __acu_estrdup(const char* s);
 
-    acu_initFixture(suite, "acu test suite");
-    
-    acu_addChildFixture(suite, testFixture());
-    acu_addChildFixture(suite, utilFixture());
+__EXPORT size_t acu_strlen(const char* s);
 
-    return entry;
-}
+__EXPORT char* acu_strncpy(char* strDest, const char* strSource, size_t count);
 
+#define acu_estrdup(s) (acu_isMemoryTrackingEnabled() ? (char*)__strdupToAllocTable(s, __FILE__, __LINE__):__acu_estrdup((s))) 
 
+__EXPORT size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width);
+
+__EXPORT const char* __strdupToAllocTable(const char* s, const char* fileName, int line);
+
+#endif

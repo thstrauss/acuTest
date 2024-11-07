@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ACU_CACH.C" />
     <ClCompile Include="acu_dir.c" />
     <ClCompile Include="acu_hstb.c" />
     <ClCompile Include="acu_list.c" />
@@ -147,15 +148,18 @@
     <ClCompile Include="acu_rand.c" />
     <ClCompile Include="acu_stbl.c" />
     <ClCompile Include="acu_stck.c" />
+    <ClCompile Include="acu_strg.c" />
     <ClCompile Include="acu_util.c" />
     <ClCompile Include="acu_uuid.c" />
     <ClCompile Include="dllmain.c" />
     <ClCompile Include="windows\acu_dirWindows.c" />
     <ClCompile Include="windows\acu_plgnWindows.c" />
     <ClCompile Include="windows\acu_randWindows.c" />
+    <ClCompile Include="windows\acu_stringWindows.c" />
     <ClCompile Include="windows\acu_utilWindows.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="acu_cach.h" />
     <ClInclude Include="acu_cmmn.h" />
     <ClInclude Include="acu_dir.h" />
     <ClInclude Include="acu_list.h" />
@@ -165,6 +169,7 @@
     <ClInclude Include="acu_rand.h" />
     <ClInclude Include="acu_stbl.h" />
     <ClInclude Include="acu_stck.h" />
+    <ClInclude Include="acu_strg.h" />
     <ClInclude Include="acu_util.h" />
     <ClInclude Include="acu_uuid.h" />
   </ItemGroup>

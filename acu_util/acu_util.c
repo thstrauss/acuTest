@@ -24,18 +24,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include <math.h>
 
 #include "acu_util.h"
 #include "acu_hstb.h"
 #include "acu_stbl.h"
+#include "acu_strg.h"
 
 extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 
 static char* programName = NULL;
-static ACU_HashTable* __allocTable = NULL;
-static ACU_HashTable* __stringTable = NULL;
-static int __acuMemoryTrackingEnabled = 0;
+ACU_HashTable* __allocTable = NULL;
+ACU_HashTable* __stringTable = NULL;
+int __acuMemoryTrackingEnabled = 0;
 static unsigned int __shift = 3;
 
 char* acu_progName(void) {
@@ -47,7 +47,7 @@ void acu_setProgName(const char* progName) {
         acu_free(programName);
     }
     if (progName) {
-        programName = acu_estrdup(progName);
+        programName = (__acuMemoryTrackingEnabled ? (char*)__strdupToAllocTable(progName, "C:\\thomas\\Atari\\Drive\\K\\cutest.t\\acu_util\\acu_util.c", 51) : __acu_estrdup((progName)));
     }
     else {
         programName = NULL;
@@ -78,18 +78,13 @@ ACU_HashTable* acu_getAllocTable(void)
     return __allocTable;
 }
 
-int acu_isMemoryTrackingEnabled(void)
-{
-    return __acuMemoryTrackingEnabled;
-}
-
 void acu_setAllocTable(ACU_HashTable* allocTable)
 {
     __allocTable = allocTable;
 }
 
 static size_t defaultWriteHandler(const char* buffer) {
-    return fwrite(buffer, sizeof(char), strlen(buffer), stdout);
+    return fwrite(buffer, sizeof(char), acu_strlen(buffer), stdout);
 }
 
 static ACU_WriteHandlerFunc* acu_writeHandler = defaultWriteHandler;
@@ -136,26 +131,23 @@ int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...)
     return result;
 }
 
-typedef struct Block_ {
-    void* p;
-    size_t size;
-    const char* fileName;
-    int line;
-} Block;
-
-static unsigned long hash(const void* key) {
+static unsigned long acu_hashPtr(const void* key) {
     const Block* block = key;
     return (unsigned long) ((size_t) block->p) >> __shift;
 }
 
-static int match(const void* key1, const void* key2) {
-    const Block* block1 = key1;
-    const Block* block2 = key2;
-    return block1->p == block2->p;
+static unsigned long acu_hashPtr2(const void* key) {
+    const Block* block = key;
+    return (unsigned long)((size_t)block->p) >> 2;
 }
 
-static void destroy(void* data) {
-    free(data);
+static unsigned long acu_hashPtr3(const void* key) {
+    const Block* block = key;
+    return (unsigned long)((size_t)block->p) >> 3;
+}
+
+static int acu_matchPtr(const void* key1, const void* key2) {
+    return (((size_t) ((Block*) key1)->p) - ((size_t) ((Block*)key2)->p)) == 0;
 }
 
 static void __freeAllocTable(void) {
@@ -171,7 +163,7 @@ static void __freeAllocTable(void) {
     }
 }
 
-static void* createBlock(const void* key) {
+static void* acu_createBlock(const void* key) {
     Block* block = (Block*)malloc(sizeof(Block));
     if (block) {
         block->p = ((Block*)key)->p;
@@ -180,13 +172,35 @@ static void* createBlock(const void* key) {
 }
 
 
+static int nlz(unsigned long x) {
+    int n;
+
+    if (x == 0) return(32);
+    n = 0;
+    if (x <= 0x0000FFFFL) { n = n + 16; x = x << 16; }
+    if (x <= 0x00FFFFFFL) { n = n + 8; x = x << 8; }
+    if (x <= 0x0FFFFFFFL) { n = n + 4; x = x << 4; }
+    if (x <= 0x3FFFFFFFL) { n = n + 2; x = x << 2; }
+    if (x <= 0x7FFFFFFFL) { n = n + 1; }
+    return n;
+}
+
 void acu_enabledTrackMemory(int enabled)
 {
     if (enabled) {
+        ACU_HashTableHashFunc* hashFunc = acu_hashPtr;
+        
         __freeAllocTable();
-        __shift = (int) (log(sizeof(void*)+1.0) / log(2.0));
+        __shift = 31-nlz(sizeof(void*));
+        
+        if (__shift == 2) {
+            hashFunc = acu_hashPtr2;
+        }
+        else if (__shift == 3) {
+            hashFunc = acu_hashPtr3;
+        }
         __allocTable = malloc(sizeof(ACU_HashTable));
-        acu_initHashTable(__allocTable, 2003, hash, match, createBlock, destroy);
+        acu_initHashTable(__allocTable, 2003, hashFunc, acu_matchPtr, acu_createBlock, free);
 
         __stringTable = malloc(sizeof(ACU_HashTable));
         acu_initStringTable(__stringTable);
@@ -214,19 +228,26 @@ __EXPORT void acu_reportTrackMemory(void)
     }
 }
 
-void* __addMallocToAllocTable(void* p, size_t size, const char* fileName, int line) {
-    if (__acuMemoryTrackingEnabled) {
-        Block key;
-        Block* block;
-        key.p = p;
-        __acuMemoryTrackingEnabled = 0;
-        block = (Block*) acu_lookupOrAddHashTable(__allocTable, &key);
-        block->fileName = acu_acquireString(__stringTable, fileName);
-        __acuMemoryTrackingEnabled = 1;
-        block->size = size;
-        block->line = line;
+
+
+void* __mallocToAllocTable(size_t size, const char* fileName, int line) {
+    void* p = malloc(size);
+    if (p) {
+        if (__acuMemoryTrackingEnabled) {
+            Block key;
+            Block* block;
+            key.p = p;
+            __acuMemoryTrackingEnabled = 0;
+            block = (Block*)acu_lookupOrAddHashTable(__allocTable, &key);
+            block->fileName = acu_acquireString(__stringTable, fileName);
+            __acuMemoryTrackingEnabled = 1;
+            block->size = size;
+            block->line = line;
+        }
+        return p;
     }
-    return p;
+    acu_eprintf("acu_emalloc of %u bytes failed:", size);
+    return NULL;
 }
 
 void* __acu_emalloc(size_t size) {
@@ -245,23 +266,45 @@ void __acu_free(void* block)
     key.p = block;
     out = acu_removeHashTable(__allocTable, &key);
     if (out) {
-        destroy(out);
+        free(out);
     }
     free(block);
 }
 
-long acu_prime(long n) {
-    long i, j; 
+unsigned long isqrt(unsigned long x) {
+    unsigned long x1;
+    unsigned long s, g0, g1;
+
+    if (x <= 1) return x;
+    s = 1;
+    x1 = x - 1L;
+    if (x1 > 65535L) { s = s + 8; x1 = x1 >> 16; }
+    if (x1 > 255L) { s = s + 4; x1 = x1 >> 8; }
+    if (x1 > 15L) { s = s + 2; x1 = x1 >> 4; }
+    if (x1 > 3L) { s = s + 1; }
+
+    g0 = 1 << s;
+    g1 = (g0 + (x >> s)) >> 1;
+
+    while (g1 < g0) {
+        g0 = g1;
+        g1 = (g0 + (x / g0)) >> 1;
+    }
+    return g0;
+}
+
+unsigned long acu_prime(unsigned long n) {
+    unsigned long i, j; 
     if (!(n & 1)) {
         n--;
     }
 
     for (i = n; i >= 2; i -= 2) {
-        double sqrtI;
+        unsigned long sqrtI;
         if (i % 2 == 0) {
             continue;
         }
-        sqrtI = sqrt(i);
+        sqrtI = isqrt(i);
         for (j = 3; j <= sqrtI; j += 2) {
             if (i % j == 0) {
                 break;

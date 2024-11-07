@@ -31,30 +31,31 @@
 #include "acu_rslt.h"
 #include "acu_tcse.h"
 #include "acu_util.h"
+#include "acu_strg.h"
 #include "acu_tryc.h"
 
 static ACU_Stack* frameStack = NULL;
 
-static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* context, ACU_Progress* progress) {
+static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase) {
     ACU_ExecuteEnv environment;
     ACU_Frame frame;
     ACU_StackElement stackElement;
-    ACU_Result* result = &testCase->result;
-    frame.exception = 0;
-    stackElement.data = &frame;
+    clock_t start;
 
-    environment.result = result;
+    environment.result = &testCase->result;
     environment.exceptionFrame = &frame;
+    stackElement.data = &frame;
+    frame.exception = 0;
 
-    acu_pushStackElement(frameStack, &stackElement);
+    ACU_PUSHSTACKELEMENT(frameStack, stackElement);
 
-    acu_prepareResult(result);
-    result->start = clock();
+    ACU_PREPARERESULT(environment.result);
+    start = clock();
     do {
         switch (setjmp(frame.exceptionBuf)) {
             case 0: {
                 while (1) {
-                    testCase->testFunc(&environment, context);
+                    testCase->testFunc(&environment, testCase->context);
                     break;
                 }
                 break;
@@ -64,12 +65,12 @@ static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase, const void* conte
             }
         }
     } while (0);
-    result->end = clock();
-    acu_dropStackElement(frameStack);
-    if (progress && progress->progress) {
-        progress->progress(testCase, progress->context);
+    environment.result->duration = clock() - start;
+    ACU_DROPSTACKELEMENT(frameStack);
+    if (testCase->progress) {
+        acu_performProgress(testCase->progress, testCase);
     }
-    return result->status;
+    return environment.result->status;
 }
 
 static void acuTest_testCaseDestroy(ACU_TestCase* testCase) {
@@ -88,8 +89,7 @@ void acu_initFixture(ACU_Fixture* fixture, const char* name) {
     fixture->testCases = testCases;
     fixture->childFixtures = childFixtures;
     fixture->name = acu_estrdup(name);
-    fixture->start = (clock_t)-1;
-    fixture->end = (clock_t)-1;
+    fixture->duration = (clock_t)0;
 }
 
 void acu_addTestCase(ACU_Fixture* fixture, const char* name, ACU_TestFunc testFunc) {
@@ -114,23 +114,29 @@ void acu_setFixtureContext(ACU_Fixture* fixture, const void* context)
 enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progress) {
     ACU_ListElement* testElement = fixture->testCases->head;
     ACU_ListElement* childFixture = fixture->childFixtures->head;
-    const void* context = fixture->context;
     enum ACU_TestResult result = ACU_TEST_PASSED;
     if (!frameStack) {
         frameStack = acu_getFrameStack();
     }
-    fixture->start = clock();
+    fixture->duration = 0;
+
     while (childFixture) {
         enum ACU_TestResult r = acu_executeFixture((ACU_Fixture*)childFixture->data, progress);
         result = acuTest_calcResult(result, r);
+        fixture->duration += ((ACU_Fixture*)childFixture->data)->duration;
         childFixture = childFixture->next;
     }
     while (testElement) {
-        enum ACU_TestResult r = acuTest_run((ACU_TestCase*)testElement->data, context, progress);
+        ACU_TestCase* testCase = (ACU_TestCase*)testElement->data;
+        enum ACU_TestResult r;
+        testCase->context = fixture->context;
+        testCase->progress = progress;
+        r = acuTest_run(testCase);
+        fixture->duration += (testCase->result).duration;
+
         result = acuTest_calcResult(result, r);
         testElement = testElement->next;
     }
-    fixture->end = clock();
     return result;
 }
 

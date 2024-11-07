@@ -26,6 +26,7 @@
 
 #include "..\acu_hstb.h"
 #include "..\acu_util.h"
+#include "..\acu_strg.h"
 
 static char errorBuffer[1024];
 
@@ -40,7 +41,7 @@ void va_acu_printf(ACU_Level level, const char* format, va_list args) {
 
     bufPos += acu_sprintf_s(errorBuffer + bufPos, sizeof(errorBuffer) - bufPos, format, args);
 
-    if (format[0] != '\0' && format[strlen(format) - 1] == ':') {
+    if (format[0] != '\0' && format[acu_strlen(format) - 1] == ':') {
         bufPos += acu_sprintf_s(errorBuffer + bufPos, sizeof(errorBuffer) - bufPos, " %d %s", errno, strerror(errno));
     }
     __acu_errorHandler(level, errorBuffer);
@@ -63,45 +64,3 @@ int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_lis
     return vsprintf(buffer, format, args);
 }
 
-char* __acu_estrdup(const char* s) {
-    char* temp = strdup(s);
-    if (temp) {
-        return temp;
-    }
-    acu_eprintf("acu_estrdup(\"%.20s\") failed:", s);
-    return NULL;
-}
-
-size_t acu_ellipsisString(char* buffer, size_t bufferSize, const char* s, size_t width)
-{
-	#define ellipsesChar '.'
-	#define ellipsesLength 3
-	
-    size_t length = strlen(s);
-    if (length <= width) {
-        strncpy(buffer, s, length);
-        width = length;
-    } else if (width < ellipsesLength) {
-        char* bufferPtr = buffer;
-        int i;
-        for (i = 0; i < width; i++) {
-            *(bufferPtr++) = ellipsesChar;
-        }
-        length = width;
-    } else {
-        size_t remainderEnd = (width - ellipsesLength) >> 1;
-        size_t remainderStart = width - remainderEnd - ellipsesLength;
-        char* bufferPtr = buffer;
-
-        strncpy(bufferPtr, s, remainderStart);
-        bufferPtr += remainderStart;
-        *(bufferPtr++) = ellipsesChar;
-        *(bufferPtr++) = ellipsesChar;
-        *(bufferPtr++) = ellipsesChar;
-        strncpy(bufferPtr, s + (length - remainderEnd), remainderEnd);
-        length = width;
-    }
-	buffer[width]='\0';
-	UNUSED(bufferSize);
-    return length;
-}

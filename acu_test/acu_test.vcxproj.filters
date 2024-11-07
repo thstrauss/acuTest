@@ -42,6 +42,9 @@
     <ClCompile Include="windows\acu_ldrWindows.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="acu_perf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="acu_test.licenseheader" />
@@ -75,6 +78,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_vers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="acu_perf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

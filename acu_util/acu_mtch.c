@@ -21,42 +21,175 @@
 
 #include "acu_mtch.h"
 
-int matchHere(const char* regexp, const char* text);
+#include "acu_list.h"
+#include "acu_util.h"
+#include "acu_strg.h"
 
-static int matchStar(int c, const char* regexp, const char* text) {
-    do {
-        if (matchHere(regexp, text)) {
-            return 1;
+typedef enum RegExClass_ { CHAR_CLASS, ANY_CLASS, CLASS_CLASS } RegExClass;
+typedef enum RegExOperation_ { SINGLE_OP, STAR_OP, PLUS_OP, QUERY_OP, START_OP, END_OP } RegExOperation;
+
+typedef struct CharacterClass_ {
+    RegExClass type;
+    union {
+        int matchChar;
+        char* class;
+    } charClass;
+} CharacterClass;
+
+typedef struct RegExp_{
+    RegExOperation type;
+    CharacterClass class;
+} RegExp;
+
+int matchHere(ACU_ListElement* regEx, const char* text);
+
+static int matchClass(const CharacterClass* class, const char* text) {
+    switch (class->type)
+    {
+        case CHAR_CLASS: return *text != '\0' && *text == class->charClass.matchChar;
+        case ANY_CLASS: return *text != '\0';
+        case CLASS_CLASS: {
+            char* c = class->charClass.class;
+            int ac;
+            while ((ac = *c++) != '\0') {
+                if (ac == *text) {
+                    return 1;
+                }
+            }
+            return 0;
         }
-    } while (*text != '\0' && (*text++ == c || c == '.'));
-    return 0;
+        default:
+            return 0;
+    }
 }
 
-static int matchHere(const char* regexp, const char* text) {
-    if (regexp[0] == '\0') {
-        return 1;
+static int matchHere(ACU_ListElement* regExpElement, const char* text) {
+    while (regExpElement != NULL) {
+        RegExp* regExp = (RegExp*)regExpElement->data;
+        if (regExp->type == STAR_OP) {
+            RegExp* nextRegExp = (RegExp*)regExpElement->next->data;
+            while (matchClass(&regExp->class, text)) {
+                if (matchClass(&nextRegExp->class, text + 1)) {
+                    text++;
+                    break;
+                }
+                text++;
+            }
+            regExpElement = regExpElement->next;
+            continue;
+        }
+        if (regExp->type == PLUS_OP && matchClass(&regExp->class, text++)) {
+            RegExp* nextRegExp = (RegExp*) regExpElement->next->data;
+            while (matchClass(&regExp->class, text)) {
+                if (matchClass(&nextRegExp->class, text + 1)) {
+                    text++;
+                    break;
+                }
+                text++;
+            }
+            regExpElement = regExpElement->next;
+            continue;
+        }
+        if (regExp->type == QUERY_OP) {
+            if (matchClass(&regExp->class, text)) {
+                text++;
+            }
+            regExpElement = regExpElement->next;
+            continue;
+        }
+        if (regExp->type == END_OP) {
+            return *text == '\0';
+        }
+        if (regExp->type == SINGLE_OP && !matchClass(&regExp->class, text)) {
+            return 0;
+        }
+        text++;
+        regExpElement = regExpElement->next;
     }
-    if (regexp[1] == '*') {
-        return matchStar(regexp[0], regexp + 2, text);
+    return 1;
+}
+
+static void compile(ACU_List* regexpList, const char* regexp) {
+    int c;
+    while ((c = *regexp) != '\0') {
+        RegExp* regEx = acu_emalloc(sizeof(RegExp));
+        acu_appendList(regexpList, regEx);
+        regEx->type = SINGLE_OP;
+        if (c == '\\') {
+            regexp++;
+            if (*regexp != '\0') {
+                regEx->class.type = CHAR_CLASS;
+                regEx->class.charClass.matchChar = *regexp;
+            }
+        }
+        else if (c == '.') {
+            regEx->class.type = ANY_CLASS;
+        }
+        else if (c == '^') {
+            regEx->type = START_OP;
+        }
+        else if (c == '$') {
+            regEx->type = END_OP;
+        }
+        else if (c == '[') {
+        	const char* start;
+            size_t size;
+        	regexp++;
+            start = regexp;
+            while (*regexp != ']') {
+            	regexp++;
+            }
+            size = regexp - start;
+            regEx->class.charClass.class = acu_emalloc(size+1);
+            acu_strncpy(regEx->class.charClass.class, start, size);
+            *(regEx->class.charClass.class + size) = '\0';
+            regEx->class.type = CLASS_CLASS;
+        }
+        else {
+            regEx->class.type = CHAR_CLASS;
+            regEx->class.charClass.matchChar = c;
+        }
+        regexp++;
+        if (*regexp != '\0' && *regexp == '*') {
+            regEx->type = STAR_OP;
+            regexp++;
+        }
+        else if (*regexp != '\0' && *regexp == '+') {
+            regEx->type = PLUS_OP;
+            regexp++;
+        }
+        else if (*regexp != '\0' && *regexp == '?') {
+            regEx->type = QUERY_OP;
+            regexp++;
+        }
     }
-    if (regexp[0] == '$' && regexp[1] == '\0') {
-        return *text == '\0';
+}
+
+static void __free(void* data) {
+    if (((RegExp*)data)->class.type == CLASS_CLASS) {
+        acu_free(((RegExp*)data)->class.charClass.class);
     }
-    if (*text != '\0' && (regexp[0] == '.' || regexp[0] == *text)) {
-        return matchHere(regexp + 1, text + 1);
-    }
-    return 0;
+    acu_free(data);
 }
 
 int acu_match(const char* regexp, const char* text)
 {
-    if (regexp[0] == '^') {
-        return matchHere(regexp + 1, text);
+    int retval = 0;
+    ACU_List* regexpList = acu_mallocList();
+    acu_initList(regexpList, __free);
+    compile(regexpList, regexp);
+
+    if (((RegExp*) regexpList->head->data)->type == START_OP) {
+        retval = matchHere(regexpList->head->next, text);
+    } else {
+        do {
+            if (matchHere(regexpList->head, text)) {
+                retval = 1;
+                break;
+            }
+        } while (*text++ != '\0');
     }
-    do {
-        if (matchHere(regexp, text)) {
-            return 1;
-        }
-    } while (*text++ != '\0');
-    return 0;
+    acu_destroyList(regexpList);
+    acu_free(regexpList);
+    return retval;
 }
