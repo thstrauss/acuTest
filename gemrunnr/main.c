@@ -75,6 +75,9 @@ static void updateVerticalSlider(const VerticalSlider* slider, const void* model
 
 static void updateHorizontalSlider(const HorizontalSlider* slider, const void* model)
 {
+	TestModel* testModel = model;
+	slider->available = 80;
+	slider->offset = 20;
 }
 
 void drawInterior(const WinData* wd, const GRECT* clippingRect) {
