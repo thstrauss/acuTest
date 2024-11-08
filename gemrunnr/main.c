@@ -76,8 +76,8 @@ static void updateVerticalSlider(const VerticalSlider* slider, const void* model
 static void updateHorizontalSlider(const HorizontalSlider* slider, const void* model)
 {
 	TestModel* testModel = model;
-	slider->available = 80;
-	slider->offset = 20;
+	slider->available = testModel->maxColumns;
+	slider->offset = testModel->horizontalPositionN;
 }
 
 void drawInterior(const WinData* wd, const GRECT* clippingRect) {
@@ -163,6 +163,21 @@ void doVerticalSlide(const WinData* wd, int verticalPositionN) {
     gem_triggerRedrawRect(wd, &rect);
 }
 
+void doHorizontalSlide(const WinData* wd, int horizontalPositionN) {
+    GRECT rect;
+    int columnsAvailable;
+    TestModel* testModel = gem_getViewModel(wd);
+
+    gem_getWorkingRect(wd, &rect);
+    columnsAvailable = rect.g_w / wd->cellSize.width;
+    testModel->horizontalPositionN = (int)((horizontalPositionN * (long)(testModel->maxColumns - columnsAvailable)) / 1000);
+    if (testModel->horizontalPositionN < 0) {
+        testModel->horizontalPositionN = 0;
+    }
+    wind_set(wd->windowHandle, WF_HSLIDE, horizontalPositionN, 0, 0, 0);
+
+    gem_triggerRedrawRect(wd, &rect);
+}
 
 void doPageUpDown(const WinData* wd, int arrow) {
     int linesAvailable;
@@ -322,6 +337,10 @@ void handleWindowMessage(const WinData* wd, const int* messageBuf) {
         case WM_VSLID: {
             wind_set(wd->windowHandle, WF_TOP, 0, 0);
             doVerticalSlide(wd, messageBuf[4]);
+        } break;
+        case WM_HSLID: {
+            wind_set(wd->windowHandle, WF_TOP, 0, 0);
+            doHorizontalSlide(wd, messageBuf[4]);
         } break;
         case WM_ARROWED: {
             doArrowed(wd, messageBuf[4]);

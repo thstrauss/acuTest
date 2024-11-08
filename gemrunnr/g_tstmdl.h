@@ -33,7 +33,9 @@
 typedef struct TestModel_ {
     int totalTestNumber;
     int verticalPositionN;
-    
+    int maxColumns;
+    int horizontalPositionN;
+
     ACU_Entry* entry;
     ACU_List* testList;
     char testFileName[13];

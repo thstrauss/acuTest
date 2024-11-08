@@ -52,6 +52,7 @@ void gem_initHorizontalSlider(const HorizontalSlider* horizontalSlider, GEM_Hori
 
 void gem_updateSliders(const WinData* winData) {
     int linesShown;
+    int columnsShown;
     GRECT rect;
     void* model = gem_getViewModel(winData);
     VerticalSlider* verticalSlider = &winData->verticalSlider;
@@ -59,14 +60,16 @@ void gem_updateSliders(const WinData* winData) {
     
     gem_getWorkingRect(winData, &rect);
     linesShown = rect.g_h / winData->cellSize.height;
+    columnsShown = rect.g_w / winData->cellSize.width;
     verticalSlider->updateModel(verticalSlider, model);
+    horizontalSlider->updateModel(horizontalSlider, model);
 
     wind_set(winData->windowHandle, WF_VSLSIZE,
         gem_sliderSize(linesShown, verticalSlider->available), 0, 0, 0);
     wind_set(winData->windowHandle, WF_VSLIDE,
         gem_sliderPositionN(linesShown, verticalSlider->available, verticalSlider->offset), 0, 0, 0);
     wind_set(winData->windowHandle, WF_HSLSIZE,
-        gem_sliderSize(linesShown, horizontalSlider->available), 0, 0, 0);
+        gem_sliderSize(columnsShown, horizontalSlider->available), 0, 0, 0);
     wind_set(winData->windowHandle, WF_HSLIDE,
-        gem_sliderPositionN(linesShown, horizontalSlider->available, horizontalSlider->offset), 0, 0, 0);
+        gem_sliderPositionN(columnsShown, horizontalSlider->available, horizontalSlider->offset), 0, 0, 0);
 }
