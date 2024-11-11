@@ -38,7 +38,7 @@
 void gem_drawContent(const WinData* wd, const void* viewModel, const GRECT* clippingRect, const GRECT* workingRect) {
     TestModel* testModel = viewModel;
 
-    testModel->content[0].ob_x = workingRect->g_x;
+    testModel->content[0].ob_x = workingRect->g_x - testModel->horizontalPositionN * wd->cellSize.width;
     testModel->content[0].ob_y = workingRect->g_y - testModel->verticalPositionN * wd->cellSize.height;
 
     objc_draw(testModel->content, 0, 7, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
