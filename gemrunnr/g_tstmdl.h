@@ -33,7 +33,9 @@
 typedef struct TestModel_ {
     int totalTestNumber;
     int verticalPositionN;
-    
+    int maxColumns;
+    int horizontalPositionN;
+
     ACU_Entry* entry;
     ACU_List* testList;
     char testFileName[13];
@@ -45,7 +47,9 @@ typedef struct TestModel_ {
     OBJECT* content; 
 } TestModel;
 
-void updateSlider(const VerticalSlider* slider, const void* model);
+void updateVerticalSlider(const VerticalSlider* slider, const void* model);
+
+void updateHorizontalSlider(const HorizontalSlider* slider, const void* model);
 
 void gem_selectFile(const WinData* wd);
 

@@ -38,7 +38,7 @@
 void gem_drawContent(const WinData* wd, const void* viewModel, const GRECT* clippingRect, const GRECT* workingRect) {
     TestModel* testModel = viewModel;
 
-    testModel->content[0].ob_x = workingRect->g_x;
+    testModel->content[0].ob_x = workingRect->g_x - testModel->horizontalPositionN * wd->cellSize.width;
     testModel->content[0].ob_y = workingRect->g_y - testModel->verticalPositionN * wd->cellSize.height;
 
     objc_draw(testModel->content, 0, 7, clippingRect->g_x, clippingRect->g_y, clippingRect->g_w, clippingRect->g_h);
@@ -47,6 +47,8 @@ void gem_drawContent(const WinData* wd, const void* viewModel, const GRECT* clip
 void gem_initTestModel(TestModel* testModel) {
     testModel->entry = NULL;
     testModel->totalTestNumber = 0;
+    testModel->maxColumns = 0;
+    testModel->horizontalPositionN = 0;
     testModel->verticalPositionN = 0;
     
     testModel->content = NULL;
@@ -113,6 +115,7 @@ void gem_content(const CellSize* cellSize, const TestModel* testModel) {
     testModel->content[numberOfLines].ob_flags |= LASTOB;
         
     testModel->totalTestNumber = numberOfLines;
+    testModel->maxColumns = 80;
 }
 
 static void gem_setInfoLine(const TestModel* testModel) {

@@ -25,16 +25,24 @@
 struct WinData_;
 
 typedef struct VerticalSlider_ {
-    const struct WinData_* winData;
     void (*updateModel)(const struct VerticalSlider_* slider, const void* model);
     int available;
     int offset;
 } VerticalSlider;
 
-typedef void GEM_UpdateSliderModelFunc(const VerticalSlider* slider, const void* model);
+typedef struct HorizontalSlider_ {
+    void (*updateModel)(const struct HorizontalSlider_* slider, const void* model);
+    int available;
+    int offset;
+} HorizontalSlider;
 
-void gem_initVerticalSlider(const VerticalSlider* verticalSlider, const struct WinData_* winData, GEM_UpdateSliderModelFunc updateModel);
+typedef void GEM_VerticalUpdateSliderModelFunc(const VerticalSlider* slider, const void* model);
+typedef void GEM_HorizontalUpdateSliderModelFunc(const HorizontalSlider* slider, const void* model);
 
-void gem_updateSliders(const VerticalSlider* verticalSlider);
+void gem_initVerticalSlider(const VerticalSlider* verticalSlider, GEM_VerticalUpdateSliderModelFunc* updateModel);
+void gem_initHorizontalSlider(const HorizontalSlider* horizontalSlider, GEM_HorizontalUpdateSliderModelFunc* updateModel);
+
+
+void gem_updateSliders(const struct WinData_* winData);
 
 #endif
