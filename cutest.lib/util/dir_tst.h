@@ -23,7 +23,7 @@
 #ifndef __dir_test__
 #define __dir_test__
 
-#include <acu_dir.h>
+#include <acu_fxtr.h>
 
 ACU_Fixture* dirTests(void);
 

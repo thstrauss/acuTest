@@ -114,6 +114,9 @@
     <ClCompile Include="test\usht_tst.c">
       <Filter>Source Files\test</Filter>
     </ClCompile>
+    <ClCompile Include="util\allc_tst.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="util\dir_tst.h">
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="test\usht_tst.h">
       <Filter>Header Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="util\allc_tst.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

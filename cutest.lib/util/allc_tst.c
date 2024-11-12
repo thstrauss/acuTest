@@ -19,45 +19,38 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "util_fxt.h"
-
-#include <acu_ldr.h>
 #include <acu_fxtr.h>
+#include <acu_asrt.h>
 #include <acu_util.h>
-#include <acu_list.h>
 #include <acu_tryc.h>
+#include <acu_list.h>
 
 #include "allc_tst.h"
-#include "dir_tst.h"
-#include "hstb_tst.h"
-#include "list_tst.h"
-#include "misc_tst.h"
-#include "mtch_tst.h"
-#include "rnd_tst.h"
-#include "stck_tst.h"
-#include "util_tst.h"
-#include "uuid_tst.h"
 
-ACU_Fixture* utilFixture() {
-    ACU_Fixture* suite = acu_mallocFixture();
+#include <acu_allc.h>
 
-    acu_initFixture(suite, "utility test suite");
+static void xxx(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_Allocator allocator;
+    void* alloc;
 
-    acu_addChildFixture(suite, allocatorTests());
-    acu_addChildFixture(suite, dirTests());
+    ACU_initAllocator(&allocator, sizeof(int), 10);
 
-    acu_addChildFixture(suite, hashTableTests());
-    acu_addChildFixture(suite, listTests());
-    acu_addChildFixture(suite, matchTests());
-    acu_addChildFixture(suite, miscTests());
 
-    acu_addChildFixture(suite, randomTests());
-    acu_addChildFixture(suite, stackFixture());
+    alloc = ACU_allocAllocator(&allocator);
+    ACU_freeAllocator(&allocator, alloc);
 
-    acu_addChildFixture(suite, utilTests());
-    acu_addChildFixture(suite, uuidTests()); 
+    ACU_destroyAllocator(&allocator);
 
-    return suite;
+    UNUSED(context);
 }
 
+ACU_Fixture* allocatorTests(void)
+{
+    ACU_Fixture* fixture = acu_mallocFixture();
 
+    acu_initFixture(fixture, "allocator Tests");
+
+    acu_addTestCase(fixture, "xxx", xxx);
+
+    return fixture;
+}

@@ -19,45 +19,37 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "util_fxt.h"
+#pragma once
 
-#include <acu_ldr.h>
-#include <acu_fxtr.h>
-#include <acu_util.h>
-#include <acu_list.h>
-#include <acu_tryc.h>
+#ifndef ACU_ALLOCATOR
+#define ACU_ALLOCATOR
 
-#include "allc_tst.h"
-#include "dir_tst.h"
-#include "hstb_tst.h"
-#include "list_tst.h"
-#include "misc_tst.h"
-#include "mtch_tst.h"
-#include "rnd_tst.h"
-#include "stck_tst.h"
-#include "util_tst.h"
-#include "uuid_tst.h"
+#include "acu_cmmn.h"
 
-ACU_Fixture* utilFixture() {
-    ACU_Fixture* suite = acu_mallocFixture();
+#include <stddef.h>
 
-    acu_initFixture(suite, "utility test suite");
+typedef enum ACU_BufferStatus_ {
+    ACU_BUFFER_STATUS_FREE,
+    ACU_BUFFER_STATUS_OCCUPIED,
+} ACU_BufferStatus;
 
-    acu_addChildFixture(suite, allocatorTests());
-    acu_addChildFixture(suite, dirTests());
+typedef struct ACU_AllocatorItem_ {
+    ACU_BufferStatus status;
+    char* itemBuffer;
+} ACU_AllocatorItem;
 
-    acu_addChildFixture(suite, hashTableTests());
-    acu_addChildFixture(suite, listTests());
-    acu_addChildFixture(suite, matchTests());
-    acu_addChildFixture(suite, miscTests());
+typedef struct ACU_Allocator_ {
+    char* buffer;
+    size_t itemSize;
+    size_t maxElements;
+} ACU_Allocator;
 
-    acu_addChildFixture(suite, randomTests());
-    acu_addChildFixture(suite, stackFixture());
+__EXPORT void ACU_initAllocator(ACU_Allocator* allocator, size_t itemSize, size_t maxElements);
 
-    acu_addChildFixture(suite, utilTests());
-    acu_addChildFixture(suite, uuidTests()); 
+__EXPORT void ACU_destroyAllocator(ACU_Allocator* allocator);
 
-    return suite;
-}
+__EXPORT void* ACU_allocAllocator(ACU_Allocator* allocator);
 
+__EXPORT void ACU_freeAllocator(ACU_Allocator* allocator, void* buffer);
 
+#endif // !ACU_ALLOCATOR
