@@ -33,11 +33,26 @@ static void xxx(ACU_ExecuteEnv* environment, const void* context) {
     ACU_Allocator allocator;
     void* alloc;
 
-    ACU_initAllocator(&allocator, sizeof(int), 10);
-
+    ACU_initAllocator(&allocator, sizeof(ACU_Allocator), 10);
 
     alloc = ACU_allocAllocator(&allocator);
     ACU_freeAllocator(&allocator, alloc);
+
+    ACU_destroyAllocator(&allocator);
+
+    UNUSED(context);
+}
+
+static void xxx2(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_Allocator allocator;
+    void *alloc1, *alloc2;
+
+    ACU_initAllocator(&allocator, sizeof(int), 2);
+
+    alloc1 = ACU_allocAllocator(&allocator);
+    alloc2 = ACU_allocAllocator(&allocator);
+    ACU_freeAllocator(&allocator, alloc1);
+    ACU_freeAllocator(&allocator, alloc2);
 
     ACU_destroyAllocator(&allocator);
 
@@ -51,6 +66,7 @@ ACU_Fixture* allocatorTests(void)
     acu_initFixture(fixture, "allocator Tests");
 
     acu_addTestCase(fixture, "xxx", xxx);
+    acu_addTestCase(fixture, "xxx2", xxx2);
 
     return fixture;
 }

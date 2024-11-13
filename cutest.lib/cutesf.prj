@@ -54,6 +54,7 @@ test\usht_tst.c (test\usht_tst.h, test\tst_bed.h)
 
 util\util_fxt.c (util\util_fxt.h)
 
+util\allc_tst.c (util\allc_tst.h)
 util\dir_tst.c (util\dir_tst.h)
 util\list_tst.c (util\list_tst.h)
 util\hstb_tst.c (util\hstb_tst.h)
