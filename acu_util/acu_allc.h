@@ -33,15 +33,20 @@ typedef enum ACU_BufferStatus_ {
     ACU_BUFFER_STATUS_OCCUPIED,
 } ACU_BufferStatus;
 
+struct ACU_Allocator_;
+
 typedef struct ACU_AllocatorItem_ {
     ACU_BufferStatus status;
+    struct ACU_Allocator_* allocator;
     char* itemBuffer;
 } ACU_AllocatorItem;
 
 typedef struct ACU_Allocator_ {
     char* buffer;
     size_t itemSize;
+    size_t elementSize;
     size_t maxElements;
+    size_t occupiedElements;
 } ACU_Allocator;
 
 __EXPORT void ACU_initAllocator(ACU_Allocator* allocator, size_t itemSize, size_t maxElements);
@@ -50,6 +55,6 @@ __EXPORT void ACU_destroyAllocator(ACU_Allocator* allocator);
 
 __EXPORT void* ACU_allocAllocator(ACU_Allocator* allocator);
 
-__EXPORT void ACU_freeAllocator(ACU_Allocator* allocator, void* buffer);
+__EXPORT void ACU_freeAllocator(void* buffer);
 
 #endif // !ACU_ALLOCATOR

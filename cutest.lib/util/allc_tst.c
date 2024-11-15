@@ -36,7 +36,7 @@ static void xxx(ACU_ExecuteEnv* environment, const void* context) {
     ACU_initAllocator(&allocator, sizeof(ACU_Allocator), 10);
 
     alloc = ACU_allocAllocator(&allocator);
-    ACU_freeAllocator(&allocator, alloc);
+    ACU_freeAllocator(alloc);
 
     ACU_destroyAllocator(&allocator);
 
@@ -51,8 +51,8 @@ static void xxx2(ACU_ExecuteEnv* environment, const void* context) {
 
     alloc1 = ACU_allocAllocator(&allocator);
     alloc2 = ACU_allocAllocator(&allocator);
-    ACU_freeAllocator(&allocator, alloc1);
-    ACU_freeAllocator(&allocator, alloc2);
+    ACU_freeAllocator(alloc1);
+    ACU_freeAllocator(alloc2);
 
     ACU_destroyAllocator(&allocator);
 

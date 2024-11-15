@@ -25,10 +25,12 @@
 void ACU_initAllocator(ACU_Allocator* allocator, size_t itemSize, size_t maxElements)
 {
     allocator->itemSize = itemSize;
+    allocator->elementSize = offsetof(ACU_AllocatorItem, itemBuffer) + itemSize;
     allocator->maxElements = maxElements;
+    allocator->occupiedElements = 0;
 
-    allocator->buffer = __acu_emalloc((itemSize + offsetof(ACU_AllocatorItem, itemBuffer))* maxElements);
-    memset(allocator->buffer, 0, (itemSize + offsetof(ACU_AllocatorItem, itemBuffer)) * maxElements);
+    allocator->buffer = __acu_emalloc(allocator-> elementSize * maxElements);
+    memset(allocator->buffer, 0, allocator->elementSize * maxElements);
 }
 
 void ACU_destroyAllocator(ACU_Allocator* allocator)
@@ -39,20 +41,25 @@ void ACU_destroyAllocator(ACU_Allocator* allocator)
 void* ACU_allocAllocator(ACU_Allocator* allocator)
 {
     ACU_AllocatorItem* allocatorItem = allocator->buffer;
-    ACU_AllocatorItem* allocatorEnd = allocator->buffer + (allocator->itemSize + offsetof(ACU_AllocatorItem, itemBuffer)) * allocator->maxElements;
-    while (allocatorItem < allocatorEnd) {
-        if (allocatorItem->status == ACU_BUFFER_STATUS_FREE) {
-            allocatorItem->status = ACU_BUFFER_STATUS_OCCUPIED;
-            return &allocatorItem->itemBuffer;
+    ACU_AllocatorItem* allocatorEnd = allocator->buffer + allocator->elementSize * allocator->maxElements;
+    if (allocator->occupiedElements < allocator->maxElements) {
+        while (allocatorItem < allocatorEnd) {
+            if (allocatorItem->status == ACU_BUFFER_STATUS_FREE) {
+                allocatorItem->status = ACU_BUFFER_STATUS_OCCUPIED;
+                allocatorItem->allocator = allocator;
+                allocator->occupiedElements++;
+                return &allocatorItem->itemBuffer;
+            }
+            ((char*) allocatorItem) += allocator->elementSize;
         }
-        ((char*) allocatorItem) += (allocator->itemSize + offsetof(ACU_AllocatorItem, itemBuffer));
     }
     return NULL;
 }
 
-void ACU_freeAllocator(ACU_Allocator* allocator, void* buffer)
+void ACU_freeAllocator(void* buffer)
 {
     char* buf = buffer;
     buf -= offsetof(ACU_AllocatorItem, itemBuffer);
     ((ACU_AllocatorItem*)buf)->status = ACU_BUFFER_STATUS_FREE;
+    ((ACU_AllocatorItem*)buf)->allocator->occupiedElements--;
 }
