@@ -40,10 +40,9 @@ void ACU_destroyAllocator(ACU_Allocator* allocator)
 
 void* ACU_allocAllocator(ACU_Allocator* allocator)
 {
-    ACU_AllocatorItem* allocatorItem = allocator->buffer;
-    ACU_AllocatorItem* allocatorEnd = allocator->buffer + allocator->elementSize * allocator->maxElements;
+    ACU_AllocatorItem* allocatorItem = (ACU_AllocatorItem*) allocator->buffer;
     if (allocator->occupiedElements < allocator->maxElements) {
-        while (allocatorItem < allocatorEnd) {
+        while (1) {
             if (allocatorItem->status == ACU_BUFFER_STATUS_FREE) {
                 allocatorItem->status = ACU_BUFFER_STATUS_OCCUPIED;
                 allocatorItem->allocator = allocator;
