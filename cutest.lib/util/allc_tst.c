@@ -29,13 +29,14 @@
 
 #include <acu_allc.h>
 
-static void xxx(ACU_ExecuteEnv* environment, const void* context) {
+static void allocReturnPointerToMemory(ACU_ExecuteEnv* environment, const void* context) {
     ACU_Allocator allocator;
     void* alloc;
 
     ACU_initAllocator(&allocator, sizeof(ACU_Allocator), 10);
 
     alloc = ACU_allocAllocator(&allocator);
+    ACU_assert_ptrIsNotNull(environment, alloc, "ptr is null");
     ACU_freeAllocator(alloc);
 
     ACU_destroyAllocator(&allocator);
@@ -43,14 +44,20 @@ static void xxx(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
-static void xxx2(ACU_ExecuteEnv* environment, const void* context) {
+static void allocatorReturnsNullWhenAllElementsAllocated(ACU_ExecuteEnv* environment, const void* context) {
     ACU_Allocator allocator;
-    void *alloc1, *alloc2;
+    void *alloc1, *alloc2, *alloc3;
 
     ACU_initAllocator(&allocator, sizeof(int), 2);
 
     alloc1 = ACU_allocAllocator(&allocator);
     alloc2 = ACU_allocAllocator(&allocator);
+    alloc3 = ACU_allocAllocator(&allocator);
+
+    ACU_assert_ptrIsNotNull(environment, alloc1, "ptr is null");
+    ACU_assert_ptrIsNotNull(environment, alloc2, "ptr is null");
+    ACU_assert_ptrIsNull(environment, alloc3, "ptr is not null");
+
     ACU_freeAllocator(alloc1);
     ACU_freeAllocator(alloc2);
 
@@ -65,8 +72,8 @@ ACU_Fixture* allocatorTests(void)
 
     acu_initFixture(fixture, "allocator Tests");
 
-    acu_addTestCase(fixture, "xxx", xxx);
-    acu_addTestCase(fixture, "xxx2", xxx2);
+    acu_addTestCase(fixture, "allocReturnPointerToMemory", allocReturnPointerToMemory);
+    acu_addTestCase(fixture, "allocatorReturnsNullWhenAllElementsAllocated", allocatorReturnsNullWhenAllElementsAllocated);
 
     return fixture;
 }
