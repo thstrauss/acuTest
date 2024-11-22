@@ -24,12 +24,14 @@
 
 #include <stdio.h>
 
-void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, size_t maxElements)
+void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, size_t maxElements, ACU_HandleContextFunc* handleContext, void* context)
 {
     allocator->itemSize = itemSize;
     allocator->elementSize = offsetof(ACU_AllocatorItem, itemBuffer) + itemSize;
     allocator->maxElements = maxElements;
     allocator->occupiedElements = 0;
+    allocator->context = context;
+    allocator->handleContextFunc = handleContext;
 
     allocator->buffer = acu_emalloc(allocator-> elementSize * maxElements);
     memset(allocator->buffer, 0, allocator->elementSize * maxElements);
@@ -60,7 +62,14 @@ void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
 void acu_freeStaticAllocator(void* buffer)
 {
     char* buf = buffer;
+    ACU_AllocatorItem* item;
+    ACU_StaticAllocator* allocator;
     buf -= offsetof(ACU_AllocatorItem, itemBuffer);
-    ((ACU_AllocatorItem*)buf)->status = ACU_BUFFER_STATUS_FREE;
-    ((ACU_AllocatorItem*)buf)->allocator->occupiedElements--;
+    item = (ACU_AllocatorItem*)buf;
+    item->status = ACU_BUFFER_STATUS_FREE;
+    allocator = item->allocator;
+    allocator->occupiedElements--;
+    if (allocator->occupiedElements == 0 && allocator->context && allocator->handleContextFunc) {
+        allocator->handleContextFunc(item->allocator);
+    }
 }

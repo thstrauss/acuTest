@@ -34,7 +34,7 @@ static void staticAllocReturnPointerToMemory(ACU_ExecuteEnv* environment, const 
     ACU_StaticAllocator allocator;
     void* alloc;
 
-    acu_initStaticAllocator(&allocator, sizeof(int), 10);
+    acu_initStaticAllocator(&allocator, sizeof(int), 10, NULL, NULL);
 
     alloc = acu_allocStaticAllocator(&allocator);
     ACU_assert_ptrIsNotNull(environment, alloc, "ptr is null");
@@ -62,7 +62,7 @@ static void allocatorReturnsNullWhenAllElementsAllocated(ACU_ExecuteEnv* environ
     ACU_StaticAllocator allocator;
     void* alloc1, * alloc2, * alloc3;
 
-    acu_initStaticAllocator(&allocator, sizeof(int), 2);
+    acu_initStaticAllocator(&allocator, sizeof(int), 2, NULL, NULL);
 
     alloc1 = acu_allocStaticAllocator(&allocator);
     alloc2 = acu_allocStaticAllocator(&allocator);

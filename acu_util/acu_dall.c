@@ -43,6 +43,21 @@ void acu_destroyAllocator(ACU_DynamicAllocator* allocator)
     acu_free(allocator->staticAllocators);
 }
 
+static void __handleContext(ACU_StaticAllocator* staticAllocator) {
+    ACU_DynamicAllocator* allocator = (ACU_DynamicAllocator*)staticAllocator->context;
+    ACU_ListElement* element = allocator->staticAllocators->head;
+    ACU_ListElement* prev = NULL;
+    while (element) {
+        if (element->data == staticAllocator) {
+            acu_removeNextList(allocator->staticAllocators, prev);
+            __destroyStaticAllocators(staticAllocator);
+            break;
+        }
+        prev = element;
+        element = element->next;
+    }
+}
+
 void* acu_allocAllocator(ACU_DynamicAllocator* allocator)
 {
     ACU_ListElement* staticAllocatorElement = allocator->staticAllocators->head;
@@ -58,7 +73,7 @@ void* acu_allocAllocator(ACU_DynamicAllocator* allocator)
         staticAllocatorElement = staticAllocatorElement->next;
     }
     staticAllocator = acu_emalloc(sizeof(ACU_StaticAllocator));
-    acu_initStaticAllocator(staticAllocator, allocator->itemSize, allocator->maxElements);
+    acu_initStaticAllocator(staticAllocator, allocator->itemSize, allocator->maxElements, __handleContext, allocator);
     acu_insertHeadList(allocator->staticAllocators, staticAllocator);
     return acu_allocStaticAllocator(staticAllocator);
 }
@@ -68,7 +83,7 @@ void acu_freeAllocator(void* buffer)
     acu_freeStaticAllocator(buffer);
 }
 
-static void __accumulate(const void* data, void* visitorContext) {
+static void __accumulateAllocatedElements(const void* data, void* visitorContext) {
     (*(size_t*)visitorContext) += ((ACU_StaticAllocator*) data)->occupiedElements;
 }
 
@@ -77,7 +92,7 @@ size_t acu_getAllocatedElements(ACU_DynamicAllocator* allocator)
     size_t count = 0;
     ACU_ListVisitor visitor;
     visitor.context = &count;
-    visitor.visitor = __accumulate;
+    visitor.visitor = __accumulateAllocatedElements;
     
     acu_acceptList(allocator->staticAllocators, &visitor);
     return count;
