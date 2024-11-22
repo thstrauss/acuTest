@@ -22,7 +22,7 @@
 #include "acu_allc.h"
 #include "acu_util.h"
 
-void ACU_initAllocator(ACU_Allocator* allocator, size_t itemSize, size_t maxElements)
+void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, size_t maxElements)
 {
     allocator->itemSize = itemSize;
     allocator->elementSize = offsetof(ACU_AllocatorItem, itemBuffer) + itemSize;
@@ -33,12 +33,12 @@ void ACU_initAllocator(ACU_Allocator* allocator, size_t itemSize, size_t maxElem
     memset(allocator->buffer, 0, allocator->elementSize * maxElements);
 }
 
-void ACU_destroyAllocator(ACU_Allocator* allocator)
+void acu_destroyStaticAllocator(ACU_StaticAllocator* allocator)
 {
     acu_free(allocator->buffer);
 }
 
-void* ACU_allocAllocator(ACU_Allocator* allocator)
+void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
 {
     ACU_AllocatorItem* allocatorItem = (ACU_AllocatorItem*) allocator->buffer;
     if (allocator->occupiedElements < allocator->maxElements) {
@@ -55,7 +55,7 @@ void* ACU_allocAllocator(ACU_Allocator* allocator)
     return NULL;
 }
 
-void ACU_freeAllocator(void* buffer)
+void acu_freeStaticAllocator(void* buffer)
 {
     char* buf = buffer;
     buf -= offsetof(ACU_AllocatorItem, itemBuffer);

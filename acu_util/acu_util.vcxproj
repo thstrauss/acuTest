@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="acu_allc.c" />
     <ClCompile Include="ACU_CACH.C" />
+    <ClCompile Include="acu_dall.c" />
     <ClCompile Include="acu_dir.c" />
     <ClCompile Include="acu_hstb.c" />
     <ClCompile Include="acu_list.c" />
@@ -163,6 +164,7 @@
     <ClInclude Include="acu_allc.h" />
     <ClInclude Include="acu_cach.h" />
     <ClInclude Include="acu_cmmn.h" />
+    <ClInclude Include="acu_dall.h" />
     <ClInclude Include="acu_dir.h" />
     <ClInclude Include="acu_list.h" />
     <ClInclude Include="acu_mtch.h" />

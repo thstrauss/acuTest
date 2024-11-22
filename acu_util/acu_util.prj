@@ -8,6 +8,7 @@
 
 acu_allc (acu_allc.h, acu_util.h)
 acu_cach (acu_cach.h)
+acu_dall (acu_dall.h, acu_allc.h, acu_util.h)
 acu_dir (acu_dir.h, acu_cmmn.h, acu_util.h)
 acu_hstb (acu_hstb.h, acu_list.h, acu_cmmn.h, acu_util.h)
 acu_list (acu_list.h, acu_cmmn.h, acu_util.h)

@@ -21,40 +21,24 @@
 
 #pragma once
 
-#ifndef ACU_ALLOCATOR
-#define ACU_ALLOCATOR
+#ifndef __dynamic_allocator__
+#define __dynamic_allocator__
 
-#include "acu_cmmn.h"
+#include "acu_list.h"
+#include "acu_allc.h"
 
-#include <stddef.h>
-
-typedef enum ACU_BufferStatus_ {
-    ACU_BUFFER_STATUS_FREE,
-    ACU_BUFFER_STATUS_OCCUPIED,
-} ACU_BufferStatus;
-
-struct ACU_StaticAllocator_;
-
-typedef struct ACU_AllocatorItem_ {
-    ACU_BufferStatus status;
-    struct ACU_StaticAllocator_* allocator;
-    char* itemBuffer;
-} ACU_AllocatorItem;
-
-typedef struct ACU_StaticAllocator_ {
-    char* buffer;
+typedef struct ACU_DynamicAllocator_ {
+    ACU_List* staticAllocators;
     size_t itemSize;
-    size_t elementSize;
     size_t maxElements;
-    size_t occupiedElements;
-} ACU_StaticAllocator;
+} ACU_DynamicAllocator;
 
-__EXPORT void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, size_t maxElements);
+__EXPORT void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t maxElements);
 
-__EXPORT void acu_destroyStaticAllocator(ACU_StaticAllocator* allocator);
+__EXPORT void acu_destroyAllocator(ACU_DynamicAllocator* allocator);
 
-__EXPORT void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator);
+__EXPORT void* acu_allocAllocator(ACU_DynamicAllocator* allocator);
 
-__EXPORT void acu_freeStaticAllocator(void* buffer);
+__EXPORT void acu_freeAllocator(void* buffer);
 
-#endif // !ACU_ALLOCATOR
+#endif // !__dynamic_allocator__

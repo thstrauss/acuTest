@@ -28,40 +28,56 @@
 #include "allc_tst.h"
 
 #include <acu_allc.h>
+#include <acu_dall.h>
 
-static void allocReturnPointerToMemory(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_Allocator allocator;
+static void staticAllocReturnPointerToMemory(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_StaticAllocator allocator;
     void* alloc;
 
-    ACU_initAllocator(&allocator, sizeof(ACU_Allocator), 10);
+    acu_initStaticAllocator(&allocator, sizeof(int), 10);
 
-    alloc = ACU_allocAllocator(&allocator);
+    alloc = acu_allocStaticAllocator(&allocator);
     ACU_assert_ptrIsNotNull(environment, alloc, "ptr is null");
-    ACU_freeAllocator(alloc);
+    acu_freeStaticAllocator(alloc);
 
-    ACU_destroyAllocator(&allocator);
+    acu_destroyStaticAllocator(&allocator);
+
+    UNUSED(context);
+}
+
+static void allocReturnPointerToMemory(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_DynamicAllocator allocator;
+    void* buffer;
+
+    acu_initAllocator(&allocator, sizeof(int), 10);
+
+    buffer = acu_allocAllocator(&allocator);
+    ACU_assert_ptrIsNotNull(environment, buffer, "ptr is null");
+    acu_freeAllocator(buffer);
+
+    acu_destroyAllocator(&allocator);
 
     UNUSED(context);
 }
 
 static void allocatorReturnsNullWhenAllElementsAllocated(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_Allocator allocator;
+    ACU_StaticAllocator allocator;
     void *alloc1, *alloc2, *alloc3;
 
-    ACU_initAllocator(&allocator, sizeof(int), 2);
+    acu_initStaticAllocator(&allocator, sizeof(int), 2);
 
-    alloc1 = ACU_allocAllocator(&allocator);
-    alloc2 = ACU_allocAllocator(&allocator);
-    alloc3 = ACU_allocAllocator(&allocator);
+    alloc1 = acu_allocStaticAllocator(&allocator);
+    alloc2 = acu_allocStaticAllocator(&allocator);
+    alloc3 = acu_allocStaticAllocator(&allocator);
 
     ACU_assert_ptrIsNotNull(environment, alloc1, "ptr is null");
     ACU_assert_ptrIsNotNull(environment, alloc2, "ptr is null");
     ACU_assert_ptrIsNull(environment, alloc3, "ptr is not null");
 
-    ACU_freeAllocator(alloc1);
-    ACU_freeAllocator(alloc2);
+    acu_freeStaticAllocator(alloc1);
+    acu_freeStaticAllocator(alloc2);
 
-    ACU_destroyAllocator(&allocator);
+    acu_destroyStaticAllocator(&allocator);
 
     UNUSED(context);
 }
@@ -72,6 +88,7 @@ ACU_Fixture* allocatorTests(void)
 
     acu_initFixture(fixture, "allocator Tests");
 
+    acu_addTestCase(fixture, "staticAllocReturnPointerToMemory", staticAllocReturnPointerToMemory);
     acu_addTestCase(fixture, "allocReturnPointerToMemory", allocReturnPointerToMemory);
     acu_addTestCase(fixture, "allocatorReturnsNullWhenAllElementsAllocated", allocatorReturnsNullWhenAllElementsAllocated);
 
