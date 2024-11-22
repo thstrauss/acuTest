@@ -67,3 +67,18 @@ void acu_freeAllocator(void* buffer)
 {
     acu_freeStaticAllocator(buffer);
 }
+
+static void __accumulate(const void* data, void* visitorContext) {
+    (*(size_t*)visitorContext) += ((ACU_StaticAllocator*) data)->occupiedElements;
+}
+
+size_t acu_getAllocatedElements(ACU_DynamicAllocator* allocator)
+{
+    size_t count = 0;
+    ACU_ListVisitor visitor;
+    visitor.context = &count;
+    visitor.visitor = __accumulate;
+    
+    acu_acceptList(allocator->staticAllocators, &visitor);
+    return count;
+}

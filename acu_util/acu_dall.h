@@ -41,4 +41,6 @@ __EXPORT void* acu_allocAllocator(ACU_DynamicAllocator* allocator);
 
 __EXPORT void acu_freeAllocator(void* buffer);
 
+__EXPORT size_t acu_getAllocatedElements(ACU_DynamicAllocator* allocator);
+
 #endif // !__dynamic_allocator__
