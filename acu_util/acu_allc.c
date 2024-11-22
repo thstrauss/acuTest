@@ -22,6 +22,8 @@
 #include "acu_allc.h"
 #include "acu_util.h"
 
+#include <stdio.h>
+
 void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, size_t maxElements)
 {
     allocator->itemSize = itemSize;
@@ -29,7 +31,7 @@ void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, si
     allocator->maxElements = maxElements;
     allocator->occupiedElements = 0;
 
-    allocator->buffer = __acu_emalloc(allocator-> elementSize * maxElements);
+    allocator->buffer = acu_emalloc(allocator-> elementSize * maxElements);
     memset(allocator->buffer, 0, allocator->elementSize * maxElements);
 }
 

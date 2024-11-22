@@ -24,10 +24,15 @@
 
 #include <stddef.h>
 
+void __destroyStaticAllocators(ACU_StaticAllocator* allocator) {
+    acu_destroyStaticAllocator(allocator);
+    acu_free(allocator);
+}
+
 void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t maxElements)
 {
-    allocator->staticAllocators = acu_mallocList();
-    acu_initList(allocator->staticAllocators, (ACU_ListDestroyFunc*) acu_destroyStaticAllocator);
+    allocator->staticAllocators = acu_emalloc(sizeof(ACU_List));
+    acu_initList(allocator->staticAllocators, (ACU_ListDestroyFunc*) __destroyStaticAllocators);
     allocator->itemSize = itemSize;
     allocator->maxElements = maxElements;
 }

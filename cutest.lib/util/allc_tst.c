@@ -45,24 +45,20 @@ static void staticAllocReturnPointerToMemory(ACU_ExecuteEnv* environment, const 
     UNUSED(context);
 }
 
-static void allocReturnPointerToMemory(ACU_ExecuteEnv* environment, const void* context) {
+static void emptyDynamicAllocator(ACU_ExecuteEnv* environment, const void* context) {
     ACU_DynamicAllocator allocator;
-    void* buffer;
 
     acu_initAllocator(&allocator, sizeof(int), 10);
-
-    buffer = acu_allocAllocator(&allocator);
-    ACU_assert_ptrIsNotNull(environment, buffer, "ptr is null");
-    acu_freeAllocator(buffer);
 
     acu_destroyAllocator(&allocator);
 
     UNUSED(context);
+    UNUSED(environment);
 }
 
 static void allocatorReturnsNullWhenAllElementsAllocated(ACU_ExecuteEnv* environment, const void* context) {
     ACU_StaticAllocator allocator;
-    void *alloc1, *alloc2, *alloc3;
+    void* alloc1, * alloc2, * alloc3;
 
     acu_initStaticAllocator(&allocator, sizeof(int), 2);
 
@@ -82,6 +78,21 @@ static void allocatorReturnsNullWhenAllElementsAllocated(ACU_ExecuteEnv* environ
     UNUSED(context);
 }
 
+static void dynamicAllocReturnPointerToMemory(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_DynamicAllocator allocator;
+    void* buffer;
+
+    acu_initAllocator(&allocator, sizeof(int), 10);
+
+    buffer = acu_allocAllocator(&allocator);
+    ACU_assert_ptrIsNotNull(environment, buffer, "ptr is null");
+    acu_freeAllocator(buffer);
+
+    acu_destroyAllocator(&allocator);
+
+    UNUSED(context);
+}
+
 ACU_Fixture* allocatorTests(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
@@ -89,8 +100,9 @@ ACU_Fixture* allocatorTests(void)
     acu_initFixture(fixture, "allocator Tests");
 
     acu_addTestCase(fixture, "staticAllocReturnPointerToMemory", staticAllocReturnPointerToMemory);
-    acu_addTestCase(fixture, "allocReturnPointerToMemory", allocReturnPointerToMemory);
     acu_addTestCase(fixture, "allocatorReturnsNullWhenAllElementsAllocated", allocatorReturnsNullWhenAllElementsAllocated);
+    acu_addTestCase(fixture, "emptyDynamicAllocator", emptyDynamicAllocator);
+    acu_addTestCase(fixture, "dynamicAllocReturnPointerToMemory", dynamicAllocReturnPointerToMemory);
 
     return fixture;
 }
