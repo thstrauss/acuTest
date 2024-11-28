@@ -25,6 +25,12 @@
     <Filter Include="Source Files\test">
       <UniqueIdentifier>{6323e723-2635-4f56-bc50-d499394f39bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\perf">
+      <UniqueIdentifier>{b531ac15-2043-4274-ae8f-fdcc7ec8d505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\perf">
+      <UniqueIdentifier>{2d9addb5-ca71-47d8-84ac-c97311340125}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="util\util_fxt.c">
@@ -117,6 +123,9 @@
     <ClCompile Include="util\allc_tst.c">
       <Filter>Source Files\util</Filter>
     </ClCompile>
+    <ClCompile Include="perf\perf_fxt.c">
+      <Filter>Source Files\perf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="util\dir_tst.h">
@@ -205,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="util\allc_tst.h">
       <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="perf\perf_fxt.h">
+      <Filter>Header Files\perf</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="acu_entr.c" />
+    <ClCompile Include="perf\perf_fxt.c" />
     <ClCompile Include="util\allc_tst.c" />
     <ClCompile Include="test\test_fxt.c" />
     <ClCompile Include="test\asrt_tst.c" />
@@ -192,6 +193,7 @@
     <ClCompile Include="util\uuid_tst.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="perf\perf_fxt.h" />
     <ClInclude Include="util\allc_tst.h" />
     <ClInclude Include="test\asrt_tst.h" />
     <ClInclude Include="test\char_tst.h" />
