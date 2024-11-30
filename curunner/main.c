@@ -59,7 +59,7 @@ static void executeEntry(const char* cupName, Summary* summary) {
         return;
     }
 
-    summary->returnValue = acu_executeFixture(entry->fixture, &progress);
+    summary->returnValue = acu_executeFixture(entry->fixture, NULL);
     acu_printf_s(buffer, sizeof(buffer), "\n\r");
     acu_acceptFixture(entry->fixture, &report);
     acu_acceptFixture(entry->fixture, &reportSummary);
