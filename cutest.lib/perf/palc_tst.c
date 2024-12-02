@@ -21,6 +21,8 @@
 
 #include "palc_tst.h"
 
+#include <acu_tryc.h>
+
 ACU_Fixture* allocPerformanceFixture(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();

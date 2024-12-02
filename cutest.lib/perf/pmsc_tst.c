@@ -25,6 +25,7 @@
 #include <acu_util.h>
 #include <acu_strg.h>
 #include <acu_perf.h>
+#include <acu_tryc.h>
 #include <stdio.h>
 
 static void voidFunc(void) {
