@@ -110,3 +110,4 @@ ACU_Fixture* allocatorTests(void)
 
     return fixture;
 }
+

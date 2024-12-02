@@ -78,30 +78,6 @@ static int zbytel(unsigned long x) {
         return (int) (y >> 15) ^ 3;
 }
 
-
-
-
-static void voidFunc(void) {
-	int i;
-	for (i=0; i<100; i++) {
-	}
-}
-
-static void strLenFunc(void) {
-	int i;
-	for (i=0; i<100; i++) {
-    	strlen("The quick brown fox jumps over the lazy dog");
-    }
-}
-
-static void acu_strlenFunc(void) {
-    int i;
-	for (i=0; i<100; i++) {
-		acu_strlen("The quick brown fox jumps over the lazy dog");
-    }
-}
-
-
 static void strlenTest(ACU_ExecuteEnv* environment, const void* context) {
 
     char s[] = "";
@@ -123,18 +99,7 @@ static void strlenTest(ACU_ExecuteEnv* environment, const void* context) {
     UNUSED(context);
 }
 
-static void strlenPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
 
-    #define DIVISOR 3
-    printf("voidFunc\t%ld\n\r", (acu_measureLoop(voidFunc, CLK_TCK / DIVISOR))*DIVISOR);
-    printf("strLenFunc\t%ld\n\r", (acu_measureLoop(strLenFunc, CLK_TCK / DIVISOR))*DIVISOR);
-    printf("acu_strlenFunc\t%ld\n\r", (acu_measureLoop(acu_strlenFunc, CLK_TCK / DIVISOR))*DIVISOR);
-
-    #undef DIVISOR
-
-    UNUSED(environment);
-    UNUSED(context);
-}
 
 ACU_Fixture* miscTests(void)
 {
@@ -145,7 +110,5 @@ ACU_Fixture* miscTests(void)
     acu_addTestCase(fixture, "float In VaArgs are implicit converted to double", floatInVaArgsTest);
     acu_addTestCase(fixture, "orphanedAlloc", orphanedAlloc);
     acu_addTestCase(fixture, "strlenTest", strlenTest);
-/*    acu_addTestCase(fixture, "strlenPerformanceTest", strlenPerformanceTest);
-*/
     return fixture;
 }
