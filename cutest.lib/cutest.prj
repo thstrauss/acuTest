@@ -31,6 +31,11 @@
 
 acu_entr.c (..\acu_test\acu_ldr.h)
 
+perf\perf_fxt.c (perf\perf_fxt.h)
+
+perf\palc_tst.c (perf\palc_tst.h)
+perf\pmsc_tst.c (perf\pmsc_tst.h)
+
 test\test_fxt.c (test\test_fxt.h)
 
 test\asrt_tst.c
