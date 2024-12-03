@@ -28,33 +28,35 @@
 #include <acu_tryc.h>
 #include <stdio.h>
 
-static void voidFunc(void) {
+static void voidFunc(void* context) {
     int i;
     for (i = 0; i < 100; i++) {
     }
+    UNUSED(context);
 }
 
-static void strLenFunc(void) {
+static void strLenFunc(void* context) {
     int i;
     for (i = 0; i < 100; i++) {
-        strlen("The quick brown fox jumps over the lazy dog");
+        size_t r = strlen("The quick brown fox jumps over the lazy dog");
     }
+    UNUSED(context);
 }
 
-static void acu_strlenFunc(void) {
+static void acu_strlenFunc(void* context) {
     int i;
     for (i = 0; i < 100; i++) {
-        acu_strlen("The quick brown fox jumps over the lazy dog");
+        size_t r = acu_strlen("The quick brown fox jumps over the lazy dog");
     }
+    UNUSED(context);
 }
 
 static void strlenPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
 
 #define DIVISOR 3
-    printf("voidFunc\t%ld\n\r", (acu_measureLoop(voidFunc, CLK_TCK / DIVISOR)) * DIVISOR);
-    printf("strLenFunc\t%ld\n\r", (acu_measureLoop(strLenFunc, CLK_TCK / DIVISOR)) * DIVISOR);
-    printf("acu_strlenFunc\t%ld\n\r", (acu_measureLoop(acu_strlenFunc, CLK_TCK / DIVISOR)) * DIVISOR);
-
+    printf("voidFunc\t%ld\n\r", (acu_measureLoop(voidFunc, CLK_TCK / DIVISOR, NULL)) * DIVISOR);
+    printf("strLenFunc\t%ld\n\r", (acu_measureLoop(strLenFunc, CLK_TCK / DIVISOR, NULL)) * DIVISOR);
+    printf("acu_strlenFunc\t%ld\n\r", (acu_measureLoop(acu_strlenFunc, CLK_TCK / DIVISOR, NULL)) * DIVISOR);
 #undef DIVISOR
 
     UNUSED(environment);

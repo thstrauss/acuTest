@@ -28,8 +28,8 @@
 
 #include <time.h>
 
-typedef void TestFunc(void);
+typedef void TestFunc(void* context);
 
-__EXPORT unsigned long acu_measureLoop(TestFunc* func, clock_t duration);
+__EXPORT unsigned long acu_measureLoop(TestFunc* func, clock_t duration, void* context);
 
 #endif
