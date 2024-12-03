@@ -34,6 +34,7 @@ void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, si
     allocator->handleContextFunc = handleContext;
 
     allocator->buffer = acu_emalloc(allocator-> elementSize * maxElements);
+    allocator->last = (ACU_AllocatorItem*) allocator->buffer;
     memset(allocator->buffer, 0, allocator->elementSize * maxElements);
 }
 

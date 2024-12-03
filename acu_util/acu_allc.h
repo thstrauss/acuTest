@@ -49,6 +49,7 @@ typedef struct ACU_StaticAllocator_ {
     size_t elementSize;
     size_t maxElements;
     size_t occupiedElements;
+    ACU_AllocatorItem* last;
     void* context;
     ACU_HandleContextFunc* handleContextFunc;
 } ACU_StaticAllocator;

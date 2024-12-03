@@ -86,6 +86,8 @@ static void allocPerformanceTest(ACU_ExecuteEnv* environment, const void* contex
     printf("acu_allocFunc\t%ld\n\r", (acu_measureLoop(acu_allocFunc, CLK_TCK / DIVISOR, &c)) * DIVISOR);
 #undef DIVISOR
 
+    acu_destroyStaticAllocator(&allocator);
+
     UNUSED(environment);
     UNUSED(context);
 }
