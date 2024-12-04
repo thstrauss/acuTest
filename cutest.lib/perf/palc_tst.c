@@ -58,7 +58,7 @@ static void allocFunc(void* context) {
     UNUSED(context);
 }
 
-static void acu_allocFunc(void* context) {
+static void acu_allocStaticAllocatorFunc(void* context) {
     int i;
     AllocContext* c = context;
     for (i = 0; i < 100; i++) {
@@ -66,6 +66,18 @@ static void acu_allocFunc(void* context) {
     }
     for (i = 0; i < 100; i++) {
         acu_freeStaticAllocator(c->buffer[i]);
+    }
+    UNUSED(context);
+}
+
+static void acu_emallocFunc(void* context) {
+    int i;
+    AllocContext* c = context;
+    for (i = 0; i < 100; i++) {
+        c->buffer[i] = acu_emalloc(10);
+    }
+    for (i = 0; i < 100; i++) {
+        acu_free(c->buffer[i]);
     }
     UNUSED(context);
 }
@@ -83,7 +95,8 @@ static void allocPerformanceTest(ACU_ExecuteEnv* environment, const void* contex
 #define DIVISOR 3
     printf("voidFunc\t%ld\n\r", (acu_measureLoop(voidFunc, CLK_TCK / DIVISOR, &c)) * DIVISOR);
     printf("allocFunc\t%ld\n\r", (acu_measureLoop(allocFunc, CLK_TCK / DIVISOR, &c)) * DIVISOR);
-    printf("acu_allocFunc\t%ld\n\r", (acu_measureLoop(acu_allocFunc, CLK_TCK / DIVISOR, &c)) * DIVISOR);
+    printf("acu_emallocFunc\t%ld\n\r", (acu_measureLoop(acu_emallocFunc, CLK_TCK / DIVISOR, &c)) * DIVISOR);
+    printf("acu_allocStaticAllocator\t%ld\n\r", (acu_measureLoop(acu_allocStaticAllocatorFunc, CLK_TCK / DIVISOR, &c)) * DIVISOR);
 #undef DIVISOR
 
     acu_destroyStaticAllocator(&allocator);

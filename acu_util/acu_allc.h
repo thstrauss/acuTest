@@ -44,12 +44,13 @@ typedef struct ACU_AllocatorItem_ {
 typedef void ACU_HandleContextFunc(struct ACU_StaticAllocator_* allocator);
 
 typedef struct ACU_StaticAllocator_ {
+    ACU_AllocatorItem* next;
+    ACU_AllocatorItem* last;
     char* buffer;
     size_t itemSize;
     size_t elementSize;
     size_t maxElements;
     size_t occupiedElements;
-    ACU_AllocatorItem* last;
     void* context;
     ACU_HandleContextFunc* handleContextFunc;
 } ACU_StaticAllocator;
