@@ -39,6 +39,7 @@ static void strLenFunc(void* context) {
     int i;
     for (i = 0; i < 100; i++) {
         size_t r = strlen("The quick brown fox jumps over the lazy dog");
+        UNUSED(r);
     }
     UNUSED(context);
 }
@@ -47,6 +48,7 @@ static void acu_strlenFunc(void* context) {
     int i;
     for (i = 0; i < 100; i++) {
         size_t r = acu_strlen("The quick brown fox jumps over the lazy dog");
+    	UNUSED(r);
     }
     UNUSED(context);
 }
