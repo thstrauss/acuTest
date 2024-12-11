@@ -26,6 +26,7 @@
 #include <acu_perf.h>
 
 #include <acu_allc.h>
+#include <acu_dall.h>
 
 #include <stdlib.h>
 
@@ -45,6 +46,11 @@ typedef struct AllocContext_ {
     char** buffer;
     ACU_StaticAllocator* allocator;
 } AllocContext;
+
+typedef struct AllocDynamicContext_ {
+    char** buffer;
+    ACU_DynamicAllocator* allocator;
+} AllocDynamicContext;
 
 static void allocFunc(void* context) {
     int i;
@@ -70,6 +76,17 @@ static void acu_allocStaticAllocatorFunc(void* context) {
     UNUSED(context);
 }
 
+static void acu_allocDynamicAllocatorFunc(void* context) {
+    int i;
+    AllocDynamicContext* c = (AllocDynamicContext*) context;
+    for (i = 0; i < 100; i++) {
+        c->buffer[i] = acu_allocAllocator(c->allocator);
+    }
+    for (i = 0; i < 100; i++) {
+        acu_freeAllocator(c->buffer[i]);
+    }
+}
+
 static void acu_emallocFunc(void* context) {
     int i;
     AllocContext* c = context;
@@ -82,12 +99,12 @@ static void acu_emallocFunc(void* context) {
     UNUSED(context);
 }
 
-static void allocPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
+static void staticAllocPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
 
     char* buffer[100];
     ACU_StaticAllocator allocator;
     AllocContext c;
-    c.buffer = &buffer[0];
+    c.buffer = buffer;
     c.allocator = &allocator;
 
     acu_initStaticAllocator(&allocator, 10, 100, (ACU_HandleContextFunc*) NULL, NULL);
@@ -105,12 +122,33 @@ static void allocPerformanceTest(ACU_ExecuteEnv* environment, const void* contex
     UNUSED(context);
 }
 
+static void dynamicAllocPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
+
+    char* buffer[100];
+    ACU_DynamicAllocator allocator;
+    AllocDynamicContext c;
+    c.buffer = buffer;
+    c.allocator = &allocator;
+
+    acu_initAllocator(&allocator, 10, 101);
+    
+#define DIVISOR 3
+    printf("acu_allocDynamicAllocator\t%ld\n\r", (acu_measureLoop(acu_allocDynamicAllocatorFunc, CLK_TCK / DIVISOR, &c)) * DIVISOR);
+#undef DIVISOR
+
+    acu_destroyAllocator(&allocator);
+
+    UNUSED(environment);
+    UNUSED(context);
+}
+
 ACU_Fixture* allocPerformanceFixture(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
     acu_initFixture(fixture, "alloc performance Tests");
 
-    acu_addTestCase(fixture, "allocPerformanceTest", allocPerformanceTest);
+    acu_addTestCase(fixture, "staticAllocPerformanceTest", staticAllocPerformanceTest);
+    acu_addTestCase(fixture, "dynamicAllocPerformanceTest", dynamicAllocPerformanceTest);
 
     return fixture;
 }

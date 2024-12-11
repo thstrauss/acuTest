@@ -47,10 +47,9 @@ typedef struct ACU_StaticAllocator_ {
     ACU_AllocatorItem* next;
     ACU_AllocatorItem* last;
     char* buffer;
-    size_t itemSize;
     size_t elementSize;
     size_t maxElements;
-    size_t occupiedElements;
+    size_t freeElements;
     void* context;
     ACU_HandleContextFunc* handleContextFunc;
 } ACU_StaticAllocator;

@@ -28,10 +28,9 @@ void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, si
 {
     size_t i;
     ACU_AllocatorItem* allocatorItem;
-    allocator->itemSize = itemSize;
     allocator->elementSize = offsetof(ACU_AllocatorItem, itemBuffer) + itemSize;
     allocator->maxElements = maxElements;
-    allocator->occupiedElements = 0;
+    allocator->freeElements = maxElements;
     allocator->context = context;
     allocator->handleContextFunc = handleContext;
 
@@ -53,20 +52,21 @@ void acu_destroyStaticAllocator(ACU_StaticAllocator* allocator)
 
 void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
 {
-    if (allocator->occupiedElements < allocator->maxElements) {
+    if (allocator->freeElements) {
+        size_t elementSize = allocator->elementSize;
         ACU_AllocatorItem* allocatorItem = allocator->next;
         while (1) {
-            if (allocatorItem > allocator->last) {
+            if (allocatorItem >= allocator->last) {
                 allocatorItem = (ACU_AllocatorItem*)allocator->buffer;
             }
             if (allocatorItem->status == ACU_BUFFER_STATUS_FREE) {
                 break;
             }
-            ((char*)allocatorItem) += allocator->elementSize;
+            ((char*)allocatorItem) += elementSize;
         }
         allocatorItem->status = ACU_BUFFER_STATUS_OCCUPIED;
-        allocator->occupiedElements++;
-        allocator->next = (ACU_AllocatorItem*)((char*)allocatorItem + allocator->elementSize);
+        allocator->freeElements--;
+        allocator->next = (ACU_AllocatorItem*)((char*)allocatorItem + elementSize);
         return &allocatorItem->itemBuffer;
     }
     return NULL;
@@ -74,16 +74,14 @@ void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
 
 void acu_freeStaticAllocator(void* buffer)
 {
-    char* buf = buffer;
-    ACU_AllocatorItem* item;
-    ACU_StaticAllocator* allocator;
-    buf -= offsetof(ACU_AllocatorItem, itemBuffer);
-    item = (ACU_AllocatorItem*)buf;
+    volatile ACU_AllocatorItem* item;
+    volatile ACU_StaticAllocator* allocator;
+    item = (ACU_AllocatorItem*)((char*)buffer - offsetof(ACU_AllocatorItem, itemBuffer));
     item->status = ACU_BUFFER_STATUS_FREE;
     allocator = item->allocator;
-    allocator->occupiedElements--;
+    allocator->freeElements++;
     allocator->next = item;
-    if (allocator->occupiedElements == 0 && allocator->context && allocator->handleContextFunc) {
+    if (allocator->freeElements == allocator->maxElements && allocator->context && allocator->handleContextFunc) {
         allocator->handleContextFunc(item->allocator);
     }
 }

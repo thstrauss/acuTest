@@ -24,17 +24,18 @@
 
 #include <stddef.h>
 
-void __destroyStaticAllocators(ACU_StaticAllocator* allocator) {
+static void __destroyStaticAllocators(ACU_StaticAllocator* allocator) {
     acu_destroyStaticAllocator(allocator);
     acu_free(allocator);
 }
 
-void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t maxElements)
+void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t maxBucketElements)
 {
-    allocator->staticAllocators = acu_emalloc(sizeof(ACU_List));
+    allocator->staticAllocators = acu_mallocList();
+    allocator->lastUsedAllocator = NULL;
     acu_initList(allocator->staticAllocators, (ACU_ListDestroyFunc*) __destroyStaticAllocators);
     allocator->itemSize = itemSize;
-    allocator->maxElements = maxElements;
+    allocator->maxBucketElements = maxBucketElements;
 }
 
 void acu_destroyAllocator(ACU_DynamicAllocator* allocator)
@@ -51,6 +52,7 @@ static void __handleContext(ACU_StaticAllocator* staticAllocator) {
         if (element->data == staticAllocator) {
             acu_removeNextList(allocator->staticAllocators, prev);
             __destroyStaticAllocators(staticAllocator);
+            allocator->lastUsedAllocator = NULL;
             break;
         }
         prev = element;
@@ -60,31 +62,34 @@ static void __handleContext(ACU_StaticAllocator* staticAllocator) {
 
 void* acu_allocAllocator(ACU_DynamicAllocator* allocator)
 {
-    ACU_ListElement* staticAllocatorElement = allocator->staticAllocators->head;
-    ACU_StaticAllocator* staticAllocator;
+    ACU_ListElement* staticAllocatorElement;
+    ACU_StaticAllocator* staticAllocator = allocator->lastUsedAllocator;
+    if (staticAllocator) {
+        void* buffer = acu_allocStaticAllocator(staticAllocator);
+        if (buffer) {
+            return buffer;
+        }
+    }
+    staticAllocatorElement = allocator->staticAllocators->head;
     while (staticAllocatorElement) {
+        void* buffer;
         staticAllocator = (ACU_StaticAllocator*)staticAllocatorElement->data;
-        if (staticAllocator->occupiedElements < staticAllocator->maxElements) {
-            void* buffer = acu_allocStaticAllocator((ACU_StaticAllocator*)staticAllocatorElement->data);
-            if (buffer) {
-                return buffer;
-            }
+        buffer = acu_allocStaticAllocator(staticAllocator);
+        if (buffer) {
+            allocator->lastUsedAllocator = staticAllocator;
+            return buffer;
         }
         staticAllocatorElement = staticAllocatorElement->next;
     }
     staticAllocator = acu_emalloc(sizeof(ACU_StaticAllocator));
-    acu_initStaticAllocator(staticAllocator, allocator->itemSize, allocator->maxElements, __handleContext, allocator);
+    acu_initStaticAllocator(staticAllocator, allocator->itemSize, allocator->maxBucketElements, __handleContext, allocator);
     acu_insertHeadList(allocator->staticAllocators, staticAllocator);
+    allocator->lastUsedAllocator = staticAllocator;
     return acu_allocStaticAllocator(staticAllocator);
 }
 
-void acu_freeAllocator(void* buffer)
-{
-    acu_freeStaticAllocator(buffer);
-}
-
 static void __accumulateAllocatedElements(const void* data, void* visitorContext) {
-    (*(size_t*)visitorContext) += ((ACU_StaticAllocator*) data)->occupiedElements;
+    (*(size_t*)visitorContext) += ((ACU_StaticAllocator*)data)->maxElements - ((ACU_StaticAllocator*) data)->freeElements;
 }
 
 size_t acu_getAllocatedElements(ACU_DynamicAllocator* allocator)

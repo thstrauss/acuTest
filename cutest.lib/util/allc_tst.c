@@ -82,15 +82,22 @@ static void allocatorReturnsNullWhenAllElementsAllocated(ACU_ExecuteEnv* environ
 
 static void dynamicAllocReturnPointerToMemory(ACU_ExecuteEnv* environment, const void* context) {
     ACU_DynamicAllocator allocator;
-    void* buffer;
+    void* buffer1;
+    void* buffer2;
 
-    acu_initAllocator(&allocator, sizeof(int), 10);
+    acu_initAllocator(&allocator, sizeof(int), 1);
 
-    buffer = acu_allocAllocator(&allocator);
-    ACU_assert_ptrIsNotNull(environment, buffer, "ptr is null");
-    ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&allocator), 1, "Not 1");
-    acu_freeAllocator(buffer);
+    buffer1 = acu_allocAllocator(&allocator);
+    buffer2 = acu_allocAllocator(&allocator);
+    ACU_assert_ptrIsNotNull(environment, buffer1, "ptr is null");
+    ACU_assert_ptrIsNotNull(environment, buffer2, "ptr is null");
+    ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&allocator), 2, "Not 2");
+    acu_freeAllocator(buffer1);
+    acu_freeAllocator(buffer2);
     ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&allocator), 0, "Not 0");
+
+    buffer1 = acu_allocAllocator(&allocator);
+    ACU_assert_ptrIsNotNull(environment, buffer1, "ptr is null");
 
     acu_destroyAllocator(&allocator);
 

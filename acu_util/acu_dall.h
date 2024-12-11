@@ -28,18 +28,19 @@
 #include "acu_allc.h"
 
 typedef struct ACU_DynamicAllocator_ {
+    ACU_StaticAllocator* lastUsedAllocator;
     ACU_List* staticAllocators;
     size_t itemSize;
-    size_t maxElements;
+    size_t maxBucketElements;
 } ACU_DynamicAllocator;
 
-__EXPORT void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t maxElements);
+__EXPORT void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t maxBucketElements);
 
 __EXPORT void acu_destroyAllocator(ACU_DynamicAllocator* allocator);
 
 __EXPORT void* acu_allocAllocator(ACU_DynamicAllocator* allocator);
 
-__EXPORT void acu_freeAllocator(void* buffer);
+#define acu_freeAllocator(buffer) acu_freeStaticAllocator(buffer)
 
 __EXPORT size_t acu_getAllocatedElements(ACU_DynamicAllocator* allocator);
 
