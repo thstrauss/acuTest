@@ -32,6 +32,7 @@ typedef struct ACU_DynamicAllocator_ {
     ACU_List* staticAllocators;
     size_t itemSize;
     size_t maxBucketElements;
+    ACU_FreeContext* freeContext;
 } ACU_DynamicAllocator;
 
 __EXPORT void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t maxBucketElements);

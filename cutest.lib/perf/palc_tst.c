@@ -107,7 +107,7 @@ static void staticAllocPerformanceTest(ACU_ExecuteEnv* environment, const void* 
     c.buffer = buffer;
     c.allocator = &allocator;
 
-    acu_initStaticAllocator(&allocator, 10, 100, (ACU_HandleContextFunc*) NULL, NULL);
+    acu_initStaticAllocator(&allocator, 10, 100, (ACU_FreeContext*) NULL);
 
 #define DIVISOR 3
     printf("voidFunc\t%ld\n\r", (acu_measureLoop(voidFunc, CLK_TCK / DIVISOR, &c)) * DIVISOR);
