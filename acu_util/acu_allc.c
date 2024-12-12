@@ -74,9 +74,9 @@ void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
 
 void acu_freeStaticAllocator(void* buffer)
 {
-    volatile ACU_AllocatorItem* item;
-    volatile ACU_StaticAllocator* allocator;
-    item = (ACU_AllocatorItem*)((char*)buffer - offsetof(ACU_AllocatorItem, itemBuffer));
+    ACU_AllocatorItem* item;
+    ACU_StaticAllocator* allocator;
+    item = (ACU_AllocatorItem*)(((char*)buffer) - offsetof(ACU_AllocatorItem, itemBuffer));
     item->status = ACU_BUFFER_STATUS_FREE;
     allocator = item->allocator;
     allocator->freeElements++;
