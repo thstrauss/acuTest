@@ -29,8 +29,8 @@
 #include <stddef.h>
 
 typedef enum ACU_BufferStatus_ {
-    ACU_BUFFER_STATUS_FREE,
-    ACU_BUFFER_STATUS_OCCUPIED,
+    ACU_BUFFER_STATUS_FREE = 1,
+    ACU_BUFFER_STATUS_OCCUPIED = 0,
 } ACU_BufferStatus;
 
 struct ACU_StaticAllocator_;
@@ -38,7 +38,7 @@ struct ACU_StaticAllocator_;
 typedef struct ACU_AllocatorItem_ {
     ACU_BufferStatus status;
     struct ACU_StaticAllocator_* allocator;
-    char* itemBuffer;
+    void* itemBuffer;
 } ACU_AllocatorItem;
 
 typedef void ACU_HandleFreeFunc(struct ACU_StaticAllocator_* allocator);
@@ -49,12 +49,12 @@ typedef struct ACU_FreeContext_ {
 } ACU_FreeContext;
 
 typedef struct ACU_StaticAllocator_ {
+    size_t freeElements;
     ACU_AllocatorItem* next;
     ACU_AllocatorItem* last;
     char* buffer;
     size_t elementSize;
     size_t maxElements;
-    size_t freeElements;
     ACU_FreeContext* freeContext;
 } ACU_StaticAllocator;
 
