@@ -101,7 +101,7 @@ void* acu_allocAllocator(ACU_DynamicAllocator* allocator)
 }
 
 static void __accumulateAllocatedElements(const void* data, void* visitorContext) {
-    (*(size_t*)visitorContext) += ((ACU_StaticAllocator*)data)->maxElements - ((ACU_StaticAllocator*) data)->freeElements;
+    (*(size_t*)visitorContext) += ((ACU_StaticAllocator*) data)->allocatedElements;
 }
 
 size_t acu_getAllocatedElements(ACU_DynamicAllocator* allocator)

@@ -49,7 +49,7 @@ typedef struct ACU_FreeContext_ {
 } ACU_FreeContext;
 
 typedef struct ACU_StaticAllocator_ {
-    size_t freeElements;
+    size_t allocatedElements;
     ACU_AllocatorItem* next;
     ACU_AllocatorItem* last;
     char* buffer;
