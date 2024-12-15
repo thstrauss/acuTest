@@ -53,9 +53,6 @@ void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
     if (allocator->allocatedElements < allocator->maxElements) {
         size_t elementSize = allocator->elementSize;
         ACU_AllocatorItem* allocatorItem = allocator->next;
-        if (allocatorItem >= allocator->last) {
-            allocatorItem = (ACU_AllocatorItem*)allocator->buffer;
-        }
         while (allocatorItem->status == ACU_BUFFER_STATUS_OCCUPIED) {
             ((char*)allocatorItem) += elementSize;
             if (allocatorItem >= allocator->last) {
@@ -65,6 +62,9 @@ void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
         allocatorItem->status = ACU_BUFFER_STATUS_OCCUPIED;
         allocator->allocatedElements++;
         allocator->next = (ACU_AllocatorItem*)((char*)allocatorItem + elementSize);
+        if (allocator->next >= allocator->last) {
+            allocator->next = (ACU_AllocatorItem*)allocator->buffer;
+        }
         return &allocatorItem->itemBuffer;
 
     }
