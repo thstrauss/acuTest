@@ -37,6 +37,7 @@ struct ACU_StaticAllocator_;
 
 typedef struct ACU_AllocatorItem_ {
     ACU_BufferStatus status;
+    struct ACU_AllocatorItem_* nextItem;
     struct ACU_StaticAllocator_* allocator;
     void* itemBuffer;
 } ACU_AllocatorItem;
@@ -51,9 +52,7 @@ typedef struct ACU_FreeContext_ {
 typedef struct ACU_StaticAllocator_ {
     size_t allocatedElements;
     ACU_AllocatorItem* next;
-    ACU_AllocatorItem* last;
     char* buffer;
-    size_t elementSize;
     size_t maxElements;
     ACU_FreeContext* freeContext;
 } ACU_StaticAllocator;
