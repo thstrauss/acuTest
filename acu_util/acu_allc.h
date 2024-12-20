@@ -36,10 +36,10 @@ typedef enum ACU_BufferStatus_ {
 struct ACU_StaticAllocator_;
 
 typedef struct ACU_AllocatorItem_ {
-    ACU_BufferStatus status;
-    struct ACU_AllocatorItem_* nextItem;
     struct ACU_StaticAllocator_* allocator;
-    void* itemBuffer;
+    struct ACU_AllocatorItem_* nextItem;
+    ACU_BufferStatus status;
+    const void* itemBuffer;
 } ACU_AllocatorItem;
 
 typedef void ACU_HandleFreeFunc(struct ACU_StaticAllocator_* allocator);
@@ -50,10 +50,10 @@ typedef struct ACU_FreeContext_ {
 } ACU_FreeContext;
 
 typedef struct ACU_StaticAllocator_ {
+    ACU_AllocatorItem* nextItem;
     size_t allocatedElements;
-    ACU_AllocatorItem* next;
-    char* buffer;
     size_t maxElements;
+    char* buffer;
     ACU_FreeContext* freeContext;
 } ACU_StaticAllocator;
 
