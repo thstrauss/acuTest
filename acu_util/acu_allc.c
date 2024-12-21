@@ -30,7 +30,7 @@ void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, si
     size_t i;
     size_t elementSize = offsetof(ACU_AllocatorItem, itemBuffer) + itemSize;
     allocator->maxElements = maxElements;
-    allocator->allocatedElements = 0;
+    allocator->freeElements = maxElements;
     allocator->freeContext = freeContext;
 
     allocator->buffer = acu_emalloc(elementSize * maxElements);
@@ -54,7 +54,7 @@ void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
 {
     ACU_AllocatorItem* allocatorItem = allocator->nextItem;
     if (allocatorItem->status == ACU_BUFFER_STATUS_OCCUPIED) {
-        if (allocator->allocatedElements == allocator->maxElements) {
+        if (allocator->freeElements == 0) {
             return NULL;
         }
         else {
@@ -64,7 +64,7 @@ void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
         }
     }
     allocatorItem->status = ACU_BUFFER_STATUS_OCCUPIED;
-    allocator->allocatedElements++;
+    allocator->freeElements--;
     allocator->nextItem = allocatorItem->nextItem;
     return &allocatorItem->itemBuffer;
 }
@@ -75,8 +75,8 @@ void acu_freeStaticAllocator(void* buffer)
     ACU_StaticAllocator* allocator = item->allocator;
     item->status = ACU_BUFFER_STATUS_FREE;
     allocator->nextItem = item;
-    allocator->allocatedElements--;
-    if (allocator->allocatedElements == 0 && allocator->freeContext) {
+    allocator->freeElements++;
+    if ((allocator->freeElements == allocator->maxElements) && allocator->freeContext) {
         allocator->freeContext->freeFunc(allocator);
     }
 }

@@ -51,7 +51,7 @@ typedef struct ACU_FreeContext_ {
 
 typedef struct ACU_StaticAllocator_ {
     ACU_AllocatorItem* nextItem;
-    size_t allocatedElements;
+    size_t freeElements;
     size_t maxElements;
     char* buffer;
     ACU_FreeContext* freeContext;
