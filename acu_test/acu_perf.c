@@ -22,14 +22,18 @@
 #include "acu_perf.h"
 #include <acu_cach.h>
 
-unsigned long acu_measureLoop(TestFunc* func, clock_t duration, void* context) {
+unsigned long acu_measureLoop(TestFunc* func, clock_t duration, int disableCache, void* context) {
     unsigned long count = 0;
     clock_t end = clock() + duration;
-    acu_disableCache();
+    if (disableCache) {
+        acu_disableCache();
+    }
     while (clock() < end) {
         count++;
         func(context);
     }
-    acu_enableCache();
+    if (disableCache) {
+        acu_enableCache();
+    }
     return count;
 }

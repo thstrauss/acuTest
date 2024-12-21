@@ -30,6 +30,6 @@
 
 typedef void TestFunc(void* context);
 
-__EXPORT unsigned long acu_measureLoop(TestFunc* func, clock_t duration, void* context);
+__EXPORT unsigned long acu_measureLoop(TestFunc* func, clock_t duration, int disableCache, void* context);
 
 #endif

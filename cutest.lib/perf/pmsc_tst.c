@@ -56,9 +56,9 @@ static void acu_strlenFunc(void* context) {
 static void strlenPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
 
 #define DIVISOR 3
-    printf("voidFunc\t%ld\n\r", (acu_measureLoop(voidFunc, CLK_TCK / DIVISOR, NULL)) * DIVISOR);
-    printf("strLenFunc\t%ld\n\r", (acu_measureLoop(strLenFunc, CLK_TCK / DIVISOR, NULL)) * DIVISOR);
-    printf("acu_strlenFunc\t%ld\n\r", (acu_measureLoop(acu_strlenFunc, CLK_TCK / DIVISOR, NULL)) * DIVISOR);
+    printf("voidFunc\t%ld\n\r", (acu_measureLoop(voidFunc, CLK_TCK / DIVISOR, 0, NULL)) * DIVISOR);
+    printf("strLenFunc\t%ld\n\r", (acu_measureLoop(strLenFunc, CLK_TCK / DIVISOR, 0, NULL)) * DIVISOR);
+    printf("acu_strlenFunc\t%ld\n\r", (acu_measureLoop(acu_strlenFunc, CLK_TCK / DIVISOR, 0, NULL)) * DIVISOR);
 #undef DIVISOR
 
     UNUSED(environment);
