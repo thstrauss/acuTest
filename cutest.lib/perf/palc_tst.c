@@ -78,8 +78,8 @@ static void allocPerformanceTest(ACU_ExecuteEnv* environment, const void* contex
     printf("\n\r");
 
 #define DIVISOR 3
-    printf("allocFunc\t%ld\n\r", (acu_measureLoop(allocFunc, CLK_TCK / DIVISOR, 0, &c)) * DIVISOR);
-    printf("acu_emallocFunc\t%ld\n\r", (acu_measureLoop(acu_emallocFunc, CLK_TCK / DIVISOR, 0, &c)) * DIVISOR);
+    printf("allocFunc\t%ld\n\r", (acu_measureLoop(allocFunc, CLK_TCK / DIVISOR, 1, &c)) * DIVISOR);
+    printf("acu_emallocFunc\t%ld\n\r", (acu_measureLoop(acu_emallocFunc, CLK_TCK / DIVISOR, 1, &c)) * DIVISOR);
 #undef DIVISOR
 
     UNUSED(environment);
@@ -109,7 +109,7 @@ static void staticAllocPerformanceTest(ACU_ExecuteEnv* environment, const void* 
     acu_initStaticAllocator(&allocator, 10, 100, (ACU_FreeContext*)NULL);
 
 #define DIVISOR 3
-    printf("acu_allocStaticAllocator\t%ld\n\r", (acu_measureLoop(acu_allocStaticAllocatorFunc, CLK_TCK / DIVISOR, 0, &c)) * DIVISOR);
+    printf("acu_allocStaticAllocator\t%ld\n\r", (acu_measureLoop(acu_allocStaticAllocatorFunc, CLK_TCK / DIVISOR, 1, &c)) * DIVISOR);
 #undef DIVISOR
 
     acu_destroyStaticAllocator(&allocator);
@@ -140,7 +140,7 @@ static void dynamicAllocPerformanceTest(ACU_ExecuteEnv* environment, const void*
     acu_initAllocator(&allocator, 10, 101);
     
 #define DIVISOR 3
-    printf("acu_allocDynamicAllocator\t%ld\n\r", (acu_measureLoop(acu_allocDynamicAllocatorFunc, CLK_TCK / DIVISOR, 0, &c)) * DIVISOR);
+    printf("acu_allocDynamicAllocator\t%ld\n\r", (acu_measureLoop(acu_allocDynamicAllocatorFunc, CLK_TCK / DIVISOR, 1, &c)) * DIVISOR);
 #undef DIVISOR
 
     acu_destroyAllocator(&allocator);
@@ -163,6 +163,20 @@ static void acu_randomAllocAllocatorFunc(void* context) {
     UNUSED(context);
 }
 
+static void acu_randomAllocFunc(void* context) {
+    int i;
+    AllocDynamicContext* c = context;
+    char** buffer1 = &(c->buffer[0]);
+
+    for (i = 1; i < 100; i++) {
+        free(buffer1[0]);
+        free(buffer1[i]);
+        buffer1[i] = malloc(100);
+        buffer1[0] = malloc(100);
+    }
+    UNUSED(context);
+}
+
 static void randomAllocPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
 
     char* buffer[100];
@@ -172,17 +186,40 @@ static void randomAllocPerformanceTest(ACU_ExecuteEnv* environment, const void* 
     c.buffer = buffer;
     c.allocator = &allocator;
 
-    acu_initAllocator(&allocator, 10, 50);
+    acu_initAllocator(&allocator, 100, 50);
 
     for (i = 0; i < 100; i++) {
         buffer[i] = acu_allocAllocator(&allocator);
     }
 
 #define DIVISOR 3
-    printf("acu_randomAllocAllocatorFunc\t%ld\n\r", (acu_measureLoop(acu_randomAllocAllocatorFunc, CLK_TCK / DIVISOR, 0, &c)) * DIVISOR);
+    printf("acu_randomAllocAllocatorFunc\t%ld\n\r", (acu_measureLoop(acu_randomAllocAllocatorFunc, CLK_TCK / DIVISOR, 1, &c)) * DIVISOR);
 #undef DIVISOR
 
     acu_destroyAllocator(&allocator);
+
+    UNUSED(environment);
+    UNUSED(context);
+}
+
+static void randomAlloc2PerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
+
+    char* buffer[100];
+    AllocDynamicContext c;
+    int i;
+    c.buffer = buffer;
+
+    for (i = 0; i < 100; i++) {
+        buffer[i] = malloc(10);
+    }
+
+#define DIVISOR 3
+    printf("acu_randomAllocFunc\t%ld\n\r", (acu_measureLoop(acu_randomAllocFunc, CLK_TCK / DIVISOR, 1, &c)) * DIVISOR);
+#undef DIVISOR
+
+    for (i = 0; i < 100; i++) {
+        free(buffer[i]);
+    }
 
     UNUSED(environment);
     UNUSED(context);
@@ -198,6 +235,7 @@ ACU_Fixture* allocPerformanceFixture(void)
     acu_addTestCase(fixture, "staticAllocPerformanceTest", staticAllocPerformanceTest);
     acu_addTestCase(fixture, "dynamicAllocPerformanceTest", dynamicAllocPerformanceTest);
     acu_addTestCase(fixture, "randomAllocPerformanceTest", randomAllocPerformanceTest);
+    acu_addTestCase(fixture, "randomAlloc2PerformanceTest", randomAlloc2PerformanceTest);
 
     return fixture;
 }
