@@ -42,7 +42,7 @@ int main(void) {
 	
 	int count=0;
 	
-	acu_enabledTrackMemory(1);
+	acu_enabledTrackMemory(0);
 	entry = acu_init();
 	counter.context = (void*) &count;
 	report.context = &reportHelper;
