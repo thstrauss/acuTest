@@ -36,9 +36,9 @@ typedef enum ACU_BufferStatus_ {
 struct ACU_StaticAllocator_;
 
 typedef struct ACU_AllocatorItem_ {
+    const struct ACU_AllocatorItem_* nextItem;
     ACU_BufferStatus status;
     const struct ACU_StaticAllocator_* allocator;
-    const struct ACU_AllocatorItem_* nextItem;
     const void* itemBuffer;
 } ACU_AllocatorItem;
 
