@@ -26,7 +26,12 @@ static void __acu_defaultListDestroy(void* data) {
     UNUSED(data);
 }
 
-void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy) {
+static ACU_AllocFuncs __acu_defaultAllocFuncs = {
+    malloc,
+    free 
+};
+
+void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, ACU_AllocFuncs* allocFuncs) {
     list->head = NULL;
     list->tail = NULL;
     if (destroy) {
@@ -34,6 +39,12 @@ void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy) {
     }
     else {
         list->destroy = __acu_defaultListDestroy;
+    }
+    if (allocFuncs) {
+        list->allocFuncs = allocFuncs;
+    }
+    else {
+        list->allocFuncs = &__acu_defaultAllocFuncs;
     }
 }
 
