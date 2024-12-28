@@ -19,28 +19,56 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "perf_fxt.h"
+#include "plst_tst.h"
 
-#include <acu_ldr.h>
-#include <acu_fxtr.h>
-#include <acu_util.h>
-#include <acu_list.h>
 #include <acu_tryc.h>
 
-#include "palc_tst.h"
-#include "plst_tst.h"
-#include "pmsc_tst.h"
+#include <acu_perf.h>
 
-ACU_Fixture* performanceFixture() {
-    ACU_Fixture* suite = acu_mallocFixture();
+#include <acu_list.h>
 
-    acu_initFixture(suite, "performance test suite");
+#include <stdlib.h>
 
-    acu_addChildFixture(suite, allocPerformanceFixture());
-    acu_addChildFixture(suite, listPerformanceFixture());
-    acu_addChildFixture(suite, miscPerformanceFixture());
+#include <stdio.h>
+#include <time.h>
 
-    return suite;
+#define DISABLE_CACHE 0
+
+static void addRemoveListFunc(void* context) {
+    ACU_List* list = context;
+    int i;
+
+    for (i = 0; i < 100; i++) {
+        acu_insertHeadList(list, NULL);
+    }
+    for (i = 0; i < 100; i++) {
+        acu_removeNextList(list, NULL);
+    }
 }
 
+static void listPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
 
+    ACU_List list;
+
+    acu_initList(&list, (ACU_ListDestroyFunc*) NULL);
+
+#define DIVISOR 3
+    printf("addRemoveListFunc\t%ld\n\r", (acu_measureLoop(addRemoveListFunc, CLK_TCK / DIVISOR, DISABLE_CACHE, &list)) * DIVISOR);
+#undef DIVISOR
+
+    acu_destroyList(&list);
+    
+    UNUSED(environment);
+    UNUSED(context);
+}
+
+ACU_Fixture* listPerformanceFixture(void)
+{
+    ACU_Fixture* fixture = acu_mallocFixture();
+    acu_initFixture(fixture, "list performance Tests");
+
+    acu_addTestCase(fixture, "listPerformanceTest", listPerformanceTest);
+
+
+    return fixture;
+}

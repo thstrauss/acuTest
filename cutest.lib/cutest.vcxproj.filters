@@ -132,6 +132,9 @@
     <ClCompile Include="perf\pmsc_tst.c">
       <Filter>Source Files\perf</Filter>
     </ClCompile>
+    <ClCompile Include="perf\plst_tst.c">
+      <Filter>Source Files\perf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="util\dir_tst.h">
@@ -228,6 +231,9 @@
       <Filter>Header Files\perf</Filter>
     </ClInclude>
     <ClInclude Include="perf\pmsc_tst.h">
+      <Filter>Header Files\perf</Filter>
+    </ClInclude>
+    <ClInclude Include="perf\plst_tst.h">
       <Filter>Header Files\perf</Filter>
     </ClInclude>
   </ItemGroup>

@@ -19,28 +19,12 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "perf_fxt.h"
+#pragma once
+#ifndef __list_performance_fixture__
+#define __list_performance_fixture__
 
-#include <acu_ldr.h>
 #include <acu_fxtr.h>
-#include <acu_util.h>
-#include <acu_list.h>
-#include <acu_tryc.h>
 
-#include "palc_tst.h"
-#include "plst_tst.h"
-#include "pmsc_tst.h"
+ACU_Fixture* listPerformanceFixture(void);
 
-ACU_Fixture* performanceFixture() {
-    ACU_Fixture* suite = acu_mallocFixture();
-
-    acu_initFixture(suite, "performance test suite");
-
-    acu_addChildFixture(suite, allocPerformanceFixture());
-    acu_addChildFixture(suite, listPerformanceFixture());
-    acu_addChildFixture(suite, miscPerformanceFixture());
-
-    return suite;
-}
-
-
+#endif
