@@ -37,7 +37,7 @@ typedef enum ACU_Level_
 } ACU_Level;
 
 /* Defines the error handler call back. */
-typedef void ACU_ErrorHandlerFunc(enum ACU_Level errorLevel, const char* errorMessage);
+typedef void ACU_ErrorHandlerFunc(ACU_Level errorLevel, const char* errorMessage);
 typedef size_t ACU_WriteHandlerFunc(const char* buffer);
 typedef void ACU_setWriteHandlerFunc(ACU_WriteHandlerFunc* writeHandler);
 typedef void ACU_setAllocTableFunc(ACU_HashTable* hashTable);
@@ -77,8 +77,6 @@ __EXPORT void acu_wprintf(const char* format, ...);
 
 __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...);
 
-
-
 __EXPORT void acu_enabledTrackMemory(int enabled);
 __EXPORT void acu_reportTrackMemory(void);
 
@@ -110,5 +108,13 @@ typedef struct Block_ {
     const char* fileName;
     int line;
 } Block;
+
+typedef void* ACU_AllocFunc(size_t size);
+typedef void ACU_FreeFunc(void* buffer);
+
+typedef struct ACU_AllocFuncs_ {
+    ACU_AllocFunc* alloc;
+    ACU_FreeFunc* free;
+} ACU_AllocFuncs;
 
 #endif

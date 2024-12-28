@@ -176,7 +176,7 @@ int acu_match(const char* regexp, const char* text)
 {
     int retval = 0;
     ACU_List* regexpList = acu_mallocList();
-    acu_initList(regexpList, __free);
+    acu_initList(regexpList, __free, NULL);
     compile(regexpList, regexp);
 
     if (((RegExp*) regexpList->head->data)->type == START_OP) {

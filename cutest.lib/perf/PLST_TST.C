@@ -50,7 +50,7 @@ static void listPerformanceTest(ACU_ExecuteEnv* environment, const void* context
 
     ACU_List list;
 
-    acu_initList(&list, (ACU_ListDestroyFunc*) NULL);
+    acu_initList(&list, (ACU_ListDestroyFunc*) NULL, NULL);
 
 #define DIVISOR 3
     printf("addRemoveListFunc\t%ld\n\r", (acu_measureLoop(addRemoveListFunc, CLK_TCK / DIVISOR, DISABLE_CACHE, &list)) * DIVISOR);

@@ -46,7 +46,7 @@ int acu_initHashTable(ACU_HashTable* hashTable, unsigned int buckets, ACU_HashTa
     bucketListEnd = hashTable->table + hashTable->buckets;
 
     for (; bucketList < bucketListEnd; bucketList++) {
-        acu_initList(bucketList, (ACU_ListDestroyFunc*) destroy);
+        acu_initList(bucketList, (ACU_ListDestroyFunc*) destroy, NULL);
     }
     return 0;
 }

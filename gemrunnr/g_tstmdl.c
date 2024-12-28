@@ -137,7 +137,7 @@ static void gem_collectTestCases(const TestModel* testModel){
     ACU_TestCases testCases;
     
     testModel->testList = acu_mallocList();
-    acu_initList(testModel->testList, (ACU_ListDestroyFunc*) NULL);
+    acu_initList(testModel->testList, (ACU_ListDestroyFunc*) NULL, NULL);
             
     testCases.testCases = testModel->testList;
     collect.context = (void*) &testCases;

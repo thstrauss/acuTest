@@ -49,7 +49,7 @@ void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t 
 {
     allocator->staticAllocators = acu_mallocList();
     allocator->lastUsedAllocator = NULL;
-    acu_initList(allocator->staticAllocators, (ACU_ListDestroyFunc*) __destroyStaticAllocators);
+    acu_initList(allocator->staticAllocators, (ACU_ListDestroyFunc*) __destroyStaticAllocators, NULL);
     allocator->itemSize = itemSize;
     allocator->maxBucketElements = maxBucketElements;
     allocator->freeContext = acu_emalloc(sizeof(ACU_FreeContext));

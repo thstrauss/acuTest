@@ -58,7 +58,7 @@ static void collectTest(ACU_ExecuteEnv* environment, const void* context) {
     ACU_List list;
     ACU_Fixture* fixture = acu_mallocFixture();
 
-    acu_initList(&list, (ACU_ListDestroyFunc*) NULL);
+    acu_initList(&list, (ACU_ListDestroyFunc*) NULL, NULL);
 
     tests.testCases = &list;
     collect.context = &tests;
