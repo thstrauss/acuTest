@@ -31,7 +31,7 @@ static ACU_AllocFuncs __acu_defaultAllocFuncs = {
     free 
 };
 
-void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, ACU_AllocFuncs* allocFuncs) {
+void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, struct ACU_AllocFuncs_* allocFuncs) {
     list->head = NULL;
     list->tail = NULL;
     if (destroy) {
