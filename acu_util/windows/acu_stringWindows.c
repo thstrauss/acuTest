@@ -39,6 +39,7 @@ char* __acu_estrdup(const char* s) {
 extern ACU_HashTable* __allocTable; 
 extern ACU_HashTable* __stringTable;
 
+extern int __acuMemoryTrackingEnabled;
 
 const char* __strdupToAllocTable(const char* s, const char* fileName, int line) {
     const char* p = __acu_estrdup(s);
