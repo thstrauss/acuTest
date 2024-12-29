@@ -78,6 +78,19 @@ ACU_HashTable* acu_getAllocTable(void)
     return __allocTable;
 }
 
+static void* alloc(size_t n, const char* fileName, int line) {
+    UNUSED(fileName);
+    UNUSED(line);
+    return malloc(n);
+}
+
+ACU_AllocFuncs* acu_isMemoryTrackingEnabled()
+{
+    static ACU_AllocFuncs defaultFuncs = {__acu_emalloc, free};
+    static ACU_AllocFuncs acu_funcs = {__mallocToAllocTable, __acu_free};
+    return __acuMemoryTrackingEnabled ? &acu_funcs : &defaultFuncs;
+}
+
 void acu_setAllocTable(ACU_HashTable* allocTable)
 {
     __allocTable = allocTable;
@@ -250,12 +263,12 @@ void* __mallocToAllocTable(size_t size, const char* fileName, int line) {
     return NULL;
 }
 
-void* __acu_emalloc(size_t size) {
+void* __acu_emalloc(size_t size, const char* fileName, int line) {
     void* p = malloc(size);
     if (p) {
         return p;
     }
-    acu_eprintf("acu_emalloc of %u bytes failed:", size);
+    acu_eprintf("acu_emalloc of %u bytes failed (%s:%d):", size, fileName, line);
     return NULL;
 }
 

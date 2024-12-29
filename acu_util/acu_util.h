@@ -54,9 +54,17 @@ __EXPORT void acu_setProgName(const char* progName);
 
 __EXPORT void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler);
 
+typedef void* ACU_AllocFunc(size_t size, const char* fileName, int line);
+typedef void ACU_FreeFunc(void* buffer);
+
+typedef struct ACU_AllocFuncs_ {
+    ACU_AllocFunc* alloc;
+    ACU_FreeFunc* free;
+} ACU_AllocFuncs;
+
 __EXPORT ACU_HashTable* acu_getAllocTable(void);
-#define acu_isMemoryTrackingEnabled() __acuMemoryTrackingEnabled
-__IMPORT extern int __acuMemoryTrackingEnabled;
+
+__EXPORT ACU_AllocFuncs* acu_isMemoryTrackingEnabled();
 
 __EXPORT void acu_setAllocTable(ACU_HashTable* allocTable);
 
@@ -80,11 +88,11 @@ __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, .
 __EXPORT void acu_enabledTrackMemory(int enabled);
 __EXPORT void acu_reportTrackMemory(void);
 
-#define acu_emalloc(n) (!acu_isMemoryTrackingEnabled() ? __acu_emalloc((n)) : __mallocToAllocTable((n), __FILE__, __LINE__) )
+#define acu_emalloc(n) (acu_isMemoryTrackingEnabled()->alloc((n), __FILE__, __LINE__))
 
-__EXPORT void* __acu_emalloc(size_t n);
+__EXPORT void* __acu_emalloc(size_t n, const char* fileName, int line);
 
-#define acu_free(buf) (!acu_isMemoryTrackingEnabled() ?  free(buf) :__acu_free(buf) )
+#define acu_free(buf) acu_isMemoryTrackingEnabled()->free((buf))
 
 __EXPORT void __acu_free(void* buf);
 
@@ -101,7 +109,6 @@ __EXPORT void* __mallocToAllocTable(size_t size, const char* fileName, int line)
 
 __EXPORT unsigned long acu_prime(unsigned long n);
 
-
 typedef struct Block_ {
     const void* p;
     size_t size;
@@ -109,12 +116,6 @@ typedef struct Block_ {
     int line;
 } Block;
 
-typedef void* ACU_AllocFunc(size_t size);
-typedef void ACU_FreeFunc(void* buffer);
 
-typedef struct ACU_AllocFuncs_ {
-    ACU_AllocFunc* alloc;
-    ACU_FreeFunc* free;
-} ACU_AllocFuncs;
 
 #endif
