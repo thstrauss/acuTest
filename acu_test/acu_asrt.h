@@ -63,6 +63,8 @@ typedef struct ACU_Values_ {
     ACU_Types expected;
 } ACU_Values;
 
+struct ACU_AssertParameter_;
+
 /* Function prototype for assert functions */
 typedef ACU_TestResult (ACU_assertFunc)(const ACU_Types* actual, const ACU_Types* expected);
 /* Function prototype for functions to format messages for specific asserts */

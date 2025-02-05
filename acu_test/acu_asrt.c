@@ -32,7 +32,7 @@
 #include "acu_stck.h"
 #include "acu_strg.h"
 
-static const maxPtrLength = 16;
+static const int maxPtrLength = 16;
 
 static size_t acu_estimateBufferLength(const char* format, va_list args) {
     size_t formatLength = acu_strlen(format);
@@ -284,7 +284,7 @@ static char* acu_notEqualStrErrorFormatMessage(const ACU_AssertParameter* parame
 
 __EXPORT const ACU_Funcs acu_notEqualStrFuncs = { acu_notEqualStr, acu_notEqualStrFailedFormatMessage, acu_notEqualStrErrorFormatMessage };
 
-static char* acu_formatMessage(enum ACU_TestResult assertResult, const ACU_AssertParameter* parameter) {
+static char* acu_formatMessage(ACU_TestResult assertResult, const ACU_AssertParameter* parameter) {
     if (assertResult == ACU_TEST_FAILED) {
         return parameter->funcs->formatFailedMessage(parameter);
     } else if (assertResult == ACU_TEST_ERROR && parameter->funcs->formatErrorMessage) {

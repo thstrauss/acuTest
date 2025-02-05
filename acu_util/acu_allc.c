@@ -47,7 +47,7 @@ void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, si
         allocatorItem->nextItem = (ACU_AllocatorItem*) (((char*)allocatorItem) + elementSize);
         allocatorItem = (ACU_AllocatorItem*) allocatorItem->nextItem;
     }
-    ((ACU_AllocatorItem*)(((char*)allocator->nextItem) + elementSize * (maxElements - 1)))->nextItem = allocator->nextItem;
+    ((ACU_AllocatorItem*)(allocator->buffer + elementSize * (maxElements - 1)))->nextItem = allocator->nextItem;
 }
 
 void acu_destroyStaticAllocator(ACU_StaticAllocator* allocator)
