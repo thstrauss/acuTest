@@ -31,23 +31,30 @@ void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, si
     size_t elementSize;
     int ptrAlignment = (itemSize % sizeof(void*)) ? 1: 0;
 
-    itemSize = (itemSize / sizeof(void*) + ptrAlignment) * sizeof(void*);
-
-    elementSize = offsetof(ACU_AllocatorItem, itemBuffer) + itemSize;
     allocator->maxElements = maxElements;
     allocator->freeElements = maxElements;
     allocator->freeContext = freeContext;
 
-    allocator->buffer = acu_emalloc(elementSize * maxElements);
-    allocator->nextItem = (ACU_AllocatorItem*)allocator->buffer;
-    allocatorItem = allocator->nextItem;
-    for (i = 0; i < maxElements; i++) {
-        allocatorItem->allocator = allocator;
-        allocatorItem->status = ACU_BUFFER_STATUS_FREE;
-        allocatorItem->nextItem = (ACU_AllocatorItem*) (((char*)allocatorItem) + elementSize);
-        allocatorItem = (ACU_AllocatorItem*) allocatorItem->nextItem;
+    if (maxElements > 0) {
+        itemSize = (itemSize / sizeof(void*) + ptrAlignment) * sizeof(void*);
+
+        elementSize = offsetof(ACU_AllocatorItem, itemBuffer) + itemSize;
+
+        allocator->buffer = acu_emalloc(elementSize * maxElements);
+        allocator->nextItem = (ACU_AllocatorItem*)allocator->buffer;
+        allocatorItem = allocator->nextItem;
+        for (i = 0; i < maxElements; i++) {
+            allocatorItem->allocator = allocator;
+            allocatorItem->status = ACU_BUFFER_STATUS_FREE;
+            allocatorItem->nextItem = (ACU_AllocatorItem*) (((char*)allocatorItem) + elementSize);
+            allocatorItem = (ACU_AllocatorItem*) allocatorItem->nextItem;
+        }
+        ((ACU_AllocatorItem*)(allocator->buffer + elementSize * (maxElements - 1)))->nextItem = allocator->nextItem;
+        }
+    else {
+        allocator->buffer = NULL;
+        allocator->nextItem = NULL;
     }
-    ((ACU_AllocatorItem*)(allocator->buffer + elementSize * (maxElements - 1)))->nextItem = allocator->nextItem;
 }
 
 void acu_destroyStaticAllocator(ACU_StaticAllocator* allocator)
