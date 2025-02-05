@@ -19,8 +19,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "../acu_strg.h"
-#include "../acu_stbl.h"
+#include "..\acu_strg.h"
+#include "..\acu_stbl.h"
 
 
 #include <stddef.h>
