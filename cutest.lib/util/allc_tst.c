@@ -45,6 +45,56 @@ static void staticAllocReturnPointerToMemory(ACU_ExecuteEnv* environment, const 
     UNUSED(context);
 }
 
+static void staticAllocReturnPointerToMemory0(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_StaticAllocator allocator;
+    void* alloc;
+
+    acu_initStaticAllocator(&allocator, sizeof(int), 0, (ACU_FreeContext*)NULL);
+
+    alloc = acu_allocStaticAllocator(&allocator);
+    ACU_assert_ptrIsNull(environment, alloc, "ptr is not null");
+
+    acu_destroyStaticAllocator(&allocator);
+
+    UNUSED(context);
+}
+
+static void staticAllocReturnPointerToMemory1(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_StaticAllocator allocator;
+    void* alloc;
+
+    acu_initStaticAllocator(&allocator, sizeof(int), 1, (ACU_FreeContext*)NULL);
+
+    alloc = acu_allocStaticAllocator(&allocator);
+    ACU_assert_ptrIsNotNull(environment, alloc, "ptr is null");
+    ACU_assert_ptrIsNull(environment, acu_allocStaticAllocator(&allocator), "ptr is not null");
+    acu_freeStaticAllocator(alloc);
+
+    acu_destroyStaticAllocator(&allocator);
+
+    UNUSED(context);
+}
+
+static void staticAllocReturnPointerToMemory2(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_StaticAllocator allocator;
+    void* alloc1;
+    void* alloc2;
+
+    acu_initStaticAllocator(&allocator, sizeof(int), 2, (ACU_FreeContext*)NULL);
+
+    alloc1 = acu_allocStaticAllocator(&allocator);
+    ACU_assert_ptrIsNotNull(environment, alloc1, "ptr is null");
+    alloc2 = acu_allocStaticAllocator(&allocator);
+    ACU_assert_ptrIsNotNull(environment, alloc2, "ptr is null");
+    ACU_assert_ptrIsNull(environment, acu_allocStaticAllocator(&allocator), "ptr is not null");
+    acu_freeStaticAllocator(alloc1);
+    acu_freeStaticAllocator(alloc2);
+
+    acu_destroyStaticAllocator(&allocator);
+
+    UNUSED(context);
+}
+
 static void emptyDynamicAllocator(ACU_ExecuteEnv* environment, const void* context) {
     ACU_DynamicAllocator allocator;
 
@@ -111,6 +161,9 @@ ACU_Fixture* allocatorTests(void)
     acu_initFixture(fixture, "allocator Tests");
 
     acu_addTestCase(fixture, "staticAllocReturnPointerToMemory", staticAllocReturnPointerToMemory);
+    acu_addTestCase(fixture, "staticAllocReturnPointerToMemory0", staticAllocReturnPointerToMemory0);
+    acu_addTestCase(fixture, "staticAllocReturnPointerToMemory1", staticAllocReturnPointerToMemory1);
+    acu_addTestCase(fixture, "staticAllocReturnPointerToMemory2", staticAllocReturnPointerToMemory2);
     acu_addTestCase(fixture, "allocatorReturnsNullWhenAllElementsAllocated", allocatorReturnsNullWhenAllElementsAllocated);
     acu_addTestCase(fixture, "emptyDynamicAllocator", emptyDynamicAllocator);
     acu_addTestCase(fixture, "dynamicAllocReturnPointerToMemory", dynamicAllocReturnPointerToMemory);

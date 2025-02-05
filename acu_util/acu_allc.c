@@ -57,19 +57,18 @@ void acu_destroyStaticAllocator(ACU_StaticAllocator* allocator)
 
 void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
 {
-    ACU_AllocatorItem* allocatorItem = allocator->nextItem;
+    ACU_AllocatorItem* allocatorItem;
+    if (allocator->freeElements == 0) {
+        return NULL;
+    }
+    allocatorItem = allocator->nextItem;
     if (allocatorItem->status == ACU_BUFFER_STATUS_OCCUPIED) {
-        if (allocator->freeElements == 0) {
-            return NULL;
-        }
-        else {
-            while (allocatorItem->status == ACU_BUFFER_STATUS_OCCUPIED) {
-                allocatorItem = (ACU_AllocatorItem*) allocatorItem->nextItem;
-                if (allocatorItem->status != ACU_BUFFER_STATUS_OCCUPIED) {
-                    break;
-                }
-                allocatorItem = (ACU_AllocatorItem*) allocatorItem->nextItem;
+        while (allocatorItem->status == ACU_BUFFER_STATUS_OCCUPIED) {
+            allocatorItem = (ACU_AllocatorItem*) allocatorItem->nextItem;
+            if (allocatorItem->status != ACU_BUFFER_STATUS_OCCUPIED) {
+                break;
             }
+            allocatorItem = (ACU_AllocatorItem*) allocatorItem->nextItem;
         }
     }
     allocator->nextItem = (ACU_AllocatorItem*) allocatorItem->nextItem;
