@@ -75,7 +75,6 @@ void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
             if (allocatorItem->status != ACU_BUFFER_STATUS_OCCUPIED) {
                 break;
             }
-            allocatorItem = (ACU_AllocatorItem*) allocatorItem->nextItem;
         }
     }
     allocator->nextItem = (ACU_AllocatorItem*) allocatorItem->nextItem;
