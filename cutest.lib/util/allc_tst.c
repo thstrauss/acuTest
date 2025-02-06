@@ -45,7 +45,7 @@ static void staticAllocReturnPointerToMemory(ACU_ExecuteEnv* environment, const 
     UNUSED(context);
 }
 
-static void staticAllocReturnPointerToMemory0(ACU_ExecuteEnv* environment, const void* context) {
+static void staticAllocWithZeroLength(ACU_ExecuteEnv* environment, const void* context) {
     ACU_StaticAllocator allocator;
     void* alloc;
 
@@ -154,6 +154,21 @@ static void dynamicAllocReturnPointerToMemory(ACU_ExecuteEnv* environment, const
     UNUSED(context);
 }
 
+static void dynamicAllocWithZeroLength(ACU_ExecuteEnv* environment, const void* context) {
+    ACU_DynamicAllocator allocator;
+    void* buffer;
+
+    acu_initAllocator(&allocator, sizeof(int), 0);
+
+    buffer = acu_allocAllocator(&allocator);
+    ACU_assert_ptrIsNull(environment, buffer, "ptr is null");
+    ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&allocator), 0, "Not 0");
+
+    acu_destroyAllocator(&allocator);
+
+    UNUSED(context);
+}
+
 ACU_Fixture* allocatorTests(void)
 {
     ACU_Fixture* fixture = acu_mallocFixture();
@@ -161,12 +176,13 @@ ACU_Fixture* allocatorTests(void)
     acu_initFixture(fixture, "allocator Tests");
 
     acu_addTestCase(fixture, "staticAllocReturnPointerToMemory", staticAllocReturnPointerToMemory);
-    acu_addTestCase(fixture, "staticAllocReturnPointerToMemory0", staticAllocReturnPointerToMemory0);
+    acu_addTestCase(fixture, "staticAllocWithZeroLength", staticAllocWithZeroLength);
     acu_addTestCase(fixture, "staticAllocReturnPointerToMemory1", staticAllocReturnPointerToMemory1);
     acu_addTestCase(fixture, "staticAllocReturnPointerToMemory2", staticAllocReturnPointerToMemory2);
     acu_addTestCase(fixture, "allocatorReturnsNullWhenAllElementsAllocated", allocatorReturnsNullWhenAllElementsAllocated);
     acu_addTestCase(fixture, "emptyDynamicAllocator", emptyDynamicAllocator);
     acu_addTestCase(fixture, "dynamicAllocReturnPointerToMemory", dynamicAllocReturnPointerToMemory);
+    acu_addTestCase(fixture, "dynamicAllocWithZeroLength", dynamicAllocWithZeroLength);
 
     return fixture;
 }

@@ -94,7 +94,7 @@ static void* __acu_allocFromOtherAllocator(ACU_DynamicAllocator* allocator) {
 void* acu_allocAllocator(ACU_DynamicAllocator* allocator)
 {
     void* buffer = acu_allocStaticAllocator(allocator->lastUsedAllocator);
-    if (buffer) {
+    if (buffer || allocator->maxBucketElements == 0) {
         return buffer;
     }
     return __acu_allocFromOtherAllocator(allocator);
