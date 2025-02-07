@@ -27,7 +27,7 @@ static void __acu_defaultListDestroy(void* data) {
     UNUSED(data);
 }
 
-ACU_DynamicAllocator* allocator = NULL;
+static ACU_DynamicAllocator* allocator = NULL;
 
 static void* _dynamicAlloc(size_t size) {
     return acu_allocAllocator(allocator);
@@ -52,7 +52,7 @@ static ACU_AllocFuncs __acu_defaultAllocFuncs = {
     _free 
 };
 
-ACU_AllocFuncs* acu_defaultAllocFuncs = &__acu_defaultAllocFuncs;
+struct ACU_AllocFuncs_* acu_defaultAllocFuncs = &__acu_defaultAllocFuncs;
 
 void acu_initList(ACU_List* list, ACU_ListDestroyFunc* destroy, ACU_AllocFuncs* allocFuncs) {
     if (!allocator) {

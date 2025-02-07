@@ -44,8 +44,6 @@ static void __freeAllocator(ACU_StaticAllocator* staticAllocator) {
     }
 }
 
-extern ACU_AllocFuncs* acu_defaultAllocFuncs;
-
 void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t maxBucketElements)
 {
     allocator->staticAllocators = acu_mallocList();

@@ -37,6 +37,8 @@ typedef void ACU_ListVisitorFunc(const void* data, void* visitorContext);
 
 struct ACU_AllocFuncs_;
 
+__IMPORT struct ACU_AllocFuncs_* acu_defaultAllocFuncs;
+
 typedef struct ACU_ListVisitor_ {
     ACU_ListVisitorFunc* visitor;
     void* context;
