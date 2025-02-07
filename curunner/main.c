@@ -83,7 +83,7 @@ int main(int argc, const char* argv[]) {
         printHelp();
     }
 
-    acu_enabledTrackMemory(0);
+    acu_enabledTrackMemory(1);
 
     files = acu_filesMalloc();
     acu_filesInit(files);

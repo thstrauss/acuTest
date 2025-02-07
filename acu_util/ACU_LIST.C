@@ -21,17 +21,44 @@
 
 #include "acu_list.h"
 #include "acu_util.h"
+#include "acu_dall.h"
 
 static void __acu_defaultListDestroy(void* data) {
     UNUSED(data);
 }
 
-static ACU_AllocFuncs __acu_defaultAllocFuncs = {
-    malloc,
-    free 
+ACU_DynamicAllocator* allocator = NULL;
+
+static void* _dynamicAlloc(size_t size) {
+    return acu_allocAllocator(allocator);
+}
+
+static ACU_AllocFuncs __acu_dynamicAllocFuncs = {
+    _dynamicAlloc,
+    acu_freeStaticAllocator
 };
 
-void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, ACU_AllocFuncs* allocFuncs) {
+static void* _malloc(size_t size) {
+    UNUSED(size);
+    return acu_emalloc(size);
+}
+
+static void _free(void* buffer) {
+    acu_free(buffer);
+}
+
+static ACU_AllocFuncs __acu_defaultAllocFuncs = {
+    _malloc,
+    _free 
+};
+
+ACU_AllocFuncs* acu_defaultAllocFuncs = &__acu_defaultAllocFuncs;
+
+void acu_initList(ACU_List* list, ACU_ListDestroyFunc* destroy, ACU_AllocFuncs* allocFuncs) {
+    if (!allocator) {
+        allocator = acu_emalloc(sizeof(ACU_DynamicAllocator));
+        acu_initAllocator(allocator, sizeof(ACU_ListElement), 100);
+    }
     list->head = NULL;
     list->tail = NULL;
     if (destroy) {
@@ -44,7 +71,7 @@ void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, ACU_AllocFuncs* a
         list->allocFuncs = allocFuncs;
     }
     else {
-        list->allocFuncs = &__acu_defaultAllocFuncs;
+        list->allocFuncs = &__acu_dynamicAllocFuncs;
     }
 }
 
@@ -56,10 +83,8 @@ ACU_ListElement* acu_listNext(ACU_ListElement* element) {
     return element->next;
 }
 
-#define ACU__LISTELEMENTMALLOC() ((ACU_ListElement*) acu_emalloc(sizeof(ACU_ListElement)))
-
 const void* acu_appendList(ACU_List* list, const void* data) {
-    ACU_ListElement* newElement = ACU__LISTELEMENTMALLOC();
+    ACU_ListElement* newElement = list->allocFuncs->alloc(sizeof(ACU_ListElement));
     if (newElement) {
     	ACU_ListElement* tailElement;
         newElement->next = NULL;
@@ -81,7 +106,7 @@ const void* acu_appendList(ACU_List* list, const void* data) {
 
 const void* acu_insertHeadList(ACU_List* list, const void* data)
 {
-    ACU_ListElement* newListElement = ACU__LISTELEMENTMALLOC();
+    ACU_ListElement* newListElement = list->allocFuncs->alloc(sizeof(ACU_ListElement));
     if (newListElement) {
         newListElement->data = (void*)data;
 
@@ -97,7 +122,7 @@ const void* acu_insertHeadList(ACU_List* list, const void* data)
 
 const void* acu_insertNextList(ACU_List* list, ACU_ListElement* element, const void* data)
 {
-    ACU_ListElement *newListElement = ACU__LISTELEMENTMALLOC();
+    ACU_ListElement *newListElement = list->allocFuncs->alloc(sizeof(ACU_ListElement));
     if (newListElement) {
 
         if (element) {
@@ -139,7 +164,7 @@ void* acu_removeNextList(ACU_List* list, ACU_ListElement* element)
             list->tail = NULL;
         }
     }
-    acu_free(oldListElement);
+    list->allocFuncs->free(oldListElement);
     return data;
 }
 
@@ -178,7 +203,7 @@ void acu_destroyList(ACU_List* list) {
             list->destroy((void*) data);
         }
         list->head = oldElement->next;
-        acu_free(oldElement);
+        list->allocFuncs->free(oldElement);
     }
     list->tail = NULL;
 }

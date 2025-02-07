@@ -80,7 +80,7 @@ __EXPORT int acu_printf_s(char* buffer, size_t bufferSize, const char* format, .
 __EXPORT void acu_enabledTrackMemory(int enabled);
 __EXPORT void acu_reportTrackMemory(void);
 
-#define acu_emalloc(n) (!acu_isMemoryTrackingEnabled() ? __acu_emalloc((n)) : __mallocToAllocTable((n), __FILE__, __LINE__) )
+#define acu_emalloc(size) (!acu_isMemoryTrackingEnabled() ? __acu_emalloc((size)) : __mallocToAllocTable((size), __FILE__, __LINE__) )
 
 __EXPORT void* __acu_emalloc(size_t n);
 

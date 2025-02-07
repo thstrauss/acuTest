@@ -21,7 +21,6 @@
 
 #include "acu_dall.h"
 #include "acu_util.h"
-
 #include <stddef.h>
 
 static void __destroyStaticAllocators(ACU_StaticAllocator* allocator) {
@@ -45,11 +44,13 @@ static void __freeAllocator(ACU_StaticAllocator* staticAllocator) {
     }
 }
 
+extern ACU_AllocFuncs* acu_defaultAllocFuncs;
+
 void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t maxBucketElements)
 {
     allocator->staticAllocators = acu_mallocList();
     allocator->lastUsedAllocator = NULL;
-    acu_initList(allocator->staticAllocators, (ACU_ListDestroyFunc*) __destroyStaticAllocators, NULL);
+    acu_initList(allocator->staticAllocators, (ACU_ListDestroyFunc*) __destroyStaticAllocators, acu_defaultAllocFuncs);
     allocator->itemSize = itemSize;
     allocator->maxBucketElements = maxBucketElements;
     allocator->freeContext = acu_emalloc(sizeof(ACU_FreeContext));
