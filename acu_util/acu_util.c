@@ -214,7 +214,7 @@ void acu_enabledTrackMemory(int enabled)
 static void report(const void* data, void* visitorContext) {
     const Block* block = data;
     char buffer1[512];
-    acu_printf_s(buffer1, sizeof buffer1, "%s:%d size = %ld: %p\n\r", block->fileName, block->line, block->size, block->p);
+    acu_printf_s(buffer1, sizeof buffer1, "%s:%d instance = %ld size = %ld: %p\n\r", block->fileName, block->line, block->instance, block->size, block->p);
     UNUSED(visitorContext);
 }
 
@@ -228,7 +228,7 @@ __EXPORT void acu_reportTrackMemory(void)
     }
 }
 
-
+static size_t instanceCount = 0;
 
 void* __mallocToAllocTable(size_t size, const char* fileName, int line) {
     void* p = malloc(size);
@@ -243,6 +243,7 @@ void* __mallocToAllocTable(size_t size, const char* fileName, int line) {
             __acuMemoryTrackingEnabled = 1;
             block->size = size;
             block->line = line;
+            block->instance = instanceCount++;
         }
         return p;
     }

@@ -107,6 +107,7 @@ typedef struct Block_ {
     size_t size;
     const char* fileName;
     int line;
+    size_t instance;
 } Block;
 
 typedef void* ACU_AllocFunc(size_t size);
