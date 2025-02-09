@@ -23,9 +23,9 @@
 #include "acu_util.h"
 #include <stddef.h>
 
-static void __destroyStaticAllocators(ACU_StaticAllocator* allocator) {
-    acu_destroyStaticAllocator(allocator);
-    acu_free(allocator);
+static void __destroyStaticAllocators(ACU_StaticAllocator* staticAllocator) {
+    acu_destroyStaticAllocator(staticAllocator);
+    acu_free(staticAllocator);
 }
 
 static void __freeAllocator(ACU_StaticAllocator* staticAllocator) {
@@ -33,10 +33,10 @@ static void __freeAllocator(ACU_StaticAllocator* staticAllocator) {
     ACU_ListElement* element = allocator->staticAllocators->head;
     ACU_ListElement* prev = NULL;
     while (element) {
-        if (element->data == staticAllocator && prev) {
+        if (element->data == staticAllocator) {
             acu_removeNextList(allocator->staticAllocators, prev);
             __destroyStaticAllocators(staticAllocator);
-            allocator->lastUsedAllocator = (ACU_StaticAllocator*) prev->data;
+            allocator->lastUsedAllocator = (prev ? (ACU_StaticAllocator*) prev->data : NULL);
             break;
         }
         prev = element;
@@ -55,9 +55,7 @@ void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t 
     allocator->freeContext->context = allocator;
     allocator->freeContext->freeFunc = __freeAllocator;
 
-    allocator->lastUsedAllocator = acu_emalloc(sizeof(ACU_StaticAllocator));
-    acu_initStaticAllocator(allocator->lastUsedAllocator, allocator->itemSize, allocator->maxBucketElements, allocator->freeContext);
-    acu_insertHeadList(allocator->staticAllocators, allocator->lastUsedAllocator);
+    allocator->lastUsedAllocator = NULL;
 }
 
 void acu_destroyAllocator(ACU_DynamicAllocator* allocator)
@@ -92,9 +90,11 @@ static void* __acu_allocFromOtherAllocator(ACU_DynamicAllocator* allocator) {
 
 void* acu_allocAllocator(ACU_DynamicAllocator* allocator)
 {
-    void* buffer = acu_allocStaticAllocator(allocator->lastUsedAllocator);
-    if (buffer || allocator->maxBucketElements == 0) {
-        return buffer;
+    if (allocator->lastUsedAllocator) {
+        void* buffer = acu_allocStaticAllocator(allocator->lastUsedAllocator);
+        if (buffer || allocator->maxBucketElements == 0) {
+            return buffer;
+        }
     }
     return __acu_allocFromOtherAllocator(allocator);
 }
