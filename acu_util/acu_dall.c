@@ -44,6 +44,8 @@ static void __freeAllocator(ACU_StaticAllocator* staticAllocator) {
     }
 }
 
+extern struct ACU_AllocFuncs_* acu_defaultAllocFuncs;
+
 void acu_initAllocator(ACU_DynamicAllocator* allocator, size_t itemSize, size_t maxBucketElements)
 {
     allocator->staticAllocators = acu_mallocList();
@@ -90,11 +92,9 @@ static void* __acu_allocFromOtherAllocator(ACU_DynamicAllocator* allocator) {
 
 void* acu_allocAllocator(ACU_DynamicAllocator* allocator)
 {
-    if (allocator->lastUsedAllocator) {
-        void* buffer = acu_allocStaticAllocator(allocator->lastUsedAllocator);
-        if (buffer || allocator->maxBucketElements == 0) {
-            return buffer;
-        }
+    void* buffer = acu_allocStaticAllocator(allocator->lastUsedAllocator);
+    if (buffer) {
+        return buffer;
     }
     return __acu_allocFromOtherAllocator(allocator);
 }
