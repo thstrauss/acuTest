@@ -29,7 +29,6 @@ void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, si
 
     allocator->maxElements = maxElements;
     allocator->freeElements = maxElements;
-    allocator->freeContext = freeContext;
 
     if (maxElements > 0) {
         ACU_AllocatorItem* allocatorItem;
@@ -37,6 +36,7 @@ void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, si
         size_t i;
         size_t elementSize;
         itemSize = (itemSize / sizeof(void*) + ptrAlignment) * sizeof(void*);
+        allocator->freeContext = freeContext;
 
         elementSize = offsetof(ACU_AllocatorItem, itemBuffer) + itemSize;
 
@@ -54,6 +54,7 @@ void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, si
     else {
         allocator->buffer = NULL;
         allocator->nextItem = NULL;
+        allocator->freeContext = NULL;
     }
 }
 
