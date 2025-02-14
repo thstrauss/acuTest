@@ -30,6 +30,14 @@
 
 typedef void TestFunc(void* context);
 
+/**
+ * Measures the time it takes to execute a function.
+ * @param func The function to execute.
+ * @param duration The duration to measure the function.
+ * @param disableCache If set to 1, the cache will be disabled.
+ * @param context The context to pass to the function.
+ * @return The time it took to execute the function.
+ */
 __EXPORT unsigned long acu_measureLoop(TestFunc* func, clock_t duration, int disableCache, void* context);
 
 #endif

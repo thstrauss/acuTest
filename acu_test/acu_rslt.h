@@ -41,8 +41,19 @@ typedef struct ACU_Result_ {
     clock_t duration;
 } ACU_Result;
 
+/*
+ * Initializes the result.
+ */
 __EXPORT void acu_initResult(ACU_Result* result);
+
+/*
+ * Prepares the result for use.
+ */
 __EXPORT void acu_prepareResult(ACU_Result* result);
+
+/*
+ * Destroys the result.
+ */
 __EXPORT void acu_destroyResult(ACU_Result* result);
 
 #define ACU_PREPARERESULT(result) \

@@ -29,6 +29,7 @@
 struct ACU_Fixture_;
 struct ACU_Progress_;
 
+/* Defines the individual test cases.*/
 typedef void ACU_TestFunc(ACU_ExecuteEnv* environment, const void* context);
 
 /* Defines the individual test cases.*/

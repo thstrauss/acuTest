@@ -25,14 +25,28 @@
 
 #include "acu_cmmn.h"
 
+/*
+ * The version of the ACU.
+ */
 typedef struct ACU_Version_ {
     unsigned char version[4];
 } ACU_Version;
 
 typedef ACU_Version* (ACU_getVersionFunc)(void);
 
+/*
+ * Returns the version of the ACU.
+ */
 ACU_Version* acu_getVersion(void);
+
+/*
+ * Compares two versions.
+ */ 
 __EXPORT int acu_compareVersion(const ACU_Version* version1, const ACU_Version* version2);
+
+/*
+ * Formats the version.
+ */
 __EXPORT char* acu_formatVersion(char* buffer, size_t bufferSize, const ACU_Version* version);
 
 #endif

@@ -27,14 +27,42 @@
 #include "acu_cmmn.h"
 #include "acu_tcse.h"
 
+ /*
+  * The ACU_TestCase is the test case that is executed.
+  */
 typedef int ACU_MatchFunc(const ACU_TestCase* testCase, void* matchContext);
+/*
+ * The ACU_TestCase is the test case that is executed.
+ */
 typedef void ACU_ProgressFunc(const ACU_TestCase* testCase, void* progressContext);
+/*
+ * The ACU_TestCase is the test case that is executed.
+ */
 typedef void ACU_ReportVisitorFunc(const ACU_TestCase* testCase, void* context);
 
+/*
+ * The ACU_TestCase is the test case that is executed.
+ */
 __EXPORT void acu_progress(const ACU_TestCase* testCase, void* progressContext);
+
+/*
+ * The ACU_TestCase is the test case that is executed.
+ */
 __EXPORT void acu_report(const ACU_TestCase* testCase, void* context);
+
+/*
+ * The ACU_TestCase is the test case that is executed.
+ */
 __EXPORT void acu_countTestCases(const ACU_TestCase* testCase, void* context);
+
+/*
+ * The ACU_TestCase is the test case that is executed.
+ */
 __EXPORT void acu_collectTestCases(const ACU_TestCase* testCase, void* context);
+
+/*
+ * The ACU_TestCase is the test case that is executed.
+ */
 __EXPORT void acu_count(const ACU_TestCase* testCase, void* context);
 
 typedef struct ACU_Progress_ {
@@ -67,8 +95,14 @@ typedef struct ACU_TestCases_ {
     ACU_List* testCases;
 } ACU_TestCases;
 
+/*
+ * Reports the progress of the test case.
+ */
 __EXPORT void acu_performProgress(const ACU_Progress* progress, ACU_TestCase* testCase);
 
+/*
+ * Reports the progress of the test case.
+ */ 
 __EXPORT void acu_reportSummary(const ACU_TestCase* testCase, void* context);
 
 #endif

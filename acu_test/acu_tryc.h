@@ -65,10 +65,16 @@ typedef struct ACU_Frame_ {
     int exception;
 } ACU_Frame;
 
+/* Defines the function pointer for setting the frame stack. */
 typedef void (ACU_setFrameStackFunc)(ACU_Stack* jmpBufFrames);
 
+/* Defines the function pointer for getting the frame stack. */
 __EXPORT ACU_Stack* acu_getFrameStack(void);
+
+/* Defines the function pointer for setting the frame stack. */
 void acu_setFrameStack(ACU_Stack* jmpBufFrames);
+
+/* Defines the function pointer for setting the frame stack. */ 
 __EXPORT void acu_freeFrameStack(void);
 
  /* For the full documentation and explanation of the code below, please refer to

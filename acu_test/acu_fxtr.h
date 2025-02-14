@@ -49,16 +49,22 @@ typedef struct ACU_Fixture_ {
 /* Initializes an ACU_Fixture.*/
 __EXPORT void acu_initFixture(ACU_Fixture* fixture, const char* name);
 
+/* Destroys an ACU_Fixture. */
 __EXPORT void acu_fixtureDestroy(ACU_Fixture* fixture);
 
+/* Adds a test case to the fixture. */ 
 __EXPORT void acu_addTestCase(ACU_Fixture* fixture, const char *name, ACU_TestFunc testFunc);
 
+/* Adds a child fixture to the fixture. */ 
 __EXPORT void acu_addChildFixture(ACU_Fixture* fixture, ACU_Fixture* childFixture);
 
+/* Sets the context for the fixture. */
 __EXPORT void acu_setFixtureContext(ACU_Fixture* fixture, const void* context);
 
+/* Executes the fixture. */
 __EXPORT enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progress);
 
+/* Accepts a fixture. */ 
 __EXPORT void acu_acceptFixture(const ACU_Fixture* fixture, ACU_ReportVisitor* visitor);
 
 #endif
