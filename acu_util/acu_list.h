@@ -48,12 +48,18 @@ typedef struct ACU_List_ {
     struct ACU_AllocFuncs_* allocFuncs;
 } ACU_List;
 
+struct ACU_AllocFuncs_;
+
 __EXPORT void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, struct ACU_AllocFuncs_* allocFuncs);
 
 __EXPORT ACU_ListElement* acu_listHead(const ACU_List* list);
 
 __EXPORT ACU_ListElement* acu_listNext(ACU_ListElement* element);
 
+/*
+ * Allocates a block of the size of the ACU_List.
+ * @remarks The allocated block shall be freed by the caller.
+ */
 #define acu_mallocList() ((ACU_List*) acu_emalloc(sizeof(ACU_List)))
 
 __EXPORT void acu_destroyList(ACU_List* list);

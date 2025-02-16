@@ -23,6 +23,8 @@
 #include "acu_util.h"
 #include <stddef.h>
 
+ACU_DynamicAllocator* allocator = NULL;
+
 static void __destroyStaticAllocators(ACU_StaticAllocator* staticAllocator) {
     acu_destroyStaticAllocator(staticAllocator);
     acu_free(staticAllocator);

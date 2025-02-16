@@ -27,7 +27,7 @@ static void __acu_defaultListDestroy(void* data) {
     UNUSED(data);
 }
 
-static ACU_DynamicAllocator* allocator = NULL;
+extern ACU_DynamicAllocator* allocator;
 
 static void* _dynamicAlloc(size_t size) {
     UNUSED(size);
@@ -39,27 +39,23 @@ static ACU_AllocFuncs __acu_dynamicAllocFuncs = {
     acu_freeStaticAllocator
 };
 
-static void* _malloc(size_t size) {
+static void* __malloc(size_t size) {
     return acu_emalloc(size);
 }
 
-static void _free(void* buffer) {
+static void __free(void* buffer) {
     acu_free(buffer);
 }
 
 static ACU_AllocFuncs __acu_defaultAllocFuncs = {
-    _malloc,
-    _free 
+    __malloc,
+    __free 
 };
 
 struct ACU_AllocFuncs_* acu_defaultAllocFuncs = &__acu_defaultAllocFuncs;
 
-void acu_initList(ACU_List* list, ACU_ListDestroyFunc* destroy, ACU_AllocFuncs* allocFuncs) {
-    if (!allocator) {
-        allocator = acu_emalloc(sizeof(ACU_DynamicAllocator));
-        acu_initAllocator(allocator, sizeof(ACU_ListElement), 100);
-    }
-    list->head = NULL;
+void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, struct ACU_AllocFuncs_* allocFuncs)
+{    list->head = NULL;
     list->tail = NULL;
     if (destroy) {
         list->destroy = destroy;
@@ -71,7 +67,7 @@ void acu_initList(ACU_List* list, ACU_ListDestroyFunc* destroy, ACU_AllocFuncs* 
         list->allocFuncs = allocFuncs;
     }
     else {
-        list->allocFuncs = &__acu_dynamicAllocFuncs;
+        list->allocFuncs = &__acu_defaultAllocFuncs;
     }
 }
 
