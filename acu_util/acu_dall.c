@@ -75,11 +75,9 @@ static void* __acu_allocFromOtherAllocator(ACU_DynamicAllocator* allocator) {
 
     staticAllocatorElement = allocator->staticAllocators->head;
     while (staticAllocatorElement) {
-        void* buffer;
-        staticAllocator = (ACU_StaticAllocator*)staticAllocatorElement->data;
-        buffer = acu_allocStaticAllocator(staticAllocator);
+        void* buffer = acu_allocStaticAllocator(staticAllocatorElement->data);
         if (buffer) {
-            allocator->lastUsedAllocator = staticAllocator;
+            allocator->lastUsedAllocator = staticAllocatorElement->data;
             return buffer;
         }
         staticAllocatorElement = staticAllocatorElement->next;
