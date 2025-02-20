@@ -50,7 +50,7 @@ typedef struct ACU_List_ {
 
 struct ACU_AllocFuncs_;
 
-__EXPORT void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, struct ACU_AllocFuncs_* allocFuncs);
+__EXPORT ACU_List* acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, struct ACU_AllocFuncs_* allocFuncs);
 
 __EXPORT ACU_ListElement* acu_listHead(const ACU_List* list);
 

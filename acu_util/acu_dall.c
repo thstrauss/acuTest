@@ -70,10 +70,7 @@ void acu_destroyAllocator(ACU_DynamicAllocator* allocator)
 }
 
 static void* __acu_allocFromOtherAllocator(ACU_DynamicAllocator* allocator) {
-    ACU_StaticAllocator* staticAllocator;
-    ACU_ListElement* staticAllocatorElement;
-
-    staticAllocatorElement = allocator->staticAllocators->head;
+    ACU_ListElement* staticAllocatorElement = allocator->staticAllocators->head;
     while (staticAllocatorElement) {
         void* buffer = acu_allocStaticAllocator(staticAllocatorElement->data);
         if (buffer) {
@@ -82,11 +79,9 @@ static void* __acu_allocFromOtherAllocator(ACU_DynamicAllocator* allocator) {
         }
         staticAllocatorElement = staticAllocatorElement->next;
     }
-    staticAllocator = acu_emalloc(sizeof(ACU_StaticAllocator));
-    acu_initStaticAllocator(staticAllocator, allocator->itemSize, allocator->maxBucketElements, allocator->freeContext);
-    acu_insertHeadList(allocator->staticAllocators, staticAllocator);
-    allocator->lastUsedAllocator = staticAllocator;
-    return acu_allocStaticAllocator(staticAllocator);
+    allocator->lastUsedAllocator = acu_initStaticAllocator(acu_emalloc(sizeof(ACU_StaticAllocator)), allocator->itemSize, allocator->maxBucketElements, allocator->freeContext);
+    acu_insertHeadList(allocator->staticAllocators, allocator->lastUsedAllocator);
+    return acu_allocStaticAllocator(allocator->lastUsedAllocator);
 
 }
 

@@ -40,7 +40,7 @@ static void __acu_defaultDestroyStackElement(void* data) {
 	UNUSED(data);
 }
 
-void acu_initStack(ACU_Stack* stack, ACU_StackDataDestroy destroy) {
+ACU_Stack* acu_initStack(ACU_Stack* stack, ACU_StackDataDestroy destroy) {
     if (destroy) {
         stack->destroy = destroy;
     }
@@ -48,6 +48,7 @@ void acu_initStack(ACU_Stack* stack, ACU_StackDataDestroy destroy) {
         stack->destroy = __acu_defaultDestroyStackElement;
     }
     stack->head = NULL;
+    return stack;
 }
 
 void* acu_peekStack(const ACU_Stack* stack)

@@ -40,7 +40,7 @@ typedef struct ACU_Stack_ {
 
 __EXPORT size_t acu_getStackSize(const ACU_Stack* stack);
 
-__EXPORT void acu_initStack(ACU_Stack* stack, ACU_StackDataDestroy destroy);
+__EXPORT ACU_Stack* acu_initStack(ACU_Stack* stack, ACU_StackDataDestroy destroy);
 
 __EXPORT void* acu_peekStack(const ACU_Stack* stack);
 

@@ -43,8 +43,7 @@ static void acu_fileEntryDestroy(ACU_FileEntry* entry) {
 
 void acu_filesInit(ACU_Files* files)
 {
-    files->fileList = acu_mallocList();
-    acu_initList(files->fileList, (ACU_ListDestroyFunc*) acu_fileEntryDestroy, NULL);
+    files->fileList = acu_initList(acu_mallocList(), (ACU_ListDestroyFunc*) acu_fileEntryDestroy, NULL);
 }
 
 void acu_filesDestroy(ACU_Files* files)

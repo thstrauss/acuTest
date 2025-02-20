@@ -24,9 +24,8 @@
 
 #include <stdio.h>
 
-void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, size_t maxElements, ACU_FreeContext* freeContext)
+ACU_StaticAllocator* acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, size_t maxElements, ACU_FreeContext* freeContext)
 {
-
     allocator->maxElements = maxElements;
     allocator->freeElements = maxElements;
 
@@ -56,6 +55,7 @@ void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, si
         allocator->nextItem = NULL;
         allocator->freeContext = NULL;
     }
+    return allocator;
 }
 
 void acu_destroyStaticAllocator(ACU_StaticAllocator* allocator)

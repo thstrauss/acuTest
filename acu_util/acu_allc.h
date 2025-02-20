@@ -57,7 +57,7 @@ typedef struct ACU_StaticAllocator_ {
     const ACU_FreeContext* freeContext;
 } ACU_StaticAllocator;
 
-__EXPORT void acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, size_t maxElements, ACU_FreeContext* freeContext);
+__EXPORT ACU_StaticAllocator* acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, size_t maxElements, ACU_FreeContext* freeContext);
 
 __EXPORT void acu_destroyStaticAllocator(ACU_StaticAllocator* allocator);
 

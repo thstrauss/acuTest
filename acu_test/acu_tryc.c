@@ -30,8 +30,7 @@ static ACU_Stack* __acu_jmpBufFrames = NULL;
 
 static ACU_Stack* __acu_initStackFrame(void) {
     ACU_Stack* frames = acu_stackMalloc();
-    acu_initStack(frames, (ACU_StackDataDestroy*)NULL);
-    return frames;
+    return acu_initStack(frames, (ACU_StackDataDestroy*)NULL);
 }
 
 ACU_Stack* acu_getFrameStack(void)

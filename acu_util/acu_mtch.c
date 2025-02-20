@@ -175,8 +175,7 @@ static void __free(void* data) {
 int acu_match(const char* regexp, const char* text)
 {
     int retval = 0;
-    ACU_List* regexpList = acu_mallocList();
-    acu_initList(regexpList, __free, NULL);
+    ACU_List* regexpList = acu_initList(acu_mallocList(), __free, NULL);
     compile(regexpList, regexp);
 
     if (((RegExp*) regexpList->head->data)->type == START_OP) {

@@ -82,12 +82,8 @@ static void acuTest_testCaseDestroy(ACU_TestCase* testCase) {
 #define acuTest_testCaseMalloc() ((ACU_TestCase*) acu_emalloc(sizeof(ACU_TestCase)))
 
 void acu_initFixture(ACU_Fixture* fixture, const char* name) {
-    ACU_List* testCases = acu_mallocList();
-    ACU_List* childFixtures = acu_mallocList();
-    acu_initList(testCases, (ACU_ListDestroyFunc*) acuTest_testCaseDestroy, NULL);
-    acu_initList(childFixtures, (ACU_ListDestroyFunc*) acu_fixtureDestroy, NULL);
-    fixture->testCases = testCases;
-    fixture->childFixtures = childFixtures;
+    fixture->testCases = acu_initList(acu_mallocList(), (ACU_ListDestroyFunc*)acuTest_testCaseDestroy, NULL);;
+    fixture->childFixtures = acu_initList(acu_mallocList(), (ACU_ListDestroyFunc*)acu_fixtureDestroy, NULL);
     fixture->name = acu_estrdup(name);
     fixture->duration = (clock_t)0;
 }
