@@ -54,7 +54,7 @@ static ACU_AllocFuncs __acu_defaultAllocFuncs = {
 
 struct ACU_AllocFuncs_* acu_defaultAllocFuncs = &__acu_defaultAllocFuncs;
 
-void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, struct ACU_AllocFuncs_* allocFuncs)
+ACU_List* acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, struct ACU_AllocFuncs_* allocFuncs)
 {    list->head = NULL;
     list->tail = NULL;
     if (destroy) {
@@ -69,6 +69,7 @@ void acu_initList(ACU_List* list, ACU_ListDestroyFunc destroy, struct ACU_AllocF
     else {
         list->allocFuncs = &__acu_defaultAllocFuncs;
     }
+    return list;
 }
 
 ACU_ListElement* acu_listHead(const ACU_List* list) {
