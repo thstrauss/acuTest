@@ -72,9 +72,9 @@ void acu_destroyAllocator(ACU_DynamicAllocator* allocator)
 static void* __acu_allocFromOtherAllocator(ACU_DynamicAllocator* allocator) {
     ACU_ListElement* staticAllocatorElement = allocator->staticAllocators->head;
     while (staticAllocatorElement) {
-        void* buffer = acu_allocStaticAllocator(staticAllocatorElement->data);
+        void* buffer = acu_allocStaticAllocator((ACU_StaticAllocator*) staticAllocatorElement->data);
         if (buffer) {
-            allocator->lastUsedAllocator = staticAllocatorElement->data;
+            allocator->lastUsedAllocator = (ACU_StaticAllocator*) staticAllocatorElement->data;
             return buffer;
         }
         staticAllocatorElement = staticAllocatorElement->next;
@@ -87,9 +87,11 @@ static void* __acu_allocFromOtherAllocator(ACU_DynamicAllocator* allocator) {
 
 void* acu_allocAllocator(ACU_DynamicAllocator* allocator)
 {
-    void* buffer = acu_allocStaticAllocator(allocator->lastUsedAllocator);
-    if (buffer) {
-        return buffer;
+    if (allocator->lastUsedAllocator) {
+        void* buffer = acu_allocStaticAllocator(allocator->lastUsedAllocator);
+        if (buffer) {
+            return buffer;
+        }
     }
     return __acu_allocFromOtherAllocator(allocator);
 }

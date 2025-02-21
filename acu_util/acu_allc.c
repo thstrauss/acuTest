@@ -65,10 +65,14 @@ void acu_destroyStaticAllocator(ACU_StaticAllocator* allocator)
 
 void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator)
 {
-    if (allocator && allocator->freeElements > 0) {
+    if (allocator->freeElements) {
         ACU_AllocatorItem* allocatorItem = allocator->nextItem;
 
         while (allocatorItem->status == ACU_BUFFER_STATUS_OCCUPIED) {
+            allocatorItem = (ACU_AllocatorItem*)allocatorItem->nextItem;
+            if (allocatorItem->status == ACU_BUFFER_STATUS_FREE) {
+                break;
+            }
             allocatorItem = (ACU_AllocatorItem*)allocatorItem->nextItem;
         }
         allocatorItem->status = ACU_BUFFER_STATUS_OCCUPIED;
