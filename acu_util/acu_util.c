@@ -133,21 +133,21 @@ int acu_printf_s(char* buffer, size_t bufferSize, const char* format, ...)
 
 static unsigned long acu_hashPtr(const void* key) {
     const Block* block = key;
-    return (unsigned long) ((size_t) block->p) >> __shift;
+    return (unsigned long) ((size_t) block->buffer) >> __shift;
 }
 
 static unsigned long acu_hashPtr2(const void* key) {
     const Block* block = key;
-    return (unsigned long)((size_t)block->p) >> 2;
+    return (unsigned long)((size_t)block->buffer) >> 2;
 }
 
 static unsigned long acu_hashPtr3(const void* key) {
     const Block* block = key;
-    return (unsigned long)((size_t)block->p) >> 3;
+    return (unsigned long)((size_t)block->buffer) >> 3;
 }
 
 static int acu_matchPtr(const void* key1, const void* key2) {
-    return (((size_t) ((Block*) key1)->p) - ((size_t) ((Block*)key2)->p)) == 0;
+    return (((size_t) ((Block*) key1)->buffer) - ((size_t) ((Block*)key2)->buffer)) == 0;
 }
 
 static void __freeAllocTable(void) {
@@ -166,7 +166,7 @@ static void __freeAllocTable(void) {
 static void* acu_createBlock(const void* key) {
     Block* block = (Block*)malloc(sizeof(Block));
     if (block) {
-        block->p = ((Block*)key)->p;
+        block->buffer = ((Block*)key)->buffer;
     }
     return block;
 }
@@ -214,7 +214,7 @@ void acu_enabledTrackMemory(int enabled)
 static void report(const void* data, void* visitorContext) {
     const Block* block = data;
     char buffer1[512];
-    acu_printf_s(buffer1, sizeof buffer1, "%s:%d instance = %ld size = %ld: %p\n\r", block->fileName, block->line, block->instance, block->size, block->p);
+    acu_printf_s(buffer1, sizeof buffer1, "%s:%d instance = %ld size = %ld: %p\n\r", block->fileName, block->line, block->instance, block->size, block->buffer);
     UNUSED(visitorContext);
 }
 
@@ -231,12 +231,12 @@ __EXPORT void acu_reportTrackMemory(void)
 static size_t instanceCount = 0;
 
 void* __mallocToAllocTable(size_t size, const char* fileName, int line) {
-    void* p = malloc(size);
-    if (p) {
+    void* buffer = malloc(size);
+    if (buffer) {
         if (__acuMemoryTrackingEnabled) {
             Block key;
             Block* block;
-            key.p = p;
+            key.buffer = buffer;
             __acuMemoryTrackingEnabled = 0;
             block = (Block*)acu_lookupOrAddHashTable(__allocTable, &key);
             block->fileName = acu_acquireString(__stringTable, fileName);
@@ -245,16 +245,16 @@ void* __mallocToAllocTable(size_t size, const char* fileName, int line) {
             block->line = line;
             block->instance = instanceCount++;
         }
-        return p;
+        return buffer;
     }
     acu_eprintf("acu_emalloc of %u bytes failed:", size);
     return NULL;
 }
 
 void* __acu_emalloc(size_t size) {
-    void* p = malloc(size);
-    if (p) {
-        return p;
+    const void* buffer = malloc(size);
+    if (buffer) {
+        return buffer;
     }
     acu_eprintf("acu_emalloc of %u bytes failed:", size);
     return NULL;
@@ -264,7 +264,7 @@ void __acu_free(void* block)
 {
     void* out;
     Block key;
-    key.p = block;
+    key.buffer = block;
     out = acu_removeHashTable(__allocTable, &key);
     if (out) {
         free(out);

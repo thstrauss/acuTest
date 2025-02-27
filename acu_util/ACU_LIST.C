@@ -27,11 +27,11 @@ static void __acu_defaultListDestroy(void* data) {
     UNUSED(data);
 }
 
-extern ACU_DynamicAllocator* allocator;
+extern ACU_DynamicAllocator* dynamicAllocator;
 
 static void* _dynamicAlloc(size_t size) {
     UNUSED(size);
-    return acu_allocAllocator(allocator);
+    return acu_allocAllocator(dynamicAllocator);
 }
 
 static ACU_AllocFuncs __acu_dynamicAllocFuncs = {

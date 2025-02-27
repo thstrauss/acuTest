@@ -38,11 +38,11 @@ struct ACU_StaticAllocator_;
 typedef struct ACU_AllocatorItem_ {
     const struct ACU_AllocatorItem_* nextItem;
     ACU_BufferStatus status;
-    const struct ACU_StaticAllocator_* allocator;
+    const struct ACU_StaticAllocator_* staticAllocator;
     const void* itemBuffer;
 } ACU_AllocatorItem;
 
-typedef void ACU_HandleFreeFunc(struct ACU_StaticAllocator_* allocator);
+typedef void ACU_HandleFreeFunc(struct ACU_StaticAllocator_* staticAllocator);
 
 typedef struct ACU_FreeContext_ {
     void* context;
@@ -57,11 +57,11 @@ typedef struct ACU_StaticAllocator_ {
     const ACU_FreeContext* freeContext;
 } ACU_StaticAllocator;
 
-__EXPORT ACU_StaticAllocator* acu_initStaticAllocator(ACU_StaticAllocator* allocator, size_t itemSize, size_t maxElements, ACU_FreeContext* freeContext);
+__EXPORT ACU_StaticAllocator* acu_initStaticAllocator(ACU_StaticAllocator* staticAllocator, size_t itemSize, size_t maxElements, ACU_FreeContext* freeContext);
 
-__EXPORT void acu_destroyStaticAllocator(ACU_StaticAllocator* allocator);
+__EXPORT void acu_destroyStaticAllocator(ACU_StaticAllocator* staticAllocator);
 
-__EXPORT void* acu_allocStaticAllocator(ACU_StaticAllocator* allocator);
+__EXPORT void* acu_allocStaticAllocator(ACU_StaticAllocator* staticAllocator);
 
 __EXPORT void acu_freeStaticAllocator(void* buffer);
 

@@ -37,12 +37,12 @@
 
 typedef struct AllocContext_ {
     char** buffer;
-    ACU_StaticAllocator* allocator;
+    ACU_StaticAllocator* staticAllocator;
 } AllocContext;
 
 typedef struct AllocDynamicContext_ {
     char** buffer;
-    ACU_DynamicAllocator* allocator;
+    ACU_DynamicAllocator* staticAllocator;
 } AllocDynamicContext;
 
 static void allocFunc(void* context) {
@@ -75,7 +75,7 @@ static void allocPerformanceTest(ACU_ExecuteEnv* environment, const void* contex
     char* buffer[100];
     AllocContext c;
     c.buffer = buffer;
-    c.allocator = NULL;
+    c.staticAllocator = NULL;
 
     printf("\n\r");
 
@@ -92,7 +92,7 @@ static void acu_allocStaticAllocatorFunc(void* context) {
     int i;
     AllocContext* c = context;
     for (i = 0; i < 100; i++) {
-        c->buffer[i] = acu_allocStaticAllocator(c->allocator);
+        c->buffer[i] = acu_allocStaticAllocator(c->staticAllocator);
     }
     for (i = 0; i < 100; i++) {
         acu_freeStaticAllocator(c->buffer[i]);
@@ -103,18 +103,18 @@ static void acu_allocStaticAllocatorFunc(void* context) {
 static void staticAllocPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
 
     char* buffer[100];
-    ACU_StaticAllocator allocator;
+    ACU_StaticAllocator staticAllocator;
     AllocContext c;
     c.buffer = buffer;
-    c.allocator = &allocator;
+    c.staticAllocator = &staticAllocator;
 
-    acu_initStaticAllocator(&allocator, 10, 100, (ACU_FreeContext*)NULL);
+    acu_initStaticAllocator(&staticAllocator, 10, 100, (ACU_FreeContext*)NULL);
 
 #define DIVISOR 3
     printf("acu_allocStaticAllocator\t%ld\n\r", (acu_measureLoop(acu_allocStaticAllocatorFunc, CLK_TCK / DIVISOR, DISABLE_CACHE, &c)) * DIVISOR);
 #undef DIVISOR
 
-    acu_destroyStaticAllocator(&allocator);
+    acu_destroyStaticAllocator(&staticAllocator);
 
     UNUSED(environment);
     UNUSED(context);
@@ -124,7 +124,7 @@ static void acu_allocDynamicAllocatorFunc(void* context) {
     int i;
     AllocDynamicContext* c = (AllocDynamicContext*)context;
     for (i = 0; i < 100; i++) {
-        c->buffer[i] = acu_allocAllocator(c->allocator);
+        c->buffer[i] = acu_allocAllocator(c->staticAllocator);
     }
     for (i = 0; i < 100; i++) {
         acu_freeAllocator(c->buffer[i]);
@@ -134,18 +134,18 @@ static void acu_allocDynamicAllocatorFunc(void* context) {
 static void dynamicAllocPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
 
     char* buffer[100];
-    ACU_DynamicAllocator allocator;
+    ACU_DynamicAllocator staticAllocator;
     AllocDynamicContext c;
     c.buffer = buffer;
-    c.allocator = &allocator;
+    c.staticAllocator = &staticAllocator;
 
-    acu_initAllocator(&allocator, 10, 101);
+    acu_initAllocator(&staticAllocator, 10, 101);
     
 #define DIVISOR 3
     printf("acu_allocDynamicAllocator\t%ld\n\r", (acu_measureLoop(acu_allocDynamicAllocatorFunc, CLK_TCK / DIVISOR, DISABLE_CACHE, &c)) * DIVISOR);
 #undef DIVISOR
 
-    acu_destroyAllocator(&allocator);
+    acu_destroyAllocator(&staticAllocator);
 
     UNUSED(environment);
     UNUSED(context);
@@ -159,8 +159,8 @@ static void acu_randomAllocAllocatorFunc(void* context) {
     for (i = 1; i < 100; i++) {
         acu_freeAllocator(buffer1[0]);
         acu_freeAllocator(buffer1[i]);
-        buffer1[i] = acu_allocAllocator(c->allocator);
-        buffer1[0] = acu_allocAllocator(c->allocator);
+        buffer1[i] = acu_allocAllocator(c->staticAllocator);
+        buffer1[0] = acu_allocAllocator(c->staticAllocator);
     }
     UNUSED(context);
 }
@@ -182,23 +182,23 @@ static void acu_randomAllocFunc(void* context) {
 static void randomAllocPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
 
     char* buffer[100];
-    ACU_DynamicAllocator allocator;
+    ACU_DynamicAllocator staticAllocator;
     AllocDynamicContext c;
     int i;
     c.buffer = buffer;
-    c.allocator = &allocator;
+    c.staticAllocator = &staticAllocator;
 
-    acu_initAllocator(&allocator, 100, 50);
+    acu_initAllocator(&staticAllocator, 100, 50);
 
     for (i = 0; i < 100; i++) {
-        buffer[i] = acu_allocAllocator(&allocator);
+        buffer[i] = acu_allocAllocator(&staticAllocator);
     }
 
 #define DIVISOR 3
     printf("acu_randomAllocAllocatorFunc\t%ld\n\r", (acu_measureLoop(acu_randomAllocAllocatorFunc, CLK_TCK / DIVISOR, DISABLE_CACHE, &c)) * DIVISOR);
 #undef DIVISOR
 
-    acu_destroyAllocator(&allocator);
+    acu_destroyAllocator(&staticAllocator);
 
     UNUSED(environment);
     UNUSED(context);

@@ -91,7 +91,6 @@ __EXPORT void __acu_free(void* buf);
 __EXPORT int acu_sprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, ...);
 __EXPORT int acu_vsprintf_s(char* buffer, size_t sizeOfBuffer, const char* format, va_list args);
 
-
 __EXPORT void* __mallocToAllocTable(size_t size, const char* fileName, int line);
 
 /*
@@ -103,7 +102,7 @@ __EXPORT unsigned long acu_prime(unsigned long n);
 
 
 typedef struct Block_ {
-    const void* p;
+    const void* buffer;
     size_t size;
     const char* fileName;
     int line;

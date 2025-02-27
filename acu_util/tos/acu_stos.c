@@ -194,7 +194,7 @@ const char* __strdupToAllocTable(const char* s, const char* fileName, int line) 
         if (__acuMemoryTrackingEnabled) {
             Block key;
             Block* block;
-            key.p = temp;
+            key.buffer = temp;
             __acuMemoryTrackingEnabled = 0;
             block = (Block*)acu_lookupOrAddHashTable(__allocTable, &key);
             block->fileName = acu_acquireString(__stringTable, fileName);

@@ -31,92 +31,92 @@
 #include <acu_dall.h>
 
 static void staticAllocReturnPointerToMemory(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_StaticAllocator allocator;
+    ACU_StaticAllocator staticAllocator;
     void* alloc;
 
-    acu_initStaticAllocator(&allocator, sizeof(int), 10, (ACU_FreeContext*) NULL);
+    acu_initStaticAllocator(&staticAllocator, sizeof(int), 10, (ACU_FreeContext*) NULL);
 
-    alloc = acu_allocStaticAllocator(&allocator);
+    alloc = acu_allocStaticAllocator(&staticAllocator);
     ACU_assert_ptrIsNotNull(environment, alloc, "ptr is null");
     acu_freeStaticAllocator(alloc);
 
-    acu_destroyStaticAllocator(&allocator);
+    acu_destroyStaticAllocator(&staticAllocator);
 
     UNUSED(context);
 }
 
 static void staticAllocWithZeroLength(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_StaticAllocator allocator;
+    ACU_StaticAllocator staticAllocator;
     void* alloc;
 
-    acu_initStaticAllocator(&allocator, sizeof(int), 0, (ACU_FreeContext*)NULL);
+    acu_initStaticAllocator(&staticAllocator, sizeof(int), 0, (ACU_FreeContext*)NULL);
 
-    alloc = acu_allocStaticAllocator(&allocator);
+    alloc = acu_allocStaticAllocator(&staticAllocator);
     ACU_assert_ptrIsNull(environment, alloc, "ptr is not null");
 
-    acu_destroyStaticAllocator(&allocator);
+    acu_destroyStaticAllocator(&staticAllocator);
 
     UNUSED(context);
 }
 
 static void staticAllocReturnPointerToMemory1(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_StaticAllocator allocator;
+    ACU_StaticAllocator staticAllocator;
     void* alloc;
 
-    acu_initStaticAllocator(&allocator, sizeof(int), 1, (ACU_FreeContext*)NULL);
+    acu_initStaticAllocator(&staticAllocator, sizeof(int), 1, (ACU_FreeContext*)NULL);
 
-    alloc = acu_allocStaticAllocator(&allocator);
+    alloc = acu_allocStaticAllocator(&staticAllocator);
     ACU_assert_ptrIsNotNull(environment, alloc, "ptr is null");
-    ACU_assert_ptrIsNull(environment, acu_allocStaticAllocator(&allocator), "ptr is not null");
+    ACU_assert_ptrIsNull(environment, acu_allocStaticAllocator(&staticAllocator), "ptr is not null");
     acu_freeStaticAllocator(alloc);
 
-    acu_destroyStaticAllocator(&allocator);
+    acu_destroyStaticAllocator(&staticAllocator);
 
     UNUSED(context);
 }
 
 static void staticAllocReturnPointerToMemory2(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_StaticAllocator allocator;
+    ACU_StaticAllocator staticAllocator;
     void* alloc1;
     void* alloc2;
 
-    acu_initStaticAllocator(&allocator, sizeof(int), 2, (ACU_FreeContext*)NULL);
+    acu_initStaticAllocator(&staticAllocator, sizeof(int), 2, (ACU_FreeContext*)NULL);
 
-    alloc1 = acu_allocStaticAllocator(&allocator);
+    alloc1 = acu_allocStaticAllocator(&staticAllocator);
     ACU_assert_ptrIsNotNull(environment, alloc1, "ptr is null");
-    alloc2 = acu_allocStaticAllocator(&allocator);
+    alloc2 = acu_allocStaticAllocator(&staticAllocator);
     ACU_assert_ptrIsNotNull(environment, alloc2, "ptr is null");
-    ACU_assert_ptrIsNull(environment, acu_allocStaticAllocator(&allocator), "ptr is not null");
+    ACU_assert_ptrIsNull(environment, acu_allocStaticAllocator(&staticAllocator), "ptr is not null");
     acu_freeStaticAllocator(alloc1);
     acu_freeStaticAllocator(alloc2);
 
-    acu_destroyStaticAllocator(&allocator);
+    acu_destroyStaticAllocator(&staticAllocator);
 
     UNUSED(context);
 }
 
 static void emptyDynamicAllocator(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_DynamicAllocator allocator;
+    ACU_DynamicAllocator staticAllocator;
 
-    acu_initAllocator(&allocator, sizeof(int), 10);
+    acu_initAllocator(&staticAllocator, sizeof(int), 10);
 
-    ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&allocator), 0, "Not 0");
+    ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&staticAllocator), 0, "Not 0");
 
-    acu_destroyAllocator(&allocator);
+    acu_destroyAllocator(&staticAllocator);
 
     UNUSED(context);
     UNUSED(environment);
 }
 
 static void allocatorReturnsNullWhenAllElementsAllocated(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_StaticAllocator allocator;
+    ACU_StaticAllocator staticAllocator;
     void* alloc1, * alloc2, * alloc3;
 
-    acu_initStaticAllocator(&allocator, sizeof(int), 2, (ACU_FreeContext*)NULL);
+    acu_initStaticAllocator(&staticAllocator, sizeof(int), 2, (ACU_FreeContext*)NULL);
 
-    alloc1 = acu_allocStaticAllocator(&allocator);
-    alloc2 = acu_allocStaticAllocator(&allocator);
-    alloc3 = acu_allocStaticAllocator(&allocator);
+    alloc1 = acu_allocStaticAllocator(&staticAllocator);
+    alloc2 = acu_allocStaticAllocator(&staticAllocator);
+    alloc3 = acu_allocStaticAllocator(&staticAllocator);
 
     ACU_assert_ptrIsNotNull(environment, alloc1, "ptr is null");
     ACU_assert_ptrIsNotNull(environment, alloc2, "ptr is null");
@@ -125,46 +125,46 @@ static void allocatorReturnsNullWhenAllElementsAllocated(ACU_ExecuteEnv* environ
     acu_freeStaticAllocator(alloc1);
     acu_freeStaticAllocator(alloc2);
 
-    acu_destroyStaticAllocator(&allocator);
+    acu_destroyStaticAllocator(&staticAllocator);
 
     UNUSED(context);
 }
 
 static void dynamicAllocReturnPointerToMemory(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_DynamicAllocator allocator;
+    ACU_DynamicAllocator staticAllocator;
     void* buffer1;
     void* buffer2;
 
-    acu_initAllocator(&allocator, sizeof(int), 1);
+    acu_initAllocator(&staticAllocator, sizeof(int), 1);
 
-    buffer1 = acu_allocAllocator(&allocator);
-    buffer2 = acu_allocAllocator(&allocator);
+    buffer1 = acu_allocAllocator(&staticAllocator);
+    buffer2 = acu_allocAllocator(&staticAllocator);
     ACU_assert_ptrIsNotNull(environment, buffer1, "ptr is null");
     ACU_assert_ptrIsNotNull(environment, buffer2, "ptr is null");
-    ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&allocator), 2, "Not 2");
+    ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&staticAllocator), 2, "Not 2");
     acu_freeAllocator(buffer1);
     acu_freeAllocator(buffer2);
-    ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&allocator), 0, "Not 0");
+    ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&staticAllocator), 0, "Not 0");
 
-    buffer1 = acu_allocAllocator(&allocator);
+    buffer1 = acu_allocAllocator(&staticAllocator);
     ACU_assert_ptrIsNotNull(environment, buffer1, "ptr is null");
 
-    acu_destroyAllocator(&allocator);
+    acu_destroyAllocator(&staticAllocator);
 
     UNUSED(context);
 }
 
 static void dynamicAllocWithZeroLength(ACU_ExecuteEnv* environment, const void* context) {
-    ACU_DynamicAllocator allocator;
+    ACU_DynamicAllocator staticAllocator;
     void* buffer;
 
-    acu_initAllocator(&allocator, sizeof(int), 0);
+    acu_initAllocator(&staticAllocator, sizeof(int), 0);
 
-    buffer = acu_allocAllocator(&allocator);
+    buffer = acu_allocAllocator(&staticAllocator);
     ACU_assert_ptrIsNull(environment, buffer, "ptr is null");
-    ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&allocator), 0, "Not 0");
+    ACU_assert(environment, size_t, Equal, acu_getAllocatedElements(&staticAllocator), 0, "Not 0");
 
-    acu_destroyAllocator(&allocator);
+    acu_destroyAllocator(&staticAllocator);
 
     UNUSED(context);
 }
