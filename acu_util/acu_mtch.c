@@ -41,8 +41,6 @@ typedef struct RegExp_{
     CharacterClass class;
 } RegExp;
 
-int matchHere(ACU_ListElement* regEx, const char* text);
-
 static int matchClass(const CharacterClass* class, const char* text) {
     switch (class->type)
     {
@@ -175,20 +173,20 @@ static void __free(void* data) {
 int acu_match(const char* regexp, const char* text)
 {
     int retval = 0;
-    ACU_List* regexpList = acu_initList(acu_mallocList(), __free, NULL);
-    compile(regexpList, regexp);
+    ACU_List regexpList;
+    acu_initList(&regexpList, __free, NULL);
+    compile(&regexpList, regexp);
 
-    if (((RegExp*) regexpList->head->data)->type == START_OP) {
-        retval = matchHere(regexpList->head->next, text);
+    if (((RegExp*) regexpList.head->data)->type == START_OP) {
+        retval = matchHere(regexpList.head->next, text);
     } else {
         do {
-            if (matchHere(regexpList->head, text)) {
+            if (matchHere(regexpList.head, text)) {
                 retval = 1;
                 break;
             }
         } while (*text++ != '\0');
     }
-    acu_destroyList(regexpList);
-    acu_free(regexpList);
+    acu_destroyList(&regexpList);
     return retval;
 }
