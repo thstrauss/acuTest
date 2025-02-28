@@ -252,7 +252,7 @@ void* __mallocToAllocTable(size_t size, const char* fileName, int line) {
 }
 
 void* __acu_emalloc(size_t size) {
-    const void* buffer = malloc(size);
+    void* buffer = malloc(size);
     if (buffer) {
         return buffer;
     }

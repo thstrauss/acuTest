@@ -19,30 +19,48 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "perf_fxt.h"
-
-#include <acu_ldr.h>
-#include <acu_fxtr.h>
-#include <acu_util.h>
-#include <acu_list.h>
-#include <acu_tryc.h>
-
-#include "palc_tst.h"
-#include "plst_tst.h"
-#include "pmsc_tst.h"
 #include "pmth_tst.h"
 
-ACU_Fixture* performanceFixture() {
-    ACU_Fixture* suite = acu_mallocFixture();
+#include <acu_tryc.h>
 
-    acu_initFixture(suite, "performance test suite");
+#include <acu_perf.h>
 
-    acu_addChildFixture(suite, allocPerformanceFixture());
-    acu_addChildFixture(suite, listPerformanceFixture());
-    acu_addChildFixture(suite, miscPerformanceFixture());
-    acu_addChildFixture(suite, matchPerformanceFixture());
+#include <stdlib.h>
 
-    return suite;
+#include <stdio.h>
+#include <time.h>
+
+#include <acu_mtch.h>
+
+#define DISABLE_CACHE 0
+
+static void acu_matchFunc(void* context) {
+    int i;
+
+    for (i = 1; i < 100; i++) {
+        acu_match("12+3", "00012222300");
+    }
+    UNUSED(context);
 }
 
 
+static void matchPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
+
+#define DIVISOR 3
+    printf("acu_matchFunc\t%ld\n\r", acu_measureLoop(acu_matchFunc, CLK_TCK / DIVISOR, DISABLE_CACHE, NULL) * DIVISOR);
+#undef DIVISOR
+
+    UNUSED(environment);
+    UNUSED(context);
+}
+
+
+ACU_Fixture* matchPerformanceFixture(void)
+{
+    ACU_Fixture* fixture = acu_mallocFixture();
+    acu_initFixture(fixture, "match performance Tests");
+
+    acu_addTestCase(fixture, "matchPerformanceTest", matchPerformanceTest);
+
+    return fixture;
+}

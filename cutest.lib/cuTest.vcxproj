@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="acu_entr.c" />
+    <ClCompile Include="perf\pmth_tst.c" />
     <ClCompile Include="perf\palc_tst.c" />
     <ClCompile Include="perf\plst_tst.c" />
     <ClCompile Include="perf\pmsc_tst.c" />
@@ -196,6 +197,7 @@
     <ClCompile Include="util\uuid_tst.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="perf\pmth_tst.h" />
     <ClInclude Include="perf\palc_tst.h" />
     <ClInclude Include="perf\plst_tst.h" />
     <ClInclude Include="perf\pmsc_tst.h" />
