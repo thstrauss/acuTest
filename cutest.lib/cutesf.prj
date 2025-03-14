@@ -37,6 +37,7 @@ perf\perf_fxt.c (perf\perf_fxt.h, perf\palc_tst.h, perf\plst_tst.h, perf\pmsc_ts
 perf\palc_tst.c (perf\palc_tst.h)
 perf\plst_tst.c (perf\plst_tst.h)
 perf\pmsc_tst.c (perf\pmsc_tst.h)
+perf\pmth_tst.c (perf\pmth_tst.h)
 
 test\test_fxt.c (test\test_fxt.h)
 

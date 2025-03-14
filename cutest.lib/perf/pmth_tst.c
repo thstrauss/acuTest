@@ -38,7 +38,7 @@ static void acu_matchFunc(void* context) {
     int i;
 
     for (i = 1; i < 100; i++) {
-        acu_match("12+3", "00012222300");
+        acu_match("^12+3", "00012222300");
     }
     UNUSED(context);
 }
