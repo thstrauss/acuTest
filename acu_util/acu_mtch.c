@@ -29,11 +29,11 @@ typedef enum RegExClass_ { CHAR_CLASS, ANY_CLASS, CLASS_CLASS } RegExClass;
 typedef enum RegExOperation_ { SINGLE_OP, STAR_OP, PLUS_OP, QUERY_OP, START_OP, END_OP } RegExOperation;
 
 typedef struct CharacterClass_ {
-    RegExClass type;
-    union {
+        union {
         int matchChar;
         char* class;
     } charClass;
+    RegExClass type;
 } CharacterClass;
 
 typedef struct RegExp_{
@@ -54,16 +54,25 @@ static int matchClass(const CharacterClass* class, const char* text) {
                     return 1;
                 }
             }
-            return 0;
+            break;
         }
-        default:
-            return 0;
     }
+    return 0;
 }
 
 static int matchHere(ACU_ListElement* regExpElement, const char* text) {
     while (regExpElement != NULL) {
         RegExp* regExp = (RegExp*)regExpElement->data;
+        if (regExp->type == SINGLE_OP && !matchClass(&regExp->class, text)) {
+            return 0;
+        }
+        if (regExp->type == QUERY_OP) {
+            if (matchClass(&regExp->class, text)) {
+                text++;
+            }
+            regExpElement = regExpElement->next;
+            continue;
+        }
         if (regExp->type == STAR_OP) {
             RegExp* nextRegExp = (RegExp*)regExpElement->next->data;
             while (matchClass(&regExp->class, text)) {
@@ -88,18 +97,8 @@ static int matchHere(ACU_ListElement* regExpElement, const char* text) {
             regExpElement = regExpElement->next;
             continue;
         }
-        if (regExp->type == QUERY_OP) {
-            if (matchClass(&regExp->class, text)) {
-                text++;
-            }
-            regExpElement = regExpElement->next;
-            continue;
-        }
         if (regExp->type == END_OP) {
             return *text == '\0';
-        }
-        if (regExp->type == SINGLE_OP && !matchClass(&regExp->class, text)) {
-            return 0;
         }
         text++;
         regExpElement = regExpElement->next;
@@ -112,15 +111,16 @@ static void compile(ACU_List* regexpList, const char* regexp) {
     while ((c = *regexp) != '\0') {
         RegExp* regEx = acu_emalloc(sizeof(RegExp));
         acu_appendList(regexpList, regEx);
-        regEx->type = SINGLE_OP;
         if (c == '\\') {
             regexp++;
+            regEx->type = SINGLE_OP;
             if (*regexp != '\0') {
                 regEx->class.type = CHAR_CLASS;
                 regEx->class.charClass.matchChar = *regexp;
             }
         }
         else if (c == '.') {
+            regEx->type = SINGLE_OP;
             regEx->class.type = ANY_CLASS;
         }
         else if (c == '^') {
@@ -130,20 +130,22 @@ static void compile(ACU_List* regexpList, const char* regexp) {
             regEx->type = END_OP;
         }
         else if (c == '[') {
-        	const char* start;
+            const char* start;
             size_t size;
-        	regexp++;
+            regexp++;
             start = regexp;
             while (*regexp != ']') {
-            	regexp++;
+                regexp++;
             }
             size = regexp - start;
             regEx->class.charClass.class = acu_emalloc(size+1);
             acu_strncpy(regEx->class.charClass.class, start, size);
             *(regEx->class.charClass.class + size) = '\0';
             regEx->class.type = CLASS_CLASS;
+            regEx->type = SINGLE_OP;
         }
         else {
+            regEx->type = SINGLE_OP;
             regEx->class.type = CHAR_CLASS;
             regEx->class.charClass.matchChar = c;
         }
@@ -172,21 +174,23 @@ static void __free(void* data) {
 
 int acu_match(const char* regexp, const char* text)
 {
-    int retval = 0;
+    int result;
     ACU_List regexpList;
+
     acu_initList(&regexpList, __free, NULL);
     compile(&regexpList, regexp);
 
     if (((RegExp*) regexpList.head->data)->type == START_OP) {
-        retval = matchHere(regexpList.head->next, text);
+        result = matchHere(regexpList.head->next, text);
     } else {
+        result = 0;
         do {
             if (matchHere(regexpList.head, text)) {
-                retval = 1;
+                result = 1;
                 break;
             }
         } while (*text++ != '\0');
     }
     acu_destroyList(&regexpList);
-    return retval;
+    return result;
 }
