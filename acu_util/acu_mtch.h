@@ -25,6 +25,16 @@
 
 #include "acu_cmmn.h"
 
+struct ACU_List_;
+
+typedef struct ACU_RegularExpression_ {
+    struct ACU_List_* regExpList;
+} ACU_RegularExpression;
+
+__EXPORT ACU_RegularExpression* acu_initRegularExpression(ACU_RegularExpression* regularExpression, const char* regexp);
+__EXPORT void acu_destroyRegularExpression(ACU_RegularExpression* regularExpression);
+__EXPORT int acu_matchRegularExpression(ACU_RegularExpression* regularExpression, const char* text);
+
 __EXPORT int acu_match(const char* regexp, const char* text);
 
 #endif

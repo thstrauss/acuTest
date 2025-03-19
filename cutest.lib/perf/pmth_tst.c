@@ -43,11 +43,33 @@ static void acu_matchFunc(void* context) {
     UNUSED(context);
 }
 
+static void acu_match2Func(void* context) {
+    int i;
+
+    ACU_RegularExpression regularExpression;
+    acu_initRegularExpression(&regularExpression, "^12+3");
+    for (i = 1; i < 100; i++) {
+        acu_matchRegularExpression(&regularExpression, "00012222300");
+    }
+    acu_destroyRegularExpression(&regularExpression);
+
+    UNUSED(context);
+}
+
 
 static void matchPerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
 
 #define DIVISOR 3
     printf("acu_matchFunc\t%ld\n\r", acu_measureLoop(acu_matchFunc, CLK_TCK / DIVISOR, DISABLE_CACHE, NULL) * DIVISOR);
+#undef DIVISOR
+
+    UNUSED(environment);
+    UNUSED(context);
+
+}static void match2PerformanceTest(ACU_ExecuteEnv* environment, const void* context) {
+
+#define DIVISOR 3
+    printf("acu_match2Func\t%ld\n\r", acu_measureLoop(acu_match2Func, CLK_TCK / DIVISOR, DISABLE_CACHE, NULL) * DIVISOR);
 #undef DIVISOR
 
     UNUSED(environment);
@@ -61,6 +83,7 @@ ACU_Fixture* matchPerformanceFixture(void)
     acu_initFixture(fixture, "match performance Tests");
 
     acu_addTestCase(fixture, "matchPerformanceTest", matchPerformanceTest);
+    acu_addTestCase(fixture, "match2PerformanceTest", match2PerformanceTest);
 
     return fixture;
 }
