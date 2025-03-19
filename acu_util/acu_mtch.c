@@ -175,22 +175,20 @@ static void __free(void* data) {
 
 __EXPORT ACU_RegularExpression* acu_initRegularExpression(ACU_RegularExpression* regularExpression, const char* regexp)
 {
-    regularExpression->regExpList = acu_mallocList();
-    acu_initList(regularExpression->regExpList, __free, NULL);
-    compile(regularExpression->regExpList, regexp);
+    acu_initList(&regularExpression->regExpList, __free, NULL);
+    compile(&regularExpression->regExpList, regexp);
     return regularExpression;
 }
 
 __EXPORT void acu_destroyRegularExpression(ACU_RegularExpression* regularExpression)
 {
-    acu_destroyList(regularExpression->regExpList);
-    acu_free(regularExpression->regExpList);
+    acu_destroyList(&regularExpression->regExpList);
 }
 
 __EXPORT int acu_matchRegularExpression(ACU_RegularExpression* regularExpression, const char* text)
 {
     int result;
-    ACU_ListElement* regExpListElement = regularExpression->regExpList->head;
+    ACU_ListElement* regExpListElement = (&regularExpression->regExpList)->head;
     if (((RegExp*)regExpListElement->data)->type == START_OP) {
         result = matchHere(regExpListElement->next, text);
     }
@@ -209,22 +207,10 @@ __EXPORT int acu_matchRegularExpression(ACU_RegularExpression* regularExpression
 int acu_match(const char* regexp, const char* text)
 {
     int result;
-    ACU_List regexpList;
+    ACU_RegularExpression regularExpression;
 
-    acu_initList(&regexpList, __free, NULL);
-    compile(&regexpList, regexp);
-
-    if (((RegExp*) regexpList.head->data)->type == START_OP) {
-        result = matchHere(regexpList.head->next, text);
-    } else {
-        result = 0;
-        do {
-            if (matchHere(regexpList.head, text)) {
-                result = 1;
-                break;
-            }
-        } while (*text++ != '\0');
-    }
-    acu_destroyList(&regexpList);
+    acu_initRegularExpression(&regularExpression, regexp);
+    result = acu_matchRegularExpression(&regularExpression, text);
+    acu_destroyRegularExpression(&regularExpression);
     return result;
 }

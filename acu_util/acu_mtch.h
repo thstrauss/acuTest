@@ -24,11 +24,12 @@
 #define __ACU_MATCH__
 
 #include "acu_cmmn.h"
+#include "acu_list.h"
 
 struct ACU_List_;
 
 typedef struct ACU_RegularExpression_ {
-    struct ACU_List_* regExpList;
+    ACU_List regExpList;
 } ACU_RegularExpression;
 
 __EXPORT ACU_RegularExpression* acu_initRegularExpression(ACU_RegularExpression* regularExpression, const char* regexp);
