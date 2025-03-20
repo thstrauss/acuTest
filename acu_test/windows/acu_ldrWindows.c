@@ -22,7 +22,7 @@
 #include <acu_plgn.h>
 
 #include "..\acu_ldr.h"
-#include "..\acu_tryc.h"
+#include <acu_tryc.h>
 #include <acu_util.h>
 
 

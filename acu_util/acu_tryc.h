@@ -72,7 +72,7 @@ typedef void (ACU_setFrameStackFunc)(ACU_Stack* jmpBufFrames);
 __EXPORT ACU_Stack* acu_getFrameStack(void);
 
 /* Defines the function pointer for setting the frame stack. */
-void acu_setFrameStack(ACU_Stack* jmpBufFrames);
+__EXPORT void acu_setFrameStack(ACU_Stack* jmpBufFrames);
 
 /* Defines the function pointer for setting the frame stack. */ 
 __EXPORT void acu_freeFrameStack(void);

@@ -33,9 +33,6 @@
     <ClCompile Include="acu_rslt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="acu_tryc.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="acu_vers.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,9 +69,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tryctch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="acu_tryc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_vers.h">

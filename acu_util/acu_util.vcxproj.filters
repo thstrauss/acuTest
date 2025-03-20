@@ -75,6 +75,9 @@
     <ClCompile Include="acu_dall.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="acu_tryc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="acu_dir.h">
@@ -120,6 +123,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="acu_dall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="acu_tryc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
