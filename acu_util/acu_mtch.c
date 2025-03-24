@@ -41,7 +41,7 @@ typedef struct RegExp_{
     CharacterClass class;
 } RegExp;
 
-static int matchClass(const CharacterClass* class, const char* text) {
+static int __acu_matchClass(const CharacterClass* class, const char* text) {
     switch (class->type)
     {
         case CHAR_CLASS: return *text != '\0' && *text == class->charClass.matchChar;
@@ -60,14 +60,14 @@ static int matchClass(const CharacterClass* class, const char* text) {
     return 0;
 }
 
-static int matchHere(ACU_ListElement* regExpElement, const char* text) {
+static int __acu_matchHere(ACU_ListElement* regExpElement, const char* text) {
     while (regExpElement != NULL) {
         RegExp* regExp = (RegExp*)regExpElement->data;
-        if (regExp->type == SINGLE_OP && !matchClass(&regExp->class, text)) {
+        if (regExp->type == SINGLE_OP && !__acu_matchClass(&regExp->class, text)) {
             return 0;
         }
         if (regExp->type == QUERY_OP) {
-            if (matchClass(&regExp->class, text)) {
+            if (__acu_matchClass(&regExp->class, text)) {
                 text++;
             }
             regExpElement = regExpElement->next;
@@ -75,8 +75,8 @@ static int matchHere(ACU_ListElement* regExpElement, const char* text) {
         }
         if (regExp->type == STAR_OP) {
             RegExp* nextRegExp = (RegExp*)regExpElement->next->data;
-            while (matchClass(&regExp->class, text)) {
-                if (matchClass(&nextRegExp->class, text + 1)) {
+            while (__acu_matchClass(&regExp->class, text)) {
+                if (__acu_matchClass(&nextRegExp->class, text + 1)) {
                     text++;
                     break;
                 }
@@ -85,10 +85,10 @@ static int matchHere(ACU_ListElement* regExpElement, const char* text) {
             regExpElement = regExpElement->next;
             continue;
         }
-        if (regExp->type == PLUS_OP && matchClass(&regExp->class, text++)) {
+        if (regExp->type == PLUS_OP && __acu_matchClass(&regExp->class, text++)) {
             RegExp* nextRegExp = (RegExp*) regExpElement->next->data;
-            while (matchClass(&regExp->class, text)) {
-                if (matchClass(&nextRegExp->class, text + 1)) {
+            while (__acu_matchClass(&regExp->class, text)) {
+                if (__acu_matchClass(&nextRegExp->class, text + 1)) {
                     text++;
                     break;
                 }
@@ -106,7 +106,7 @@ static int matchHere(ACU_ListElement* regExpElement, const char* text) {
     return 1;
 }
 
-static void compile(ACU_List* regexpList, const char* regexp) {
+static void __acu_compile(ACU_List* regexpList, const char* regexp) {
     int c;
     while ((c = *regexp) != '\0') {
         RegExp* regEx = acu_emalloc(sizeof(RegExp));
@@ -165,7 +165,7 @@ static void compile(ACU_List* regexpList, const char* regexp) {
     }
 }
 
-static void __free(void* data) {
+static void __acu_freeRegExp(void* data) {
     if (((RegExp*)data)->class.type == CLASS_CLASS) {
         acu_free(((RegExp*)data)->class.charClass.class);
     }
@@ -173,29 +173,29 @@ static void __free(void* data) {
 }
 
 
-__EXPORT ACU_RegularExpression* acu_initRegularExpression(ACU_RegularExpression* regularExpression, const char* regexp)
+ACU_RegularExpression* acu_initRegularExpression(ACU_RegularExpression* regularExpression, const char* regexp)
 {
-    acu_initList(&regularExpression->regExpList, __free, NULL);
-    compile(&regularExpression->regExpList, regexp);
+    acu_initList(&regularExpression->regExpList, __acu_freeRegExp, NULL);
+    __acu_compile(&regularExpression->regExpList, regexp);
     return regularExpression;
 }
 
-__EXPORT void acu_destroyRegularExpression(ACU_RegularExpression* regularExpression)
+void acu_destroyRegularExpression(ACU_RegularExpression* regularExpression)
 {
     acu_destroyList(&regularExpression->regExpList);
 }
 
-__EXPORT int acu_matchRegularExpression(ACU_RegularExpression* regularExpression, const char* text)
+int acu_matchRegularExpression(ACU_RegularExpression* regularExpression, const char* text)
 {
     int result;
     ACU_ListElement* regExpListElement = (&regularExpression->regExpList)->head;
     if (((RegExp*)regExpListElement->data)->type == START_OP) {
-        result = matchHere(regExpListElement->next, text);
+        result = __acu_matchHere(regExpListElement->next, text);
     }
     else {
         result = 0;
         do {
-            if (matchHere(regExpListElement, text)) {
+            if (__acu_matchHere(regExpListElement, text)) {
                 result = 1;
                 break;
             }
