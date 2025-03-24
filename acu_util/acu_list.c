@@ -43,13 +43,13 @@ static void* __malloc(size_t size) {
     return acu_emalloc(size);
 }
 
-static void __free(void* buffer) {
+static void __acu_freeBuffer(void* buffer) {
     acu_free(buffer);
 }
 
 static ACU_AllocFuncs __acu_defaultAllocFuncs = {
     __malloc,
-    __free 
+    __acu_freeBuffer
 };
 
 struct ACU_AllocFuncs_* acu_defaultAllocFuncs = &__acu_defaultAllocFuncs;
