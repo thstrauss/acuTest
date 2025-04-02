@@ -22,7 +22,6 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stddef.h>
-#include <stdarg.h>
 
 #include "acu_cmmn.h"
 #include "acu_eenv.h"
