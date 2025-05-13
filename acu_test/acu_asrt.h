@@ -28,7 +28,8 @@
 #define _ACU_ASSERT_H_
 
 #include <acu_cmmn.h>
-#include "acu_tryc.h"
+#include "acu_eenv.h"
+#include <acu_tryc.h>
 #include <stddef.h>
 
 typedef void* voidPtr;

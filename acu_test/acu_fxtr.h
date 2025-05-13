@@ -28,8 +28,8 @@
 #include "acu_eenv.h"
 #include "acu_rslt.h"
 #include "acu_tcse.h"
-#include "acu_rprt.h"
 #include <acu_util.h>
+#include "acu_rprt.h"
 
 struct ACU_List_;
 
@@ -83,7 +83,9 @@ __EXPORT void acu_setFixtureContext(ACU_Fixture* fixture, const void* context);
  * @param fixture The fixture to execute.
  * @param progress The progress to report to.
  */
-__EXPORT enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progress);
+__EXPORT ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progress);
+
+struct ACU_ReportVisitor_;
 
 /* Accepts a fixture. All Nodes of the fixture are visited.
  * @param fixture The fixture to accept.

@@ -25,45 +25,45 @@
 
 #include <acu_list.h>
 #include "acu_cmmn.h"
-#include "acu_tcse.h"
 
+struct ACU_TestCase_;
  /*
   * The ACU_TestCase is the test case that is executed.
   */
-typedef int ACU_MatchFunc(const ACU_TestCase* testCase, void* matchContext);
+typedef int ACU_MatchFunc(const struct ACU_TestCase_* testCase, void* matchContext);
 /*
  * The ACU_TestCase is the test case that is executed.
  */
-typedef void ACU_ProgressFunc(const ACU_TestCase* testCase, void* progressContext);
+typedef void ACU_ProgressFunc(const struct ACU_TestCase_* testCase, void* progressContext);
 /*
  * The ACU_TestCase is the test case that is executed.
  */
-typedef void ACU_ReportVisitorFunc(const ACU_TestCase* testCase, void* context);
+typedef void ACU_ReportVisitorFunc(const struct ACU_TestCase_* testCase, void* context);
 
 /*
  * The ACU_TestCase is the test case that is executed.
  */
-__EXPORT void acu_progress(const ACU_TestCase* testCase, void* progressContext);
+__EXPORT void acu_progress(const struct ACU_TestCase_* testCase, void* progressContext);
 
 /*
  * The ACU_TestCase is the test case that is executed.
  */
-__EXPORT void acu_report(const ACU_TestCase* testCase, void* context);
+__EXPORT void acu_report(const struct ACU_TestCase_* testCase, void* context);
 
 /*
  * The ACU_TestCase is the test case that is executed.
  */
-__EXPORT void acu_countTestCases(const ACU_TestCase* testCase, void* context);
+__EXPORT void acu_countTestCases(const struct ACU_TestCase_* testCase, void* context);
 
 /*
  * The ACU_TestCase is the test case that is executed.
  */
-__EXPORT void acu_collectTestCases(const ACU_TestCase* testCase, void* context);
+__EXPORT void acu_collectTestCases(const struct ACU_TestCase_* testCase, void* context);
 
 /*
  * The ACU_TestCase is the test case that is executed.
  */
-__EXPORT void acu_count(const ACU_TestCase* testCase, void* context);
+__EXPORT void acu_count(const struct ACU_TestCase_* testCase, void* context);
 
 typedef struct ACU_Progress_ {
     ACU_ProgressFunc* progress;
@@ -98,11 +98,11 @@ typedef struct ACU_TestCases_ {
 /*
  * Reports the progress of the test case.
  */
-__EXPORT void acu_performProgress(const ACU_Progress* progress, ACU_TestCase* testCase);
+__EXPORT void acu_performProgress(const ACU_Progress* progress, const struct ACU_TestCase_* testCase);
 
 /*
  * Reports the progress of the test case.
  */ 
-__EXPORT void acu_reportSummary(const ACU_TestCase* testCase, void* context);
+__EXPORT void acu_reportSummary(const struct ACU_TestCase_* testCase, void* context);
 
 #endif

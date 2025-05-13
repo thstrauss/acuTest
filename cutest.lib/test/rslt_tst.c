@@ -30,31 +30,31 @@
 #include <acu_rslt.h>
 
 static void resultFailedTest(ACU_ExecuteEnv* environment, const void* context) {
-    enum ACU_TestResult result = acuTest_calcResult(ACU_TEST_PASSED, ACU_TEST_FAILED);
+    ACU_TestResult result = acuTest_calcResult(ACU_TEST_PASSED, ACU_TEST_FAILED);
     ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "Failed");
     UNUSED(context);
 }
 
 static void resultPassedInitialFailedTest(ACU_ExecuteEnv* environment, const void* context) {
-    enum ACU_TestResult result = acuTest_calcResult(ACU_TEST_FAILED, ACU_TEST_PASSED);
+    ACU_TestResult result = acuTest_calcResult(ACU_TEST_FAILED, ACU_TEST_PASSED);
     ACU_assert(environment, int, Equal, result, ACU_TEST_FAILED, "Failed");
     UNUSED(context);
 }
 
 static void resultErrorTest(ACU_ExecuteEnv* environment, const void* context) {
-    enum ACU_TestResult result = acuTest_calcResult(ACU_TEST_PASSED, ACU_TEST_ERROR);
+    ACU_TestResult result = acuTest_calcResult(ACU_TEST_PASSED, ACU_TEST_ERROR);
     ACU_assert(environment, int, Equal, result, ACU_TEST_ERROR, "Error");
     UNUSED(context);
 }
 
 static void resultPassedInitialErrorTest(ACU_ExecuteEnv* environment, const void* context) {
-    enum ACU_TestResult result = acuTest_calcResult(ACU_TEST_ERROR, ACU_TEST_PASSED);
+    ACU_TestResult result = acuTest_calcResult(ACU_TEST_ERROR, ACU_TEST_PASSED);
     ACU_assert(environment, int, Equal, result, ACU_TEST_ERROR, "Error");
     UNUSED(context);
 }
 
 static void resultFailedInitialErrorTest(ACU_ExecuteEnv* environment, const void* context) {
-    enum ACU_TestResult result = acuTest_calcResult(ACU_TEST_FAILED, ACU_TEST_ERROR);
+    ACU_TestResult result = acuTest_calcResult(ACU_TEST_FAILED, ACU_TEST_ERROR);
     ACU_assert(environment, int, Equal, result, ACU_TEST_ERROR, "Error");
     UNUSED(context);
 }

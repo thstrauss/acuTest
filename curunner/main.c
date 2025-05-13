@@ -36,7 +36,7 @@ static void printHelp(void) {
 
 typedef struct Summary_ {
     ACU_Summary summary;
-    enum ACU_TestResult returnValue;
+    ACU_TestResult returnValue;
 } Summary;
 
 static void executeEntry(const char* cupName, Summary* summary) {

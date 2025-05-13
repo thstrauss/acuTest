@@ -23,6 +23,7 @@
 
 #include <acu_eenv.h>
 #include <acu_asrt.h>
+#include <acu_rprt.h>
 
 #include <acu_stck.h>
 

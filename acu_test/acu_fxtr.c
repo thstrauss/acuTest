@@ -33,10 +33,11 @@
 #include "acu_util.h"
 #include "acu_strg.h"
 #include "acu_tryc.h"
+#include "acu_rprt.h"
 
 static ACU_Stack* frameStack = NULL;
 
-static enum ACU_TestResult acuTest_run(ACU_TestCase* testCase) {
+static ACU_TestResult acuTest_run(ACU_TestCase* testCase) {
     ACU_ExecuteEnv environment;
     ACU_Frame frame;
     ACU_StackElement stackElement;
@@ -107,24 +108,24 @@ void acu_setFixtureContext(ACU_Fixture* fixture, const void* context)
     fixture->context = context;
 }
 
-enum ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progress) {
+ACU_TestResult acu_executeFixture(ACU_Fixture* fixture, ACU_Progress* progress) {
     ACU_ListElement* testElement = fixture->testCases->head;
     ACU_ListElement* childFixture = fixture->childFixtures->head;
-    enum ACU_TestResult result = ACU_TEST_PASSED;
+    ACU_TestResult result = ACU_TEST_PASSED;
     if (!frameStack) {
         frameStack = acu_getFrameStack();
     }
     fixture->duration = 0;
 
     while (childFixture) {
-        enum ACU_TestResult r = acu_executeFixture((ACU_Fixture*)childFixture->data, progress);
+        ACU_TestResult r = acu_executeFixture((ACU_Fixture*)childFixture->data, progress);
         result = acuTest_calcResult(result, r);
         fixture->duration += ((ACU_Fixture*)childFixture->data)->duration;
         childFixture = childFixture->next;
     }
     while (testElement) {
         ACU_TestCase* testCase = (ACU_TestCase*)testElement->data;
-        enum ACU_TestResult r;
+        ACU_TestResult r;
         testCase->context = fixture->context;
         testCase->progress = progress;
         r = acuTest_run(testCase);

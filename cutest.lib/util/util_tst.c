@@ -28,6 +28,7 @@
 
 #include <acu_strg.h>
 #include <acu_util.h>
+#include <acu_tryc.h>
 
 #include "util_tst.h"
 

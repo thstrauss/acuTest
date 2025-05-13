@@ -27,6 +27,7 @@
 #include "acu_vers.h"
 #include "acu_tryc.h"
 #include "acu_plgn.h"
+#include "acu_rprt.h"
 
 static int checkVersion(ACU_Entry* entry) {
     ACU_Version* libVersion = entry->getAcuTestVersion();
@@ -60,7 +61,9 @@ void acu_destroyEntry(ACU_Entry* entry) {
     }
 }
 
-void acu_executeEntry(const ACU_Entry* entry, ACU_Progress* progress)
+struct ACU_Progress_;
+
+void acu_executeEntry(const ACU_Entry* entry, struct ACU_Progress_* progress)
 {
     if (entry) {
         entry->setWriteHandler(acu_getWriteHandler());

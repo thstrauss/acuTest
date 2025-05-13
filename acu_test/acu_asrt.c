@@ -23,13 +23,11 @@
 #include <string.h>
 #include <stddef.h>
 
-#include "acu_cmmn.h"
-#include "acu_eenv.h"
 #include "acu_util.h"
 #include "acu_rslt.h"
-#include "acu_tryc.h"
 #include "acu_stck.h"
 #include "acu_strg.h"
+#include "acu_tryc.h"
 
 static const int maxPtrLength = 16;
 
@@ -306,7 +304,7 @@ static void acu_finalizeFailed(ACU_ExecuteEnv* environment, const ACU_AssertPara
 }
 
 void acu_assert(ACU_ExecuteEnv* environment, const ACU_AssertParameter* parameter) {
-    enum ACU_TestResult assertResult;
+    ACU_TestResult assertResult;
 
     assertResult = parameter->funcs->assert(&(parameter->values).actual, &(parameter->values).expected);
     environment->result->status = assertResult;

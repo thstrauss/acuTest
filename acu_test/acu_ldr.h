@@ -66,6 +66,6 @@ __EXPORT void acu_destroyEntry(ACU_Entry* entry);
 /*
 Executes the tests in the plug-in.
 */
-__EXPORT void acu_executeEntry(const ACU_Entry* entry, ACU_Progress* progress);
+__EXPORT void acu_executeEntry(const ACU_Entry* entry, struct ACU_Progress_* progress);
  
 #endif

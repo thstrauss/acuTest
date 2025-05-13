@@ -21,6 +21,7 @@
 
 #include <acu_fxtr.h>
 #include <acu_asrt.h>
+#include <acu_rprt.h>
 
 #include <stddef.h>
 
@@ -43,7 +44,7 @@ int main(void)
     ACU_ReportHelper reportHelper = { NULL, NULL };
     ACU_ReportVisitor report = { acu_report, NULL };
     ACU_Progress progress = { acu_progress , NULL };
-    enum ACU_TestResult result;
+    ACU_TestResult result;
 
     report.context = &reportHelper;
 

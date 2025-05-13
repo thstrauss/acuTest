@@ -28,6 +28,7 @@
 #include <acu_util.h>
 #include <acu_stck.h>
 #include <acu_tryc.h>
+#include <acu_rprt.h>
 
 static void test1(ACU_ExecuteEnv* environment, const void* context) {
     ACU_PrepareParameter(int, Equal, 1, 2, "assert");
