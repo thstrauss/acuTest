@@ -152,7 +152,7 @@ int main()
 ## Design Considerations
 
 The Atari PureC compiler has a limitation of 4096 characters for macro expansion. To work around this
-an hybrid approach with macro based code generation at compile time to generate the assert functions and 
+a hybrid approach with macro based code generation at compile time to generate the assert functions and 
 macro's which are part of the runtime was taken. It acts somehow like templates in C++.
 
  
