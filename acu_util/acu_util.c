@@ -35,7 +35,7 @@ extern void va_acu_printf(ACU_Level level, const char* format, va_list args);
 static char* programName = NULL;
 ACU_HashTable* __allocTable = NULL;
 ACU_HashTable* __stringTable = NULL;
-int __acuMemoryTrackingEnabled = 0;
+ACU_UTIL_API int __acuMemoryTrackingEnabled = 0;
 static unsigned int __shift = 3;
 
 char* acu_progName(void) {
@@ -54,7 +54,7 @@ void acu_setProgName(const char* progName) {
     }
 }
 
-static void defaultErrorHandler(enum ACU_Level level, const char* message) {
+static void defaultErrorHandler(ACU_Level level, const char* message) {
     fflush(stdout);
     fprintf(stderr, "%s\r\n", message);
     if (level == acu_error) {

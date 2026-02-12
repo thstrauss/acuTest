@@ -30,6 +30,12 @@
 #include "acu_cmmn.h"
 #include "acu_hstb.h"
 
+#ifdef ACUUTIL_EXPORTS
+#define ACU_UTIL_API __EXPORT
+#else
+#define ACU_UTIL_API __IMPORT
+#endif
+
 typedef enum ACU_Level_
 {
     acu_error = 1,
@@ -56,7 +62,7 @@ __EXPORT void acu_setErrorHandler(ACU_ErrorHandlerFunc* errorHandler);
 
 __EXPORT ACU_HashTable* acu_getAllocTable(void);
 #define acu_isMemoryTrackingEnabled() __acuMemoryTrackingEnabled
-__IMPORT extern int __acuMemoryTrackingEnabled;
+extern ACU_UTIL_API int __acuMemoryTrackingEnabled;
 
 __EXPORT void acu_setAllocTable(ACU_HashTable* allocTable);
 
