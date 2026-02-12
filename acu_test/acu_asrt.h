@@ -40,7 +40,6 @@ typedef unsigned int unsignedInt;
 typedef unsigned long unsignedLong;
 typedef unsigned short unsignedShort;
 
-
 /* The union is used to store parameters to assert functions. */
 typedef union ACU_Types_ {
     voidPtr voidPtrType;
