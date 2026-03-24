@@ -58,24 +58,26 @@ const char* __strdupToAllocTable(const char* s, const char* fileName, int line) 
 
 static size_t acu_strlen(const char* s) {
     const char* sPtr = s;
-    unsigned long  magic = 0x7F7F7F7FL;
+    unsigned long long magic = 0x7F7F7F7F7F7F7F7FLL;
 
-    unsigned long  l = *((const unsigned long*)sPtr);
+    unsigned long long  l = *((const unsigned long long*)sPtr);
     while (!~(((l & magic) + magic) | l | magic)) {
-        sPtr += sizeof(unsigned long);
-        l = *((const unsigned long*)sPtr);
+        sPtr += sizeof(unsigned long long);
+        l = *((const unsigned long long*)sPtr);
         if (~(((l & magic) + magic) | l | magic)) {
             break;
         }
-        sPtr += sizeof(unsigned long);
-        l = *((const unsigned long*)sPtr);
+        sPtr += sizeof(unsigned long long);
+        l = *((const unsigned long long*)sPtr);
         if (~(((l & magic) + magic) | l | magic)) {
             break;
         }
-        sPtr += sizeof(unsigned long);
-        l = *((const unsigned long*)sPtr);
+        sPtr += sizeof(unsigned long long);
+        l = *((const unsigned long long*)sPtr);
     }
     while (*sPtr) {
+        if (!*(++sPtr)) break;
+        if (!*(++sPtr)) break;
         if (!*(++sPtr)) break;
         if (!*(++sPtr)) break;
         sPtr++;
